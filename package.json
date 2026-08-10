@@ -1,0 +1,47 @@
+{
+  "name": "vitrine-schoulbus",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Page de presentation du site Bus scolaire Beckerich. Projet distinct de l'application.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build && npm run build:ssr && node scripts/prerendu.mjs",
+    "build:ssr": "vite build --ssr src/entree-serveur.ts --outDir dist-ssr",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b --noEmit",
+    "lint": "oxlint",
+    "jetons:verifier": "node scripts/sync-jetons.mjs --verifier",
+    "jetons:reprendre": "node scripts/sync-jetons.mjs",
+    "contraste": "node scripts/verifier-contraste.mjs",
+    "chiffres": "node scripts/build-chiffres.mjs",
+    "assets:qr": "node scripts/build-qr.mjs",
+    "verifier": "npm run typecheck && npm run lint && npm test && npm run contraste && npm run jetons:verifier"
+  },
+  "dependencies": {
+    "@fontsource-variable/ibm-plex-sans": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "lenis": "^1.3.11",
+    "motion": "^12.34.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^24.13.3",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "jsdom": "^30.0.1",
+    "oxlint": "^1.75.0",
+    "qrcode": "^1.5.4",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0",
+    "vitest": "^4.1.10"
+  }
+}

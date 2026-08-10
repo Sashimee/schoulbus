@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Bus scolaire Beckerich — les horaires de vos enfants, sans y réfléchir</title>
+    <meta
+      name="description"
+      content="Le plan du bus scolaire de la commune de Beckerich, personnalisé pour chaque enfant : arrêt le plus proche, prochain départ, fiche de la semaine. Site indépendant, hors ligne, sans compte."
+    />
+    <!-- La couleur de barre suit le thème, exactement comme dans l'application. -->
+    <meta name="theme-color" content="#0e1a2e" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#e1e7ee" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!--metas-partage-->
+    <!--
+      Le thème est posé avant le premier rendu : sans ce script, une page servie en
+      pré-rendu clignote en sombre avant de basculer en clair chez qui l'a choisi.
+    -->
+    <script>
+      try {
+        var t = localStorage.getItem('vitrine-schoulbus.theme')
+        if (t === 'clair' || t === 'sombre') document.documentElement.dataset.theme = t
+      } catch (e) {
+        /* localStorage refusé : la préférence système suffit. */
+      }
+    </script>
+  </head>
+  <body>
+    <div id="racine"><!--contenu-vitrine--></div>
+    <noscript>
+      <p>
+        Cette page se lit sans JavaScript, mais les animations et le changement de langue en
+        demandent. L'application est sur
+        <a href="https://sashimee.github.io/bus-scolaire-beckerich">sashimee.github.io</a>, et le
+        plan officiel sur
+        <a href="https://kanner.beckerich.lu/infos/horaires-de-bus">kanner.beckerich.lu</a>.
+      </p>
+    </noscript>
+    <script type="module" src="/src/entree.tsx"></script>
+  </body>
+</html>

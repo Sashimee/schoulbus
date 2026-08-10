@@ -1,0 +1,712 @@
+/*
+ * Les pièces réutilisables de la vitrine.
+ *
+ * Deux familles s'y côtoient, et il ne faut pas les confondre :
+ *
+ *  - Les pièces de la VITRINE (`.bouton`, `.carte`, `.etiquette`, `.entete`…), qui
+ *    reprennent le vocabulaire de l'application à l'identique, aux mêmes jetons.
+ *  - Les pièces de la MAQUETTE (`.appareil`, `.ecran*`), qui rejouent l'application à
+ *    l'intérieur d'un téléphone dessiné. Elles ont leur propre échelle : un écran de
+ *    390 px de large montré à 0,8 réduit ne peut pas emprunter les tailles de texte de
+ *    la page qui l'entoure, sinon trois mots remplissent l'écran.
+ */
+
+@layer composants {
+  /* ------------------------------------------------------------------ *
+   * Boutons
+   * ------------------------------------------------------------------ */
+  .bouton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espace-2);
+    min-block-size: var(--cible);
+    padding: var(--espace-3) var(--espace-5);
+    border: var(--trait) solid transparent;
+    border-radius: var(--rayon-s);
+    font-size: var(--texte-m);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    /*
+     * Seuls `background`, `border-color` et `transform` bougent. Une largeur ou une
+     * ombre animée coûte une remise en page à chaque image, ce que la règle de
+     * l'application interdit — et ce que le bouton aimanté rendrait très visible.
+     */
+    transition:
+      background 0.16s var(--sortie),
+      border-color 0.16s var(--sortie),
+      color 0.16s var(--sortie);
+  }
+  .bouton:active {
+    transform: scale(0.97);
+  }
+
+  .bouton--primaire {
+    background: var(--plein);
+    color: var(--encre-sur-plein);
+    font-weight: 700;
+  }
+  .bouton--primaire:hover {
+    background: color-mix(in oklab, var(--plein) 88%, var(--accent));
+  }
+
+  .bouton--discret {
+    background: var(--surface);
+    border-color: var(--bord);
+    color: var(--encre);
+  }
+  .bouton--discret:hover {
+    background: var(--surface-haute);
+  }
+
+  .bouton--fantome {
+    color: var(--accent);
+  }
+  .bouton--fantome:hover {
+    background: var(--surface);
+  }
+
+  .bouton--grand {
+    min-block-size: 56px;
+    padding: var(--espace-4) var(--espace-6);
+    font-size: var(--texte-l);
+  }
+
+  /*
+   * Le bouton aimanté. L'enveloppe reçoit la translation calculée en JavaScript, le
+   * bouton garde ses propres transitions : deux transformations sur un même élément se
+   * seraient écrasées l'une l'autre.
+   */
+  .aimant {
+    display: inline-block;
+    will-change: transform;
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Verre
+   * ------------------------------------------------------------------ */
+  .carte {
+    position: relative;
+    padding: var(--espace-5);
+    background: var(--surface);
+    border: var(--trait) solid var(--bord);
+    border-radius: var(--rayon-l);
+    box-shadow: var(--lustre);
+    /* Le halo du projecteur est découpé au rayon de la carte. */
+    overflow: hidden;
+  }
+
+  .carte--accent {
+    background: var(--surface-accent);
+    border-color: var(--bord-accent);
+  }
+
+  /*
+   * Le projecteur : un halo qui suit le pointeur. Sa position arrive par `--x`/`--y`,
+   * écrites directement sur le nœud par `useProjecteur` — passer par l'état de React
+   * relancerait un rendu à chaque pixel parcouru.
+   *
+   * En `::after` plutôt qu'en fond : la carte est déjà une surface de verre, et la règle
+   * de la bibliothèque interdit d'en empiler deux. Une lueur n'est pas une surface.
+   */
+  .carte--projecteur::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      18rem 18rem at var(--x, 50%) var(--y, 0%),
+      color-mix(in oklab, var(--accent) 14%, transparent) 0%,
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 0.24s var(--sortie);
+  }
+  .carte--projecteur:hover::after,
+  .carte--projecteur:focus-within::after {
+    opacity: 1;
+  }
+
+  /* L'arête haute qui s'allume au survol : la lumière glisse le long du bord. */
+  .carte--projecteur::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: 1px;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklab, var(--accent) 55%, transparent) var(--x, 50%),
+      transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.24s var(--sortie);
+  }
+  .carte--projecteur:hover::before {
+    opacity: 1;
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Étiquettes
+   * ------------------------------------------------------------------ */
+  .etiquette {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espace-2);
+    padding: var(--espace-1) var(--espace-3);
+    border: var(--trait) solid var(--bord);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--encre-douce);
+    font-size: var(--texte-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .etiquette--accent {
+    background: var(--surface-accent);
+    border-color: var(--bord-accent);
+    color: var(--encre);
+  }
+  .etiquette--attention {
+    background: var(--attention-fond);
+    border-color: var(--attention-bord);
+    color: var(--attention);
+  }
+
+  /* La marque, en haut de page et en pied. */
+  .marque {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espace-3);
+    color: var(--encre);
+    font-size: var(--texte-xs);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .marque__logo {
+    inline-size: 28px;
+    block-size: 28px;
+    flex: none;
+  }
+
+  /* ------------------------------------------------------------------ *
+   * En-tête flottant
+   * ------------------------------------------------------------------ */
+  .entete {
+    position: fixed;
+    inset-block-start: var(--espace-3);
+    inset-inline: var(--espace-3);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espace-4);
+    max-inline-size: var(--vitrine-large);
+    margin-inline: auto;
+    padding: var(--espace-2) var(--espace-2) var(--espace-2) var(--espace-4);
+    background: var(--rail);
+    border: var(--trait) solid var(--bord);
+    border-radius: var(--rayon-l);
+    box-shadow: var(--lustre);
+    /*
+     * Le flou n'est posé QUE là où du contenu défile réellement dessous — en-tête, rail,
+     * bandeaux. C'est l'écart n° 3 assumé au lot 18 : flouter une surface immobile sur
+     * un dégradé lisse rend le même dégradé, pour le prix d'une couche composée.
+     */
+    backdrop-filter: var(--flou);
+    -webkit-backdrop-filter: var(--flou);
+    transition:
+      transform 0.38s var(--sortie),
+      opacity 0.38s var(--sortie);
+  }
+  /* Tant qu'on n'a pas quitté le héros, l'en-tête n'a rien à dire. */
+  .entete[data-visible='non'] {
+    transform: translateY(calc(-100% - var(--espace-4)));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .entete__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--espace-2);
+  }
+
+  /* La ligne de progression, cousue au bord bas de l'en-tête. */
+  .progression {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    block-size: 2px;
+    inline-size: 100%;
+    background: var(--accent);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    border-end-start-radius: var(--rayon-l);
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Sélecteurs (langue, thème)
+   * ------------------------------------------------------------------ */
+  .segments {
+    display: flex;
+    gap: 3px;
+    padding: 3px;
+    background: var(--fond-creux);
+    border: var(--trait) solid var(--bord);
+    border-radius: 999px;
+  }
+  .segments__choix {
+    min-block-size: 34px;
+    padding-inline: var(--espace-3);
+    border-radius: 999px;
+    color: var(--encre-douce);
+    font-size: var(--texte-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition:
+      background 0.12s var(--sortie),
+      color 0.12s var(--sortie);
+  }
+  .segments__choix[aria-pressed='true'] {
+    background: var(--plein);
+    color: var(--encre-sur-plein);
+  }
+  .segments__choix:hover:not([aria-pressed='true']) {
+    color: var(--encre);
+  }
+
+  /*
+   * Dans l'en-tête, le groupe perd son creux et ne garde que son trait.
+   *
+   * `--rail` est déjà un voile de verre ; poser `--fond-creux` par-dessus en empile un
+   * second, ce que la bibliothèque de conception interdit — et la mesure lui donne
+   * raison : l'encre douce y tombe à 4,54:1 contre 5,20:1 sur le rail seul. Elle passe
+   * encore, mais elle passe de justesse, et une seule retouche du dégradé la ferait
+   * basculer sous le seuil sans que rien ne le signale.
+   */
+  .entete .segments {
+    background: none;
+  }
+
+  /*
+   * Les sélecteurs de l'en-tête descendent sous 34 px de haut, en deçà de la cible
+   * tactile de 44 px. Ils sont donc réservés au pointeur fin ; sur tactile, la même
+   * commande est reprise en pied de page, à taille pleine.
+   */
+  @media (pointer: coarse) {
+    .entete .segments {
+      display: none;
+    }
+  }
+
+  .pied .segments__choix {
+    min-block-size: var(--cible);
+    padding-inline: var(--espace-4);
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Curseur personnalisé
+   *
+   * Il ne remplace jamais le curseur système : il s'y ajoute. Le pointeur natif reste
+   * visible, parce qu'un anneau qui traîne de trois images derrière la main rend le
+   * clic imprécis, et parce qu'une personne qui n'a pas chargé le JavaScript doit
+   * toujours voir où elle pointe.
+   * ------------------------------------------------------------------ */
+  .curseur {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    z-index: 90;
+    pointer-events: none;
+    border-radius: 999px;
+    will-change: transform;
+    mix-blend-mode: plus-lighter;
+    /*
+     * Invisible jusqu'au premier mouvement du pointeur, où le code le révèle. Sans cela,
+     * l'anneau naîtrait en haut à gauche et traverserait l'écran en diagonale au premier
+     * geste. L'état de départ est ici et non dans la composante : c'est une propriété
+     * d'apparence, elle appartient à la feuille de style.
+     */
+    opacity: 0;
+  }
+  .curseur__anneau {
+    inline-size: 34px;
+    block-size: 34px;
+    margin: -17px 0 0 -17px;
+    border: var(--trait) solid color-mix(in oklab, var(--accent) 70%, transparent);
+    transition:
+      inline-size 0.24s var(--ressort),
+      block-size 0.24s var(--ressort),
+      margin 0.24s var(--ressort),
+      opacity 0.24s var(--sortie);
+  }
+  .curseur__anneau[data-actif='oui'] {
+    inline-size: 56px;
+    block-size: 56px;
+    margin: -28px 0 0 -28px;
+    background: color-mix(in oklab, var(--accent) 10%, transparent);
+  }
+  .curseur__point {
+    inline-size: 5px;
+    block-size: 5px;
+    margin: -2.5px 0 0 -2.5px;
+    background: var(--accent);
+  }
+
+  /*
+   * En thème clair, `plus-lighter` sur un accent sombre donne un halo blanc invisible.
+   * L'anneau y repasse en mélange normal.
+   */
+  :root[data-theme='clair'] .curseur {
+    mix-blend-mode: normal;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme='sombre']) .curseur {
+      mix-blend-mode: normal;
+    }
+  }
+
+  /* ------------------------------------------------------------------ *
+   * La maquette : un téléphone, et l'application dedans
+   * ------------------------------------------------------------------ */
+  .appareil {
+    position: relative;
+    inline-size: var(--vitrine-appareil-l);
+    block-size: var(--vitrine-appareil-h);
+    max-inline-size: 100%;
+    padding: 10px;
+    background: color-mix(in oklab, var(--fond) 88%, #000);
+    border: var(--trait) solid var(--bord);
+    border-radius: var(--vitrine-appareil-rayon);
+    box-shadow: var(--vitrine-appareil-ombre);
+    /* Le basculement 3D vit sur une enveloppe, jamais sur l'appareil lui-même. */
+    transform-style: preserve-3d;
+  }
+
+  .appareil__scene {
+    perspective: 1400px;
+  }
+
+  .appareil__ecran {
+    position: relative;
+    block-size: 100%;
+    overflow: hidden;
+    border-radius: calc(var(--vitrine-appareil-rayon) - 10px);
+    background:
+      radial-gradient(58% 40% at 88% 2%, var(--halo) 0%, transparent 70%),
+      var(--degrade);
+    background-repeat: no-repeat;
+  }
+
+  /* Les deux taches floues de la maquette, à l'intérieur de l'écran. */
+  .appareil__lueur {
+    position: absolute;
+    border-radius: 999px;
+    pointer-events: none;
+    filter: blur(90px);
+  }
+  .appareil__lueur--haut {
+    inline-size: 280px;
+    block-size: 280px;
+    inset-block-start: -80px;
+    inset-inline-end: -90px;
+    background: #2f7fb8;
+    opacity: 0.5;
+  }
+  .appareil__lueur--bas {
+    inline-size: 240px;
+    block-size: 240px;
+    inset-block-end: -60px;
+    inset-inline-start: -80px;
+    background: #7fc3e3;
+    opacity: 0.24;
+    filter: blur(100px);
+  }
+
+  /* ------------------------------------------------------------------ *
+   * L'application rejouée. Échelle propre : tout est relatif à `--ecran-base`.
+   * ------------------------------------------------------------------ */
+  .ecran {
+    --ecran-base: 15px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    padding: 18px 16px 0;
+    color: var(--encre);
+    font-size: var(--ecran-base);
+    line-height: 1.45;
+  }
+
+  .ecran__entete {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block-end: 16px;
+  }
+  .ecran__marque {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--encre-douce);
+  }
+
+  .ecran__corps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .ecran__carte {
+    padding: 16px;
+    background: var(--surface);
+    border: var(--trait) solid var(--bord);
+    border-radius: 20px;
+    box-shadow: var(--lustre);
+  }
+  .ecran__carte--accent {
+    background: var(--surface-accent);
+    border-color: var(--bord-accent);
+  }
+  .ecran__carte--alerte {
+    background: var(--danger-fond);
+    border-color: var(--danger-bord);
+  }
+
+  .ecran__titre {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--encre-douce);
+  }
+
+  /* Le bloc qui décide : le prochain départ. */
+  .ecran__prochain {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .ecran__heure {
+    font-family: var(--police-chiffres);
+    font-variant-numeric: tabular-nums;
+    font-size: 58px;
+    font-weight: 600;
+    line-height: 0.86;
+    letter-spacing: -0.04em;
+    color: var(--accent);
+  }
+  .ecran__delai {
+    font-size: 13px;
+    color: var(--encre-douce);
+  }
+
+  /*
+   * Le signal « partez maintenant » : un anneau qui s'ouvre, un point qui respire.
+   * Repris tel quel de `.prochain__signal` dans l'application.
+   */
+  .ecran__signal {
+    position: relative;
+    inline-size: 16px;
+    block-size: 16px;
+    flex: none;
+    align-self: center;
+  }
+  .ecran__signal::before,
+  .ecran__signal::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    border-radius: 999px;
+    translate: -50% -50%;
+  }
+  .ecran__signal::before {
+    inline-size: 16px;
+    block-size: 16px;
+    border: var(--trait-fort) solid var(--accent);
+    animation: onde 1.8s var(--sortie) infinite;
+  }
+  .ecran__signal::after {
+    inline-size: 6px;
+    block-size: 6px;
+    background: var(--accent);
+    animation: souffle 1.8s var(--sortie) infinite;
+  }
+
+  /* Une ligne de trajet. */
+  .ecran__trajet {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-block: 9px;
+    border-block-start: var(--trait) solid var(--bord);
+  }
+  .ecran__trajet:first-child {
+    border-block-start: 0;
+  }
+  .ecran__trajet-heure {
+    font-family: var(--police-chiffres);
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    font-size: 16px;
+  }
+  .ecran__trajet-lieu {
+    font-size: 13px;
+    color: var(--encre-douce);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* La fiche de la semaine. */
+  .ecran__semaine {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+  .ecran__jour {
+    padding: 10px 6px;
+    background: var(--fond-creux);
+    border: var(--trait) solid var(--bord);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .ecran__jour[data-aujourdhui='oui'] {
+    background: var(--surface-accent);
+    border-color: var(--bord-accent);
+  }
+  .ecran__jour-nom {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--encre-douce);
+  }
+  .ecran__jour-heure {
+    font-family: var(--police-chiffres);
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* La progression de l'assistant : quatre barres, pas un pourcentage. */
+  .ecran__progression {
+    display: flex;
+    gap: 4px;
+  }
+  .ecran__pas {
+    flex: 1;
+    block-size: 4px;
+    border-radius: 999px;
+    background: var(--fond-creux);
+  }
+  .ecran__pas[data-franchi='oui'] {
+    background: var(--accent);
+  }
+
+  /* Le rail de navigation flottant, en bas de l'écran de la maquette. */
+  .ecran__rail {
+    display: flex;
+    gap: 4px;
+    margin: auto 0 12px;
+    padding: 4px;
+    background: var(--rail);
+    border: var(--trait) solid var(--bord);
+    border-radius: 20px;
+    box-shadow: var(--lustre);
+    backdrop-filter: var(--flou);
+    -webkit-backdrop-filter: var(--flou);
+  }
+  .ecran__rail-item {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding-block: 8px;
+    border-radius: 16px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--encre-douce);
+  }
+  .ecran__rail-item[data-actif='oui'] {
+    color: var(--accent);
+    background: var(--surface);
+  }
+  .ecran__rail-item svg {
+    inline-size: 20px;
+    block-size: 20px;
+    stroke-width: 1.75;
+  }
+
+  /* La carte des arrêts, dessinée — pas une tuile chargée. */
+  .ecran__plan {
+    position: relative;
+    block-size: 190px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--fond-creux);
+    border: var(--trait) solid var(--bord);
+  }
+
+  /* Le bus de l'état vide. Jamais à côté d'une heure réelle : il ferait croire à un suivi. */
+  .ecran__bus {
+    font-size: 26px;
+    animation: traverse 4s linear infinite;
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Divers
+   * ------------------------------------------------------------------ */
+  /* La petite flèche d'un lien sortant, alignée sur la ligne de base du texte. */
+  .lien__icone {
+    display: inline-block;
+    inline-size: 0.9em;
+    block-size: 0.9em;
+    margin-inline-start: 0.35em;
+    vertical-align: -0.08em;
+  }
+
+  .qr {
+    inline-size: 148px;
+    block-size: 148px;
+    padding: var(--espace-3);
+    background: #fff;
+    border-radius: var(--rayon-m);
+  }
+
+  .puce {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 34px;
+    block-size: 34px;
+    flex: none;
+    border-radius: var(--rayon-s);
+    background: var(--surface-accent);
+    border: var(--trait) solid var(--bord-accent);
+    color: var(--accent);
+  }
+  .puce svg {
+    inline-size: 18px;
+    block-size: 18px;
+    stroke-width: 1.75;
+  }
+}

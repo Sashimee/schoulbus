@@ -1,0 +1,218 @@
+/*
+ * Jetons de conception — REPRIS DE L'APPLICATION, NE PAS MODIFIER ICI.
+ *
+ * Copie conforme de la couche `tokens` de bus-scolaire-beckerich/src/index.css.
+ * Couleurs, échelle typographique, espacements, rayons, ombres et courbes y sont
+ * mesurés : chaque couple encre/fond tient >= 4,58:1 sur les 24 compositions réelles
+ * (dégradé + halo + voiles de verre). Éclaircir un voile ici désaccorderait la vitrine
+ * de l'application ET casserait ce calcul.
+ *
+ * Ce que la vitrine ajoute en propre — échelle d'affichage, durées longues, rythme des
+ * sections — vit dans `vitrine.css`, préfixé `--vitrine-`.
+ *
+ * Reprendre la version de l'application :  npm run jetons:reprendre
+ * Vérifier qu'elles n'ont pas divergé :    npm run jetons:verifier
+ */
+@layer tokens {
+  :root {
+    /*
+     * Deux familles, et rien d'autre. IBM Plex Sans porte le texte ; IBM Plex Mono ne
+     * sert qu'aux suites de caractères qu'on compare colonne par colonne — une heure,
+     * un code d'accès, une coordonnée. Les deux sont servies depuis le site, voir
+     * `polices.css`.
+     */
+    --police:
+      'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --police-chiffres: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    /*
+     * Échelle typographique modulaire. Le corps de texte est `--texte-l` (1rem) :
+     * en dessous, on ne lit pas une heure de bus d'un coup d'œil sur un quai.
+     */
+    --texte-xs: 0.75rem; /* étiquettes, mentions */
+    --texte-s: 0.8125rem; /* aides, notes, détails */
+    --texte-m: 0.9375rem; /* libellés de champ, tableaux */
+    --texte-l: 1rem; /* corps */
+    --texte-xl: 1.125rem; /* titre de carte, heure mise en avant */
+    --texte-2xl: 1.375rem; /* titre de section */
+    --texte-3xl: 1.75rem; /* titre de page */
+    --texte-4xl: 2.25rem; /* titre d'écran, sur les pages qui n'en portent qu'un */
+
+    /*
+     * L'heure du prochain départ. Elle ne fait pas partie de l'échelle : c'est le seul
+     * élément de l'application qu'on doit lire à bout de bras, un enfant sur un bras et
+     * le téléphone dans l'autre main. `clamp` la borne pour qu'elle ne déborde pas d'un
+     * écran de 320 px ni ne devienne grotesque sur un bureau.
+     */
+    --heure-geante: clamp(3rem, 15vw, 3.875rem);
+
+    /* Espacement : une seule échelle, multiples de 4 px. */
+    --espace-1: 0.25rem;
+    --espace-2: 0.5rem;
+    --espace-3: 0.75rem;
+    --espace-4: 1rem;
+    --espace-5: 1.5rem;
+    --espace-6: 2rem;
+    --espace-7: 3rem;
+
+    /*
+     * Rayons et épaisseurs de trait. Les rayons se sont élargis
+     * avec la refonte : une surface de verre à angle vif se lit comme un défaut de
+     * rendu, pas comme une carte posée sur le fond.
+     */
+    --rayon-s: 12px;
+    --rayon-m: 16px;
+    --rayon-l: 24px;
+    /* `--lustre` porte l'ombre des surfaces posées ; il ne reste que deux ombres
+       portées, pour ce qui flotte au-dessus d'elles et pour ce qui bloque la page. */
+    --ombre-2: 0 2px 6px -1px rgb(0 0 0 / 0.22), 0 8px 24px -14px rgb(0 0 0 / 0.4);
+    --ombre-3: 0 4px 12px -2px rgb(0 0 0 / 0.28), 0 20px 48px -20px rgb(0 0 0 / 0.5);
+    --trait: 1px;
+    --trait-fort: 2px;
+
+    /* Cible tactile minimale, imposée à tout élément interactif. */
+    --cible: 44px;
+    /* Hauteur du rail de navigation flottant : la page réserve sa place en bas. */
+    --rail-hauteur: 60px;
+
+    --gouttiere: var(--espace-4);
+    --largeur: 46rem;
+    /* La navigation bascule de bas en haut à 48rem. En dur dans les media queries,
+       qui ne savent pas lire une variable. */
+
+    /* Le flou d'arrière-plan des surfaces de verre, en un seul endroit. */
+    --flou: blur(28px) saturate(140%);
+    --sortie: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --ressort: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /*
+     * Palette sombre (défaut).
+     *
+     * Les surfaces ne sont plus opaques : ce sont des voiles blancs posés sur un
+     * dégradé. Un couple encre/fond ne se vérifie donc plus sur une couleur unie mais
+     * sur la COMPOSITION réelle — arrêt du dégradé, halo décoratif, une ou deux
+     * couches de verre. Toutes les encres ci-dessous ont été mesurées ainsi, sur les
+     * 24 compositions possibles, et tiennent ≥ 4,58:1 (voir docs/plan.md, lot 18).
+     * Ne pas éclaircir un voile ni un arrêt du dégradé sans refaire le calcul :
+     * éclaircir le fond abaisse toutes les encres d'un coup.
+     */
+    --degrade: radial-gradient(120% 80% at 15% 0%, #142b47 0%, #0e1a2e 45%, #080d19 100%);
+    --halo: rgb(47 127 184 / 0.1);
+    --fond: #0e1a2e; /* repli uni : barre système, impression, `color-scheme` */
+    --fond-creux: rgb(255 255 255 / 0.05); /* creux d'un champ, d'une puce */
+    --surface: rgb(255 255 255 / 0.07); /* le verre ordinaire */
+    --surface-haute: rgb(255 255 255 / 0.12); /* verre appuyé : survol, en-tête de tableau */
+    --surface-accent: rgb(169 220 245 / 0.1); /* verre teinté : ce qui appelle une décision */
+    --rail: rgb(255 255 255 / 0.12); /* la barre de navigation flottante */
+
+    --bord: rgb(255 255 255 / 0.18);
+    --bord-accent: rgb(169 220 245 / 0.34);
+    /* L'arête de la vitre : un filet de lumière en haut, une ombre portée en dessous. */
+    --lustre: inset 0 1px 0 rgb(255 255 255 / 0.28), 0 18px 40px -24px rgb(0 0 0 / 0.8);
+
+    --encre: #e9eff6;
+    --encre-douce: #c2cdda;
+
+    --accent: #a9dcf5;
+    --accent-2: #d5bdf7; /* seul usage : distinguer une ligne de bus */
+    /* Le bouton d'action : un galet clair, pas une pastille colorée. */
+    --plein: rgb(255 255 255 / 0.92);
+    --encre-sur-plein: #10233d;
+
+    --danger: #f4aab6;
+    --danger-fond: rgb(232 121 140 / 0.14);
+    --danger-bord: rgb(232 121 140 / 0.38);
+    --attention: #ecc386;
+    --attention-fond: rgb(224 169 90 / 0.14);
+    --attention-bord: rgb(224 169 90 / 0.38);
+    --succes: #b3d3ad;
+    --succes-fond: rgb(147 197 140 / 0.14);
+    --succes-bord: rgb(147 197 140 / 0.38);
+    --info-fond: var(--surface-accent);
+    --info-bord: var(--bord-accent);
+
+    color-scheme: dark;
+  }
+
+  /*
+   * Palette claire. Elle est écrite deux fois — sur le choix explicite et sur la
+   * préférence système — parce qu'une media query ne peut pas figurer dans un
+   * sélecteur : c'est la seule duplication acceptée de la couche `tokens`.
+   *
+   * Le principe s'inverse : les voiles sont blancs sur un fond gris-bleu, et le bouton
+   * d'action redevient sombre. La bordure, elle, ne peut pas rester blanche comme dans
+   * la maquette — un filet blanc sur un fond clair ne sépare rien. Elle passe à l'encre
+   * translucide, et c'est `--lustre` seul qui garde l'arête de verre.
+   */
+  :root[data-theme='clair'] {
+    --degrade: radial-gradient(120% 80% at 20% 0%, #eef2f7 0%, #e1e7ee 50%, #cfd8e2 100%);
+    --halo: rgb(47 127 184 / 0.05);
+    --fond: #e1e7ee;
+    --fond-creux: rgb(255 255 255 / 0.5);
+    --surface: rgb(255 255 255 / 0.55);
+    --surface-haute: rgb(255 255 255 / 0.75);
+    --surface-accent: rgb(157 196 232 / 0.38);
+    --rail: rgb(255 255 255 / 0.6);
+
+    --bord: rgb(21 26 32 / 0.14);
+    --bord-accent: rgb(18 57 95 / 0.3);
+    --lustre: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 16px 36px -26px rgb(21 26 32 / 0.6);
+
+    --encre: #151a20;
+    --encre-douce: #4a5262;
+
+    --accent: #12395f;
+    --accent-2: #553094;
+    --plein: #12395f;
+    --encre-sur-plein: #eef2f7;
+
+    --danger: #8f1f2b;
+    --danger-fond: rgb(156 39 51 / 0.1);
+    --danger-bord: rgb(156 39 51 / 0.28);
+    --attention: #6b4300;
+    --attention-fond: rgb(125 80 0 / 0.1);
+    --attention-bord: rgb(125 80 0 / 0.28);
+    --succes: #215424;
+    --succes-fond: rgb(44 107 34 / 0.1);
+    --succes-bord: rgb(44 107 34 / 0.28);
+
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme='sombre']) {
+      --degrade: radial-gradient(120% 80% at 20% 0%, #eef2f7 0%, #e1e7ee 50%, #cfd8e2 100%);
+      --halo: rgb(47 127 184 / 0.05);
+      --fond: #e1e7ee;
+      --fond-creux: rgb(255 255 255 / 0.5);
+      --surface: rgb(255 255 255 / 0.55);
+      --surface-haute: rgb(255 255 255 / 0.75);
+      --surface-accent: rgb(157 196 232 / 0.38);
+      --rail: rgb(255 255 255 / 0.6);
+
+      --bord: rgb(21 26 32 / 0.14);
+      --bord-accent: rgb(18 57 95 / 0.3);
+      --lustre: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 16px 36px -26px rgb(21 26 32 / 0.6);
+
+      --encre: #151a20;
+      --encre-douce: #4a5262;
+
+      --accent: #12395f;
+      --accent-2: #553094;
+      --plein: #12395f;
+      --encre-sur-plein: #eef2f7;
+
+      --danger: #8f1f2b;
+      --danger-fond: rgb(156 39 51 / 0.1);
+      --danger-bord: rgb(156 39 51 / 0.28);
+      --attention: #6b4300;
+      --attention-fond: rgb(125 80 0 / 0.1);
+      --attention-bord: rgb(125 80 0 / 0.28);
+      --succes: #215424;
+      --succes-fond: rgb(44 107 34 / 0.1);
+      --succes-bord: rgb(44 107 34 / 0.28);
+
+      color-scheme: light;
+    }
+  }
+}

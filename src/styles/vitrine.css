@@ -1,0 +1,442 @@
+/*
+ * Feuille maîtresse de la vitrine.
+ *
+ * Même discipline que l'application : aucune valeur brute hors de la couche des jetons,
+ * une composante ne porte que des classes. Les jetons de couleur, d'espacement, de rayon
+ * et de courbe viennent tels quels de l'application (`jetons.css`, repris par script) ;
+ * ce fichier n'ajoute que ce qu'une page de présentation réclame en propre et que
+ * l'application n'a jamais eu — une échelle d'affichage, un rythme de sections, des
+ * durées longues pour ce qui se déclenche au défilement.
+ *
+ * L'ajout est toujours préfixé `--vitrine-`. On sait ainsi, en lisant une déclaration,
+ * si l'on touche à la charte commune ou à la seule vitrine.
+ */
+@layer reset, tokens, vitrine, base, composants, sections, utilitaires;
+
+@import './polices.css';
+@import './jetons.css';
+@import './composants.css';
+@import './sections.css';
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  * {
+    margin: 0;
+  }
+  body {
+    -webkit-font-smoothing: antialiased;
+  }
+  img,
+  svg,
+  canvas {
+    display: block;
+    max-inline-size: 100%;
+  }
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 650;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  p,
+  li {
+    text-wrap: pretty;
+  }
+  ul {
+    padding: 0;
+    list-style: none;
+  }
+}
+
+@layer vitrine {
+  :root {
+    /*
+     * Échelle d'affichage. L'application s'arrête à `--texte-4xl` (2,25 rem) parce
+     * qu'aucun de ses écrans n'a de titre à crier : on y vient chercher une heure, pas
+     * une promesse. Une page de présentation, elle, doit poser un premier plan avant
+     * que le regard ne cherche quoi que ce soit — d'où ces trois crans au-dessus.
+     *
+     * `clamp` borne les deux extrémités : lisible à 320 px, jamais grotesque à 2560.
+     */
+    /*
+     * Les bornes hautes sont calées sur la LARGEUR DE LA COLONNE, pas sur celle de
+     * l'écran. Le héros partage la sienne avec un téléphone de 390 px : un titre de
+     * 6 rem y tombait à six lignes au lieu de trois, et une phrase de trois lignes
+     * cassée en six ne se lit plus d'un coup d'œil — ce qu'on lui demandait.
+     */
+    --vitrine-titre-1: clamp(2.5rem, 5vw, 4.5rem);
+    --vitrine-titre-2: clamp(1.875rem, 3.6vw, 3rem);
+    --vitrine-titre-3: clamp(1.375rem, 2.2vw, 1.875rem);
+    /* Le paragraphe d'introduction d'une section : plus grand que le corps, sans être un titre. */
+    --vitrine-chapeau: clamp(1.0625rem, 1.5vw, 1.375rem);
+
+    /*
+     * L'heure du héros. L'application borne la sienne à 3,875 rem parce qu'elle vit dans
+     * un écran de téléphone tenu à bout de bras ; ici elle est le sujet de la page, et
+     * doit se lire d'un coup d'œil sur un écran de bureau à un mètre.
+     */
+    --vitrine-heure: clamp(3.5rem, 8.5vw, 6.5rem);
+
+    /*
+     * Durées longues. La règle de l'application — tout finit sous la demi-seconde —
+     * continue de régir ce qui répond à un DOIGT : appui, bascule, survol. Elle ne peut
+     * pas régir ce qui répond au DÉFILEMENT, où 240 ms se lisent comme un sursaut.
+     */
+    --vitrine-lent: 0.9s;
+    --vitrine-tres-lent: 1.4s;
+
+    /* Rythme vertical. Une section respire, sinon la page se lit comme un formulaire. */
+    --vitrine-section: clamp(5.5rem, 12vh, 9.5rem);
+    --vitrine-section-serree: clamp(3.5rem, 7vh, 6rem);
+
+    /* Largeurs. `--largeur` (46 rem) reste celle de l'application, trop étroite ici. */
+    --vitrine-large: 78rem;
+    --vitrine-moyen: 62rem;
+    --vitrine-texte: 38rem; /* colonne de lecture : ~70 signes */
+
+    /* L'appareil de la maquette, au millimètre près (Schulbus App - Produktion). */
+    --vitrine-appareil-l: 390px;
+    --vitrine-appareil-h: 844px;
+    --vitrine-appareil-rayon: 28px;
+    --vitrine-appareil-ombre: 0 24px 60px -24px rgb(0 0 0 / 0.75);
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    /*
+     * Le défilement doux est confié à Lenis, qui a besoin d'un défilement natif brut
+     * pour poser le sien par-dessus. `scroll-behavior: smooth` en CSS les ferait lutter.
+     * Le retour au natif se fait dans `useNiveauMouvement`, pas ici.
+     */
+    scroll-behavior: auto;
+  }
+
+  body {
+    /*
+     * Le fond n'est pas ici mais dans `.fond`, en position fixe : la page mesure une
+     * dizaine d'écrans, et un dégradé posé sur le `body` s'étirerait sur toute cette
+     * hauteur — les arrêts se retrouveraient à des kilomètres les uns des autres, et le
+     * halo disparaîtrait de l'écran dès le deuxième défilement.
+     *
+     * `background-attachment: fixed` réglerait cela sur le papier ; l'application l'a
+     * abandonné (saccades au défilement sur téléphone, ignoré par iOS). Un élément fixe
+     * derrière le contenu obtient le même résultat sans le coût.
+     */
+    background-color: var(--fond);
+    color: var(--encre);
+    font-family: var(--police);
+    font-size: var(--texte-l);
+    line-height: 1.55;
+    min-block-size: 100dvh;
+    /* Une translation d'entrée de 18 px ne doit jamais créer de défilement horizontal. */
+    overflow-x: clip;
+  }
+
+  h1 {
+    font-size: var(--vitrine-titre-1);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+  h2 {
+    font-size: var(--vitrine-titre-2);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  h3 {
+    font-size: var(--vitrine-titre-3);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  h4 {
+    font-size: var(--texte-xl);
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    color: var(--accent);
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+  }
+
+  /* Les suites de caractères qu'on lit colonne par colonne. Comme dans l'application. */
+  time,
+  .heure,
+  .tabulaire {
+    font-family: var(--police-chiffres);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /*
+   * Le focus reste celui de l'application, et il est intouchable : le curseur
+   * personnalisé de la vitrine ne s'adresse qu'à la souris, et ne doit jamais servir
+   * d'excuse pour affaiblir ce que voit une personne au clavier.
+   */
+  :focus-visible {
+    outline: var(--trait-fort) solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /*
+   * Le fond de page : dégradé, deux halos, et — si l'appareil le porte — le canevas du
+   * nuage animé par-dessus. Fixe, derrière tout le reste, insensible au pointeur.
+   */
+  .fond {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(58% 40% at 88% 2%, var(--halo) 0%, transparent 70%),
+      radial-gradient(50% 36% at -8% 64%, var(--halo) 0%, transparent 70%), var(--degrade);
+    background-repeat: no-repeat;
+    background-color: var(--fond);
+  }
+
+  .fond__toile {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    /*
+     * Le canevas se fond dans le dégradé CSS au lieu de le remplacer : si le shader
+     * échoue à mi-course, ou si la première image tarde, il reste le fond de
+     * l'application dessous, et non du noir.
+     */
+    opacity: 0;
+    transition: opacity var(--vitrine-tres-lent) var(--sortie);
+  }
+  .fond__toile[data-prete='oui'] {
+    opacity: 1;
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Mouvements nommés.
+   *
+   * Les quatre premiers sont ceux de l'application, repris à l'identique : une carte
+   * qui monte de 14 px ici et de 14 px là-bas, c'est la même main qui a dessiné les
+   * deux. Les suivants n'existent que dans la vitrine.
+   * ------------------------------------------------------------------ */
+  @keyframes monte {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+  @keyframes glisse {
+    from {
+      opacity: 0;
+      transform: translateX(18px);
+    }
+  }
+  @keyframes onde {
+    from {
+      opacity: 0.7;
+      transform: scale(0.6);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.9);
+    }
+  }
+  @keyframes souffle {
+    0%,
+    100% {
+      opacity: 0.9;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+  }
+
+  /*
+   * Le ruban des langues, en boucle.
+   *
+   * Les deux pistes sont identiques et se déplacent ensemble d'exactement leur propre
+   * largeur : quand la première a fini de sortir par la gauche, la seconde occupe la
+   * place qu'elle avait au départ, avec le même contenu. Le raccord est donc invisible,
+   * et la boucle n'a pas de « saut » à cacher.
+   */
+  @keyframes defile {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  /* La dérive très lente des halos décoratifs — grands écrans seulement. */
+  @keyframes derive {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(18px, -14px, 0);
+    }
+  }
+
+  /* Le bus qui traverse, une seule fois, dans l'écran « plus de bus aujourd'hui ». */
+  @keyframes traverse {
+    from {
+      transform: translateX(-12%);
+    }
+    to {
+      transform: translateX(115%);
+    }
+  }
+
+  /*
+   * « Réduire les animations » n'est pas une préférence esthétique : c'est un besoin
+   * médical pour qui souffre de troubles vestibulaires. Tout s'arrête, et la page reste
+   * entièrement lisible — les composantes qui animent une apparition doivent donc
+   * toujours partir d'un état visible, jamais d'`opacity: 0` figé.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilitaires {
+  /* La bande de contenu. Trois largeurs, pas une de plus. */
+  .bande {
+    inline-size: 100%;
+    max-inline-size: var(--vitrine-large);
+    margin-inline: auto;
+    padding-inline: var(--gouttiere);
+  }
+  .bande--moyen {
+    max-inline-size: var(--vitrine-moyen);
+  }
+  .bande--texte {
+    max-inline-size: var(--vitrine-texte);
+  }
+
+  .section {
+    position: relative;
+    padding-block: var(--vitrine-section);
+  }
+  .section--serree {
+    padding-block: var(--vitrine-section-serree);
+  }
+
+  .texte-doux {
+    color: var(--encre-douce);
+  }
+  .texte-accent {
+    color: var(--accent);
+  }
+  .chapeau {
+    font-size: var(--vitrine-chapeau);
+    line-height: 1.45;
+    color: var(--encre-douce);
+    max-inline-size: var(--vitrine-texte);
+  }
+
+  .pile {
+    display: flex;
+    flex-direction: column;
+  }
+  .pile--1 {
+    gap: var(--espace-1);
+  }
+  .pile--2 {
+    gap: var(--espace-2);
+  }
+  .pile--3 {
+    gap: var(--espace-3);
+  }
+  .pile--4 {
+    gap: var(--espace-4);
+  }
+  .pile--5 {
+    gap: var(--espace-5);
+  }
+  .pile--6 {
+    gap: var(--espace-6);
+  }
+
+  .rangee {
+    display: flex;
+    align-items: center;
+    gap: var(--espace-3);
+    flex-wrap: wrap;
+  }
+
+  /* Le lien d'évitement, premier élément focalisable de la page. */
+  .saut-contenu {
+    position: absolute;
+    inset-block-start: var(--espace-2);
+    inset-inline-start: var(--espace-2);
+    z-index: 100;
+    padding: var(--espace-3) var(--espace-4);
+    background: var(--plein);
+    color: var(--encre-sur-plein);
+    border-radius: var(--rayon-s);
+    font-weight: 700;
+    transform: translateY(-200%);
+  }
+  .saut-contenu:focus-visible {
+    transform: none;
+  }
+
+  .visuellement-cache {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /*
+   * L'en-tête d'une section : étiquette, titre, chapeau. Toujours la même pile, toujours
+   * le même écart — c'est ce qui fait qu'on reconnaît un début de section sans le lire.
+   */
+  .entete-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--espace-4);
+  }
+
+  /*
+   * `content-visibility: auto` a été essayé sur les sections basses, puis retiré.
+   *
+   * Le gain — quelques millisecondes au premier rendu d'une page qui ne contient que du
+   * texte et des formes CSS — ne payait pas son défaut : en remontant, le navigateur
+   * affiche la taille de réserve avant d'avoir remis en page, et l'on traverse un écran
+   * entièrement vide. Sur une page dont le sujet est la fiabilité, un blanc au
+   * défilement se lit comme une panne.
+   */
+}
