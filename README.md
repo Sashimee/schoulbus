@@ -35,7 +35,23 @@ npm run jetons:verifier    # les jetons ont-ils divergé de ceux de l'applicatio
 npm run jetons:reprendre   # les reprendre depuis l'application
 npm run chiffres           # régénérer src/contenu/chiffres.ts depuis les données
 npm run assets:qr          # régénérer le QR vers URL_APP
+npm run assets:partage     # régénérer les vignettes de partage et les icônes matricielles
 ```
+
+### Les ressources engendrées sont commitées
+
+`public/partage*.png`, `public/apple-touch-icon.png`, `public/favicon-32.png` et
+`public/qr-application.svg` ne sont PAS produits par `npm run build`. Ils sont engendrés à
+la main, puis commités — sans quoi la construction, et donc le conteneur, dépendraient de
+`satori`, de `resvg` et d'une bibliothèque de QR pour redessiner à l'identique des fichiers
+qui ne changent qu'avec le titre de la page.
+
+Le risque de ce choix est qu'ils cessent un jour de correspondre au texte : l'intégration
+continue les régénère donc à chaque poussée et refuse la révision s'ils ont bougé.
+
+Les vignettes sont dessinées avec la police du site, lue dans `node_modules` et convertie
+en tracés. Elles ne dépendent donc d'aucune police installée sur la machine — c'est ce qui
+distingue ce script de celui de l'application, dont la vignette prend la police du système.
 
 ## Ce qu'il faut savoir avant d'y toucher
 
@@ -105,18 +121,67 @@ régénère avec `npm run assets:qr`.
 - **La traduction luxembourgeoise n'a pas été relue par une personne dont c'est la langue
   maternelle.** C'est la langue du foyer dans une bonne part de la commune ; une tournure
   fausse s'y remarque immédiatement. À faire relire avant toute mise en ligne publique.
-- **Les largeurs de téléphone et de tablette n'ont pas été vues à l'écran.** La mise en
-  page a été vérifiée sur écran large, en thème clair et sombre, dans les trois langues,
-  et relue dans la feuille de style pour les points de bascule (40 rem, 48 rem, 62 rem) —
-  mais pas ouverte sur un appareil étroit.
+- **Les largeurs étroites ont été mesurées dans un moteur de rendu, pas sur un appareil.**
+  La page a été ouverte dans Chromium à 320, 360, 390, 414 et 768 px, en thème clair et
+  sombre, dans les trois langues, avec émulation tactile — trente combinaisons. Ce que
+  cette réserve annonçait sans le savoir s'y trouvait : la colonne de texte du héros
+  mesurait 390 px sur un écran de 320, et le titre comme le chapeau étaient COUPÉS, sans
+  défilement pour aller les chercher (voir le commentaire de `.heros__grille > *`). C'est
+  corrigé, et vérifié : plus aucune cible tactile sous 44 px, plus de texte tronqué.
+  Restent deux pixels de débord de document, dus au ruban des langues, que `overflow-x:
+  clip` retient et que rien ne laisse voir.
+  Ce qui n'a toujours PAS été fait : ouvrir la page sur un vrai téléphone. Un émulateur ne
+  rend ni les polices du système, ni la barre d'adresse qui mange la hauteur, ni les
+  marges de sécurité d'un écran à encoche — ces dernières sont posées dans la feuille de
+  style, jamais vues à l'œuvre.
 - **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` compose
   ce que le navigateur devrait afficher ; il ne lit pas l'écran.
 - **Le nuage WebGL n'a été vu qu'à l'arrêt.** L'environnement de vérification suspendait
   les images d'animation ; la composition a été validée sur une image fixe, le mouvement
   seulement relu dans le code.
-- **Le déploiement n'est pas décidé.** Aucun fichier d'intégration continue n'est posé.
-  La construction est purement statique : GitHub Pages, Cloudflare Pages ou autre restent
-  ouverts.
+- **Le conteneur n'a pas encore tourné ailleurs qu'ici.** L'image se construit, se lance,
+  et ses en-têtes ont été relevés à la main (voir plus bas) — mais sur cette machine, en
+  HTTP, sans Traefik devant. Le point à surveiller au premier déploiement est
+  `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
+
+## Le déploiement
+
+Une image Docker en deux étapes : Node construit, nginx sert. Rien d'autre ne tourne — le
+site est statique.
+
+```bash
+docker build -t vitrine \
+  --build-arg URL_PUBLIQUE=https://schoulbus.lu \
+  --build-arg DATE_CONTENU=$(git log -1 --format=%cs -- src index.html public) .
+docker run --rm -p 8080:80 vitrine
+```
+
+`URL_PUBLIQUE` entre dans les métadonnées de partage, qui exigent des adresses absolues :
+elle est donc connue à la construction, pas au démarrage. `DATE_CONTENU` sert au `lastmod`
+du plan du site ; le dépôt Git n'étant pas copié dans l'image, sans elle la balise est
+omise — jamais remplacée par la date de construction, qui ne dirait rien de vrai.
+
+L'étape de construction lance `npm run verifier` avant `npm run build` : une image ne peut
+pas être publiée si les types, le lint, les tests, les contrastes ou les jetons tombent.
+
+### Ce que nginx pose, et ce qu'il ne pose pas
+
+La politique de sécurité du contenu vit dans la balise `<meta>` engendrée par
+`vite.config.ts`, parce que c'est là qu'est calculée l'empreinte du script
+anti-scintillement de `index.html`. L'en-tête HTTP ne porte donc QUE `frame-ancestors`,
+que la spécification demande d'ignorer dans une balise. Deux politiques s'intersectent : en
+recopier une deuxième version ici rebloquerait le script au premier oubli.
+
+Les en-têtes communs sont dans `nginx-entetes.conf`, réintroduits par `include` dans chaque
+bloc `location` — un `add_header` posé dans un `location` remplace ceux du serveur au lieu
+de s'y ajouter, silencieusement.
+
+### Dokploy
+
+Application de type Dockerfile, domaine `schoulbus.lu`, TLS par le Traefik de Dokploy. Le
+`HEALTHCHECK` de l'image permet à Dokploy de distinguer un déploiement cassé d'un
+déploiement réussi. L'intégration continue (`.github/workflows/verifier.yml`) ne déploie
+rien : elle refuse une révision qui ne se vérifie pas, et construit l'image à blanc.
 
 ## Source des données
 
