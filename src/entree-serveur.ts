@@ -21,7 +21,7 @@ import { App } from './App.tsx'
 import { FournisseurI18n } from './i18n/Fournisseur.tsx'
 import { Mentions } from './pages/Mentions.tsx'
 import { CONTENUS, LANGUES, PAGES, cheminPage, type Page } from './i18n/contexte.ts'
-import { ORIGINE, URL_APP, imagePartage } from './config.ts'
+import { APP_PUBLIEE, ORIGINE, URL_APP, imagePartage } from './config.ts'
 import type { Langue } from './contenu/type.ts'
 
 export { LANGUES, PAGES }
@@ -60,34 +60,43 @@ function echapper(texte: string): string {
 function donneesStructurees(langue: Langue, url: string, vignette: string): string {
   const contenu = CONTENUS[langue]
 
+  const site = {
+    '@type': 'WebSite',
+    '@id': `${url}#site`,
+    url,
+    name: contenu.general.marque,
+    description: contenu.meta.description,
+    inLanguage: contenu.codeLangue,
+    image: vignette,
+  }
+
+  /*
+   * L'application n'est décrite que si elle est publique.
+   *
+   * Un `SoftwareApplication` porte une `url`, et c'est là tout le problème : le décrire
+   * reviendrait à donner aux moteurs l'adresse exacte vers laquelle la page refuse
+   * délibérément de conduire. On ne peut pas retirer un lien de la page et le laisser dans
+   * le balisage — c'est le même lien, simplement écrit pour une machine.
+   */
+  const application = {
+    '@type': 'SoftwareApplication',
+    '@id': `${URL_APP}#application`,
+    name: contenu.general.marque,
+    description: contenu.meta.description,
+    url: URL_APP,
+    applicationCategory: 'TravelApplication',
+    // Une application web installable : elle tourne partout où tourne un navigateur.
+    operatingSystem: 'Web',
+    // Les cinq langues de l'application, et non les trois de la vitrine.
+    inLanguage: ['fr', 'de', 'lb', 'pt', 'en'],
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+    isPartOf: { '@id': `${url}#site` },
+  }
+
   const graphe = {
     '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'WebSite',
-        '@id': `${url}#site`,
-        url,
-        name: contenu.general.marque,
-        description: contenu.meta.description,
-        inLanguage: contenu.codeLangue,
-        image: vignette,
-      },
-      {
-        '@type': 'SoftwareApplication',
-        '@id': `${URL_APP}#application`,
-        name: contenu.general.marque,
-        description: contenu.meta.description,
-        url: URL_APP,
-        applicationCategory: 'TravelApplication',
-        // Une application web installable : elle tourne partout où tourne un navigateur.
-        operatingSystem: 'Web',
-        // Les cinq langues de l'application, et non les trois de la vitrine.
-        inLanguage: ['fr', 'de', 'lb', 'pt', 'en'],
-        isAccessibleForFree: true,
-        offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
-        isPartOf: { '@id': `${url}#site` },
-      },
-    ],
+    '@graph': APP_PUBLIEE ? [site, application] : [site],
   }
 
   return `    <script type="application/ld+json">${JSON.stringify(graphe).replace(/</g, '\\u003c')}</script>`

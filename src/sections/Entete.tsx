@@ -15,7 +15,7 @@ import { useState } from 'react'
 import { Bouton } from '../composants/Bouton.tsx'
 import { LogoBus } from '../composants/LogoBus.tsx'
 import { ChoixLangue, ChoixTheme } from '../composants/Selecteurs.tsx'
-import { URL_APP } from '../config.ts'
+import { APP_PUBLIEE, URL_APP } from '../config.ts'
 import { useContenu } from '../i18n/contexte.ts'
 
 export function Entete() {
@@ -44,9 +44,16 @@ export function Entete() {
       <div className="entete__actions">
         <ChoixLangue />
         <ChoixTheme />
-        <Bouton href={URL_APP} variante="primaire" externe>
-          {contenu.general.ouvrirApp}
-        </Bouton>
+        {/*
+         * Rien ne remplace le bouton ici. L'en-tête accompagne la lecture ; y afficher
+         * « bientôt disponible » sur toute la hauteur de la page répéterait dix fois une
+         * information que le héros et la section finale donnent déjà, chacune à leur place.
+         */}
+        {APP_PUBLIEE && (
+          <Bouton href={URL_APP} variante="primaire" externe>
+            {contenu.general.ouvrirApp}
+          </Bouton>
+        )}
       </div>
 
       {/*

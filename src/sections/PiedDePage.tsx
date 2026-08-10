@@ -9,11 +9,25 @@
  */
 import { LogoBus } from '../composants/LogoBus.tsx'
 import { ChoixLangue, ChoixTheme } from '../composants/Selecteurs.tsx'
+import { APP_PUBLIEE, URL_APP } from '../config.ts'
 import { PAGES, cheminPage, useContenu, useLangue } from '../i18n/contexte.ts'
+
+/*
+ * Les liens qui entrent dans l'application sont retirés tant qu'elle n'est pas publique.
+ *
+ * Le tri se fait sur l'adresse plutôt que sur une liste tenue à la main : c'est la seule
+ * façon qu'un lien ajouté demain dans `contenu/*.ts` soit filtré lui aussi, sans que
+ * personne n'ait à se souvenir de cette règle.
+ */
+function sansApplication(liens: { texte: string; url: string }[]) {
+  return APP_PUBLIEE ? liens : liens.filter((l) => !l.url.startsWith(URL_APP))
+}
 
 export function PiedDePage() {
   const contenu = useContenu()
   const { langue } = useLangue()
+  const siteVisibles = sansApplication(contenu.pied.liens.site)
+  const projetVisibles = sansApplication(contenu.pied.liens.projet)
 
   return (
     <footer className="pied">
@@ -27,21 +41,29 @@ export function PiedDePage() {
             <p className="texte-doux">{contenu.pied.description}</p>
           </div>
 
-          <nav aria-label={contenu.pied.titreSite}>
-            <h2 className="pied__titre">{contenu.pied.titreSite}</h2>
-            <div className="pied__liens">
-              {contenu.pied.liens.site.map((l) => (
-                <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer">
-                  {l.texte}
-                </a>
-              ))}
-            </div>
-          </nav>
+          {/*
+           * La colonne « Le site » ne contient que des pages de l'application : elle
+           * disparaît entièrement tant que celle-ci n'est pas publique. Un titre au-dessus
+           * d'une liste vide est pire qu'une colonne en moins — il annonce quelque chose
+           * qui n'arrive pas.
+           */}
+          {siteVisibles.length > 0 && (
+            <nav aria-label={contenu.pied.titreSite}>
+              <h2 className="pied__titre">{contenu.pied.titreSite}</h2>
+              <div className="pied__liens">
+                {siteVisibles.map((l) => (
+                  <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer">
+                    {l.texte}
+                  </a>
+                ))}
+              </div>
+            </nav>
+          )}
 
           <nav aria-label={contenu.pied.titreProjet}>
             <h2 className="pied__titre">{contenu.pied.titreProjet}</h2>
             <div className="pied__liens">
-              {contenu.pied.liens.projet.map((l) => (
+              {projetVisibles.map((l) => (
                 <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer">
                   {l.texte}
                 </a>

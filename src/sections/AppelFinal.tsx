@@ -10,7 +10,7 @@
  */
 import { m } from 'motion/react'
 import { Bouton } from '../composants/Bouton.tsx'
-import { URL_APP } from '../config.ts'
+import { APP_PUBLIEE, URL_APP, URL_SOURCE_OFFICIELLE } from '../config.ts'
 import { useContenu } from '../i18n/contexte.ts'
 import { useNiveauMouvement } from '../mouvement/useNiveauMouvement.ts'
 import { Revele } from '../mouvement/Revele.tsx'
@@ -44,35 +44,61 @@ export function AppelFinal() {
           <p className="chapeau final__chapeau">{contenu.final.chapeau}</p>
         </Revele>
 
-        <Revele rang={2}>
-          <Bouton href={URL_APP} variante="primaire" grand aimante externe>
-            {contenu.final.action}
-          </Bouton>
-        </Revele>
+        {APP_PUBLIEE ? (
+          <>
+            <Revele rang={2}>
+              <Bouton href={URL_APP} variante="primaire" grand aimante externe>
+                {contenu.final.action}
+              </Bouton>
+            </Revele>
 
-        <Revele rang={3}>
-          <div className="final__qr">
-            {/*
-             * Le QR est engendré à la construction (`scripts/build-qr.mjs`) plutôt que
-             * dans le navigateur : c'est une image fixe qui ne dépend que de `URL_APP`,
-             * et l'engendrer à l'ouverture coûterait une bibliothèque entière pour un
-             * dessin qui ne change jamais.
-             *
-             * L'adresse part de `BASE_URL` et non d'un chemin relatif : c'est la seule
-             * image que Vite n'écrit pas lui-même, et `./` la faisait chercher dans le
-             * dossier de la langue courante — donc absente sur `/de/` et sur `/lb/`,
-             * c'est-à-dire partout sauf là où on la relisait.
-             */}
-            <img
-              className="qr"
-              src={`${import.meta.env.BASE_URL}qr-application.svg`}
-              alt=""
-              width="148"
-              height="148"
-            />
-            <span className="texte-doux">{contenu.final.qr}</span>
-          </div>
-        </Revele>
+            <Revele rang={3}>
+              <div className="final__qr">
+                {/*
+                 * Le QR est engendré à la construction (`scripts/build-qr.mjs`) plutôt que
+                 * dans le navigateur : c'est une image fixe qui ne dépend que de `URL_APP`,
+                 * et l'engendrer à l'ouverture coûterait une bibliothèque entière pour un
+                 * dessin qui ne change jamais.
+                 *
+                 * L'adresse part de `BASE_URL` et non d'un chemin relatif : c'est la seule
+                 * image que Vite n'écrit pas lui-même, et `./` la faisait chercher dans le
+                 * dossier de la langue courante — donc absente sur `/de/` et sur `/lb/`,
+                 * c'est-à-dire partout sauf là où on la relisait.
+                 */}
+                <img
+                  className="qr"
+                  src={`${import.meta.env.BASE_URL}qr-application.svg`}
+                  alt=""
+                  width="148"
+                  height="148"
+                />
+                <span className="texte-doux">{contenu.final.qr}</span>
+              </div>
+            </Revele>
+          </>
+        ) : (
+          /*
+           * Sans appel à l'action, la page ne peut pas s'arrêter sur un blanc : après dix
+           * écrans de démonstration, un silence se lit comme une panne. L'annonce dit
+           * pourquoi il n'y a rien à ouvrir, et renvoie à la seule source qui existe
+           * aujourd'hui — la même que celle citée par la section « Indépendance ».
+           */
+          <Revele rang={2}>
+            <div className="final__bientot">
+              <span className="etiquette etiquette--accent">{contenu.general.bientot}</span>
+              <p className="texte-doux">{contenu.final.bientot}</p>
+              {/*
+               * Un `Bouton` et non un lien dans le texte : c'est désormais la seule chose
+               * qu'on puisse faire au bas de cette page, et un lien de 25 px de haut est
+               * sous la cible de 44 px que le projet s'impose. La variante « fantôme » lui
+               * garde l'allure d'un lien.
+               */}
+              <Bouton href={URL_SOURCE_OFFICIELLE} variante="fantome" externe>
+                {contenu.independance.lien}
+              </Bouton>
+            </div>
+          </Revele>
+        )}
       </div>
     </section>
   )

@@ -25,7 +25,7 @@ import { Fragment } from 'react'
 import { Appareil } from '../composants/Appareil.tsx'
 import { Bouton } from '../composants/Bouton.tsx'
 import { EcranAujourdhui } from '../composants/Ecrans.tsx'
-import { URL_APP, URL_LIMITES } from '../config.ts'
+import { APP_PUBLIEE, URL_APP, URL_LIMITES } from '../config.ts'
 import { useContenu } from '../i18n/contexte.ts'
 import { useBrouillage } from '../mouvement/useBrouillage.ts'
 import { useNiveauMouvement } from '../mouvement/useNiveauMouvement.ts'
@@ -88,14 +88,25 @@ export function Hero() {
             </span>
           </div>
 
-          <div className="heros__actions">
-            <Bouton href={URL_APP} variante="primaire" grand aimante externe>
-              {contenu.heros.actionPrincipale}
-            </Bouton>
-            <Bouton href={URL_LIMITES} variante="discret" grand externe>
-              {contenu.heros.actionSecondaire}
-            </Bouton>
-          </div>
+          {/*
+           * Tant que l'application n'est pas publique, une annonce prend la place des deux
+           * boutons — et non un bouton grisé. Un bouton désactivé reste un bouton : il
+           * appelle le geste, puis le refuse. Une étiquette ne le demande pas.
+           */}
+          {APP_PUBLIEE ? (
+            <div className="heros__actions">
+              <Bouton href={URL_APP} variante="primaire" grand aimante externe>
+                {contenu.heros.actionPrincipale}
+              </Bouton>
+              <Bouton href={URL_LIMITES} variante="discret" grand externe>
+                {contenu.heros.actionSecondaire}
+              </Bouton>
+            </div>
+          ) : (
+            <div className="heros__actions">
+              <span className="etiquette etiquette--accent">{contenu.general.bientot}</span>
+            </div>
+          )}
         </div>
 
         <div className="heros__appareil">

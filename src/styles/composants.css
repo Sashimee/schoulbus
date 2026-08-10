@@ -374,15 +374,21 @@
     }
 
     /*
-     * Même sans le nom, l'en-tête ne tient pas sur une ligne : il reste 272 px utiles,
-     * et le bus, les trois langues et le bouton en réclament une trentaine de plus. Le
-     * bouton passe donc sur une deuxième ligne, sur toute la largeur.
+     * Même sans le nom, l'en-tête ne tient pas sur une ligne QUAND LE BOUTON EST LÀ : il
+     * reste 272 px utiles, et le bus, les trois langues et le bouton en réclament une
+     * trentaine de plus. Le bouton passe donc sur une deuxième ligne, sur toute la largeur.
      *
      * Deux lignes plutôt qu'un élément sacrifié : retirer le bouton priverait le
      * téléphone — d'où vient l'essentiel du public — du seul appel à l'action qui
      * l'accompagne pendant qu'il lit, et retirer les langues ramènerait le défaut qu'on
      * vient de corriger. Ce que ça coûte, c'est une soixantaine de pixels de hauteur, et
      * seulement une fois le héros dépassé, là où l'en-tête apparaît.
+     *
+     * CES RÈGLES NE SONT PAS MORTES tant que `APP_PUBLIEE` vaut `false`. Elles sont
+     * seulement sans effet : il n'y a alors rien à faire passer à la ligne, et l'en-tête
+     * tient de lui-même. Les supprimer parce qu'on ne les voit pas agir aujourd'hui
+     * ramènerait le débordement le jour où l'interrupteur passe à `true` — c'est-à-dire au
+     * pire moment, celui de la publication.
      */
     .entete {
       flex-wrap: wrap;

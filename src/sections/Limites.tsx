@@ -11,7 +11,7 @@
  * l'application, où la page « Limites » est présentée avant toute promesse.
  */
 import { Bouton } from '../composants/Bouton.tsx'
-import { URL_LIMITES } from '../config.ts'
+import { APP_PUBLIEE, URL_LIMITES } from '../config.ts'
 import { useContenu } from '../i18n/contexte.ts'
 import { Revele } from '../mouvement/Revele.tsx'
 
@@ -36,11 +36,16 @@ export function Limites() {
           ))}
         </ul>
 
-        <div className="horsligne__action">
-          <Bouton href={URL_LIMITES} variante="fantome" externe>
-            {contenu.limites.lien}
-          </Bouton>
-        </div>
+        {/* Le lien menait à la page « Limites » de l'application. Les trois items
+            ci-dessus disent déjà l'essentiel ; c'est le renvoi vers le détail qui manque,
+            pas l'aveu lui-même. */}
+        {APP_PUBLIEE && (
+          <div className="horsligne__action">
+            <Bouton href={URL_LIMITES} variante="fantome" externe>
+              {contenu.limites.lien}
+            </Bouton>
+          </div>
+        )}
       </div>
     </section>
   )

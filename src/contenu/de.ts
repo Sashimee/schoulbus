@@ -38,6 +38,7 @@ export const de: Contenu = {
     themeClair: 'Hell',
     themeSombre: 'Dunkel',
     choixLangue: 'Sprache',
+    bientot: 'Bald verfügbar',
   },
 
   heros: {
@@ -288,6 +289,9 @@ export const de: Contenu = {
       `jedem folgenden Morgen da.`,
     action: 'App öffnen',
     qr: 'Oder scannen, um sie auf dem Telefon zu öffnen',
+    bientot:
+      `Die Anwendung ist noch nicht öffentlich. Diese Seite beschreibt, was sie können wird; ` +
+      `bis dahin bleibt der offizielle Plan der Gemeinde die einzige Quelle.`,
   },
 
   pied: {

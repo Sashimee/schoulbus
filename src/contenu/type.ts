@@ -47,6 +47,11 @@ export type Contenu = {
     themeClair: string
     themeSombre: string
     choixLangue: string
+    /*
+     * Ce qui s'affiche à la place des appels à l'action tant que `APP_PUBLIEE` vaut
+     * `false`. Court : c'est une étiquette, pas une phrase.
+     */
+    bientot: string
   }
   heros: {
     etiquette: string
@@ -120,6 +125,11 @@ export type Contenu = {
     chapeau: string
     action: string
     qr: string
+    /*
+     * La section finale sans appel à l'action. Elle doit dire pourquoi il n'y a rien à
+     * ouvrir — une page qui se termine sur un silence laisse croire qu'elle est cassée.
+     */
+    bientot: string
   }
   pied: {
     description: string

@@ -42,6 +42,7 @@ export const fr: Contenu = {
     themeClair: 'Clair',
     themeSombre: 'Sombre',
     choixLangue: 'Langue',
+    bientot: 'Bientôt disponible',
   },
 
   heros: {
@@ -290,6 +291,9 @@ export const fr: Contenu = {
       `l’heure sera là tous les matins suivants.`,
     action: 'Ouvrir l’application',
     qr: 'Ou scannez pour l’ouvrir sur le téléphone',
+    bientot:
+      `L’application n’est pas encore ouverte au public. Cette page décrit ce qu’elle fera ; ` +
+      `en attendant, le plan officiel de la commune reste la seule source à consulter.`,
   },
 
   pied: {

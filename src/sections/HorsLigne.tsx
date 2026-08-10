@@ -11,7 +11,7 @@
 import { m } from 'motion/react'
 import { Bouton } from '../composants/Bouton.tsx'
 import { Icone } from '../composants/Icones.tsx'
-import { URL_INSTALLER } from '../config.ts'
+import { APP_PUBLIEE, URL_INSTALLER } from '../config.ts'
 import { useContenu } from '../i18n/contexte.ts'
 import { useNiveauMouvement } from '../mouvement/useNiveauMouvement.ts'
 import { Revele } from '../mouvement/Revele.tsx'
@@ -45,11 +45,16 @@ export function HorsLigne() {
             ))}
           </ul>
 
-          <div className="horsligne__action">
-            <Bouton href={URL_INSTALLER} variante="discret" externe>
-              {contenu.horsligne.action}
-            </Bouton>
-          </div>
+          {/* « Comment l'installer » mène à une page de l'application : rien à proposer
+              tant qu'il n'y a rien à installer. Le reste de la section décrit toujours ce
+              que l'installation apportera. */}
+          {APP_PUBLIEE && (
+            <div className="horsligne__action">
+              <Bouton href={URL_INSTALLER} variante="discret" externe>
+                {contenu.horsligne.action}
+              </Bouton>
+            </div>
+          )}
         </div>
 
         <Revele geste="glisse">

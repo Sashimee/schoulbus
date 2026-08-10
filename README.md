@@ -116,6 +116,30 @@ le partage.
 le jour où l'application prend un domaine propre, cette ligne change, et le QR se
 régénère avec `npm run assets:qr`.
 
+### Pour l'instant, ils n'y mènent pas
+
+`APP_PUBLIEE` vaut `false` dans `src/config.ts`. Tant que c'est le cas, la vitrine
+**décrit** l'application sans conduire à elle : pas de bouton, pas de QR, pas d'entrée de
+pied de page, et pas de `SoftwareApplication` dans le balisage structuré. À leur place, une
+mention « bientôt disponible » dans le héros et dans la section finale, et un renvoi vers
+le plan officiel de la commune — la seule source qui existe aujourd'hui.
+
+Le jour de la publication, cette ligne passe à `true` et tout revient d'un coup, aux mêmes
+endroits, dans les mêmes mots. Deux choses restent alors à faire à la main, parce qu'elles
+ne sont pas du code :
+
+- le `<noscript>` d'`index.html`, qui ne nomme plus l'application ;
+- le lien de la maquette, s'il change d'adresse (`npm run assets:qr`).
+
+Les deux états sont testés. `src/tests/rendu.test.ts` vérifie qu'aucune page rendue ne
+contient `URL_APP` tant que l'interrupteur est fermé, et que les appels à l'action
+reviennent quand il s'ouvre — le risque n'est pas le tri d'aujourd'hui, c'est la section
+ajoutée dans six mois qui reprendrait un lien d'un ancien exemple.
+
+Une nuance à connaître : l'adresse de l'application reste présente dans le paquet
+JavaScript, comme donnée de configuration. Aucun lien n'y mène et aucune page ne l'affiche,
+mais elle est lisible par qui ouvre le fichier. Elle l'est de toute façon dans ce dépôt.
+
 ## Réserves ouvertes
 
 - **La traduction luxembourgeoise n'a pas été relue par une personne dont c'est la langue

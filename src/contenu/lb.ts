@@ -41,6 +41,7 @@ export const lb: Contenu = {
     themeClair: 'Hell',
     themeSombre: 'Däischter',
     choixLangue: 'Sprooch',
+    bientot: 'Geschwë verfügbar',
   },
 
   heros: {
@@ -288,6 +289,9 @@ export const lb: Contenu = {
       `folgende Moien do.`,
     action: 'App opmaachen',
     qr: 'Oder scannen, fir se um Telefon opzemaachen',
+    bientot:
+      `D’Applikatioun ass nach net ëffentlech. Dës Säit beschreift, wat se kënne wäert; ` +
+      `bis dohinner bleift den offizielle Plang vun der Gemeng déi eenzeg Quell.`,
   },
 
   pied: {

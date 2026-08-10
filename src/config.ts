@@ -10,6 +10,30 @@
 export const URL_APP = 'https://sashimee.github.io/bus-scolaire-beckerich'
 
 /**
+ * L'application est-elle publique ?
+ *
+ * Tant que cette constante vaut `false`, la vitrine DÉCRIT l'application sans mener à
+ * elle : aucun bouton, aucun QR, aucune entrée de pied de page, et rien dans le balisage
+ * structuré ne désigne `URL_APP`. À leur place, une mention « bientôt disponible ».
+ *
+ * Un interrupteur plutôt qu'une suppression, pour deux raisons.
+ *
+ * La première est que les textes des appels à l'action existent en trois langues et ont
+ * été relus. Les effacer maintenant, ce serait réinventer dans quelques semaines une
+ * formulation luxembourgeoise qui attend déjà sa relecture — une deuxième fois, et sans
+ * nécessité.
+ *
+ * La seconde est qu'un lien qu'on retire à la main revient à la main. Le jour où
+ * l'application sera publiée, cette ligne passe à `true` et tout réapparaît d'un coup,
+ * aux mêmes endroits, dans les mêmes mots. Les deux états sont testés (`src/tests/`) :
+ * il n'existe pas d'état intermédiaire où la moitié des liens serait revenue.
+ *
+ * Ce que cet interrupteur ne couvre PAS, faute d'être du code : le `<noscript>` de
+ * `index.html`, qui est du HTML statique. Il ne nomme donc plus l'application du tout.
+ */
+export const APP_PUBLIEE = false
+
+/**
  * La source officielle. Elle n'est pas décorative : le site est indépendant de la
  * commune, et tout ce qu'il affiche vient de ce document. Le lien doit rester visible
  * partout où l'on parle d'horaires.

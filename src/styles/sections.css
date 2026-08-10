@@ -684,6 +684,33 @@
     gap: var(--espace-3);
     margin-block-start: var(--espace-4);
   }
+
+  /*
+   * L'annonce qui remplace l'appel à l'action. Même pile centrée que le QR ci-dessus,
+   * pour la même raison : `align-items: center` garde l'étiquette à la largeur de son
+   * texte. Étirée sur toute la colonne, une pastille cesse d'être une pastille et se lit
+   * comme un bandeau d'alerte — ce qu'une bonne nouvelle n'est pas.
+   */
+  .final__bientot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--espace-3);
+    max-inline-size: var(--vitrine-texte);
+    margin-block-start: var(--espace-4);
+  }
+  /*
+   * Ce bouton-ci a le droit de passer à la ligne, contrairement à tous les autres.
+   *
+   * `.bouton` interdit la coupure parce qu'un appel à l'action tient en deux mots et se
+   * lit d'un bloc. Celui-ci porte une phrase entière — « Den offiziellen Plan auf
+   * kanner.beckerich.lu ansehen » — qui débordait de 47 px en allemand sur un écran de
+   * 320. Le débordement n'est apparu qu'à la mesure : à l'œil, la page semblait correcte.
+   */
+  .final__bientot .bouton {
+    white-space: normal;
+    text-align: center;
+  }
   @media (max-width: 48rem) {
     /* Un QR ne sert à rien sur l'appareil qui l'afficherait : le lien suffit. */
     .final__qr {

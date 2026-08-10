@@ -15,8 +15,8 @@
  */
 import { describe, expect, it } from 'vitest'
 import { rendre } from '../entree-serveur.ts'
-import { LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
-import { imagePartage, mentionsPretes } from '../config.ts'
+import { CONTENUS, LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
+import { APP_PUBLIEE, URL_APP, imagePartage, mentionsPretes } from '../config.ts'
 
 /*
  * Le contenu de `public/`, relevé par Vite à la transformation.
@@ -59,7 +59,13 @@ describe('pré-rendu', () => {
 
     // `<` est échappé à l'écriture : on le rétablit avant d'analyser.
     const graphe = JSON.parse(trouve![1].replace(/\\u003c/g, '<'))
-    expect(graphe['@graph']).toHaveLength(2)
+    /*
+     * Le site est toujours décrit ; l'application ne l'est que si elle est publique. Un
+     * `SoftwareApplication` porte une `url`, et le décrire donnerait aux moteurs l'adresse
+     * exacte vers laquelle la page refuse de conduire.
+     */
+    expect(graphe['@graph']).toHaveLength(APP_PUBLIEE ? 2 : 1)
+    expect(graphe['@graph'][0]['@type']).toBe('WebSite')
 
     /*
      * Ce qui ne doit PAS y figurer. Un `aggregateRating` inventé déclencherait
@@ -98,6 +104,34 @@ describe('pré-rendu', () => {
   it('le pied de page ne propose les mentions que si elles existent', () => {
     const { html } = rendre('fr')
     expect(html.includes('/mentions/')).toBe(PAGES.includes('mentions'))
+  })
+
+  /*
+   * L'invariant de l'application : tant qu'elle n'est pas publique, RIEN dans les pages
+   * rendues ne mène à elle. Ni bouton, ni QR, ni entrée de pied de page, ni balisage
+   * structuré.
+   *
+   * Ce test ne protège pas contre l'erreur d'aujourd'hui — le tri vient d'être fait, et se
+   * relit. Il protège contre celle de dans trois mois : une section ajoutée, un lien repris
+   * d'un ancien exemple, et l'adresse repart en ligne sans que personne ne s'en aperçoive,
+   * puisque la page continuerait de s'afficher parfaitement.
+   */
+  it('aucune page ne mène à l’application tant qu’elle n’est pas publique', () => {
+    for (const langue of LANGUES) {
+      for (const page of PAGES) {
+        const { html, tete } = rendre(langue, page)
+        const trouve = `${html}${tete}`.includes(URL_APP)
+        expect(trouve, `${langue}/${page}`).toBe(APP_PUBLIEE)
+      }
+    }
+  })
+
+  it('les appels à l’action reviennent avec l’application', () => {
+    const { html } = rendre('fr')
+    // Le héros porte soit ses deux boutons, soit l'annonce — jamais ni l'un ni l'autre.
+    expect(html).toContain(APP_PUBLIEE ? CONTENUS.fr.heros.actionPrincipale : CONTENUS.fr.general.bientot)
+    // Le QR ne s'affiche qu'avec ce vers quoi il pointe.
+    expect(html.includes('qr-application.svg')).toBe(APP_PUBLIEE)
   })
 
   it.each(LANGUES)('%s : annonce les deux autres langues au partage', (langue) => {

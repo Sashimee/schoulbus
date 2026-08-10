@@ -36,12 +36,16 @@
   </head>
   <body>
     <div id="racine"><!--contenu-vitrine--></div>
+    <!--
+      Ce bloc ne nomme plus l'application : elle n'est pas encore publique, et rien sur
+      cette page ne doit y conduire (voir `APP_PUBLIEE` dans `src/config.ts`). C'est le
+      seul endroit que l'interrupteur ne couvre pas — du HTML statique, écrit avant que
+      le moindre script ne tourne. À rétablir le jour de la publication.
+    -->
     <noscript>
       <p>
         Cette page se lit sans JavaScript, mais les animations et le changement de langue en
-        demandent. L'application est sur
-        <a href="https://sashimee.github.io/bus-scolaire-beckerich">sashimee.github.io</a>, et le
-        plan officiel sur
+        demandent. Le plan officiel de la commune est sur
         <a href="https://kanner.beckerich.lu/infos/horaires-de-bus">kanner.beckerich.lu</a>.
       </p>
     </noscript>
