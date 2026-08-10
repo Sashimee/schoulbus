@@ -68,6 +68,25 @@
     gap: var(--espace-7);
     align-items: center;
   }
+  /*
+   * La ligne la plus importante de ce fichier.
+   *
+   * Un élément de grille a `min-width: auto`, ce qui l'empêche de descendre sous sa
+   * largeur de contenu minimale. Le téléphone de la maquette mesure 390 px fixes ; sa
+   * piste ne pouvait donc pas descendre sous 390, et comme le héros n'a qu'UNE colonne
+   * sous 62 rem, la colonne de TEXTE était étirée à 390 elle aussi. Sur un écran de
+   * 320 px, le titre, le chapeau et l'heure débordaient de 86 px — et comme le corps
+   * porte `overflow-x: clip`, rien ne défilait : le texte était simplement COUPÉ. « Les
+   * horaires du bu », « la commune de Becke ». Le `max-inline-size: 100%` de l'appareil
+   * ne pouvait pas l'éviter : pendant le calcul intrinsèque d'une piste, un pourcentage
+   * est cyclique, donc ignoré.
+   *
+   * C'est le défaut que la réserve du README annonçait sans le savoir — « les largeurs de
+   * téléphone n'ont pas été vues à l'écran ». Il ne se voyait qu'à l'écran.
+   */
+  .heros__grille > * {
+    min-inline-size: 0;
+  }
   @media (min-width: 62rem) {
     .heros__grille {
       /* `auto` sur la deuxième piste : le téléphone a une largeur fixe, tout le reste
@@ -82,6 +101,17 @@
     flex-direction: column;
     gap: var(--espace-5);
     max-inline-size: 40rem;
+  }
+
+  /*
+   * L'étiquette du héros est la seule du site à porter une phrase entière — « Site
+   * indépendant · Année scolaire 2025/2026 ». Le `white-space: nowrap` des étiquettes est
+   * juste pour les courtes (« Sans réseau »), mais coupait celle-ci à « ANNÉE SCOLAIRE
+   * 20 » sur un écran étroit : la mention d'indépendance, tronquée, dans la première
+   * chose qu'on lit. Elle passe donc à la ligne quand il le faut.
+   */
+  .heros .etiquette {
+    white-space: normal;
   }
 
   /*
@@ -189,6 +219,12 @@
     display: flex;
     align-items: center;
     gap: var(--espace-4);
+    /*
+     * L'heure géante et sa légende tiennent côte à côte dès qu'il y a la place, et
+     * passent l'une sous l'autre quand il n'y en a plus. Sans cela, la colonne de texte
+     * ne pouvait pas descendre sous la somme des deux, et c'est elle qui débordait.
+     */
+    flex-wrap: wrap;
   }
   .heros__heure {
     font-family: var(--police-chiffres);
@@ -299,6 +335,10 @@
   .recit__grille {
     display: grid;
     gap: var(--espace-6);
+  }
+  /* Même raison que dans le héros : la colonne collante porte le même appareil de 390 px. */
+  .recit__grille > * {
+    min-inline-size: 0;
   }
   @media (min-width: 62rem) {
     .recit__grille {
@@ -657,6 +697,13 @@
   .pied {
     padding-block: var(--vitrine-section-serree);
     border-block-start: var(--trait) solid var(--bord);
+    /*
+     * La barre d'accueil des téléphones sans bouton recouvre le bas de l'écran. Ici la
+     * marge de sécurité S'AJOUTE au rythme de la section, au lieu de le remplacer comme
+     * dans `.bande` : c'est la dernière chose de la page, et ce sont les commandes de
+     * langue et de thème en version tactile qui s'y trouvent.
+     */
+    padding-block-end: calc(var(--vitrine-section-serree) + env(safe-area-inset-bottom));
   }
   .pied__grille {
     display: grid;

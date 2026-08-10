@@ -18,7 +18,7 @@ export function ChoixLangue() {
   const contenu = useContenu()
 
   return (
-    <div className="segments" role="group" aria-label={contenu.general.choixLangue}>
+    <div className="segments segments--langue" role="group" aria-label={contenu.general.choixLangue}>
       {LANGUES.map((l) => (
         <button
           key={l}
@@ -47,7 +47,7 @@ export function ChoixTheme() {
   ]
 
   return (
-    <div className="segments" role="group" aria-label={contenu.general.theme}>
+    <div className="segments segments--theme" role="group" aria-label={contenu.general.theme}>
       {choix.map((c) => (
         <button
           key={c.valeur}

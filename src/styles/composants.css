@@ -203,6 +203,15 @@
     position: fixed;
     inset-block-start: var(--espace-3);
     inset-inline: var(--espace-3);
+    /*
+     * `viewport-fit=cover` fait courir la page sous les coins arrondis et sous la barre
+     * d'état : sans ces trois lignes, l'en-tête flottant passe sous l'encoche en portrait
+     * et sous l'arrondi en paysage. Les déclarations ci-dessus restent : un navigateur
+     * qui ignore `env()` invalide celles-ci et retombe sur la marge simple.
+     */
+    inset-block-start: max(var(--espace-3), env(safe-area-inset-top));
+    inset-inline-start: max(var(--espace-3), env(safe-area-inset-left));
+    inset-inline-end: max(var(--espace-3), env(safe-area-inset-right));
     z-index: 40;
     display: flex;
     align-items: center;
@@ -298,13 +307,101 @@
   }
 
   /*
-   * Les sélecteurs de l'en-tête descendent sous 34 px de haut, en deçà de la cible
-   * tactile de 44 px. Ils sont donc réservés au pointeur fin ; sur tactile, la même
-   * commande est reprise en pied de page, à taille pleine.
+   * Sur tactile, les deux sélecteurs de l'en-tête ne suivent pas le même sort.
+   *
+   * Ils descendent tous deux à 34 px, en deçà de la cible de 44 px, et ils étaient donc
+   * renvoyés ensemble en pied de page. Pour le thème, c'est encore la bonne réponse : le
+   * réglage du système décide déjà, et personne n'ouvre une page dans l'urgence de la
+   * passer en clair. Pour la langue, non — la conséquence était qu'une famille dont la
+   * langue est le luxembourgeois devait faire défiler la page ENTIÈRE en français avant
+   * de pouvoir en changer. Dans une commune où c'est la langue du foyer, c'était le
+   * défaut le plus cher de la page, et il ne se voyait pas depuis un écran large.
+   *
+   * La langue reste donc dans l'en-tête, portée à la cible tactile. Elle peut se le
+   * permettre : ses segments tiennent en deux lettres, là où ceux du thème portent un
+   * mot entier qui ne passerait pas la largeur d'un téléphone.
    */
   @media (pointer: coarse) {
-    .entete .segments {
+    .entete .segments--theme {
       display: none;
+    }
+    /*
+     * Les deux dimensions, et non la seule hauteur comme en pied de page : un segment de
+     * langue porte deux lettres, donc 41 px de large, et c'est la cible la plus utilisée
+     * de l'en-tête sur téléphone. La place existe depuis que le bouton est descendu d'une
+     * ligne (voir la règle sous 30 rem).
+     */
+    .entete .segments--langue .segments__choix {
+      min-block-size: var(--cible);
+      min-inline-size: var(--cible);
+    }
+  }
+
+  /*
+   * Sous 30 rem, la marque perd son texte et ne garde que son bus.
+   *
+   * « BUS SCOLAIRE BECKERICH » mesure 210 px en capitales espacées. Avec le bouton
+   * d'ouverture à côté, l'en-tête réclamait 360 px sur un écran de 320 : le nom se
+   * cassait à raison d'UNE LETTRE PAR LIGNE, en une colonne verticale, et le bouton
+   * sortait de l'écran. Le texte reste dans le document — c'est le nom accessible du
+   * lien, et le seul — mais il cesse d'être dessiné.
+   */
+  @media (max-width: 30rem) {
+    /*
+     * `.entete` et non `.marque` seule : la contrainte de place n'existe que dans la barre
+     * flottante, où le nom voisine avec les langues et le bouton. En pied de page et sur
+     * les mentions légales, la marque est seule sur sa ligne et garde son nom.
+     */
+    .entete .marque > span {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+    /*
+     * Sans son texte, le lien se réduisait au bus : une cible de 28 px, alors qu'il
+     * ramène en haut de page. Le dessin garde sa taille, la zone sensible reprend la
+     * sienne.
+     */
+    .entete .marque {
+      justify-content: center;
+      min-block-size: var(--cible);
+      min-inline-size: var(--cible);
+    }
+
+    /*
+     * Même sans le nom, l'en-tête ne tient pas sur une ligne : il reste 272 px utiles,
+     * et le bus, les trois langues et le bouton en réclament une trentaine de plus. Le
+     * bouton passe donc sur une deuxième ligne, sur toute la largeur.
+     *
+     * Deux lignes plutôt qu'un élément sacrifié : retirer le bouton priverait le
+     * téléphone — d'où vient l'essentiel du public — du seul appel à l'action qui
+     * l'accompagne pendant qu'il lit, et retirer les langues ramènerait le défaut qu'on
+     * vient de corriger. Ce que ça coûte, c'est une soixantaine de pixels de hauteur, et
+     * seulement une fois le héros dépassé, là où l'en-tête apparaît.
+     */
+    .entete {
+      flex-wrap: wrap;
+      row-gap: var(--espace-2);
+    }
+    .entete__actions {
+      flex-wrap: wrap;
+      /* Le groupe reste à côté du bus et prend la place qui lui reste sur la ligne. */
+      flex: 1 1 auto;
+      justify-content: flex-end;
+      row-gap: var(--espace-2);
+    }
+    /* Seul le bouton descend : il réclame la ligne entière du groupe. */
+    .entete__actions > .aimant,
+    .entete__actions > .bouton {
+      flex: 1 0 100%;
+    }
+    .entete__actions > .aimant > .bouton {
+      inline-size: 100%;
     }
   }
 

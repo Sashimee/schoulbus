@@ -332,6 +332,14 @@
     max-inline-size: var(--vitrine-large);
     margin-inline: auto;
     padding-inline: var(--gouttiere);
+    /*
+     * En paysage sur un téléphone à encoche, la gouttière seule laisse le texte courir
+     * sous l'arrondi de l'écran. La marge de sécurité ne s'ajoute pas à la gouttière, elle
+     * la remplace quand elle est plus grande : deux marges empilées décentreraient la
+     * bande sur le seul côté où se trouve l'encoche.
+     */
+    padding-inline: max(var(--gouttiere), env(safe-area-inset-left))
+      max(var(--gouttiere), env(safe-area-inset-right));
   }
   .bande--moyen {
     max-inline-size: var(--vitrine-moyen);
@@ -396,6 +404,9 @@
     position: absolute;
     inset-block-start: var(--espace-2);
     inset-inline-start: var(--espace-2);
+    /* Premier élément atteignable au clavier : il ne doit pas surgir sous la barre d'état. */
+    inset-block-start: max(var(--espace-2), env(safe-area-inset-top));
+    inset-inline-start: max(var(--espace-2), env(safe-area-inset-left));
     z-index: 100;
     padding: var(--espace-3) var(--espace-4);
     background: var(--plein);
