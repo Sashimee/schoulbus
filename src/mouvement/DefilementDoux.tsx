@@ -13,7 +13,6 @@
  * retombe.
  */
 import { useEffect } from 'react'
-import Lenis from 'lenis'
 import { useNiveauMouvement } from './useNiveauMouvement.ts'
 
 export function DefilementDoux() {
@@ -22,25 +21,45 @@ export function DefilementDoux() {
   useEffect(() => {
     if (niveau !== 'complet') return
 
-    const lenis = new Lenis({
-      // 0.09 : assez pour adoucir la molette, trop peu pour qu'un arrêt se prolonge.
-      lerp: 0.09,
-      // La molette garde son amplitude ; seule la trajectoire est lissée.
-      wheelMultiplier: 1,
-      // Le tactile n'est jamais détourné, même si l'appareil a aussi une souris.
-      syncTouch: false,
+    /*
+     * La bibliothèque est chargée ICI, et non en haut du fichier.
+     *
+     * Elle pèse 5,4 ko une fois comprimée, et ne sert qu'au niveau 'complet' — souris,
+     * écran large. Un téléphone ne l'exécute jamais ; importée en tête, il la
+     * téléchargeait quand même, avant de pouvoir afficher quoi que ce soit. Le niveau
+     * n'est connu qu'après le premier rendu, ce qui tombe bien : c'est aussi le moment
+     * où un import dynamique ne retarde plus rien.
+     */
+    let vivant = true
+    let arreter: (() => void) | undefined
+
+    void import('lenis').then(({ default: Lenis }) => {
+      // Le niveau a pu retomber pendant le chargement, ou la composante être démontée.
+      if (!vivant) return
+
+      const lenis = new Lenis({
+        // 0.09 : assez pour adoucir la molette, trop peu pour qu'un arrêt se prolonge.
+        lerp: 0.09,
+        // La molette garde son amplitude ; seule la trajectoire est lissée.
+        wheelMultiplier: 1,
+        // Le tactile n'est jamais détourné, même si l'appareil a aussi une souris.
+        syncTouch: false,
+      })
+
+      let image = requestAnimationFrame(function boucle(temps: number) {
+        lenis.raf(temps)
+        image = requestAnimationFrame(boucle)
+      })
+
+      arreter = () => {
+        cancelAnimationFrame(image)
+        lenis.destroy()
+      }
     })
 
-    let image = 0
-    const boucle = (temps: number) => {
-      lenis.raf(temps)
-      image = requestAnimationFrame(boucle)
-    }
-    image = requestAnimationFrame(boucle)
-
     return () => {
-      cancelAnimationFrame(image)
-      lenis.destroy()
+      vivant = false
+      arreter?.()
     }
   }, [niveau])
 
