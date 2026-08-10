@@ -1,0 +1,54 @@
+# Ce qui doit tenir à chaque poussée.
+#
+# Le déploiement n'est PAS ici : il est fait par Dokploy, à partir du `Dockerfile`. Ce
+# fichier ne fait que refuser une révision qui ne se vérifie pas, avant qu'elle n'arrive
+# sur le serveur — la construction de l'image relance `npm run verifier` de son côté, mais
+# une image qui échoue à ce moment-là échoue pendant un déploiement, et non avant.
+name: Vérifier
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # La même version que le `Dockerfile`, et celle qu'exige `jsdom`.
+          node-version: '24'
+          cache: npm
+
+      - run: npm ci
+
+      # Types, lint, tests, contrastes, dérive des jetons.
+      - run: npm run verifier
+
+      - run: npm run build
+
+      # Les images de partage et le QR sont COMMITÉS, pour que ni la construction ni le
+      # conteneur ne dépendent de `satori` ni de `resvg`. Le risque de ce choix est qu'ils
+      # cessent un jour de correspondre au texte de la page sans que personne ne le
+      # remarque : on les régénère donc ici, et on refuse la révision s'ils ont bougé.
+      - name: Les vignettes correspondent-elles encore au contenu ?
+        run: |
+          npm run assets:partage
+          npm run assets:qr
+          if ! git diff --quiet -- public; then
+            echo "Les ressources engendrées ne correspondent plus au contenu."
+            echo "Lancer « npm run assets:partage && npm run assets:qr » et commiter le résultat."
+            git diff --stat -- public
+            exit 1
+          fi
+
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Construction seule, sans publication : c'est un test de fumée du `Dockerfile`,
+      # que Dokploy exécutera pour de bon.
+      - run: docker build --build-arg URL_PUBLIQUE=https://schoulbus.lu -t vitrine:essai .

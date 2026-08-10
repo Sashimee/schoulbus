@@ -1,0 +1,14 @@
+# Ce qui n'a rien à faire dans le contexte de construction.
+#
+# `dist/` et `dist-ssr/` en particulier : l'image les reconstruit. Les copier ferait
+# publier ce qui traînait sur la machine de qui a lancé la commande, ce qui est
+# exactement la façon dont un site part en ligne avec une version qu'on croyait corrigée.
+node_modules
+dist
+dist-ssr
+.git
+.gitignore
+*.log
+.DS_Store
+Dockerfile
+.dockerignore
