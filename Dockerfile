@@ -20,7 +20,7 @@ COPY . .
 
 # L'origine publique entre dans les métadonnées de partage, qui exigent des URL absolues ;
 # elle doit donc être connue à la construction et non au démarrage.
-ARG URL_PUBLIQUE=https://schoulbus.lu
+ARG URL_PUBLIQUE=https://www.schoulbus.lu
 ARG BASE_PATH=/
 # La date du dernier changement de contenu, pour `lastmod` du plan du site. Le dépôt Git
 # n'est pas copié ici — sans cette valeur, `prerendu.mjs` omet la balise plutôt que
