@@ -128,5 +128,35 @@ export type Contenu = {
     liens: { site: { texte: string; url: string }[]; projet: { texte: string; url: string }[] }
     mention: string
     source: string
+    /*
+     * Ce que la vitrine ne fait pas. La section « Confidentialité » le dit déjà de
+     * l'APPLICATION ; cette ligne-ci parle de la PAGE qu'on est en train de lire, et
+     * c'est une autre promesse — une page de présentation qui vante l'absence de
+     * traqueurs tout en en portant serait le mensonge le plus banal du web.
+     */
+    viePrivee: string
+    /** Le lien vers la page des mentions légales, dans la colonne « Le projet ». */
+    lienMentions: string
+  }
+
+  /*
+   * Les mentions légales. Une page à part, et non une section de plus : la page d'accueil
+   * a un ordre choisi, qui va des faits à la demande d'ouvrir l'application, et une
+   * obligation administrative n'a pas sa place au milieu.
+   */
+  mentions: {
+    titre: string
+    /** Ce que cette page est, et ce qu'elle ne change pas. */
+    intro: string
+    editeurTitre: string
+    /** Qui publie. `ADRESSE_EDITEUR` s'y insère. */
+    editeurCorps: string
+    hebergeurTitre: string
+    hebergeurCorps: string
+    donneesTitre: string
+    donneesCorps: string
+    responsabiliteTitre: string
+    responsabiliteCorps: string
+    retour: string
   }
 }

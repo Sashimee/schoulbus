@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState, type ReactNode } from 'react'
 import type { Langue } from '../contenu/type.ts'
-import { CONTENUS, ContexteI18n, cheminLangue } from './contexte.ts'
+import { CONTENUS, ContexteI18n, cheminPage, type Page } from './contexte.ts'
 
 /**
  * Porte la langue courante.
@@ -16,21 +16,32 @@ import { CONTENUS, ContexteI18n, cheminLangue } from './contexte.ts'
  */
 export function FournisseurI18n({
   langueInitiale,
+  pageInitiale = 'accueil',
   children,
 }: {
   langueInitiale: Langue
+  /*
+   * La page courante ne sert qu'à une chose : savoir vers quelle adresse pointer quand
+   * on change de langue. Depuis les mentions légales allemandes, on doit arriver aux
+   * mentions légales françaises — et non à l'accueil, qui renverrait la personne au
+   * début d'un texte qu'elle était en train de vérifier.
+   */
+  pageInitiale?: Page
   // Facultatif dans le type, comme partout en React : c'est ce qui permet au pré-rendu
   // de passer l'arbre en troisième argument de `createElement` plutôt qu'en propriété.
   children?: ReactNode
 }) {
   const [langue, setLangue] = useState<Langue>(langueInitiale)
 
-  const changerLangue = useCallback((suivante: Langue) => {
-    setLangue(suivante)
-    if (typeof document === 'undefined') return
-    document.documentElement.lang = CONTENUS[suivante].codeLangue
-    window.history.pushState({}, '', cheminLangue(suivante) + window.location.hash)
-  }, [])
+  const changerLangue = useCallback(
+    (suivante: Langue) => {
+      setLangue(suivante)
+      if (typeof document === 'undefined') return
+      document.documentElement.lang = CONTENUS[suivante].codeLangue
+      window.history.pushState({}, '', cheminPage(suivante, pageInitiale) + window.location.hash)
+    },
+    [pageInitiale],
+  )
 
   const valeur = useMemo(
     () => ({ langue, contenu: CONTENUS[langue], changerLangue }),

@@ -31,3 +31,40 @@ export const URL_INSTALLER = `${URL_APP}/installer`
  */
 declare const __ORIGINE__: string
 export const ORIGINE = typeof __ORIGINE__ === 'string' ? __ORIGINE__ : 'https://schoulbus.lu'
+
+/**
+ * Le nom de la vignette de partage d'une langue. Le français est à la racine, comme sa
+ * page — même règle que `cheminLangue`, et c'est voulu : une vignette allemande sous un
+ * lien français donnerait à un groupe de parents une page qu'ils n'ouvriront pas.
+ *
+ * Posé ici, et non dans `scripts/build-partage.mjs` : le script qui engendre les fichiers
+ * et le pré-rendu qui les annonce doivent lire la même règle, sinon la balise pointe un
+ * jour vers un fichier que personne n'écrit plus. Ce fichier est le seul des deux qui
+ * s'importe aussi bien depuis Node que depuis le navigateur.
+ */
+export function imagePartage(langue: string): string {
+  return langue === 'fr' ? 'partage.png' : `partage-${langue}.png`
+}
+
+/**
+ * L'éditeur du site, tel qu'il figure aux mentions légales.
+ *
+ * Le nom est déjà public : il est dans les crédits de l'application, dont le fichier de
+ * données précise que rien n'y est inscrit sans accord. L'ADRESSE, elle, ne l'est nulle
+ * part — et c'est justement ce qu'une mention légale luxembourgeoise réclame.
+ *
+ * Tant que cette ligne porte la valeur de remplacement, LA PAGE N'EXISTE PAS : elle n'est
+ * ni engendrée, ni annoncée au plan du site, ni liée depuis le pied de page (voir `PAGES`
+ * dans `i18n/contexte.ts`). Une page de mentions légales qui afficherait
+ * « adresse à compléter » serait pire que pas de page du tout — elle prouverait qu'on ne
+ * l'a pas relue. Le jour où cette ligne est remplie, les six adresses apparaissent.
+ */
+export const ADRESSE_EDITEUR = 'ADRESSE-À-COMPLÉTER'
+
+/** Le nom de l'éditeur. Repris des crédits de l'application. */
+export const NOM_EDITEUR = 'Alex Baskewitsch'
+
+/** Les mentions légales sont-elles complètes, et donc publiables ? */
+export function mentionsPretes(): boolean {
+  return !ADRESSE_EDITEUR.includes('À-COMPLÉTER')
+}

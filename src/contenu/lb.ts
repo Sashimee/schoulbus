@@ -9,7 +9,15 @@
  * Les noms officiels suivent la graphie de la commune : Biekerech, Huttange, Dillendapp.
  */
 import type { Contenu } from './type.ts'
-import { URL_APP, URL_CREDITS, URL_DEPOT, URL_INDEPENDANCE, URL_LIMITES } from '../config.ts'
+import {
+  ADRESSE_EDITEUR,
+  NOM_EDITEUR,
+  URL_APP,
+  URL_CREDITS,
+  URL_DEPOT,
+  URL_INDEPENDANCE,
+  URL_LIMITES,
+} from '../config.ts'
 import { CHIFFRES } from './chiffres.ts'
 
 export const lb: Contenu = {
@@ -301,5 +309,24 @@ export const lb: Contenu = {
     },
     mention: 'Vun engem Elterendeel, zu Biekerech.',
     source: `Donnéeën: offizielle Plang vun der Gemeng, Schouljoer ${CHIFFRES.anneeScolaire}.`,
+    lienMentions: "Impressum",
+    viePrivee: 'Dës Säit setzt keng Cookien, mëscht keng Miessung, a rifft kee Server un.',
   },
+
+  mentions: {
+    titre: `Impressum`,
+    intro: `Dës Säit seet, wien dëst Ugebot verëffentlecht. Um Rescht ännert si näischt: D'Säit bleift onofhängeg, a maassgeevend ass dat offiziellt Dokument vun der Gemeng.`,
+    editeurTitre: `Erausginn vun`,
+    editeurCorps: `Dës Säit gëtt vum ${NOM_EDITEUR} privat an net kommerziell erausginn. Si ass weder a Optrag ginn, nach vun der Gemengeverwaltung Biekerech, vun der Grondschoul oder vun der Maison Relais gepréift oder guttgeheescht.
+Adress: ${ADRESSE_EDITEUR}
+Kontakt: iwwer den Depot vum Code, deem seng Adress am Fouss vun der Säit steet.`,
+    hebergeurTitre: `Hosting`,
+    hebergeurCorps: `D'Säit besteet aus statesche Fichieren, déi vun engem Server ausgeliwwert ginn, deen den Erausginner lount. Do gi keng Besuchsdonnéeën opbewahrt.`,
+    donneesTitre: `Perséinlech Donnéeën`,
+    donneesCorps: `Dës Säit setzt keng Cookien, mëscht keng Zougrëffsmiessung a rifft kee frieme Service un. Et gi keng perséinlech Donnéeën gesammelt; et gëtt also näischt anzegesinn, ze verbesseren oder ze läschen. D'Applikatioun selwer behält dat, wat Dir do aginn, nëmmen op Ärem Apparat — hir Säit „Grenzen" beschreift dat.`,
+    responsabiliteTitre: `Haftung`,
+    responsabiliteCorps: `D'ugewisen Zäite kommen aus dem offizielle Plang vun der Gemeng a sinn suergfälteg iwwerdroen, awer ouni Garantie. Am Zweifel oder bei Ofwäichunge gëllt dat offiziellt Dokument vun der Gemeng.`,
+    retour: `Zréck op d'Startsäit`,
+  },
+
 }

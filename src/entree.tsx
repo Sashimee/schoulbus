@@ -19,17 +19,25 @@
 import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { App } from './App.tsx'
+import { Mentions } from './pages/Mentions.tsx'
 import { FournisseurI18n } from './i18n/Fournisseur.tsx'
-import { langueDuChemin } from './i18n/contexte.ts'
+import { langueDuChemin, pageDuChemin } from './i18n/contexte.ts'
 import './styles/vitrine.css'
 
 const racine = document.getElementById('racine')
 
 if (racine) {
+  // La page se déduit de l'adresse, comme la langue, et pour la même raison : le
+  // pré-rendu a fait le même calcul, et les deux arbres doivent coïncider.
+  const page = pageDuChemin(window.location.pathname)
+
   const arbre = (
     <StrictMode>
-      <FournisseurI18n langueInitiale={langueDuChemin(window.location.pathname)}>
-        <App />
+      <FournisseurI18n
+        langueInitiale={langueDuChemin(window.location.pathname)}
+        pageInitiale={page}
+      >
+        {page === 'mentions' ? <Mentions /> : <App />}
       </FournisseurI18n>
     </StrictMode>
   )

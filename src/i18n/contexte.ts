@@ -16,6 +16,7 @@
  * — ce qui, pour une page dont le rôle est justement d'être trouvée, serait absurde.
  */
 import { createContext, useContext } from 'react'
+import { mentionsPretes } from '../config.ts'
 import type { Contenu, Langue } from '../contenu/type.ts'
 import { fr } from '../contenu/fr.ts'
 import { de } from '../contenu/de.ts'
@@ -30,6 +31,35 @@ const base = import.meta.env.BASE_URL
 /** L'adresse d'une langue. Le français est à la racine, il n'a pas de segment. */
 export function cheminLangue(langue: Langue): string {
   return langue === 'fr' ? base : `${base}${langue}/`
+}
+
+/*
+ * Le site a deux pages, et pas une de plus.
+ *
+ * `accueil` est la page de présentation ; `mentions` porte l'obligation administrative,
+ * qui n'avait sa place ni au milieu de l'argumentaire ni à sa fin — l'ordre des sections
+ * mène à l'ouverture de l'application, et une adresse postale n'y conduit personne.
+ *
+ * Toutes deux sont pré-rendues dans les trois langues : six fichiers HTML.
+ */
+export type Page = 'accueil' | 'mentions'
+
+/*
+ * Les mentions n'entrent dans la liste que si elles sont complètes. Tout ce qui parcourt
+ * `PAGES` — le pré-rendu, le plan du site, le lien du pied de page — s'aligne donc d'un
+ * seul geste, et il n'existe aucun état où la page serait publiée à moitié.
+ */
+export const PAGES: Page[] = mentionsPretes() ? ['accueil', 'mentions'] : ['accueil']
+
+/** L'adresse d'une page dans une langue : `/`, `/de/`, `/mentions/`, `/de/mentions/`… */
+export function cheminPage(langue: Langue, page: Page): string {
+  const racine = cheminLangue(langue)
+  return page === 'accueil' ? racine : `${racine}mentions/`
+}
+
+/** Déduit la page d'un chemin. Tout ce qui n'est pas reconnu retombe sur l'accueil. */
+export function pageDuChemin(chemin: string): Page {
+  return /(^|\/)mentions\/?$/.test(chemin) ? 'mentions' : 'accueil'
 }
 
 /**

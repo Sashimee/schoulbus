@@ -10,7 +10,15 @@
  * délibérément — c'est l'ordre qu'a choisi l'application elle-même.
  */
 import type { Contenu } from './type.ts'
-import { URL_APP, URL_CREDITS, URL_DEPOT, URL_INDEPENDANCE, URL_LIMITES } from '../config.ts'
+import {
+  ADRESSE_EDITEUR,
+  NOM_EDITEUR,
+  URL_APP,
+  URL_CREDITS,
+  URL_DEPOT,
+  URL_INDEPENDANCE,
+  URL_LIMITES,
+} from '../config.ts'
 import { CHIFFRES } from './chiffres.ts'
 
 export const fr: Contenu = {
@@ -303,5 +311,24 @@ export const fr: Contenu = {
     },
     mention: 'Fait par un parent, à Beckerich.',
     source: `Données : plan officiel de la commune, année scolaire ${CHIFFRES.anneeScolaire}.`,
+    lienMentions: "Mentions légales",
+    viePrivee: 'Cette page ne pose aucun cookie, ne mesure rien, et n’appelle aucun serveur.',
   },
+
+  mentions: {
+    titre: `Mentions légales`,
+    intro: `Cette page identifie qui publie ce site. Elle ne change rien à ce qu'il dit par ailleurs : le site reste indépendant, et le document officiel de la commune fait foi.`,
+    editeurTitre: `Éditeur`,
+    editeurCorps: `Ce site est publié par ${NOM_EDITEUR}, à titre privé et non commercial. Il n'est ni commandé, ni validé, ni relu par l'administration communale de Beckerich, par l'école fondamentale ou par la maison relais.
+Adresse : ${ADRESSE_EDITEUR}
+Contact : par le dépôt du code, dont l'adresse figure en pied de page.`,
+    hebergeurTitre: `Hébergement`,
+    hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur loué par l'éditeur. Aucune donnée de visite n'y est conservée.`,
+    donneesTitre: `Données personnelles`,
+    donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l'audience et n'adresse aucune requête à un service tiers. Aucune donnée personnelle n'est collectée, et il n'y a donc rien à consulter, à corriger ni à effacer. L'application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
+    responsabiliteTitre: `Responsabilité`,
+    responsabiliteCorps: `Les horaires affichés sont repris du plan officiel de la commune et retranscrits avec soin, sans garantie d'exactitude. En cas de doute ou de divergence, c'est le document officiel de la commune qui fait foi.`,
+    retour: `Retour à la page d'accueil`,
+  },
+
 }

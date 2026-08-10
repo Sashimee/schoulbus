@@ -19,7 +19,11 @@
     "contraste": "node scripts/verifier-contraste.mjs",
     "chiffres": "node scripts/build-chiffres.mjs",
     "assets:qr": "node scripts/build-qr.mjs",
+    "assets:partage": "node scripts/build-partage.mjs",
     "verifier": "npm run typecheck && npm run lint && npm test && npm run contraste && npm run jetons:verifier"
+  },
+  "engines": {
+    "node": ">=24.15.0"
   },
   "dependencies": {
     "@fontsource-variable/ibm-plex-sans": "^5.3.0",
@@ -30,6 +34,8 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "@resvg/resvg-js": "^2.6.2",
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^24.13.3",
@@ -40,6 +46,7 @@
     "jsdom": "^30.0.1",
     "oxlint": "^1.75.0",
     "qrcode": "^1.5.4",
+    "satori": "^0.29.0",
     "typescript": "~6.0.2",
     "vite": "^8.2.0",
     "vitest": "^4.1.10"

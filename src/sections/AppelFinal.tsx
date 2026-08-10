@@ -57,8 +57,19 @@ export function AppelFinal() {
              * dans le navigateur : c'est une image fixe qui ne dépend que de `URL_APP`,
              * et l'engendrer à l'ouverture coûterait une bibliothèque entière pour un
              * dessin qui ne change jamais.
+             *
+             * L'adresse part de `BASE_URL` et non d'un chemin relatif : c'est la seule
+             * image que Vite n'écrit pas lui-même, et `./` la faisait chercher dans le
+             * dossier de la langue courante — donc absente sur `/de/` et sur `/lb/`,
+             * c'est-à-dire partout sauf là où on la relisait.
              */}
-            <img className="qr" src="./qr-application.svg" alt="" width="148" height="148" />
+            <img
+              className="qr"
+              src={`${import.meta.env.BASE_URL}qr-application.svg`}
+              alt=""
+              width="148"
+              height="148"
+            />
             <span className="texte-doux">{contenu.final.qr}</span>
           </div>
         </Revele>
