@@ -15,6 +15,19 @@ par script, et son adresse, posée dans un seul fichier.
 | Langues | fr, de, lb, pt, en | fr, de, lb |
 | Données | horaires, arrêts, adresses | aucune — elle ne fait que décrire |
 
+## Le flux de branches
+
+`main` est le site en production : ce qui y arrive part en ligne. On n'y travaille jamais
+directement, ni sur `dev`, qui est la branche d'intégration.
+
+```
+branche de travail  ──►  dev  ──►  main (en ligne)
+```
+
+Une branche par sujet, partant de `dev`. Quand tout passe, fusion dans `dev` ; quand `dev`
+est sain, fusion dans `main`. Un correctif d'une ligne suit le même chemin qu'un lot
+entier. La vérification continue tourne sur `dev`, sur `main` et sur les *pull requests*.
+
 ## Commandes
 
 ```bash
