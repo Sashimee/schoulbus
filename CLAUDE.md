@@ -7,7 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Vitrine schoulbus.lu — repères pour travailler sur ce dépôt
 
 Page de présentation de l'application **Bus scolaire Beckerich**. Elle explique ce que
-l'application fait, dit dans la même page ce qu'elle ne sait pas faire, et mène vers elle.
+l'application fait et dit dans la même page ce qu'elle ne sait pas faire. Elle **n'y conduit
+pas** pour l'instant : l'application est encore en développement, et `APP_PUBLIEE` vaut
+`false` (voir « Les liens, et l'interrupteur »).
 Réalisée par un parent, à titre privé, **sans lien avec la commune ni avec l'école**.
 
 **Ce dépôt n'est pas l'application.** L'application vit dans `../bus-scolaire-beckerich`,
@@ -254,6 +256,6 @@ s'y calcule ; l'en-tête HTTP ne porte que `frame-ancestors`.
 ## Réserve la plus urgente
 
 **Le luxembourgeois n'a pas été relu par une personne dont c'est la langue maternelle**, et
-la page est publiée. C'est la langue du foyer dans une bonne part de la commune ; une
+la vitrine, elle, est bel et bien publiée — refermer l'interrupteur ne change rien à cela. C'est la langue du foyer dans une bonne part de la commune ; une
 tournure fausse s'y remarque immédiatement et décrédibilise le reste. Voir l'en-tête de
 `src/contenu/lb.ts` et les réserves du README.

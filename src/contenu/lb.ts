@@ -324,14 +324,16 @@ export const lb: Contenu = {
     surtitre: 'Et ass 07:25 Auer.',
     heure: '07:45',
     titre: 'Sechzéng Minutte bis Dir lassmusst.',
+    // Keen Imperativ, sou laang wéi d'Applikatioun net erreechbar ass — Begrënnung an `fr.ts`.
     chapeau:
-      `Dir hutt en net misse sichen. Fëllt d’Säit eng Kéier aus — an d’Zäit steet all folgende ` +
-      `Moien do.`,
+      `Sou wäert de Moie ausgesinn: eng Zäit, an d’Zäit déi bleift bis ee lassmuss. Näischt ze ` +
+      `sichen, näischt ze vergläichen, u kee Moie drun ze denken.`,
     action: 'App opmaachen',
     qr: 'Oder scannen, fir se um Telefon opzemaachen',
     bientot:
-      `D’Applikatioun ass nach net ëffentlech. Dës Säit beschreift, wat se kënne wäert; ` +
-      `bis dohinner bleift den offizielle Plang vun der Gemeng déi eenzeg Quell.`,
+      `D’Applikatioun ass nach an der Entwécklung. Dës Säit beschreift, wat se mécht; si féiert ` +
+      `nach net dohinner. Bis dohinner bleift den offizielle Plang vun der Gemeng d’Quell déi ` +
+      `ee liese soll.`,
   },
 
   pied: {

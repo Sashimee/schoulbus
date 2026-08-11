@@ -37,17 +37,21 @@
   <body>
     <div id="racine"><!--contenu-vitrine--></div>
     <!--
-      Ce bloc ne nomme plus l'application : elle n'est pas encore publique, et rien sur
-      cette page ne doit y conduire (voir `APP_PUBLIEE` dans `src/config.ts`). C'est le
-      seul endroit que l'interrupteur ne couvre pas — du HTML statique, écrit avant que
-      le moindre script ne tourne. À rétablir le jour de la publication.
+      Ce bloc ne nomme pas l'application : elle est encore en développement, et rien sur
+      cette page ne doit y conduire (voir `APP_PUBLIEE` dans `src/config.ts`). C'est le seul
+      endroit que l'interrupteur ne couvre pas — du HTML statique, écrit avant que le moindre
+      script ne tourne.
+
+      Il n'est plus nécessaire d'y penser : `rendu.test.ts` vérifie que ce bloc nomme
+      l'application si et seulement si `APP_PUBLIEE` le dit. Le jour de la publication, c'est
+      le test qui réclamera la correction, et non la mémoire de qui bascule la constante.
+      Ce commentaire-ci, en revanche, n'est tenu par rien : il avait déjà menti une fois, en
+      affirmant que le bloc ne nommait pas l'application alors qu'il la nommait.
     -->
     <noscript>
       <p>
         Cette page se lit sans JavaScript, mais les animations et le changement de langue en
-        demandent. L'application est sur
-        <a href="https://sashimee.github.io/bus-scolaire-beckerich">sashimee.github.io</a>, et le
-        plan officiel de la commune sur
+        demandent. Le plan officiel de la commune est sur
         <a href="https://kanner.beckerich.lu/infos/horaires-de-bus">kanner.beckerich.lu</a>.
       </p>
     </noscript>
