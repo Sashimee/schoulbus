@@ -28,7 +28,7 @@ export const lb: Contenu = {
     titre: 'Schoulbus Biekerech — d’Zäite vun Ären Kanner, ouni nozedenken',
     description:
       `De Schoulbusplang vun der Gemeng Biekerech, fir all Kand perséinlech opbereet: seng ` +
-      `Haltestell, seng Zäit, seng Schoul. Offline, ouni Kont, ouni geschéckt Donnéeën. ` +
+      `Haltestell, seng Zäit, seng Schoul. Offline, ouni Kont. ` +
       `Onofhängeg Säit, ouni Verbindung mat der Gemeng oder der Schoul.`,
   },
 
@@ -45,15 +45,16 @@ export const lb: Contenu = {
   },
 
   heros: {
-    etiquette: `Onofhängeg Säit · Schouljoer ${CHIFFRES.anneeScolaire}`,
+    etiquette: `Onofhängeg Säit · Schouljoren ${CHIFFRES.anneesCouvertes.join(' an ')}`,
     titre: ['D’Buszäite', 'vun Ären Kanner,', 'ouni nozedenken.'],
     chapeau:
-      `Den offizielle Plang vun der Gemeng Biekerech, opbereet fir all eenzelt Kand. Seng ` +
-      `nooste Haltestell, d’Zäit wou et fortfiert, an d’Zäit déi et zu Fouss dohinner brauch. ` +
-      `Opmaachen, kucken, lassgoen.`,
-    heure: '07:12',
+      `Den offizielle Plang vun der Gemeng Biekerech, Kand fir Kand opbereet: seng nooste ` +
+      `Haltestell, d’Zäit vu sengem Bus, an d’Zäit déi et zu Fouss dohinner brauch. Méi weist ` +
+      `den Ufankssbildschirm net.`,
+    // 07:45 — déiselwecht Zäit wéi op der Bildschirmopnam nieft dem Text.
+    heure: '07:45',
     legendeTitre: 'Nächst Offaart',
-    legendeDetail: 'Léa · Haltestell Huttange · 4 Min. zu Fouss',
+    legendeDetail: 'Léa · Hovelange · Kneppchen · 4 Min. zu Fouss',
     actionPrincipale: 'App opmaachen',
     actionSecondaire: 'Wat d’Säit net weess',
     invite: 'Erofscrollen',
@@ -63,44 +64,51 @@ export const lb: Contenu = {
     arrets: 'Haltestellen',
     villages: 'Dierfer an der Gemeng',
     langues: 'Sproochen, och Lëtzebuergesch',
-    envoi: 'Donnéeën un e Server geschéckt',
+    envoi: 'Familljendonnéeën un e Server geschéckt',
     envoiValeur: '0',
+    envoiNote:
+      `Zwou Saache ginn awer trotzdem eraus: d'Applikatioun zielt hir Säitenopruff, a wien ` +
+      `d'Notifikatiounen aschalt, hannerleet eng anonym Apparat-Kennung op engem Server, sou ` +
+      `laang wéi den Abonnement leeft. Weder Är Adress, nach d'Virnimm, nach d'Zyklen.`,
   },
 
   recit: {
     etiquette: 'Moies',
-    titre: 'Aacht Minutten, an eng Kolonn ze fannen.',
+    titre: 'Zwanzeg Minutten, an eng Kolonn ze fannen.',
     chapeau:
       `Den offizielle Plang stëmmt. Hien ass just laang, dicht, a fir déi ganz Gemeng op eemol ` +
-      `geduecht — net fir ee bestëmmt Kand, en Dënschdeg, um siwen Auer.`,
+      `geschriwwen — net fir ee bestëmmt Kand, en Dënschdeg, um siwen Auer.`,
     temps: [
       {
         titre: 'De Plang fëllt fënnef Säiten',
         texte:
-          `Dräi Linnen hin, zwou zréck, eng Faart bei d’Kantinn, dozou Foussnoten fir d’Deeg wou ` +
-          `d’Reegel wiesselt. Alles steet dran. Ee muss just all Moie erëm déi richteg Kolonn fir ` +
-          `dat richtegt Duerf an de richtege Cycle fannen.`,
+          `Siwe Linnen, eelef Faarten, dozou Foussnote fir d’Deeg wou d’Reegel wiesselt. Alles ` +
+          `steet dran: d’Säit iwwerdréit et Zeil fir Zeil, ouni eppes ze entscheeden. Bleift ` +
+          `just, all Moie déi richteg Kolonn fir dat richtegt Duerf an de richtege Cycle ze ` +
+          `fannen.`,
       },
       {
         titre: 'Dir fëllt en eng eenzeg Kéier aus',
         texte:
-          `Wunnadress, Virnumm vum Kand, säi Cycle. D’Säit leet doraus seng Schoul, seng Linn an ` +
-          `seng nooste Haltestell of, a schätzt de Fousswee dohinner. Dat dauert fënnef Minutten ` +
-          `— an et widderhëlt sech net.`,
+          `Siwe Froen, eng pro Bildschierm: d’Adress, de Virnumm, de Cycle, dann de Bus, de ` +
+          `Mëtteg, d’Betreiung an d’Deeg déi aus der Rei falen. De Cycle bestëmmt d’Schoul, ` +
+          `d’Adress d’Haltestell. Dat zweet Kand iwwerhëlt d’Astellunge vum eelere: ze änneren ` +
+          `bleiwen e Virnumm an e Cycle.`,
       },
       {
         titre: 'Duerno bleift nëmmen nach eng Zäit',
         texte:
-          `Den Ufanksbildschierm weist näischt ausser der nächster Offaart, ganz grouss. Wann et ` +
-          `Zäit gëtt fortzegoen, fänkt e Punkt niewent der Zäit u me schloen. Näischt ze sichen, ` +
-          `näischt opzeklappen, näischt ze vergläichen.`,
+          `Den Ufanksbildschierm weist näischt ausser der nächster Offaart, ganz grouss. ` +
+          `Niewendrun „an 16 Min.“: d’Zäit déi Iech bleift bis Dir LASSGOEN musst — de Fousswee ` +
+          `bis bei d’Haltestell ass scho ofgezunn. Wann et sou wäit ass, fänkt e Punkt u ze ` +
+          `blénken. Näischt ze sichen, näischt opzeklappen, näischt ze vergläichen.`,
       },
       {
         titre: 'De Rescht kënnt vun eleng',
         texte:
-          `De Wochenzettel fir d’Schoultäsch, de ganze Plang fir nozekucken, den Export an de ` +
-          `Kalenner vum Telefon, dat A4-Blat fir op de Frigo. Alles op senger Plaz — a näischt ` +
-          `drängt sech op de Moiesbildschierm.`,
+          `Déi ganz Woch vun engem Kand op engem Bildschierm, mat der Kaart vum Fousswee bis bei ` +
+          `seng Haltestell; den offizielle Plang fir nozekucken; den Export an de Kalenner vum ` +
+          `Telefon; dat A4-Blat fir op de Frigo. Näischt dovun belaascht de Moiesbildschierm.`,
       },
     ],
   },
@@ -108,72 +116,77 @@ export const lb: Contenu = {
   fonctions: {
     etiquette: 'Wat dra stécht',
     titre: 'Alles wat e Busplang eleng net seet.',
-    chapeau:
-      `All Funktioun äntwert op eng Situatioun déi Elteren an der Gemeng wierklech erlieft hunn. ` +
-      `Keng gouf derbäigesat well se sech op enger Lëscht gutt mécht.`,
+    chapeau: `All Funktioun äntwert op eng Situatioun déi Elteren an der Gemeng erliewen.`,
     tuiles: [
       {
         icone: 'semaine',
         titre: 'De Wochenzettel',
         texte:
           `Déi fënnef Deeg vun engem Kand op engem Bildschierm: Offaartszäit, Haltestell, ` +
-          `Schoul, Réckfaart. Deeg ouni Bus si markéiert, net einfach eidel gelooss.`,
+          `Schoul, Réckfaart an eng Kaart vum Fousswee bis bei d’Haltestell. Munch Deeg bréngt ` +
+          `Dir et selwer hin oder hëlt et of: sot et, an déi Faarte verschwannen, amplaz ëmsoss ` +
+          `do ze stoen.`,
       },
       {
         icone: 'plan',
-        titre: 'Den offizielle Plang, liesbar',
+        titre: 'Den offizielle Plang, ofgeschriwwen',
         texte:
-          `Déi ${CHIFFRES.lignes} Linnen an ${CHIFFRES.arrets} Haltestellen op enger Kaart — an ` +
-          `den PDF vun der Gemeng mat engem Grëff derniewent.`,
+          `Déi ${CHIFFRES.lignes} Linnen an ${CHIFFRES.arrets} Haltestellen, Tabell fir Tabell ` +
+          `iwwerdroen, mam PDF vun der Gemeng derniewent.`,
       },
       {
         icone: 'agenda',
         titre: 'An Äre Kalenner',
         texte:
-          `Eng .ics-Datei fir all Kalenner, oder op Wonsch en direkten Androen a Google Kalenner. ` +
-          `D’Schoulvakanze si scho berücksichtegt.`,
+          `Eng .ics-Datei pro Kand, oder eng eenzeg fir all d’Geschwëster. D’Schoulvakanze si ` +
+          `scho erausgerechent.`,
       },
       {
         icone: 'alerte',
         titre: 'Stéierungen',
         texte:
-          `Kënnegt d’Gemeng en Ausfall oder eng Verspéidung un, steet se uewen um Bildschierm — ` +
-          `an als Matdeelung um Telefon, wann Dir se erlaabt hutt.`,
+          `Eng Vertriedung vun der Schoul oder der Gemeng mellt den Ausfall, andeems se op fënnef ` +
+          `Froen äntwert. Déi ausgefall Faart verschwënnt vum Bildschierm, d’Verspéidung ` +
+          `erschéngt duerchgestrach a korrigéiert. Eng Matdeelung ka warnen — garantéiere kann se ` +
+          `näischt.`,
       },
       {
         icone: 'imprimer',
         titre: 'D’Blat fir de Frigo',
         texte:
-          `Eng A4-Säit pro Kand, oder all d’Geschwëster op engem Blat. A Schwaarzwäiss gedréckt, ` +
-          `ouni Verlaf an ouni gro Hannergrond: gutt liesbar, an et eidelt keng Patroun.`,
+          `Eng A4-Säit pro Kand, oder all d’Geschwëster op engem Blat. A Schwaarzwäiss, ouni ` +
+          `Verlaf an ouni gro Hannergrond.`,
       },
       {
         icone: 'partage',
-        titre: 'Deelen a QR-Code',
+        titre: 'Deelen, QR-Code an Iwwerhuelen',
         texte:
-          `E Link fir d’Grousseltere oder d’Dagesmamm. Hie dréit d’Astellunge mat sech — ni ` +
-          `iwwer e Server, kuckt weider ënnen.`,
+          `E Link — oder e QR-Code — fir d’Grousseltere oder d’Dagesmamm: si gesinn dee selwechte ` +
+          `Bildschierm wéi Dir. Dee selwechte Link hëlleft um iPhone, wou déi installéiert App ` +
+          `net gesäit wat Dir a Safari aginn hutt.`,
       },
       {
         icone: 'repas',
         titre: 'Mëttes doheem, oder net',
         texte:
-          `D’Mëttegiesse gëtt Dag fir Dag agestallt. An der Kantinn Dillendapp follegt d’Kand der ` +
-          `Mëttesfaart, doheem der gewéinlecher Réckfaart. De Plang riicht sech dono.`,
+          `E Kand kann e Méindeg am Dillendapp iessen an en Dënschdeg heemfueren. D’Mëttegiesse ` +
+          `gëtt Dag fir Dag agestallt, an d’Faarte riichte sech dono.`,
       },
       {
         icone: 'adresse',
         titre: 'Dënschdes bei der Bomi',
         texte:
-          `Eng aner Adress fir een eenzelen Dag — déi nooste Haltestell gëtt nëmme fir dësen Dag ` +
-          `nei berechent.`,
+          `Eng aner Adress fir een eenzelen Dag — a fir ee eenzege Moment vum Dag: moies, mëttes ` +
+          `oder owes. Déi nooste Haltestell gëtt fir dësen Dag nei berechent.`,
       },
       {
         icone: 'horloge',
         titre: 'D’Betreiung',
         texte:
-          `D’Zäite vun der Maison Relais kommen an de Zettel, fir datt déi ugewisen Zäit och ` +
-          `wierklech déi ass op déi et un dësem Dag ukënnt.`,
+          `E Méindeg bréngt Dir et an den Dillendapp, en Donneschdeg hëlt Dir et of. Déi ` +
+          `méiglech Zäite sinn duerch d’Ouverture vun der Maison Relais begrenzt an duerch de Bus ` +
+          `vu sengem Cycle weider ageschränkt. Owes wou Dir net kënnt kommen, verweist de Zettel ` +
+          `op de Bummelbus.`,
       },
     ],
   },
@@ -190,13 +203,15 @@ export const lb: Contenu = {
         titre: 'Näischt ze schécken, näischt ze verléieren',
         texte:
           `Kee Kont, keng Umeldung, kee Passwuert. Wat Dir aginn, bleift am Browser vum Apparat ` +
-          `op deem Dir et aginn hutt.`,
+          `op deem Dir et aginn hutt — an e Knäppchen an den Astellunge läscht alles nees.`,
       },
       {
         titre: 'D’Adressiche leeft offline',
         texte:
-          `Déi ${CHIFFRES.rues} Stroosse vun der Gemeng stiechen an der Säit selwer. Är Strooss ` +
-          `anzetippe freet kee Kaartendéngscht: kee baussen erfiert wou Dir wunnt.`,
+          `Déi ${CHIFFRES.rues} Stroosse vun der Gemeng — ${CHIFFRES.adresses} Adressen — ` +
+          `stiechen an der Säit selwer. Är Strooss ` +
+          `anzetippe freet kee Kaartendéngscht: kee baussen erfiert wou Dir wunnt. Dofir kennt ` +
+          `d’Sich awer och nëmmen dës eng Gemeng.`,
       },
       {
         titre: 'Gedeelt gëtt hannert dem Rautezeechen',
@@ -227,16 +242,17 @@ export const lb: Contenu = {
 
   horsligne: {
     etiquette: 'Op der Haltestell',
-    titre: 'Funktionéiert do wou d’Netz et net mécht.',
+    titre: 'D’Zäite bleiwen och ouni Netz liesbar.',
     chapeau:
       `D’Säit léisst sech wéi eng App installéieren a behält alles Néidegt um Apparat. Op der ` +
-      `Bushaltestell, am Reen, mat engem Balken Empfang steet d’Zäit scho do — si huet ni ` +
-      `misse gelueden ginn.`,
+      `Haltestell, mat engem Balken Empfang, steet d’Zäit scho do: si huet net misse gelueden ` +
+      `ginn.`,
     points: [
       'Installéiert sech aus dem Browser, ouni App-Store',
-      'Mécht op an ënner enger Sekonn, mat oder ouni Netz',
+      'Mécht op, ouni op d’Netz ze waarden',
       'Schrëften, Fuerpläng an Adresse sinn scho do',
       'Aktualiséiert sech vun eleng, soubal d’Netz zréck ass',
+      'Nëmmen d’Kaart vum Fousswee brauch nach d’Netz',
     ],
     action: 'Wéi se installéiert gëtt',
     legendeSignal: 'Ouni Netz',
@@ -245,27 +261,50 @@ export const lb: Contenu = {
   limites: {
     etiquette: 'Éierlechkeet',
     titre: 'Wat dës Säit net weess.',
-    chapeau:
-      `Eng App déi hir Ongenauegkeete verschweigt, léisst Iech e Bus verpassen ouni Iech ze ` +
-      `warnen. Dës weist hir — an zwar do wou se zielen.`,
+    chapeau: `Dat hei kann dës Säit net — an dat hei mécht se nëmmen ongeféier.`,
+    // Sechs Androen, net fënnef: d'Begrënnung steet an `fr.ts`.
     items: [
       {
         titre: 'D’Fousszäite si geschat',
         texte:
-          `Si gi Loftlinn berechent, am Tempo vun engem Erwuessenen. Dat ass keng Wegbeschreiwung: ` +
-          `en Iwwergank, eng Steigung oder e sechsjäregt Kand veränneren d’Resultat.`,
+          `Si gi Loftlinn berechent, ëm en Drëttel erhéicht fir Ëmweeër, mat 4,5 km/h. Dat ass ` +
+          `keng Wegbeschreiwung: eng Steigung, en Iwwergank oder e sechsjäregt Kand veränneren ` +
+          `d’Resultat.`,
       },
       {
-        titre: 'Munch Haltestelle leien ongeféier',
+        titre: 'D’Zäite sinn eng Ofschrëft',
         texte:
-          `Ass eng Haltestell an den ëffentlechen Donnéeën net benannt, hëlt d’Säit d’Mëtt vun ` +
-          `der Strooss oder vum Duerf. Si seet dat derbäi, amplaz eng Genauegkeet virzetäuschen.`,
+          `Si sinn aus dem Dokument vun der Gemeng iwwerholl, mat Suergfalt an ouni Garantie. ` +
+          `D’Gemeng kann et ouni Virwarnung änneren. Bei Ofwäichunge gëllt dat offiziellt Dokument.`,
       },
       {
-        titre: 'Den offizielle Plang huet gro Beräicher',
+        titre: 'De Plang gëllt fir zwee Joer, op eng mëndlech Zouso hin',
         texte:
-          `E puer Reegele vum Dokument sinn zweedeiteg. Si ginn onverännert iwwerholl a markéiert ` +
-          `— ni un Ärer Plaz entscheet.`,
+          `D’Gemeng huet am August 2026 um Telefon confirméiert, datt d’Zäite fir ` +
+          `${CHIFFRES.anneesCouvertes[1]} onverännert bleiwen. Eng mëndlech Zouso ass kee ` +
+          `Dokument: si bleift bei all Rentrée nozekucken, an d’Säit seet dat do wou se d’Joer ` +
+          `uweist.`,
+      },
+      {
+        titre: 'Eng Notifikatioun ass keng Garantie',
+        texte:
+          `En ausgeschalten Telefon, e „Net stéieren“, en Notifikatiounsdéngscht deen ausfällt — ` +
+          `a si kënnt net un. D’Schoul an d’Gemeng bleiwen den offiziellen Informatiounswee; ` +
+          `d’App ersetzt en net.`,
+      },
+      {
+        titre: 'D’Adressesich hält bei der Gemengegrenz op',
+        texte:
+          `Si kennt nëmmen déi ${CHIFFRES.rues} Stroosse vu Biekerech. Wunnt een anzwousch — bei ` +
+          `de Grousselteren, am Nopeschduerf — muss een d’Haltestell selwer uginn, an d’Fousszäit ` +
+          `bleift onbekannt.`,
+      },
+      {
+        titre: 'Zwou Saache ginn awer aus dem Apparat eraus',
+        texte:
+          `D’App zielt hir Säitenopruff, a wien d’Notifikatiounen aschalt, hannerleet eng anonym ` +
+          `Apparat-Kennung op engem Server, sou laang wéi den Abonnement leeft. Näischt vun deem ` +
+          `wat Dir aginn hutt geet mat.`,
       },
     ],
     lien: 'D’Säit „Grenzen" liesen',
@@ -281,12 +320,13 @@ export const lb: Contenu = {
   },
 
   final: {
-    surtitre: 'Et ass 07:04 Auer.',
-    heure: '07:12',
-    titre: 'De Bus fiert an aacht Minutten.',
+    // Déiselwecht Zuele wéi op der Bildschirmopnam am Kapp vun der Säit.
+    surtitre: 'Et ass 07:25 Auer.',
+    heure: '07:45',
+    titre: 'Sechzéng Minutte bis Dir lassmusst.',
     chapeau:
-      `Dir musst en net sichen. Eng Kéier opmaachen, eng Kéier ausfëllen — an d’Zäit steet all ` +
-      `folgende Moien do.`,
+      `Dir hutt en net misse sichen. Fëllt d’Säit eng Kéier aus — an d’Zäit steet all folgende ` +
+      `Moien do.`,
     action: 'App opmaachen',
     qr: 'Oder scannen, fir se um Telefon opzemaachen',
     bientot:
@@ -312,7 +352,7 @@ export const lb: Contenu = {
       ],
     },
     mention: 'Vun engem Elterendeel, zu Biekerech.',
-    source: `Donnéeën: offizielle Plang vun der Gemeng, Schouljoer ${CHIFFRES.anneeScolaire}.`,
+    source: `Donnéeën: offizielle Plang vun der Gemeng, Schouljoren ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: "Impressum",
     viePrivee: 'Dës Säit setzt keng Cookien, mëscht keng Miessung, a rifft kee Server un.',
   },

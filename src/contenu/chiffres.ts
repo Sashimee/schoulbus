@@ -15,9 +15,15 @@ export const CHIFFRES = {
   "cycles": 5,
   "lignes": 7,
   "rues": 59,
+  "adresses": 1162,
   "langues": 5,
-  "anneeScolaire": "2025/2026",
-  "donneesEnvoyees": 0
+  "anneesCouvertes": [
+    "2025/2026",
+    "2026/2027"
+  ],
+  "valideAu": "2027-07-15",
+  "confirmationOrale": true,
+  "donneesFamilleEnvoyees": 0
 } as const
 
 export type Chiffres = typeof CHIFFRES

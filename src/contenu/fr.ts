@@ -8,6 +8,22 @@
  * Ton : ce site ne vend rien. Il décrit ce qu'une application fait, et dit dans la même
  * page ce qu'elle ne sait pas faire. La section « Limites » vient AVANT l'appel final,
  * délibérément — c'est l'ordre qu'a choisi l'application elle-même.
+ *
+ * Le registre à viser est celui de l'application, pas celui d'une page de vente : énoncer
+ * une situation, puis ce que le logiciel en fait. Pas d'aphorisme, pas d'antithèse, pas de
+ * phrase qui se félicite. « Vous le déposez au Dillendapp le lundi, vous venez le chercher
+ * le jeudi » vaut mieux que « chaque chose à sa place ».
+ *
+ * DEUX CONTRAINTES DURES, à relire avant toute retouche :
+ *
+ *  1. Les nombres du héros et de l'appel final sont CEUX DES CAPTURES. Le lecteur voit
+ *     l'écran à côté de la phrase ; s'ils divergent, c'est la phrase qu'il croira fausse.
+ *     Ils viennent de `src/contenu/captures.ts` (mardi 22 septembre 2026, 07:25) et se
+ *     lisent sur `public/captures/aujourdhui-fr-*.webp`.
+ *  2. `heros.titre` est dessiné dans les vignettes de partage à 76 px sur 1200 px de large
+ *     (`scripts/build-partage.mjs`) : 24 CARACTÈRES PAR LIGNE AU PLUS, et
+ *     `npm run assets:partage` après chaque changement, sans quoi la vignette et la page
+ *     ne disent plus la même chose.
  */
 import type { Contenu } from './type.ts'
 import {
@@ -29,7 +45,7 @@ export const fr: Contenu = {
     titre: 'Bus scolaire Beckerich — les horaires de vos enfants, sans y réfléchir',
     description:
       `Le plan du bus scolaire de la commune de Beckerich, personnalisé pour chaque enfant : ` +
-      `son arrêt, son heure, son école. Hors ligne, sans compte, sans donnée envoyée. ` +
+      `son arrêt, son heure, son école. Hors ligne, sans compte. ` +
       `Site indépendant, sans lien avec la commune ni avec l'école.`,
   },
 
@@ -46,15 +62,16 @@ export const fr: Contenu = {
   },
 
   heros: {
-    etiquette: `Site indépendant · Année scolaire ${CHIFFRES.anneeScolaire}`,
+    etiquette: `Site indépendant · Années scolaires ${CHIFFRES.anneesCouvertes.join(' et ')}`,
     titre: ['Les horaires du bus', 'de vos enfants,', 'sans y réfléchir.'],
     chapeau:
-      `Le plan officiel de la commune de Beckerich, personnalisé pour chaque enfant. ` +
-      `Son arrêt le plus proche, l’heure à laquelle il part, le temps qu’il lui faut pour y aller. ` +
-      `Vous ouvrez, vous regardez, vous partez.`,
-    heure: '07:12',
+      `Le plan officiel de la commune de Beckerich, repris enfant par enfant : son arrêt le ` +
+      `plus proche, l’heure de son bus, et le temps qu’il lui faut pour y aller à pied. ` +
+      `L’écran d’accueil ne montre que cela.`,
+    // 07:45, et non l'heure du bus : c'est l'heure qu'affiche la capture d'à côté.
+    heure: '07:45',
     legendeTitre: 'Prochain départ',
-    legendeDetail: 'Léa · arrêt de Huttange · 4 min à pied',
+    legendeDetail: 'Léa · Hovelange · Kneppchen · 4 min à pied',
     actionPrincipale: 'Ouvrir l’application',
     actionSecondaire: 'Ce que le site ne sait pas',
     invite: 'Faire défiler',
@@ -64,44 +81,51 @@ export const fr: Contenu = {
     arrets: 'arrêts desservis',
     villages: 'villages de la commune',
     langues: 'langues, dont le luxembourgeois',
-    envoi: 'donnée envoyée à un serveur',
+    envoi: 'donnée de famille envoyée à un serveur',
     envoiValeur: '0',
+    envoiNote:
+      `Deux choses sortent quand même : l'application compte ses pages vues, et activer ` +
+      `les notifications dépose un identifiant d'appareil anonyme sur un serveur, le temps ` +
+      `de l'abonnement. Ni votre adresse, ni les prénoms, ni les cycles.`,
   },
 
   recit: {
     etiquette: 'Le matin',
-    titre: 'Huit minutes, et une colonne à trouver.',
+    titre: 'Vingt minutes, et une colonne à trouver.',
     chapeau:
-      `Le plan officiel est juste. Il est aussi long, dense, et pensé pour toute la commune ` +
+      `Le plan officiel est juste. Il est aussi long, dense, et écrit pour toute la commune ` +
       `à la fois — pas pour un enfant en particulier, un mardi, à sept heures.`,
     temps: [
       {
         titre: 'Le plan tient sur cinq pages',
         texte:
-          `Trois lignes à l’aller, deux au retour, une desserte de cantine, et des notes de bas ` +
-          `de page sur les jours où la règle change. Tout y est. Il faut seulement retrouver, ` +
-          `chaque matin, la bonne colonne pour le bon village et le bon cycle.`,
+          `Sept lignes, onze services, et des notes de bas de page sur les jours où la règle ` +
+          `change. Tout y est : le site le recopie ligne par ligne, sans rien trancher. Il ` +
+          `reste seulement à retrouver, chaque matin, la bonne colonne pour le bon village et ` +
+          `le bon cycle.`,
       },
       {
         titre: 'Vous le remplissez une fois',
         texte:
-          `L’adresse du domicile, le prénom de l’enfant, son cycle. Le site en déduit son école, ` +
-          `sa ligne et son arrêt le plus proche, puis estime le temps de marche jusque là-bas. ` +
-          `Cela prend cinq minutes, et cela ne se refait pas.`,
+          `Sept questions, une par écran : l’adresse, le prénom, le cycle, puis le bus, le midi, ` +
+          `le périscolaire et les jours qui sortent de l’ordinaire. Le cycle décide de l’école, ` +
+          `l’adresse décide de l’arrêt. Le deuxième enfant part de la configuration de son aîné : ` +
+          `il ne reste qu’un prénom et un cycle à changer.`,
       },
       {
         titre: 'Ensuite, il ne reste qu’une heure',
         texte:
-          `L’écran d’accueil ne montre rien d’autre que le prochain départ, en très grand. ` +
-          `Quand le moment de sortir approche, un point se met à battre à côté de l’heure. ` +
-          `Il n’y a rien à chercher, rien à déplier, rien à comparer.`,
+          `L’écran d’accueil ne montre que le prochain départ, en très grand. À côté, « dans ` +
+          `16 min » : le temps qu’il vous reste avant de SORTIR, la marche jusqu’à l’arrêt déjà ` +
+          `déduite. Quand il est temps d’y aller, un point se met à battre. Rien à chercher, ` +
+          `rien à déplier, rien à comparer.`,
       },
       {
         titre: 'Et le reste suit',
         texte:
-          `La fiche de la semaine pour le cartable, le plan complet pour vérifier, l’export vers ` +
-          `l’agenda du téléphone, la feuille A4 à coller sur le frigo. Chaque chose à sa place, ` +
-          `et aucune ne s’impose à l’écran du matin.`,
+          `La semaine entière d’un enfant sur un écran, avec la carte du trajet à pied jusqu’à ` +
+          `son arrêt ; le plan officiel pour vérifier ; l’export vers l’agenda du téléphone ; la ` +
+          `feuille A4 pour le frigo. Rien de tout cela n’encombre l’écran du matin.`,
       },
     ],
   },
@@ -109,72 +133,75 @@ export const fr: Contenu = {
   fonctions: {
     etiquette: 'Ce qu’il y a dedans',
     titre: 'Tout ce qu’un plan de bus ne dit pas tout seul.',
-    chapeau:
-      `Chaque fonction répond à une situation réelle rencontrée par un parent de la commune. ` +
-      `Aucune n’a été ajoutée parce qu’elle faisait bien sur une liste.`,
+    chapeau: `Chaque fonction répond à une situation qu’un parent de la commune rencontre.`,
     tuiles: [
       {
         icone: 'semaine',
         titre: 'La fiche de la semaine',
         texte:
-          `Les cinq jours d’un enfant sur un seul écran : heure de départ, arrêt, école, retour. ` +
-          `Les jours où il ne prend pas le bus sont marqués comme tels, pas laissés vides.`,
+          `Les cinq jours d’un enfant sur un écran : l’heure de départ, l’arrêt, l’école, le ` +
+          `retour, et une carte du trajet à pied jusqu’à l’arrêt. Certains jours vous l’emmenez ` +
+          `vous-même, ou vous allez le chercher : dites-le, et ces trajets-là disparaissent au ` +
+          `lieu de rester affichés pour rien.`,
       },
       {
         icone: 'plan',
-        titre: 'Le plan officiel, lisible',
+        titre: 'Le plan officiel, recopié',
         texte:
-          `Les ${CHIFFRES.lignes} lignes et les ${CHIFFRES.arrets} arrêts sur une carte, ` +
-          `et le PDF de la commune consultable en un geste.`,
+          `Les ${CHIFFRES.lignes} lignes et les ${CHIFFRES.arrets} arrêts, transcrits tableau ` +
+          `par tableau, avec le PDF de la commune à côté.`,
       },
       {
         icone: 'agenda',
         titre: 'Vers votre agenda',
         texte:
-          `Un fichier .ics pour n’importe quel calendrier, ou une écriture directe dans Google ` +
-          `Agenda si vous la demandez. Les vacances scolaires sont déjà dedans.`,
+          `Un fichier .ics par enfant, ou un seul pour toute la fratrie. Les vacances scolaires ` +
+          `en sont déjà retirées.`,
       },
       {
         icone: 'alerte',
         titre: 'Les perturbations',
         texte:
-          `Quand la commune annonce une annulation ou un retard, elle apparaît en tête d’écran — ` +
-          `et sur le téléphone, en notification, si vous l’avez acceptée.`,
+          `Un représentant de l’école ou de la commune publie l’annulation en répondant à cinq ` +
+          `questions. Le trajet annulé disparaît de l’écran, le retard s’affiche barré et ` +
+          `corrigé. Une notification peut prévenir, sans jamais rien garantir.`,
       },
       {
         icone: 'imprimer',
         titre: 'La feuille du frigo',
         texte:
-          `Une page A4 par enfant, ou toute la fratrie sur une seule feuille. Imprimée en noir ` +
-          `et blanc, sans dégradé ni fond gris : c’est lisible, et cela ne vide pas une cartouche.`,
+          `Une page A4 par enfant, ou toute la fratrie sur une seule feuille. En noir et blanc, ` +
+          `sans dégradé ni fond gris.`,
       },
       {
         icone: 'partage',
-        titre: 'Partage et QR',
+        titre: 'Partage, QR, et reprise',
         texte:
-          `Un lien à envoyer aux grands-parents ou à la personne qui garde. Il transporte la ` +
-          `configuration, jamais vers un serveur — voir plus bas.`,
+          `Un lien — ou un QR code — à envoyer aux grands-parents ou à la personne qui garde : ` +
+          `ils voient le même écran que vous. Le même lien sert sur iPhone, où l’application ` +
+          `installée ne voit pas ce que vous aviez saisi dans Safari.`,
       },
       {
         icone: 'repas',
         titre: 'Midi à la maison, ou pas',
         texte:
-          `Le repas se règle jour par jour. À la cantine Dillendapp, l’enfant suit la desserte ` +
-          `de midi ; à la maison, il suit le retour ordinaire. Le plan s’adapte tout seul.`,
+          `Un enfant peut manger au Dillendapp le lundi et rentrer le mardi. Le repas se règle ` +
+          `jour par jour, et les trajets suivent.`,
       },
       {
         icone: 'adresse',
         titre: 'Le mardi chez la mamie',
         texte:
-          `Une adresse différente pour un jour donné, et l’arrêt le plus proche est recalculé ` +
-          `pour ce jour-là uniquement.`,
+          `Une autre adresse pour un seul jour — et pour un seul moment de la journée : le ` +
+          `matin, le midi ou le soir. L’arrêt le plus proche est recalculé pour ce jour-là.`,
       },
       {
         icone: 'horloge',
         titre: 'Le périscolaire',
         texte:
-          `Les heures de maison relais entrent dans la fiche, pour que l’heure affichée soit ` +
-          `celle qui compte vraiment ce jour-là.`,
+          `Vous le déposez au Dillendapp le lundi, vous venez le chercher le jeudi. Les heures ` +
+          `possibles sont bornées par l’ouverture de la maison relais et resserrées par le bus ` +
+          `de son cycle. Les soirs où vous ne pouvez pas venir, la fiche renvoie vers le Bummelbus.`,
       },
     ],
   },
@@ -191,14 +218,16 @@ export const fr: Contenu = {
         titre: 'Rien à envoyer, rien à perdre',
         texte:
           `Pas de compte, pas d’inscription, pas de mot de passe. Ce que vous saisissez reste ` +
-          `dans le navigateur de l’appareil sur lequel vous l’avez saisi.`,
+          `dans le navigateur de l’appareil où vous l’avez saisi, et un bouton des réglages ` +
+          `l’efface entièrement.`,
       },
       {
         titre: 'La recherche d’adresse est hors ligne',
         texte:
-          `Les ${CHIFFRES.rues} rues de la commune sont embarquées dans le site. Taper votre rue ` +
-          `n’interroge aucun service de cartographie : personne à l’extérieur n’apprend où vous ` +
-          `habitez.`,
+          `Les ${CHIFFRES.rues} rues de la commune — ${CHIFFRES.adresses} adresses — sont ` +
+          `embarquées dans le site. Taper la vôtre n’interroge aucun service de cartographie : ` +
+          `personne à l’extérieur n’apprend où vous habitez. En contrepartie, la recherche ne ` +
+          `connaît que cette commune-là.`,
       },
       {
         titre: 'Le partage passe après le dièse',
@@ -208,7 +237,7 @@ export const fr: Contenu = {
           `et personne ne l’a lu au passage.`,
       },
     ],
-    legendeSchema: 'Ce que le navigateur garde, et ce qui sort — c’est-à-dire rien.',
+    legendeSchema: 'Ce que le navigateur garde, et ce qui n’en sort pas.',
   },
 
   langues: {
@@ -229,16 +258,19 @@ export const fr: Contenu = {
 
   horsligne: {
     etiquette: 'À l’arrêt',
-    titre: 'Fonctionne là où le réseau ne fonctionne pas.',
+    titre: 'Les horaires restent lisibles sans réseau.',
     chapeau:
-      `Le site s’installe comme une application, et garde tout ce dont il a besoin sur ` +
-      `l’appareil. À l’arrêt de bus, sous la pluie, avec une barre de réseau, l’heure est déjà ` +
-      `affichée — elle n’a jamais eu besoin d’être téléchargée.`,
+      `Le site s’installe comme une application et garde sur l’appareil tout ce dont il a ` +
+      `besoin. À l’arrêt, avec une barre de réseau, l’heure est déjà affichée : elle n’a pas ` +
+      `eu à être téléchargée.`,
     points: [
       'S’installe depuis le navigateur, sans passer par un magasin d’applications',
-      'S’ouvre en moins d’une seconde, réseau ou pas',
+      'S’ouvre sans attendre le réseau',
       'Les polices, les horaires et les adresses sont déjà là',
       'Se met à jour toute seule quand le réseau revient',
+      // La carte du trajet à pied est le seul écran qui demande encore le réseau. Le taire
+      // ici, c'est promettre un « tout hors ligne » que la fiche de la semaine dément.
+      'Seule la carte du trajet à pied a encore besoin du réseau',
     ],
     action: 'Comment l’installer',
     legendeSignal: 'Sans réseau',
@@ -247,27 +279,60 @@ export const fr: Contenu = {
   limites: {
     etiquette: 'Honnêteté',
     titre: 'Ce que ce site ne sait pas.',
-    chapeau:
-      `Une application qui cache ses approximations vous fait rater un bus sans prévenir. ` +
-      `Celle-ci affiche les siennes, à l’endroit où elles comptent.`,
+    chapeau: `Voici ce que ce site ne sait pas faire, et ce qu’il fait de façon approchée.`,
+    /*
+     * SIX items, et pas cinq : `.limites__liste` est une grille de trois colonnes
+     * (`sections.css`). Trois ou six remplissent leurs rangées ; quatre ou cinq laissent un
+     * trou qui se lit comme un oubli.
+     *
+     * Deux limites d'autrefois ont disparu d'ici parce qu'elles ont cessé d'être vraies :
+     * les arrêts « situés à peu près » sont aujourd'hui tous vérifiés dans `arrets.json`,
+     * et les « zones grises » du plan ont été levées par la commune (`incertitudes: []`).
+     * Une limite qu'on garde après sa disparition n'est pas de la prudence, c'est une
+     * autre inexactitude.
+     */
     items: [
       {
         titre: 'Les temps de marche sont estimés',
         texte:
-          `Ils sont calculés à vol d’oiseau, à allure d’adulte. Ce n’est pas un itinéraire : ` +
-          `un passage à niveau, une côte ou un enfant de six ans changent le résultat.`,
+          `Ils sont calculés à vol d’oiseau, majorés d’un tiers pour les détours, à 4,5 km/h. ` +
+          `Ce n’est pas un itinéraire : une côte, un passage à niveau ou un enfant de six ans ` +
+          `changent le résultat.`,
       },
       {
-        titre: 'Certains arrêts sont situés à peu près',
+        titre: 'Les horaires sont une transcription',
         texte:
-          `Quand l’arrêt n’est pas nommé dans les données publiques, le site retient le centre ` +
-          `de la rue ou du village. Il l’indique, plutôt que de faire croire à une précision.`,
+          `Ils sont recopiés du document de la commune, avec soin et sans garantie. La commune ` +
+          `peut le modifier sans préavis. En cas d’écart, c’est le document officiel qui fait foi.`,
       },
       {
-        titre: 'Le plan officiel a ses zones grises',
+        titre: 'Le plan vaut pour deux années, sur une confirmation orale',
         texte:
-          `Certaines règles du document sont ambiguës. Elles sont recopiées telles quelles et ` +
-          `signalées, jamais tranchées à votre place.`,
+          `La commune a confirmé par téléphone, en août 2026, que les horaires ne changeaient ` +
+          `pas pour ${CHIFFRES.anneesCouvertes[1]}. Une confirmation orale n’est pas un ` +
+          `document : elle reste à revérifier à chaque rentrée, et le site le dit là où il ` +
+          `affiche l’année.`,
+      },
+      {
+        titre: 'Une notification n’est pas une garantie',
+        texte:
+          `Un téléphone éteint, un mode « ne pas déranger », un service de notification en ` +
+          `panne, et elle n’arrive pas. L’école et la commune restent la voie d’information ` +
+          `officielle ; l’application ne les remplace pas.`,
+      },
+      {
+        titre: 'La recherche d’adresse s’arrête à la commune',
+        texte:
+          `Elle ne connaît que les ${CHIFFRES.rues} rues de Beckerich. Pour un domicile situé ` +
+          `ailleurs — chez les grands-parents, au village voisin — il faut désigner l’arrêt ` +
+          `soi-même, et le temps de marche devient inconnu.`,
+      },
+      {
+        titre: 'Deux choses sortent quand même de l’appareil',
+        texte:
+          `L’application compte ses pages vues, et activer les notifications dépose un ` +
+          `identifiant d’appareil anonyme sur un serveur, le temps de l’abonnement. Rien de ce ` +
+          `que vous saisissez ne part avec.`,
       },
     ],
     lien: 'Lire la page « Limites »',
@@ -283,12 +348,14 @@ export const fr: Contenu = {
   },
 
   final: {
-    surtitre: 'Il est 07:04.',
-    heure: '07:12',
-    titre: 'Le bus part dans huit minutes.',
+    // Les mêmes nombres que la capture du héros : 07:25 à l'écran, départ à 07:45,
+    // quatre minutes de marche — donc seize minutes avant de sortir.
+    surtitre: 'Il est 07:25.',
+    heure: '07:45',
+    titre: 'Il reste seize minutes avant de sortir.',
     chapeau:
-      `Vous n’avez pas à le chercher. Ouvrez le site une fois, remplissez-le une fois, et ` +
-      `l’heure sera là tous les matins suivants.`,
+      `Vous n’avez pas eu à le chercher. Remplissez le site une fois, et l’heure sera là tous ` +
+      `les matins suivants.`,
     action: 'Ouvrir l’application',
     qr: 'Ou scannez pour l’ouvrir sur le téléphone',
     bientot:
@@ -314,7 +381,7 @@ export const fr: Contenu = {
       ],
     },
     mention: 'Fait par un parent, à Beckerich.',
-    source: `Données : plan officiel de la commune, année scolaire ${CHIFFRES.anneeScolaire}.`,
+    source: `Données : plan officiel de la commune, années scolaires ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: "Mentions légales",
     viePrivee: 'Cette page ne pose aucun cookie, ne mesure rien, et n’appelle aucun serveur.',
   },

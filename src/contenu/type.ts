@@ -69,8 +69,18 @@ export type Contenu = {
     arrets: string
     villages: string
     langues: string
+    /** Le zéro est cadré : il porte sur ce que la famille saisit, pas sur tout trafic. */
     envoi: string
     envoiValeur: string
+    /**
+     * Ce qui sort quand même, sous la bande de chiffres.
+     *
+     * Un « 0 » affiché en grand se relit vite comme « rien ne sort », et ce serait faux :
+     * l'application compte ses pages vues, et une notification suppose un identifiant
+     * d'appareil déposé sur un serveur le temps de l'abonnement. La note n'est pas une
+     * précaution juridique, c'est ce qui rend le chiffre vrai.
+     */
+    envoiNote: string
   }
   recit: {
     etiquette: string

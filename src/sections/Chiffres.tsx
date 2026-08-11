@@ -6,6 +6,12 @@
  * formule ; c'est la moindre des choses sur la page d'un projet dont le deuxième
  * principe est de dire ce qu'il ne sait pas.
  *
+ * Le zéro porte une note, et elle n'est pas décorative. Il vaut pour les données de la
+ * famille — adresse, prénoms, cycles — et pour elles seules. Deux choses sortent malgré
+ * tout de l'appareil ; la note les nomme, sous la bande, sans attendre que le lecteur
+ * aille les chercher dans les limites. Un chiffre juste qu'on laisse se relire de travers
+ * est un chiffre faux.
+ *
  * Le décompte s'arrête à la première valeur atteinte et ne rejoue pas. Un compteur qui
  * repart à chaque passage devant lui transforme un fait en animation.
  */
@@ -46,7 +52,7 @@ export function Chiffres() {
     { valeur: CHIFFRES.arrets, libelle: contenu.chiffres.arrets },
     { valeur: CHIFFRES.villages, libelle: contenu.chiffres.villages },
     { valeur: CHIFFRES.langues, libelle: contenu.chiffres.langues },
-    { valeur: CHIFFRES.donneesEnvoyees, libelle: contenu.chiffres.envoi },
+    { valeur: CHIFFRES.donneesFamilleEnvoyees, libelle: contenu.chiffres.envoi },
   ]
 
   return (
@@ -62,6 +68,9 @@ export function Chiffres() {
             </Revele>
           ))}
         </div>
+        <Revele as="p" className="chiffres__note">
+          {contenu.chiffres.envoiNote}
+        </Revele>
       </div>
     </section>
   )

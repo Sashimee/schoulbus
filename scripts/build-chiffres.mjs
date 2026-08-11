@@ -15,7 +15,11 @@ import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ici = dirname(fileURLToPath(import.meta.url))
-const DONNEES = resolve(ici, '../../bus-scolaire-beckerich/src/data')
+// Le dépôt de l'application est normalement un frère du nôtre. `DEPOT_APP` existe pour
+// l'intégration continue, qui ne sait pas placer deux dépôts côte à côte : elle extrait
+// l'application où elle veut et nous dit où. Même variable dans `scripts/captures.mjs`.
+const DEPOT_APP = process.env.DEPOT_APP ?? resolve(ici, '../../bus-scolaire-beckerich')
+const DONNEES = resolve(DEPOT_APP, 'src/data')
 const CIBLE = resolve(ici, '../src/contenu/chiffres.ts')
 
 if (!existsSync(DONNEES)) {
@@ -40,12 +44,25 @@ const chiffres = {
   cycles: ecoles.cycles.length,
   lignes: plan.lignes.length,
   rues: adresses.rues.length,
+  // Le nombre d'adresses embarquées dans l'application. Il étaie deux phrases de la
+  // vitrine : la recherche d'adresse est hors ligne, et elle ne connaît que la commune.
+  adresses: adresses.adresses.length,
   // Les cinq dictionnaires de l'application : fr, de, lb, pt, en.
   langues: 5,
-  anneeScolaire: plan.anneeScolaire,
-  // Ce qui part de l'appareil vers un serveur. C'est le premier principe du projet,
-  // et c'est un chiffre, pas une formule creuse.
-  donneesEnvoyees: 0,
+  // Les années que le plan couvre — au pluriel, parce qu'il en couvre deux. Écrire
+  // « 2025/2026 » seul reviendrait à annoncer périmé un plan qui ne l'est pas.
+  anneesCouvertes: plan.anneesCouvertes,
+  valideAu: plan.valideAu,
+  // La commune a confirmé par téléphone que le plan ne changeait pas pour 2026/2027.
+  // Une confirmation orale n'est pas un document : la vitrine le dit dans ses limites,
+  // et ce booléen est ce qui l'y oblige.
+  confirmationOrale: plan.source.confirmationOrale === true,
+  // Ce qui part de l'appareil vers un serveur — DES DONNÉES DE LA FAMILLE, et de celles-là
+  // seulement. Le cadrage n'est pas une précaution de langage : deux choses sortent bel et
+  // bien de l'appareil, et la vitrine les nomme (`chiffres.envoiNote`, et une limite
+  // entière). Élargir ce chiffre à « rien ne sort » serait faux ; le lecteur qui voudrait
+  // le faire trouvera les deux exceptions dans `src/tests/contenu.test.ts`.
+  donneesFamilleEnvoyees: 0,
 }
 
 const sortie = `/*

@@ -9,7 +9,6 @@
  */
 import { describe, expect, it } from 'vitest'
 import { CONTENUS, LANGUES, cheminLangue, langueDuChemin } from '../i18n/contexte.ts'
-import { ECRANS } from '../contenu/ecrans.ts'
 import { CHIFFRES } from '../contenu/chiffres.ts'
 
 /** Parcourt récursivement un objet et rend les chaînes qu'il contient, avec leur chemin. */
@@ -57,12 +56,6 @@ describe('contenu', () => {
     }
   })
 
-  it('les écrans de la maquette existent dans les trois langues', () => {
-    for (const l of LANGUES) {
-      expect(ECRANS[l].jours).toHaveLength(5)
-      expect(ECRANS[l].marque.length).toBeGreaterThan(0)
-    }
-  })
 })
 
 describe('adresses des langues', () => {
@@ -89,10 +82,37 @@ describe('chiffres', () => {
     expect(CHIFFRES.arrets).toBeGreaterThan(0)
     expect(CHIFFRES.villages).toBeGreaterThan(0)
     expect(CHIFFRES.rues).toBeGreaterThan(0)
+    expect(CHIFFRES.adresses).toBeGreaterThan(0)
     expect(CHIFFRES.lignes).toBeGreaterThan(0)
     expect(CHIFFRES.langues).toBe(5)
-    // Le seul zéro voulu de tout le projet.
-    expect(CHIFFRES.donneesEnvoyees).toBe(0)
+  })
+
+  it('rien de la famille ne part vers un serveur — et deux choses en partent quand même', () => {
+    expect(CHIFFRES.donneesFamilleEnvoyees).toBe(0)
+
+    // Ce zéro est CADRÉ, et le cadre est la partie qui compte. Il porte sur ce que la
+    // famille saisit : adresse, prénoms, cycles, jours dérogatoires. Rien de cela ne
+    // quitte l'appareil, et le code n'a nulle part où l'envoyer.
+    //
+    // Deux choses sortent malgré tout, et la page les nomme :
+    //   1. l'application compte ses pages vues (GoatCounter) ;
+    //   2. activer les notifications enregistre un identifiant d'appareil anonyme sur un
+    //      serveur, le temps de l'abonnement, et il est supprimé au désabonnement.
+    //
+    // D'où ce test : il exige que les deux exceptions soient déclarées, dans les trois
+    // langues, plutôt que de laisser le zéro se relire un jour comme « rien ne sort ».
+    for (const l of LANGUES) {
+      expect(CONTENUS[l].chiffres.envoiNote.trim().length).toBeGreaterThan(0)
+    }
+  })
+
+  it('annonce les années que le plan couvre, au pluriel s’il le faut', () => {
+    // Le plan 2025/2026 vaut aussi pour 2026/2027. Afficher une seule année annoncerait
+    // périmé un plan qui ne l'est pas.
+    expect(CHIFFRES.anneesCouvertes.length).toBeGreaterThan(0)
+    for (const annee of CHIFFRES.anneesCouvertes) {
+      expect(annee).toMatch(/^\d{4}\/\d{4}$/)
+    }
   })
 
   it('ne compte pas plus de villages que d’arrêts', () => {

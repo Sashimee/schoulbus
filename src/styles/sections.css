@@ -325,6 +325,17 @@
     font-size: var(--texte-s);
     color: var(--encre-douce);
   }
+  /*
+   * La note qui cadre le zéro. Elle est sous la bande, pas dans une des quatre colonnes :
+   * elle porte sur un seul des chiffres, mais la lire en petit à côté de son libellé
+   * reviendrait à l'enterrer. Largeur limitée pour rester une phrase et non un paragraphe.
+   */
+  .chiffres__note {
+    max-inline-size: 62ch;
+    margin-block-start: var(--espace-4);
+    font-size: var(--texte-s);
+    color: var(--encre-douce);
+  }
 
   /* ------------------------------------------------------------------ *
    * Récit — l'appareil reste, le texte défile
