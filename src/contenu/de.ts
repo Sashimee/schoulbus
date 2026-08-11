@@ -315,6 +315,7 @@ export const de: Contenu = {
       `Gemeindeverwaltung Beckerich oder zur Schule. Sie spricht nur für sich selbst. Im ` +
       `Zweifel oder bei Abweichungen gilt das offizielle Dokument der Gemeinde.`,
     lien: 'Den offiziellen Plan auf kanner.beckerich.lu ansehen',
+    retour: `Zurück zur Startseite`,
   },
 
   final: {

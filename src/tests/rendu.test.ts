@@ -16,7 +16,13 @@
 import { describe, expect, it } from 'vitest'
 import { rendre } from '../entree-serveur.ts'
 import { CONTENUS, LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
-import { APP_PUBLIEE, URL_APP, imagePartage, mentionsPretes } from '../config.ts'
+import {
+  APP_PUBLIEE,
+  URL_APP,
+  URL_SOURCE_OFFICIELLE,
+  imagePartage,
+  mentionsPretes,
+} from '../config.ts'
 import { ECRANS, THEMES, fichierCapture } from '../contenu/captures.ts'
 
 /*
@@ -161,9 +167,50 @@ describe('pré-rendu', () => {
     }
   })
 
+  /*
+   * La page « Indépendance ».
+   *
+   * Elle n'est conditionnée par rien — contrairement aux mentions, qui attendent l'adresse
+   * de l'éditeur — donc elle doit exister dans les trois langues, toujours.
+   */
+  it.each(LANGUES)('%s : la page indépendance est engendrée et se désigne elle-même', (langue) => {
+    expect(PAGES).toContain('independance')
+    const { html, tete } = rendre(langue, 'independance')
+
+    expect(html).toContain(CONTENUS[langue].independance.titre)
+    // Sans canonique propre, elle se disputerait le résultat de recherche de l'accueil.
+    expect(tete).toContain(`${cheminPage(langue, 'independance')}" />`)
+    // Le balisage structuré décrit le site, pas une page annexe.
+    expect(tete).not.toContain('application/ld+json')
+  })
+
+  /*
+   * Le lien vers le plan officiel de la commune ne doit jamais disparaître du site.
+   *
+   * Ce test protège contre une panne qui n'existe pas encore. `URL_SOURCE_OFFICIELLE`
+   * n'a que deux consommateurs : la page ci-dessus, et le bouton fantôme du bloc
+   * « bientôt » de l'appel final. Or ce bouton n'apparaît QUE tant que `APP_PUBLIEE` vaut
+   * `false` : le jour où l'application sera publiée, il s'en va.
+   *
+   * Avant, la section « Indépendance » de l'accueil portait ce lien en permanence. Elle
+   * n'existe plus. Sans ce test, la bascule de l'interrupteur retirerait donc du site
+   * entier le renvoi vers la source officielle — silencieusement, et alors même que
+   * `config.ts` exige que « le lien doit rester visible partout où l'on parle d'horaires ».
+   */
+  it.each(LANGUES)('%s : le renvoi vers le plan officiel survit à l’interrupteur', (langue) => {
+    const { html } = rendre(langue, 'independance')
+    expect(html).toContain(URL_SOURCE_OFFICIELLE)
+  })
+
   it('le pied de page ne propose les mentions que si elles existent', () => {
     const { html } = rendre('fr')
     expect(html.includes('/mentions/')).toBe(PAGES.includes('mentions'))
+  })
+
+  it('le pied de page mène à l’indépendance, discrètement', () => {
+    // Le seul chemin vers elle depuis l'accueil : c'est tout l'objet du déplacement.
+    const { html } = rendre('fr')
+    expect(html).toContain(cheminPage('fr', 'independance'))
   })
 
   /*

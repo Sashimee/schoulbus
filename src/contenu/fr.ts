@@ -345,6 +345,7 @@ export const fr: Contenu = {
       `communale de Beckerich ni avec l’école. Il n’engage qu’elle-même. En cas de doute ou de ` +
       `divergence, c’est le document officiel de la commune qui fait foi.`,
     lien: 'Voir le plan officiel sur kanner.beckerich.lu',
+    retour: `Retour à la page d'accueil`,
   },
 
   final: {

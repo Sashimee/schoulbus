@@ -157,10 +157,23 @@ paquet serveur (`src/entree-serveur.ts`), puis `scripts/prerendu.mjs`, qui rend 
 langues en HTML complet et écrit `sitemap.xml` et `robots.txt`.
 
 ```
-dist/index.html      français   (langue de référence, à la racine)
-dist/de/index.html   allemand
-dist/lb/index.html   luxembourgeois
+dist/index.html                   français (langue de référence, à la racine)
+dist/de/index.html                allemand
+dist/lb/index.html                luxembourgeois
+dist/independance/index.html      la mention d'indépendance, une page par langue
+dist/de/independance/index.html
+dist/lb/independance/index.html
 ```
+
+L'indépendance a sa page depuis qu'elle a quitté l'accueil, où elle tenait une section
+entière juste avant l'appel final. Elle n'est plus au premier plan, mais elle n'a pas
+disparu : l'accueil continue de dire « site indépendant » dans son étiquette, son pied de
+page et sa vignette de partage, et la page porte la phrase qui n'existe nulle part ailleurs
+— celle qui dit que le document de la commune fait foi. On y accède par un lien discret du
+pied de page.
+
+Les mentions légales viendront s'ajouter en quatrième page le jour où `ADRESSE_EDITEUR`
+sera renseignée (voir plus bas).
 
 Le changement de langue dans la page ne recharge rien : le contenu est déjà dans le
 paquet, seule l'adresse est mise à jour. Les trois URL existent pour les moteurs et pour

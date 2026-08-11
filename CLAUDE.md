@@ -231,7 +231,8 @@ dessiné à 76 px sur 1200 px : **24 caractères par ligne au plus.**
 | Chemin | Rôle |
 | --- | --- |
 | `src/contenu/` | Tout le texte, les chiffres engendrés, le manifeste des captures. |
-| `src/sections/` | Une composante par section, dans l'ordre de `App.tsx`. Disposition seulement. |
+| `src/sections/` | Une composante par section de l'accueil, dans l'ordre de `App.tsx`. Disposition seulement. |
+| `src/pages/` | Les pages hors accueil : `independance` (toujours engendrée), `mentions` (seulement si `ADRESSE_EDITEUR` est renseignée). Le nom de la page EST son segment d'adresse — même règle dans `cheminPage()` et dans le `dossier()` du pré-rendu. |
 | `src/composants/` | Briques réutilisées : `Appareil` (le téléphone), `Ecrans` (les captures), `Icones`, `SchemaConfidentialite`. |
 | `src/mouvement/` | Niveau de mouvement, révélation au défilement, fond WebGL, curseur. |
 | `src/styles/` | `jetons.css` (copie de l'application), puis vitrine / composants / sections. |

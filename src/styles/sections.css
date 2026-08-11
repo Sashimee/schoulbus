@@ -649,22 +649,6 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * Indépendance
-   * ------------------------------------------------------------------ */
-  .independance {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espace-4);
-    padding: var(--espace-6);
-    background: var(--attention-fond);
-    border: var(--trait) solid var(--attention-bord);
-    border-radius: var(--rayon-l);
-  }
-  .independance h2 {
-    font-size: var(--vitrine-titre-3);
-  }
-
-  /* ------------------------------------------------------------------ *
    * Appel final
    * ------------------------------------------------------------------ */
   .final {

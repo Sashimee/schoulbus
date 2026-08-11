@@ -5,12 +5,16 @@
  * ordinaire :
  *
  *   héros → chiffres → récit → fonctions → confidentialité → langues → hors ligne
- *   → LIMITES → INDÉPENDANCE → appel final
+ *   → LIMITES → appel final
  *
- * Ce que le site ne sait pas faire, et le fait qu'il n'engage que son auteur, viennent
- * AVANT qu'on demande à quiconque de l'ouvrir. C'est l'ordre qu'a retenu l'application
- * elle-même, et l'inverser aurait fait de cette page une plaquette qui trahit le projet
- * qu'elle présente.
+ * Ce que le site ne sait pas faire vient AVANT qu'on demande à quiconque de l'ouvrir.
+ * C'est l'ordre qu'a retenu l'application elle-même, et l'inverser aurait fait de cette
+ * page une plaquette qui trahit le projet qu'elle présente.
+ *
+ * La mention d'indépendance tenait naguère sa propre section, ici, entre les limites et
+ * l'appel final. Elle a sa page désormais (`pages/Independance.tsx`), atteignable depuis
+ * le pied de page. Ce qu'elle disait de l'accueil, l'accueil continue de le dire — dans
+ * l'étiquette du héros, dans le pied de page et dans la vignette de partage.
  *
  * `LazyMotion` + `domAnimation` : la fabrique complète de `motion` pèse près du double,
  * et rien ici n'a besoin de la physique de projection ni du glisser-déposer.
@@ -35,7 +39,6 @@ import { Confidentialite } from './sections/Confidentialite.tsx'
 import { Langues } from './sections/Langues.tsx'
 import { HorsLigne } from './sections/HorsLigne.tsx'
 import { Limites } from './sections/Limites.tsx'
-import { Independance } from './sections/Independance.tsx'
 import { AppelFinal } from './sections/AppelFinal.tsx'
 import { PiedDePage } from './sections/PiedDePage.tsx'
 
@@ -65,7 +68,6 @@ export function App() {
         <Langues />
         <HorsLigne />
         <Limites />
-        <Independance />
         <AppelFinal />
       </main>
 
