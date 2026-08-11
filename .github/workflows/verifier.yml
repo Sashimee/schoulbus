@@ -6,9 +6,13 @@
 # une image qui échoue à ce moment-là échoue pendant un déploiement, et non avant.
 name: Vérifier
 
+# `dev` autant que `main` : le flux veut que rien n'atteigne la production sans être passé
+# par l'intégration, et « être passé par l'intégration » ne veut rien dire si personne n'y
+# vérifie quoi que ce soit. Les branches de travail, elles, sont vues par le déclencheur
+# `pull_request` — c'est là qu'on les regarde.
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
 
 jobs:
