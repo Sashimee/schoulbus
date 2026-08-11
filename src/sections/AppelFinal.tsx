@@ -81,7 +81,8 @@ export function AppelFinal() {
            * Sans appel à l'action, la page ne peut pas s'arrêter sur un blanc : après dix
            * écrans de démonstration, un silence se lit comme une panne. L'annonce dit
            * pourquoi il n'y a rien à ouvrir, et renvoie à la seule source qui existe
-           * aujourd'hui — la même que celle citée par la section « Indépendance ».
+           * aujourd'hui — la même que celle citée par la page « Indépendance », dont ce
+           * bouton emprunte d'ailleurs le libellé (`independance.lien`).
            */
           <Revele rang={2}>
             <div className="final__bientot">

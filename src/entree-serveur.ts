@@ -19,6 +19,7 @@ import { createElement } from 'react'
 import { renderToString } from 'react-dom/server'
 import { App } from './App.tsx'
 import { FournisseurI18n } from './i18n/Fournisseur.tsx'
+import { Independance } from './pages/Independance.tsx'
 import { Mentions } from './pages/Mentions.tsx'
 import { CONTENUS, LANGUES, PAGES, cheminPage, type Page } from './i18n/contexte.ts'
 import { APP_PUBLIEE, ORIGINE, URL_APP, imagePartage } from './config.ts'
@@ -103,6 +104,32 @@ function donneesStructurees(langue: Langue, url: string, vignette: string): stri
   return `    <script type="application/ld+json">${JSON.stringify(graphe).replace(/</g, '\\u003c')}</script>`
 }
 
+/**
+ * Le titre et la description propres à une page.
+ *
+ * Chaque sous-page a les siens : servie avec le titre de l'accueil, elle se disputerait le
+ * même résultat de recherche, et un moteur déclasserait l'une des deux comme copie.
+ *
+ * Une fonction plutôt qu'un ternaire recopié : il y avait deux endroits à tenir d'accord
+ * quand il n'existait qu'une sous-page, et il y en aurait eu quatre à la deuxième.
+ */
+function textesDePage(langue: Langue, page: Page) {
+  const c = CONTENUS[langue]
+  if (page === 'mentions') {
+    return {
+      titre: echapper(`${c.mentions.titre} — ${c.general.marque}`),
+      description: echapper(c.mentions.intro),
+    }
+  }
+  if (page === 'independance') {
+    return {
+      titre: echapper(`${c.independance.titre} — ${c.general.marque}`),
+      description: echapper(c.independance.texte),
+    }
+  }
+  return { titre: echapper(c.meta.titre), description: echapper(c.meta.description) }
+}
+
 export function rendre(
   langue: Langue,
   page: Page = 'accueil',
@@ -113,22 +140,12 @@ export function rendre(
     createElement(
       FournisseurI18n,
       { langueInitiale: langue, pageInitiale: page },
-      createElement(page === 'mentions' ? Mentions : App),
+      createElement(page === 'mentions' ? Mentions : page === 'independance' ? Independance : App),
     ),
   )
 
   const url = `${ORIGINE}${cheminPage(langue, page)}`
-  /*
-   * Les mentions légales ont leur propre titre : servies avec celui de l'accueil, les
-   * deux pages se disputeraient le même résultat de recherche, et un moteur en
-   * déclasserait une des deux comme copie.
-   */
-  const titre =
-    page === 'mentions'
-      ? echapper(`${contenu.mentions.titre} — ${contenu.general.marque}`)
-      : echapper(contenu.meta.titre)
-  const description =
-    page === 'mentions' ? echapper(contenu.mentions.intro) : echapper(contenu.meta.description)
+  const { titre, description } = textesDePage(langue, page)
 
   /*
    * Les alternatives de langue. `hreflang` dit à un moteur que ces trois adresses sont
@@ -219,12 +236,5 @@ export function rendre(
 
 /** Titre et description, pour remplacer ceux du gabarit dans chaque page engendrée. */
 export function metadonnees(langue: Langue, page: Page = 'accueil') {
-  const c = CONTENUS[langue]
-  if (page === 'mentions') {
-    return {
-      titre: echapper(`${c.mentions.titre} — ${c.general.marque}`),
-      description: echapper(c.mentions.intro),
-    }
-  }
-  return { titre: echapper(c.meta.titre), description: echapper(c.meta.description) }
+  return textesDePage(langue, page)
 }

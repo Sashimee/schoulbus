@@ -34,32 +34,48 @@ export function cheminLangue(langue: Langue): string {
 }
 
 /*
- * Le site a deux pages, et pas une de plus.
+ * Les pages du site. `accueil` est la présentation ; les deux autres portent ce qui doit
+ * exister sans encombrer l'argumentaire.
  *
- * `accueil` est la page de présentation ; `mentions` porte l'obligation administrative,
- * qui n'avait sa place ni au milieu de l'argumentaire ni à sa fin — l'ordre des sections
- * mène à l'ouverture de l'application, et une adresse postale n'y conduit personne.
+ * `mentions` porte l'obligation administrative — une adresse postale ne conduit personne
+ * à ouvrir quoi que ce soit, et n'avait donc sa place ni au milieu du propos ni à sa fin.
  *
- * Toutes deux sont pré-rendues dans les trois langues : six fichiers HTML.
+ * `independance` porte la mention d'indépendance, qui occupait naguère une section entière
+ * de l'accueil. Elle en est sortie pour n'être plus au premier plan, PAS pour disparaître :
+ * l'accueil continue de dire « site indépendant » dans son étiquette, son pied de page et
+ * sa vignette de partage, et cette page-ci porte la phrase qui n'existe nulle part ailleurs
+ * — celle qui dit lequel, du document communal ou de ce site, fait foi.
+ *
+ * Chacune est pré-rendue dans les trois langues.
  */
-export type Page = 'accueil' | 'mentions'
+export type Page = 'accueil' | 'mentions' | 'independance'
 
 /*
  * Les mentions n'entrent dans la liste que si elles sont complètes. Tout ce qui parcourt
  * `PAGES` — le pré-rendu, le plan du site, le lien du pied de page — s'aligne donc d'un
  * seul geste, et il n'existe aucun état où la page serait publiée à moitié.
  */
-export const PAGES: Page[] = mentionsPretes() ? ['accueil', 'mentions'] : ['accueil']
+export const PAGES: Page[] = mentionsPretes()
+  ? ['accueil', 'independance', 'mentions']
+  : ['accueil', 'independance']
 
-/** L'adresse d'une page dans une langue : `/`, `/de/`, `/mentions/`, `/de/mentions/`… */
+/**
+ * L'adresse d'une page dans une langue : `/`, `/de/`, `/independance/`, `/de/mentions/`…
+ *
+ * Le nom de la page EST son segment d'adresse. C'est la même règle que celle de
+ * `dossier()` dans `scripts/prerendu.mjs`, et il faut qu'elle le reste : le pré-rendu écrit
+ * les fichiers, cette fonction écrit les liens qui les désignent. Deux règles séparées, et
+ * un jour un lien mène à un dossier que personne n'écrit plus.
+ */
 export function cheminPage(langue: Langue, page: Page): string {
   const racine = cheminLangue(langue)
-  return page === 'accueil' ? racine : `${racine}mentions/`
+  return page === 'accueil' ? racine : `${racine}${page}/`
 }
 
 /** Déduit la page d'un chemin. Tout ce qui n'est pas reconnu retombe sur l'accueil. */
 export function pageDuChemin(chemin: string): Page {
-  return /(^|\/)mentions\/?$/.test(chemin) ? 'mentions' : 'accueil'
+  const segment = chemin.replace(/\/+$/, '').split('/').pop() ?? ''
+  return segment === 'mentions' || segment === 'independance' ? segment : 'accueil'
 }
 
 /**

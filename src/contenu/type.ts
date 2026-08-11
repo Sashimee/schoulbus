@@ -123,10 +123,18 @@ export type Contenu = {
     items: { titre: string; texte: string }[]
     lien: string
   }
+  /**
+   * La page « Indépendance » (`/independance/`), et non plus une section de l'accueil.
+   *
+   * ATTENTION à `lien` : il est PARTAGÉ avec le bloc « bientôt » de l'appel final, qui
+   * l'emploie pour son bouton vers le plan officiel. Le supprimer en croyant nettoyer cette
+   * page laisserait ce bouton sans libellé.
+   */
   independance: {
     titre: string
     texte: string
     lien: string
+    retour: string
   }
   final: {
     surtitre: string

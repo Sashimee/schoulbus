@@ -69,12 +69,22 @@ export function PiedDePage() {
                 </a>
               ))}
               {/*
-               * Les mentions légales sont la seule autre page du site : elles ne s'ouvrent
-               * donc pas dans un onglet, contrairement à tous les liens ci-dessus, qui
-               * mènent à l'application. Le lien n'apparaît que si la page existe — tant que
-               * l'adresse de l'éditeur n'est pas renseignée, elle n'est pas engendrée, et
-               * un lien mènerait à une 404.
+               * Les pages du site lui-même : elles ne s'ouvrent pas dans un onglet,
+               * contrairement à tous les liens ci-dessus, qui mènent à l'application.
+               *
+               * L'indépendance est ici, et nulle part ailleurs sur l'accueil. C'est
+               * délibéré : elle tenait une section entière, elle n'est plus qu'un lien de
+               * pied de page — trouvable par qui la cherche, sans occuper le propos. Ce que
+               * l'accueil continue de dire de lui-même se lit deux lignes plus bas, dans
+               * `pied.description`.
+               *
+               * Chaque lien n'apparaît que si sa page existe. Les mentions ne sont pas
+               * engendrées tant que l'adresse de l'éditeur n'est pas renseignée, et un lien
+               * mènerait alors à une 404.
                */}
+              {PAGES.includes('independance') && (
+                <a href={cheminPage(langue, 'independance')}>{contenu.independance.titre}</a>
+              )}
               {PAGES.includes('mentions') && (
                 <a href={cheminPage(langue, 'mentions')}>{contenu.pied.lienMentions}</a>
               )}

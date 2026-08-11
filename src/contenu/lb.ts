@@ -317,6 +317,7 @@ export const lb: Contenu = {
       `Gemengeverwaltung Biekerech oder mat der Schoul. Si schwätzt nëmme fir sech selwer. Am ` +
       `Zweiwel oder bei Ofwäichunge gëllt dat offiziellt Dokument vun der Gemeng.`,
     lien: 'Den offizielle Plang op kanner.beckerich.lu kucken',
+    retour: `Zréck op d'Startsäit`,
   },
 
   final: {
