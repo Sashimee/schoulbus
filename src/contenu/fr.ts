@@ -31,7 +31,6 @@ import {
   NOM_EDITEUR,
   URL_APP,
   URL_CREDITS,
-  URL_DEPOT,
   URL_INDEPENDANCE,
   URL_LIMITES,
 } from '../config.ts'
@@ -388,7 +387,6 @@ export const fr: Contenu = {
       ],
       projet: [
         { texte: 'Crédits et remerciements', url: URL_CREDITS },
-        { texte: 'Code source', url: URL_DEPOT },
       ],
     },
     mention: 'Fait par un parent, à Beckerich.',
@@ -402,8 +400,7 @@ export const fr: Contenu = {
     intro: `Cette page identifie qui publie ce site. Elle ne change rien à ce qu'il dit par ailleurs : le site reste indépendant, et le document officiel de la commune fait foi.`,
     editeurTitre: `Éditeur`,
     editeurCorps: `Ce site est publié par ${NOM_EDITEUR}, à titre privé et non commercial. Il n'est ni commandé, ni validé, ni relu par l'administration communale de Beckerich, par l'école fondamentale ou par la maison relais.
-Adresse : ${ADRESSE_EDITEUR}
-Contact : par le dépôt du code, dont l'adresse figure en pied de page.`,
+Adresse : ${ADRESSE_EDITEUR}`,
     hebergeurTitre: `Hébergement`,
     hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur loué par l'éditeur. Aucune donnée de visite n'y est conservée.`,
     donneesTitre: `Données personnelles`,

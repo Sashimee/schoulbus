@@ -29,6 +29,15 @@ export function PiedDePage() {
   const siteVisibles = sansApplication(contenu.pied.liens.site)
   const projetVisibles = sansApplication(contenu.pied.liens.projet)
 
+  /*
+   * Les pages du site lui-même. Chacune n'entre dans la liste que si `PAGES` la contient,
+   * de sorte qu'un lien ne peut pas mener à une adresse que le pré-rendu n'écrit pas.
+   */
+  const pagesInternes = [
+    { page: 'independance' as const, texte: contenu.independance.titre },
+    { page: 'mentions' as const, texte: contenu.pied.lienMentions },
+  ].filter((p) => PAGES.includes(p.page))
+
   return (
     <footer className="pied">
       <div className="bande">
@@ -42,12 +51,22 @@ export function PiedDePage() {
           </div>
 
           {/*
-           * La colonne « Le site » ne contient que des pages de l'application : elle
-           * disparaît entièrement tant que celle-ci n'est pas publique. Un titre au-dessus
-           * d'une liste vide est pire qu'une colonne en moins — il annonce quelque chose
-           * qui n'arrive pas.
+           * « Le site » : ses propres pages, et celles de l'application qui le prolongent.
+           *
+           * Les pages internes (indépendance, mentions) sont ICI et non sous « Le projet »,
+           * parce que c'est ce que les deux titres disent. Elles ne s'ouvrent pas dans un
+           * onglet, contrairement aux liens vers l'application.
+           *
+           * L'indépendance n'a plus que ce lien pour la désigner : elle tenait une section
+           * entière de l'accueil, elle est désormais trouvable par qui la cherche, sans
+           * occuper le propos. Ce que l'accueil continue de dire de lui-même se lit dans
+           * `pied.description`, deux colonnes plus à gauche.
+           *
+           * Chaque entrée n'apparaît que si sa page existe : les mentions ne sont pas
+           * engendrées tant que l'adresse de l'éditeur n'est pas renseignée, et le lien
+           * mènerait à une 404.
            */}
-          {siteVisibles.length > 0 && (
+          {(siteVisibles.length > 0 || pagesInternes.length > 0) && (
             <nav aria-label={contenu.pied.titreSite}>
               <h2 className="pied__titre">{contenu.pied.titreSite}</h2>
               <div className="pied__liens">
@@ -56,40 +75,34 @@ export function PiedDePage() {
                     {l.texte}
                   </a>
                 ))}
+                {pagesInternes.map((p) => (
+                  <a key={p.page} href={cheminPage(langue, p.page)}>
+                    {p.texte}
+                  </a>
+                ))}
               </div>
             </nav>
           )}
 
-          <nav aria-label={contenu.pied.titreProjet}>
-            <h2 className="pied__titre">{contenu.pied.titreProjet}</h2>
-            <div className="pied__liens">
-              {projetVisibles.map((l) => (
-                <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer">
-                  {l.texte}
-                </a>
-              ))}
-              {/*
-               * Les pages du site lui-même : elles ne s'ouvrent pas dans un onglet,
-               * contrairement à tous les liens ci-dessus, qui mènent à l'application.
-               *
-               * L'indépendance est ici, et nulle part ailleurs sur l'accueil. C'est
-               * délibéré : elle tenait une section entière, elle n'est plus qu'un lien de
-               * pied de page — trouvable par qui la cherche, sans occuper le propos. Ce que
-               * l'accueil continue de dire de lui-même se lit deux lignes plus bas, dans
-               * `pied.description`.
-               *
-               * Chaque lien n'apparaît que si sa page existe. Les mentions ne sont pas
-               * engendrées tant que l'adresse de l'éditeur n'est pas renseignée, et un lien
-               * mènerait alors à une 404.
-               */}
-              {PAGES.includes('independance') && (
-                <a href={cheminPage(langue, 'independance')}>{contenu.independance.titre}</a>
-              )}
-              {PAGES.includes('mentions') && (
-                <a href={cheminPage(langue, 'mentions')}>{contenu.pied.lienMentions}</a>
-              )}
-            </div>
-          </nav>
+          {/*
+           * « Le projet » ne porte plus que les crédits, eux-mêmes filtrés tant que
+           * l'application n'est pas publique — la colonne disparaît donc entièrement, et
+           * revient d'elle-même le jour de la bascule. Elle a la même garde que « Le site »,
+           * et pour la même raison : un titre au-dessus d'une liste vide annonce quelque
+           * chose qui n'arrive pas.
+           */}
+          {projetVisibles.length > 0 && (
+            <nav aria-label={contenu.pied.titreProjet}>
+              <h2 className="pied__titre">{contenu.pied.titreProjet}</h2>
+              <div className="pied__liens">
+                {projetVisibles.map((l) => (
+                  <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer">
+                    {l.texte}
+                  </a>
+                ))}
+              </div>
+            </nav>
+          )}
         </div>
 
         <div className="pied__bas">

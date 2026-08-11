@@ -51,9 +51,6 @@ export const APP_PUBLIEE = false
  */
 export const URL_SOURCE_OFFICIELLE = 'https://kanner.beckerich.lu/infos/horaires-de-bus'
 
-/** Le dépôt de l'application. Le code est lisible par qui veut vérifier la promesse. */
-export const URL_DEPOT = 'https://github.com/Sashimee/bus-scolaire-beckerich'
-
 /** Pages d'information de l'application, citées depuis la vitrine. */
 export const URL_LIMITES = `${URL_APP}/limites`
 export const URL_INDEPENDANCE = `${URL_APP}/independance`

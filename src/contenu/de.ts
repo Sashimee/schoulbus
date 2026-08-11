@@ -11,7 +11,6 @@ import {
   NOM_EDITEUR,
   URL_APP,
   URL_CREDITS,
-  URL_DEPOT,
   URL_INDEPENDANCE,
   URL_LIMITES,
 } from '../config.ts'
@@ -349,7 +348,6 @@ export const de: Contenu = {
       ],
       projet: [
         { texte: 'Dank und Mitwirkende', url: URL_CREDITS },
-        { texte: 'Quellcode', url: URL_DEPOT },
       ],
     },
     mention: 'Von einem Elternteil, in Beckerich.',
@@ -363,8 +361,7 @@ export const de: Contenu = {
     intro: `Diese Seite nennt, wer dieses Angebot veröffentlicht. Am Übrigen ändert sie nichts: Die Seite bleibt unabhängig, und maßgeblich ist das offizielle Dokument der Gemeinde.`,
     editeurTitre: `Herausgeber`,
     editeurCorps: `Diese Seite wird von ${NOM_EDITEUR} privat und nicht gewerblich veröffentlicht. Sie ist weder beauftragt noch geprüft oder freigegeben durch die Gemeindeverwaltung Beckerich, die Grundschule oder die Maison Relais.
-Anschrift: ${ADRESSE_EDITEUR}
-Kontakt: über das Code-Repository, dessen Adresse in der Fußzeile steht.`,
+Anschrift: ${ADRESSE_EDITEUR}`,
     hebergeurTitre: `Hosting`,
     hebergeurCorps: `Die Seite besteht aus statischen Dateien, die von einem durch den Herausgeber gemieteten Server ausgeliefert werden. Besuchsdaten werden dort nicht aufbewahrt.`,
     donneesTitre: `Personenbezogene Daten`,
