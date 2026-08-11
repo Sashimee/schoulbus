@@ -17,6 +17,7 @@ import { describe, expect, it } from 'vitest'
 import { rendre } from '../entree-serveur.ts'
 import { CONTENUS, LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
 import { APP_PUBLIEE, URL_APP, imagePartage, mentionsPretes } from '../config.ts'
+import { ECRANS, THEMES, fichierCapture } from '../contenu/captures.ts'
 
 /*
  * Le contenu de `public/`, relevé par Vite à la transformation.
@@ -27,6 +28,16 @@ import { APP_PUBLIEE, URL_APP, imagePartage, mentionsPretes } from '../config.ts
  */
 const FICHIERS = new Set(
   Object.keys(import.meta.glob('../../public/*', { eager: false })).map((c) => c.split('/').pop()),
+)
+
+/*
+ * Les captures, à part : `import.meta.glob('../../public/*')` ne descend pas dans les
+ * sous-dossiers, et un motif récursif ramasserait aussi bien les fichiers de travail.
+ */
+const CAPTURES = new Set(
+  Object.keys(import.meta.glob('../../public/captures/*', { eager: false })).map(
+    (c) => c.split('/').pop() as string,
+  ),
 )
 
 describe('pré-rendu', () => {
@@ -43,6 +54,55 @@ describe('pré-rendu', () => {
 
     expect(tete).toContain(`/${nom}"`)
     expect(FICHIERS).toContain(nom)
+  })
+
+  /*
+   * Les captures : annoncées et présentes, ni plus ni moins.
+   *
+   * C'est le même raisonnement que pour `og:image` ci-dessus, et il vaut d'autant plus
+   * ici : une capture manquante ne casse pas la page, elle laisse un cadre de téléphone
+   * vide au milieu du récit — et ce cadre a l'air d'un choix de mise en page.
+   */
+  it('chaque capture annoncée par le manifeste existe sur le disque', () => {
+    const manquantes = []
+    for (const langue of LANGUES) {
+      for (const theme of THEMES) {
+        for (const ecran of ECRANS) {
+          const nom = fichierCapture(ecran.nom, langue, theme).replace('captures/', '')
+          if (!CAPTURES.has(nom)) manquantes.push(nom)
+        }
+      }
+    }
+    expect(manquantes).toEqual([])
+  })
+
+  it('aucune capture ne traîne hors du manifeste', () => {
+    // Un fichier resté d'un écran supprimé serait servi sans jamais être affiché, et
+    // pèserait sur le dépôt jusqu'à ce que quelqu'un se demande à quoi il sert.
+    const attendues = new Set(
+      LANGUES.flatMap((langue) =>
+        THEMES.flatMap((theme) =>
+          ECRANS.map((e) => fichierCapture(e.nom, langue, theme).replace('captures/', '')),
+        ),
+      ),
+    )
+    expect([...CAPTURES].filter((f) => !attendues.has(f))).toEqual([])
+  })
+
+  it.each(LANGUES)('%s : la page ne montre que les captures de sa langue', (langue) => {
+    const { html } = rendre(langue)
+    const citees = [...html.matchAll(/captures\/[a-z]+-([a-z]{2})-[a-z]+\.webp/g)].map((m) => m[1])
+    expect(citees.length).toBeGreaterThan(0)
+    // Une capture allemande servie sous `/lb/` est la version moderne du QR en chemin
+    // relatif : invisible à la relecture, puisqu'on relit dans sa propre langue.
+    expect([...new Set(citees)]).toEqual([langue])
+  })
+
+  it.each(LANGUES)('%s : la capture du héros est préchargée dans les deux thèmes', (langue) => {
+    const { tete } = rendre(langue)
+    for (const theme of THEMES) {
+      expect(tete).toContain(`href="/${fichierCapture('aujourdhui', langue, theme)}"`)
+    }
   })
 
   it('les icônes matricielles existent', () => {
@@ -121,9 +181,42 @@ describe('pré-rendu', () => {
       for (const page of PAGES) {
         const { html, tete } = rendre(langue, page)
         const trouve = `${html}${tete}`.includes(URL_APP)
-        expect(trouve, `${langue}/${page}`).toBe(APP_PUBLIEE)
+
+        /*
+         * L'invariant n'est pas le même dans les deux sens, et la nuance compte.
+         *
+         * Tant que l'application n'est pas publique, AUCUNE page ne doit la nommer : c'est
+         * l'interrupteur, et il est absolu. Une fois publiée, en revanche, seule la page
+         * d'accueil est tenue d'y mener — les mentions légales n'ont ni pied de page ni
+         * appel à l'action, et exiger d'elles un lien ferait échouer la construction le
+         * jour où l'adresse de l'éditeur sera renseignée et où la page apparaîtra.
+         *
+         * Écrit maintenant, tant que c'est bon marché : la bascule vers `true` arme ce
+         * piège sans le déclencher, donc personne ne le verrait venir.
+         */
+        if (!APP_PUBLIEE) {
+          expect(trouve, `${langue}/${page} ne doit pas nommer l’application`).toBe(false)
+        } else if (page === 'accueil') {
+          expect(trouve, `${langue}/${page} doit mener à l’application`).toBe(true)
+        }
       }
     }
+  })
+
+  /*
+   * Le `<noscript>` d'`index.html`.
+   *
+   * Le README le désigne comme la seule chose que l'interrupteur ne couvre pas : c'est du
+   * HTML statique, hors de portée d'une constante TypeScript, et il fallait donc penser à
+   * le corriger à la main le jour de la publication. « Penser à » n'est pas une garantie ;
+   * un test en est une.
+   */
+  it('le noscript nomme l’application si et seulement si elle est publique', () => {
+    const gabarits = import.meta.glob('../../index.html', { query: '?raw', eager: true })
+    const source = Object.values(gabarits)[0] as unknown as { default: string }
+    const noscript = source.default.match(/<noscript>([\s\S]*?)<\/noscript>/)
+    expect(noscript).not.toBeNull()
+    expect(noscript?.[1].includes(URL_APP)).toBe(APP_PUBLIEE)
   })
 
   it('les appels à l’action reviennent avec l’application', () => {

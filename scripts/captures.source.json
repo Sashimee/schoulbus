@@ -1,0 +1,9 @@
+{
+  "$commentaire": "Provenance des captures. L'intégration continue extrait l'application à ce révision avant de régénérer et de comparer.",
+  "revisionApplication": "509b621",
+  "instantSimule": "2026-09-22T05:25:00.000Z",
+  "largeur": 370,
+  "hauteur": 824,
+  "densite": 2,
+  "playwright": "1.62.1"
+}

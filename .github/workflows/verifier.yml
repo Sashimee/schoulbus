@@ -23,7 +23,11 @@ jobs:
           node-version: '24'
           cache: npm
 
+      # Playwright ne sert qu'aux captures, engendrées dans le travail dédié ci-dessous et
+      # dans son conteneur épinglé. Ici, télécharger Chromium coûterait 150 Mo pour rien.
       - run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
       # Types, lint, tests, contrastes, dérive des jetons.
       - run: npm run verifier
@@ -42,6 +46,66 @@ jobs:
             echo "Les ressources engendrées ne correspondent plus au contenu."
             echo "Lancer « npm run assets:partage && npm run assets:qr » et commiter le résultat."
             git diff --stat -- public
+            exit 1
+          fi
+
+  # ------------------------------------------------------------------ #
+  # Les captures correspondent-elles encore à l'application ?
+  # ------------------------------------------------------------------ #
+  #
+  # Les vingt-quatre captures sont commitées, exactement comme les vignettes de partage, et
+  # pour la même raison : ni la construction ni le conteneur n'ont à connaître Playwright.
+  # Le risque est le même aussi — qu'elles vieillissent sans que personne ne s'en aperçoive,
+  # puisqu'une capture périmée s'affiche parfaitement.
+  #
+  # DEUX CONDITIONS rendent la comparaison d'octets possible, et aucune n'est facultative :
+  #
+  #   1. Le CONTENEUR ÉPINGLÉ de Playwright, le même qu'en local. La pile de polices et la
+  #      version de Chromium décident du rendu au pixel près ; sans conteneur commun, la
+  #      comparaison échouerait à chaque poussée et quelqu'un supprimerait ce travail au
+  #      bout d'un mois. Son étiquette doit suivre la version de `playwright` dans le
+  #      lockfile — l'étape « concordance » ci-dessous refuse qu'elles divergent.
+  #   2. L'application extraite à LA MÊME RÉVISION que celle des captures, lue dans
+  #      `scripts/captures.source.json`. Comparer à la pointe de `main` ferait échouer ce
+  #      travail à chaque changement de l'application, ce qui n'est pas la question posée
+  #      ici : la question est « les fichiers commités correspondent-ils à ce qu'ils
+  #      prétendent montrer ? »
+  #
+  # Mettre à jour les captures après un changement de l'application est donc un geste
+  # délibéré — `npm run captures`, puis commiter — et non un effet de bord d'un autre.
+  captures:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.62.1-noble
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: L'étiquette du conteneur suit-elle le lockfile ?
+        run: |
+          attendue=$(node -p "require('./node_modules/playwright/package.json').version" 2>/dev/null \
+            || node -p "require('./package-lock.json').packages['node_modules/playwright'].version")
+          if [ "$attendue" != "1.62.1" ]; then
+            echo "playwright vaut $attendue, mais ce travail tourne dans le conteneur v1.62.1."
+            echo "Les captures commitées ont été faites avec une autre version de Chromium :"
+            echo "alignez l'étiquette du conteneur, régénérez les captures, et commitez."
+            exit 1
+          fi
+
+      - name: Extraire l'application à la révision photographiée
+        run: |
+          revision=$(node -p "require('./scripts/captures.source.json').revisionApplication")
+          git clone --filter=blob:none https://github.com/Sashimee/bus-scolaire-beckerich.git app
+          git -C app checkout "$revision"
+
+      - run: npm ci
+      - run: npm ci --prefix app
+
+      - name: Les captures correspondent-elles encore ?
+        run: |
+          DEPOT_APP="$PWD/app" npm run captures
+          if ! git diff --quiet -- public/captures; then
+            echo "Les captures ne correspondent plus à l'application."
+            echo "Lancer « npm run captures » et commiter le résultat."
+            git diff --stat -- public/captures
             exit 1
           fi
 

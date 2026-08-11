@@ -24,7 +24,7 @@
 import { Fragment } from 'react'
 import { Appareil } from '../composants/Appareil.tsx'
 import { Bouton } from '../composants/Bouton.tsx'
-import { EcranAujourdhui } from '../composants/Ecrans.tsx'
+import { Capture } from '../composants/Ecrans.tsx'
 import { APP_PUBLIEE, URL_APP, URL_LIMITES } from '../config.ts'
 import { useContenu } from '../i18n/contexte.ts'
 import { useBrouillage } from '../mouvement/useBrouillage.ts'
@@ -110,8 +110,10 @@ export function Hero() {
         </div>
 
         <div className="heros__appareil">
-          <Appareil incline>
-            <EcranAujourdhui />
+          <Appareil incline capture>
+            {/* Son avance vient des deux `<link rel="preload">` conditionnels posés par
+                `entree-serveur.ts`, pas d'un attribut sur l'image — voir `Ecrans.tsx`. */}
+            <Capture ecran="aujourdhui" />
           </Appareil>
         </div>
       </div>

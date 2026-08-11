@@ -14,6 +14,11 @@ WORKDIR /vitrine
 # Les dépendances d'abord, seules : tant que `package-lock.json` ne bouge pas, cette
 # couche est réutilisée et l'installation ne recommence pas à chaque changement de style.
 COPY package.json package-lock.json ./
+# Playwright ne sert qu'à engendrer les captures, et les captures sont versionnées : les
+# refaire ici serait à la fois inutile et impossible (il faudrait le dépôt de
+# l'application). Sans cette variable, `npm ci` téléchargerait tout de même ~150 Mo de
+# Chromium dans cette couche. Même règle que les vignettes de partage.
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 RUN npm ci
 
 COPY . .

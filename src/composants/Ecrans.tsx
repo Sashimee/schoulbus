@@ -1,240 +1,82 @@
 /*
- * L'application, rejouée à l'intérieur de la maquette.
+ * Les écrans de l'application — de vraies captures, désormais.
  *
- * Quatre écrans, un par temps du récit. Ils ne sont pas des captures : ce sont des
- * reconstructions, aux mêmes jetons et aux mêmes formes que l'application réelle. Une
- * capture aurait vieilli au premier déploiement et se serait affichée floue sur écran
- * dense ; ceci suit la charte automatiquement, thème clair compris.
+ * CE QU'IL Y AVAIT AVANT, ET POURQUOI CE N'EST PLUS LÀ
+ * ---------------------------------------------------
+ * Ce fichier reconstruisait quatre écrans en DOM et en CSS. Le raisonnement se tenait :
+ * une reconstruction suit le thème et la langue toute seule, et ne pixellise pas sur un
+ * écran dense. Mais elle crée une deuxième source de vérité sur le même produit, et c'est
+ * toujours la deuxième qui dérive. La nôtre a fini par annoncer « Étape 2 sur 4 » quand
+ * l'assistant en compte sept, par placer la journée courte le mercredi quand ce sont le
+ * mardi et le jeudi, et par donner une adresse — « 12, rue de Huttange » — dans une rue
+ * qui n'existe pas : toutes les rues de la commune sont en luxembourgeois. Rien de tout
+ * cela ne pouvait être détecté, faute d'avoir quoi que ce soit à comparer.
  *
- * Rien ici n'invente une capacité que l'application n'a pas. Les heures viennent d'une
- * journée plausible du plan officiel, l'arrêt existe (`arrets.json`), et aucun écran ne
- * montre de position de bus en direct — l'application ne sait pas où est le bus.
+ * Une capture ne peut se tromper que d'une seule façon : vieillir. Et cela, `npm run
+ * captures` suivi d'une comparaison le voit.
+ *
+ * LE THÈME, ET POURQUOI DEUX IMAGES PLUTÔT QU'UNE
+ * ----------------------------------------------
+ * Le visiteur peut basculer le thème depuis l'en-tête. Deux solutions sont donc exclues :
+ *
+ *   - `<picture>` avec `media="(prefers-color-scheme: …)"` ne voit que la préférence du
+ *     système, jamais le choix manuel ;
+ *   - choisir la source en React d'après l'état du thème rendrait l'hydratation
+ *     incohérente avec le HTML pré-rendu.
+ *
+ * Les deux variantes sont donc dans le document, et la CSS en masque une — avec la même
+ * cascade que `jetons.css` emploie pour les couleurs, ce qui garantit qu'image et page
+ * basculent ensemble. Une image `loading="lazy"` dans un sous-arbre `display: none` n'est
+ * pas téléchargée : une seule descend, l'autre à la demande si l'on bascule.
+ *
+ * L'APPAREIL RESTE `aria-hidden`
+ * ------------------------------
+ * L'argument d'origine ne faiblit pas, il se renforce : une capture contient PLUS de texte
+ * incident qu'une maquette, et tout ce qu'elle montre est déjà dit en toutes lettres dans
+ * la section d'à côté. Un lecteur d'écran qui la traverserait entendrait « 07:45, dans 16
+ * min, Hovelange · Kneppchen » hors de tout contexte. Une image qui redit son voisinage
+ * est décorative, et se déclare comme telle.
  */
-import { CHIFFRES } from '../contenu/chiffres.ts'
-import { ECRANS } from '../contenu/ecrans.ts'
+import { HAUTEUR_IMAGE, LARGEUR_IMAGE, THEMES, fichierCapture } from '../contenu/captures.ts'
+import type { NomEcran } from '../contenu/captures.ts'
 import { useLangue } from '../i18n/contexte.ts'
-import { Icone } from './Icones.tsx'
 
-function Rail({ actif }: { actif: 'accueil' | 'enfants' | 'plan' | 'reglages' }) {
+/**
+ * Une capture de l'application, dans la langue courante et dans les deux thèmes.
+ *
+ * `width`/`height` portent les dimensions réelles du fichier : le rapport est donc connu
+ * avant que le moindre octet n'arrive, et la page ne sursaute pas au chargement.
+ */
+export function Capture({ ecran }: { ecran: NomEcran }) {
   const { langue } = useLangue()
-  const t = ECRANS[langue].rail
-
-  const entrees = [
-    { cle: 'accueil', icone: 'accueil', texte: t.accueil },
-    { cle: 'enfants', icone: 'enfants', texte: t.enfants },
-    { cle: 'plan', icone: 'plan', texte: t.plan },
-    { cle: 'reglages', icone: 'reglages', texte: t.reglages },
-  ] as const
 
   return (
-    <div className="ecran__rail">
-      {entrees.map((e) => (
-        <div key={e.cle} className="ecran__rail-item" data-actif={e.cle === actif ? 'oui' : 'non'}>
-          <Icone nom={e.icone} />
-          <span>{e.texte}</span>
-        </div>
+    <span className="capture">
+      {THEMES.map((theme) => (
+        <img
+          key={theme}
+          className={`capture__vue capture__vue--${theme}`}
+          src={`${import.meta.env.BASE_URL}${fichierCapture(ecran, langue, theme)}`}
+          width={LARGEUR_IMAGE}
+          height={HAUTEUR_IMAGE}
+          alt=""
+          /*
+           * `lazy` PARTOUT, y compris pour le héros, et c'est ce qui fait descendre un
+           * seul fichier au lieu de deux : une image différée dans un sous-arbre
+           * `display: none` n'est pas demandée. L'image du thème courant, elle, est dans
+           * le champ de vision et part immédiatement malgré l'attribut.
+           *
+           * Et surtout : pas de `fetchPriority="high"`. React en déduit un
+           * `<link rel="preload">` SANS `media`, qui rapatrie la capture claire même chez
+           * un visiteur en thème sombre — soit exactement le doublon que les deux
+           * annonces conditionnelles d'`entree-serveur.ts` sont là pour éviter. L'avance
+           * du héros vient de là, et de nulle part ailleurs.
+           */
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+        />
       ))}
-    </div>
-  )
-}
-
-function Entete({ titre }: { titre?: string }) {
-  const { langue } = useLangue()
-  const t = ECRANS[langue]
-  return (
-    <div className="ecran__entete">
-      <span className="ecran__marque">{titre ?? t.marque}</span>
-      <span className="etiquette">{CHIFFRES.anneeScolaire}</span>
-    </div>
-  )
-}
-
-/* ------------------------------------------------------------------ *
- * 1 · Le plan officiel — dense, juste, et pas fait pour un seul enfant
- * ------------------------------------------------------------------ */
-export function EcranPlan() {
-  const { langue } = useLangue()
-  const t = ECRANS[langue]
-
-  // Des heures réelles du plan, volontairement présentées en bloc : c'est justement
-  // l'effet « cinq pages de tableaux » que le récit décrit à ce moment-là.
-  const lignes = [
-    ['06:55', 'Elvange'],
-    ['07:02', 'Hovelange'],
-    ['07:08', 'Levelange'],
-    ['07:12', 'Huttange'],
-    ['07:18', 'Noerdange'],
-    ['07:24', 'Beckerich'],
-    ['07:31', 'Oberpallen'],
-    ['07:38', 'Schweich'],
-  ]
-
-  return (
-    <div className="ecran">
-      <Entete titre={t.planOfficiel} />
-      <div className="ecran__corps">
-        <div className="ecran__carte">
-          <div className="ecran__titre">
-            {t.ligne} 1 · {t.aller}
-          </div>
-          <div>
-            {lignes.map(([heure, lieu]) => (
-              <div key={lieu} className="ecran__trajet">
-                <span className="ecran__trajet-heure">{heure}</span>
-                <span className="ecran__trajet-lieu">{lieu}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="ecran__carte">
-          <div className="ecran__titre">
-            {CHIFFRES.lignes} × {t.ligne} · {CHIFFRES.arrets} {t.arretsDesservis}
-          </div>
-        </div>
-      </div>
-      <Rail actif="plan" />
-    </div>
-  )
-}
-
-/* ------------------------------------------------------------------ *
- * 2 · La configuration — une fois, puis plus jamais
- * ------------------------------------------------------------------ */
-export function EcranConfigurer() {
-  const { langue } = useLangue()
-  const t = ECRANS[langue]
-
-  const champs = [
-    { libelle: t.adresse, valeur: '12, rue de Huttange' },
-    { libelle: t.prenom, valeur: t.enfant },
-    { libelle: t.cycle, valeur: '3.1' },
-  ]
-
-  return (
-    <div className="ecran">
-      <Entete />
-      <div className="ecran__corps">
-        <div className="ecran__titre">{t.etape(2, 4)}</div>
-        {/* La barre de progression de l'assistant : quatre crans, deux franchis. */}
-        <div className="ecran__progression">
-          {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="ecran__pas" data-franchi={i < 2 ? 'oui' : 'non'} />
-          ))}
-        </div>
-        {champs.map((c) => (
-          <div key={c.libelle} className="ecran__carte">
-            <div className="ecran__titre">{c.libelle}</div>
-            <div>{c.valeur}</div>
-          </div>
-        ))}
-        <div className="ecran__carte ecran__carte--accent">
-          <div className="ecran__titre">{t.arret}</div>
-          <div>{t.aFied(4)}</div>
-        </div>
-      </div>
-      <Rail actif="enfants" />
-    </div>
-  )
-}
-
-/* ------------------------------------------------------------------ *
- * 3 · Aujourd'hui — l'écran du matin, et le seul qui compte à sept heures
- * ------------------------------------------------------------------ */
-export function EcranAujourdhui({ perturbation = false }: { perturbation?: boolean }) {
-  const { langue } = useLangue()
-  const t = ECRANS[langue]
-
-  return (
-    <div className="ecran">
-      <Entete />
-      <div className="ecran__corps">
-        {perturbation && (
-          <div className="ecran__carte ecran__carte--alerte">
-            <div className="ecran__titre">{t.perturbation}</div>
-            <div>{t.perturbationTexte}</div>
-          </div>
-        )}
-
-        <div className="ecran__carte ecran__carte--accent">
-          <div className="ecran__titre">{t.prochainDepart}</div>
-          <div className="ecran__prochain">
-            <span className="ecran__heure">07:12</span>
-            <span className="ecran__signal" />
-            <span className="ecran__delai">{t.dans(8)}</span>
-          </div>
-          <div className="ecran__delai">
-            {t.enfant} · {t.arret} · {t.aFied(4)}
-          </div>
-        </div>
-
-        <div className="ecran__carte">
-          <div className="ecran__titre">{t.retour}</div>
-          <div className="ecran__trajet">
-            <span className="ecran__trajet-heure">12:05</span>
-            <span className="ecran__trajet-lieu">{t.ecole}</span>
-          </div>
-          <div className="ecran__trajet">
-            <span className="ecran__trajet-heure">16:10</span>
-            <span className="ecran__trajet-lieu">{t.ecole}</span>
-          </div>
-        </div>
-      </div>
-      <Rail actif="accueil" />
-    </div>
-  )
-}
-
-/* ------------------------------------------------------------------ *
- * 4 · La semaine — ce qui suit, une fois l'heure du matin réglée
- * ------------------------------------------------------------------ */
-export function EcranSemaine() {
-  const { langue } = useLangue()
-  const t = ECRANS[langue]
-
-  const semaine = [
-    { jour: t.jours[0], heure: '07:12' },
-    { jour: t.jours[1], heure: '07:12' },
-    // Mercredi : la desserte de midi change, et l'heure du matin avec elle.
-    { jour: t.jours[2], heure: '07:12' },
-    { jour: t.jours[3], heure: '07:12' },
-    { jour: t.jours[4], heure: '07:12' },
-  ]
-
-  return (
-    <div className="ecran">
-      <Entete titre={t.semaineDe} />
-      <div className="ecran__corps">
-        <div className="ecran__carte">
-          <div className="ecran__titre">{t.aller}</div>
-          <div className="ecran__semaine">
-            {semaine.map((j, i) => (
-              <div key={j.jour} className="ecran__jour" data-aujourdhui={i === 1 ? 'oui' : 'non'}>
-                <div className="ecran__jour-nom">{j.jour}</div>
-                <div className="ecran__jour-heure">{j.heure}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="ecran__carte">
-          <div className="ecran__titre">{t.retour}</div>
-          <div className="ecran__semaine">
-            {[
-              { jour: t.jours[0], heure: '16:10' },
-              { jour: t.jours[1], heure: '16:10' },
-              { jour: t.jours[2], heure: '12:05' },
-              { jour: t.jours[3], heure: '16:10' },
-              { jour: t.jours[4], heure: '16:10' },
-            ].map((j, i) => (
-              <div key={j.jour} className="ecran__jour" data-aujourdhui={i === 1 ? 'oui' : 'non'}>
-                <div className="ecran__jour-nom">{j.jour}</div>
-                <div className="ecran__jour-heure">{j.heure}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <Rail actif="accueil" />
-    </div>
+    </span>
   )
 }

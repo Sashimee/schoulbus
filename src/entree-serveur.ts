@@ -22,6 +22,7 @@ import { FournisseurI18n } from './i18n/Fournisseur.tsx'
 import { Mentions } from './pages/Mentions.tsx'
 import { CONTENUS, LANGUES, PAGES, cheminPage, type Page } from './i18n/contexte.ts'
 import { APP_PUBLIEE, ORIGINE, URL_APP, imagePartage } from './config.ts'
+import { THEMES, fichierCapture } from './contenu/captures.ts'
 import type { Langue } from './contenu/type.ts'
 
 export { LANGUES, PAGES }
@@ -151,8 +152,33 @@ export function rendre(
   // La vignette de la langue rendue, pas celle du français (voir `imagePartage`).
   const vignette = `${ORIGINE}/${imagePartage(langue)}`
 
+  /*
+   * Le préchargement de la capture du héros.
+   *
+   * Elle est au-dessus de la ligne de flottaison, à l'intérieur du téléphone : découverte
+   * par le navigateur seulement après l'analyse du corps, elle apparaîtrait après le
+   * texte qui l'accompagne. Annoncée ici, elle part avec la page.
+   *
+   * Deux annonces, portées par `media` : `rel="preload"` l'honore, donc un seul des deux
+   * fichiers est réellement demandé. Le pire cas — un visiteur qui a forcé un thème
+   * contraire à celui de son système — coûte une image inutile d'une cinquantaine de
+   * kilo-octets, et c'est le seul cas où les deux descendent.
+   *
+   * Réservé à l'accueil : la page de mentions ne montre aucun appareil.
+   */
+  const prechargements =
+    page === 'accueil'
+      ? THEMES.map(
+          (theme) =>
+            `    <link rel="preload" as="image" fetchpriority="high" media="(prefers-color-scheme: ${
+              theme === 'sombre' ? 'dark' : 'light'
+            })" href="/${fichierCapture('aujourdhui', langue, theme)}" />`,
+        ).join('\n')
+      : ''
+
   const tete = [
     `    <link rel="canonical" href="${url}" />`,
+    prechargements,
     alternatives,
     `    <link rel="alternate" hreflang="x-default" href="${ORIGINE}${cheminPage('fr', page)}" />`,
     /*

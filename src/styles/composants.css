@@ -510,6 +510,22 @@
     background-repeat: no-repeat;
   }
 
+  /*
+   * Variante capture : l'écran ne peint plus rien.
+   *
+   * Le dégradé et les deux taches floues ci-dessous dessinaient le fond de la maquette.
+   * Une capture est opaque et porte déjà son propre fond — le même, puisque `jetons.css`
+   * est une copie conforme des jetons de l'application, tenue par `npm run
+   * jetons:verifier`. Les peindre dessous ne se verrait pas et coûterait deux flous de
+   * 90 px à chaque rendu.
+   *
+   * Si une couture apparaît entre le biseau et l'image, ce n'est pas ici qu'il faut la
+   * corriger : c'est le signe que les jetons ont divergé de l'application.
+   */
+  .appareil__ecran--capture {
+    background: var(--fond);
+  }
+
   /* Les deux taches floues de la maquette, à l'intérieur de l'écran. */
   .appareil__lueur {
     position: absolute;
@@ -536,243 +552,49 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * L'application rejouée. Échelle propre : tout est relatif à `--ecran-base`.
+   * La capture : l'application photographiée, dans les deux thèmes
    * ------------------------------------------------------------------ */
-  .ecran {
-    --ecran-base: 15px;
+  .capture {
     position: relative;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
+    display: block;
     block-size: 100%;
-    padding: 18px 16px 0;
-    color: var(--encre);
-    font-size: var(--ecran-base);
-    line-height: 1.45;
   }
-
-  .ecran__entete {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-block-end: 16px;
-  }
-  .ecran__marque {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--encre-douce);
-  }
-
-  .ecran__corps {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  .ecran__carte {
-    padding: 16px;
-    background: var(--surface);
-    border: var(--trait) solid var(--bord);
-    border-radius: 20px;
-    box-shadow: var(--lustre);
-  }
-  .ecran__carte--accent {
-    background: var(--surface-accent);
-    border-color: var(--bord-accent);
-  }
-  .ecran__carte--alerte {
-    background: var(--danger-fond);
-    border-color: var(--danger-bord);
-  }
-
-  .ecran__titre {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--encre-douce);
-  }
-
-  /* Le bloc qui décide : le prochain départ. */
-  .ecran__prochain {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-  }
-  .ecran__heure {
-    font-family: var(--police-chiffres);
-    font-variant-numeric: tabular-nums;
-    font-size: 58px;
-    font-weight: 600;
-    line-height: 0.86;
-    letter-spacing: -0.04em;
-    color: var(--accent);
-  }
-  .ecran__delai {
-    font-size: 13px;
-    color: var(--encre-douce);
+  .capture__vue {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    /* La capture est prise aux dimensions exactes de l'écran : `cover` ne recadre donc
+       rien, il garantit seulement qu'un arrondi de sous-pixel ne laisse pas une raie du
+       fond apparaître sur un bord. */
+    object-fit: cover;
   }
 
   /*
-   * Le signal « partez maintenant » : un anneau qui s'ouvre, un point qui respire.
-   * Repris tel quel de `.prochain__signal` dans l'application.
+   * Un seul thème visible à la fois, et la MÊME cascade que `jetons.css` : choix explicite
+   * d'abord, préférence du système ensuite. Toute autre règle laisserait l'image et la
+   * page se contredire — un écran sombre dans une maquette claire, ou l'inverse, chaque
+   * fois que le visiteur touche au sélecteur de thème.
+   *
+   * `display: none` plutôt qu'une opacité : une image ainsi masquée n'est pas téléchargée
+   * tant qu'elle reste cachée. Le visiteur ne paie donc qu'un seul des deux fichiers.
    */
-  .ecran__signal {
-    position: relative;
-    inline-size: 16px;
-    block-size: 16px;
-    flex: none;
-    align-self: center;
+  .capture__vue--clair {
+    display: none;
   }
-  .ecran__signal::before,
-  .ecran__signal::after {
-    content: '';
-    position: absolute;
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-    border-radius: 999px;
-    translate: -50% -50%;
+  :root[data-theme='clair'] .capture__vue--clair {
+    display: block;
   }
-  .ecran__signal::before {
-    inline-size: 16px;
-    block-size: 16px;
-    border: var(--trait-fort) solid var(--accent);
-    animation: onde 1.8s var(--sortie) infinite;
+  :root[data-theme='clair'] .capture__vue--sombre {
+    display: none;
   }
-  .ecran__signal::after {
-    inline-size: 6px;
-    block-size: 6px;
-    background: var(--accent);
-    animation: souffle 1.8s var(--sortie) infinite;
-  }
-
-  /* Une ligne de trajet. */
-  .ecran__trajet {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding-block: 9px;
-    border-block-start: var(--trait) solid var(--bord);
-  }
-  .ecran__trajet:first-child {
-    border-block-start: 0;
-  }
-  .ecran__trajet-heure {
-    font-family: var(--police-chiffres);
-    font-variant-numeric: tabular-nums;
-    font-weight: 500;
-    font-size: 16px;
-  }
-  .ecran__trajet-lieu {
-    font-size: 13px;
-    color: var(--encre-douce);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  /* La fiche de la semaine. */
-  .ecran__semaine {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-  }
-  .ecran__jour {
-    padding: 10px 6px;
-    background: var(--fond-creux);
-    border: var(--trait) solid var(--bord);
-    border-radius: 12px;
-    text-align: center;
-  }
-  .ecran__jour[data-aujourdhui='oui'] {
-    background: var(--surface-accent);
-    border-color: var(--bord-accent);
-  }
-  .ecran__jour-nom {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--encre-douce);
-  }
-  .ecran__jour-heure {
-    font-family: var(--police-chiffres);
-    font-variant-numeric: tabular-nums;
-    font-size: 13px;
-    font-weight: 500;
-  }
-
-  /* La progression de l'assistant : quatre barres, pas un pourcentage. */
-  .ecran__progression {
-    display: flex;
-    gap: 4px;
-  }
-  .ecran__pas {
-    flex: 1;
-    block-size: 4px;
-    border-radius: 999px;
-    background: var(--fond-creux);
-  }
-  .ecran__pas[data-franchi='oui'] {
-    background: var(--accent);
-  }
-
-  /* Le rail de navigation flottant, en bas de l'écran de la maquette. */
-  .ecran__rail {
-    display: flex;
-    gap: 4px;
-    margin: auto 0 12px;
-    padding: 4px;
-    background: var(--rail);
-    border: var(--trait) solid var(--bord);
-    border-radius: 20px;
-    box-shadow: var(--lustre);
-    backdrop-filter: var(--flou);
-    -webkit-backdrop-filter: var(--flou);
-  }
-  .ecran__rail-item {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    padding-block: 8px;
-    border-radius: 16px;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: var(--encre-douce);
-  }
-  .ecran__rail-item[data-actif='oui'] {
-    color: var(--accent);
-    background: var(--surface);
-  }
-  .ecran__rail-item svg {
-    inline-size: 20px;
-    block-size: 20px;
-    stroke-width: 1.75;
-  }
-
-  /* La carte des arrêts, dessinée — pas une tuile chargée. */
-  .ecran__plan {
-    position: relative;
-    block-size: 190px;
-    border-radius: 16px;
-    overflow: hidden;
-    background: var(--fond-creux);
-    border: var(--trait) solid var(--bord);
-  }
-
-  /* Le bus de l'état vide. Jamais à côté d'une heure réelle : il ferait croire à un suivi. */
-  .ecran__bus {
-    font-size: 26px;
-    animation: traverse 4s linear infinite;
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme='sombre']) .capture__vue--clair {
+      display: block;
+    }
+    :root:not([data-theme='sombre']) .capture__vue--sombre {
+      display: none;
+    }
   }
 
   /* ------------------------------------------------------------------ *

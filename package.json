@@ -20,7 +20,8 @@
     "chiffres": "node scripts/build-chiffres.mjs",
     "assets:qr": "node scripts/build-qr.mjs",
     "assets:partage": "node scripts/build-partage.mjs",
-    "verifier": "npm run typecheck && npm run lint && npm test && npm run contraste && npm run jetons:verifier"
+    "verifier": "npm run typecheck && npm run lint && npm test && npm run contraste && npm run jetons:verifier",
+    "captures": "node scripts/captures.mjs"
   },
   "engines": {
     "node": ">=24.15.0"
@@ -45,6 +46,7 @@
     "@vitejs/plugin-react": "^6.0.4",
     "jsdom": "^30.0.1",
     "oxlint": "^1.75.0",
+    "playwright": "^1.62.1",
     "qrcode": "^1.5.4",
     "satori": "^0.29.0",
     "typescript": "~6.0.2",

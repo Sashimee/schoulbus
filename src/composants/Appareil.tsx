@@ -1,10 +1,15 @@
 /*
- * Le téléphone dessiné, et ce qu'on y voit.
+ * Le téléphone dessiné, et la capture qu'on y pose.
  *
  * L'appareil est décoratif au sens strict : `aria-hidden`. Tout ce qu'il montre est dit
  * en toutes lettres dans le texte de la section qui l'accompagne — un lecteur d'écran
- * qui traverserait cette maquette entendrait « 07:12, Huttange, Lun Mar Mer » sans
+ * qui le traverserait entendrait « 07:45, dans 16 min, Hovelange · Kneppchen » sans
  * contexte, et perdrait le fil du récit. Une image d'écran est une image.
+ *
+ * Ce qu'il contient n'est plus une maquette reconstruite mais une vraie capture de
+ * l'application (voir `Ecrans.tsx`), et cela ne change pas la décision ci-dessus : une
+ * capture porte encore plus de texte incident qu'une maquette, et pas un mot qu'un
+ * attribut `alt` pourrait dire sans répéter la section d'à côté.
  *
  * Le basculement suit le pointeur, avec très peu d'amplitude (5°). Au-delà, la maquette
  * cesse d'être un objet posé sur la page pour devenir un jouet, et les textes qu'elle
@@ -15,7 +20,16 @@ import { useNiveauMouvement } from '../mouvement/useNiveauMouvement.ts'
 
 const INCLINAISON_MAX = 5
 
-export function Appareil({ children, incline = false }: { children: ReactNode; incline?: boolean }) {
+export function Appareil({
+  children,
+  incline = false,
+  /** Le contenu est-il une capture opaque ? Alors l'écran ne peint rien dessous. */
+  capture = false,
+}: {
+  children: ReactNode
+  incline?: boolean
+  capture?: boolean
+}) {
   const scene = useRef<HTMLDivElement>(null)
   const corps = useRef<HTMLDivElement>(null)
   const niveau = useNiveauMouvement()
@@ -62,9 +76,15 @@ export function Appareil({ children, incline = false }: { children: ReactNode; i
   return (
     <div ref={scene} className="appareil__scene" aria-hidden="true">
       <div ref={corps} className="appareil">
-        <div className="appareil__ecran">
-          <div className="appareil__lueur appareil__lueur--haut" />
-          <div className="appareil__lueur appareil__lueur--bas" />
+        <div className={`appareil__ecran${capture ? ' appareil__ecran--capture' : ''}`}>
+          {/* Sous une capture opaque, les deux lueurs ne se verraient pas : on ne les
+              monte pas plutôt que de les peindre pour rien. */}
+          {!capture && (
+            <>
+              <div className="appareil__lueur appareil__lueur--haut" />
+              <div className="appareil__lueur appareil__lueur--bas" />
+            </>
+          )}
           {children}
         </div>
       </div>

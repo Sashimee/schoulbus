@@ -21,12 +21,8 @@
 import { AnimatePresence, m, useInView } from 'motion/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Appareil } from '../composants/Appareil.tsx'
-import {
-  EcranAujourdhui,
-  EcranConfigurer,
-  EcranPlan,
-  EcranSemaine,
-} from '../composants/Ecrans.tsx'
+import { Capture } from '../composants/Ecrans.tsx'
+import type { NomEcran } from '../contenu/captures.ts'
 import { useContenu } from '../i18n/contexte.ts'
 import { useNiveauMouvement } from '../mouvement/useNiveauMouvement.ts'
 import { Revele } from '../mouvement/Revele.tsx'
@@ -38,7 +34,7 @@ const SORTIE = [0.22, 0.61, 0.36, 1] as const
  * aux vignettes du petit écran : un temps ne peut pas montrer deux choses différentes
  * selon la largeur de la fenêtre.
  */
-const ECRANS_RECIT = [EcranPlan, EcranConfigurer, EcranAujourdhui, EcranSemaine] as const
+const ECRANS_RECIT: NomEcran[] = ['plan', 'assistant', 'aujourdhui', 'semaine']
 
 /** Un temps du récit. Signale son entrée au centre de l'écran, et rien de plus. */
 function Temps({
@@ -66,8 +62,6 @@ function Temps({
     if (auCentre) onCentre(index)
   }, [auCentre, index, onCentre])
 
-  const Ecran = ECRANS_RECIT[index]
-
   return (
     <div className="recit__temp" ref={ref}>
       <Revele rang={0} className="entete-section">
@@ -80,8 +74,8 @@ function Temps({
 
       {/* La vignette du petit écran : l'appareil collant n'existe pas ici. */}
       <div className="recit__vignette">
-        <Appareil>
-          <Ecran />
+        <Appareil capture>
+          <Capture ecran={ECRANS_RECIT[index]} />
         </Appareil>
       </div>
     </div>
@@ -95,7 +89,6 @@ export function Recit() {
   // Référence stable : sans elle, chaque rendu du récit donnerait une nouvelle fonction
   // aux quatre temps, et relancerait leurs effets pour rien.
   const changerCourant = useCallback((i: number) => setCourant(i), [])
-  const Ecran = ECRANS_RECIT[courant]
 
   return (
     <section className="section recit">
@@ -108,7 +101,7 @@ export function Recit() {
 
         <div className="recit__grille">
           <div className="recit__appareil">
-            <Appareil incline>
+            <Appareil incline capture>
               {/*
                * Sans mouvement, PAS d'`AnimatePresence` du tout — et non un
                * `AnimatePresence` dont les animations seraient neutralisées.
@@ -120,7 +113,7 @@ export function Recit() {
                * première vue en racontant les trois suivantes.
                */}
               {niveau === 'aucun' ? (
-                <Ecran />
+                <Capture ecran={ECRANS_RECIT[courant]} />
               ) : (
                 /*
                  * `mode="wait"` : le nouvel écran n'entre qu'une fois l'ancien sorti.
@@ -136,7 +129,7 @@ export function Recit() {
                     exit={{ opacity: 0, x: -18 }}
                     transition={{ duration: 0.3, ease: SORTIE }}
                   >
-                    <Ecran />
+                    <Capture ecran={ECRANS_RECIT[courant]} />
                   </m.div>
                 </AnimatePresence>
               )}
