@@ -14,7 +14,6 @@ import {
   NOM_EDITEUR,
   URL_APP,
   URL_CREDITS,
-  URL_DEPOT,
   URL_INDEPENDANCE,
   URL_LIMITES,
 } from '../config.ts'
@@ -351,7 +350,6 @@ export const lb: Contenu = {
       ],
       projet: [
         { texte: 'Merci a Mataarbechter', url: URL_CREDITS },
-        { texte: 'Quellcode', url: URL_DEPOT },
       ],
     },
     mention: 'Vun engem Elterendeel, zu Biekerech.',
@@ -365,8 +363,7 @@ export const lb: Contenu = {
     intro: `Dës Säit seet, wien dëst Ugebot verëffentlecht. Um Rescht ännert si näischt: D'Säit bleift onofhängeg, a maassgeevend ass dat offiziellt Dokument vun der Gemeng.`,
     editeurTitre: `Erausginn vun`,
     editeurCorps: `Dës Säit gëtt vum ${NOM_EDITEUR} privat an net kommerziell erausginn. Si ass weder a Optrag ginn, nach vun der Gemengeverwaltung Biekerech, vun der Grondschoul oder vun der Maison Relais gepréift oder guttgeheescht.
-Adress: ${ADRESSE_EDITEUR}
-Kontakt: iwwer den Depot vum Code, deem seng Adress am Fouss vun der Säit steet.`,
+Adress: ${ADRESSE_EDITEUR}`,
     hebergeurTitre: `Hosting`,
     hebergeurCorps: `D'Säit besteet aus statesche Fichieren, déi vun engem Server ausgeliwwert ginn, deen den Erausginner lount. Do gi keng Besuchsdonnéeën opbewahrt.`,
     donneesTitre: `Perséinlech Donnéeën`,

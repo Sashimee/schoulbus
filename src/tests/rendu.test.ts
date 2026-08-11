@@ -202,6 +202,25 @@ describe('pré-rendu', () => {
     expect(html).toContain(URL_SOURCE_OFFICIELLE)
   })
 
+  /*
+   * Rien, nulle part, ne renvoie à un dépôt de code.
+   *
+   * Le pied de page portait un lien « Code source » vers le dépôt de l'application. Il a
+   * été retiré : ce que voit un visiteur n'a pas à mener au code, et le développeur qui le
+   * cherche le trouve dans le README.
+   *
+   * Le motif est volontairement LARGE — `github.com`, et non l'adresse exacte qui vient
+   * d'être supprimée. Le jour où quelqu'un voudra lier un dépôt, quel qu'il soit, ce test
+   * le lui rappellera : ce sera une décision, et non un glissement au fil d'un pied de page
+   * qu'on complète.
+   */
+  it.each(LANGUES)('%s : aucune page ne renvoie à un dépôt de code', (langue) => {
+    for (const page of PAGES) {
+      const { html, tete } = rendre(langue, page)
+      expect(`${html}${tete}`, `${langue}/${page}`).not.toContain('github.com')
+    }
+  })
+
   it('le pied de page ne propose les mentions que si elles existent', () => {
     const { html } = rendre('fr')
     expect(html.includes('/mentions/')).toBe(PAGES.includes('mentions'))
