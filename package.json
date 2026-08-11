@@ -21,7 +21,8 @@
     "assets:qr": "node scripts/build-qr.mjs",
     "assets:partage": "node scripts/build-partage.mjs",
     "verifier": "npm run typecheck && npm run lint && npm test && npm run contraste && npm run jetons:verifier",
-    "captures": "node scripts/captures.mjs"
+    "captures": "node scripts/captures.mjs",
+    "captures:conteneur": "docker run --rm -u $(id -u):$(id -g) -v \"$PWD\":/vitrine -v \"$PWD/../bus-scolaire-beckerich\":/app -w /vitrine -e DEPOT_APP=/app -e HOME=/tmp mcr.microsoft.com/playwright:v1.62.1-noble npm run captures"
   },
   "engines": {
     "node": ">=24.15.0"

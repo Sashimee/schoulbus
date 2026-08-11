@@ -37,6 +37,7 @@ npm run chiffres           # régénérer src/contenu/chiffres.ts depuis les don
 npm run assets:qr          # régénérer le QR vers URL_APP
 npm run assets:partage     # régénérer les vignettes de partage et les icônes matricielles
 npm run captures           # rephotographier l'application (voir plus bas)
+npm run captures:conteneur # la même chose dans le conteneur épinglé — CELLE QU'ON COMMITE
 ```
 
 ### Les écrans montrés sont de vraies captures
@@ -65,11 +66,17 @@ Trois choses que le script REFUSE de laisser passer, plutôt que de produire une
 a l'air d'aller : une tuile absente des fixtures, une carte modale par-dessus l'écran, un
 foyer incomplet. Il vérifie aussi le poids — 60 ko par fichier, 1,4 Mo pour l'ensemble.
 
-Les captures sont **déterministes au bit près** dans un conteneur donné, ce qui est toute
-la condition pour que l'intégration continue puisse les comparer. C'est aussi ce qui
-explique le conteneur épinglé (`mcr.microsoft.com/playwright:v…-noble`) dans
-`.github/workflows/verifier.yml` : la pile de polices et la version de Chromium décident du
-rendu au pixel près.
+Les captures sont **déterministes au bit près à environnement égal**, ce qui est toute la
+condition pour que l'intégration continue puisse les comparer. « À environnement égal » est
+la partie qui compte : six des vingt-quatre fichiers engendrés sur une machine de
+développement diffèrent de ceux du conteneur, la pile de polices et la version de Chromium
+décidant du rendu au pixel près.
+
+**Ce sont donc les captures DU CONTENEUR qui sont commitées.** `npm run captures` sert à
+itérer ; `npm run captures:conteneur` produit ce qui est versionné, dans la même image que
+l'intégration continue. Régénérer avec le premier et commiter le résultat fait échouer le
+contrôle de dérive — sans que rien ne soit faux dans les images, ce qui est la façon la
+plus déroutante d'échouer.
 
 > Les tuiles de `scripts/fixtures/tuiles/` proviennent d'OpenStreetMap et sont soumises à
 > l'ODbL. L'attribution est rendue dans l'image elle-même, par Leaflet.
@@ -182,11 +189,13 @@ fichier, même si aucun lien n'y menait. Elle l'est de toute façon dans ce dép
   en ligne et mène à l'application. Ce qui était « à faire relire avant publication » est
   maintenant **publié sans relecture**, devant le public le plus à même de le remarquer.
   C'est la réserve la plus urgente des cinq.
-- **Les captures n'ont été produites que sur une machine.** Elles sont reproductibles au
-  bit près ici, trois exécutions de suite ; la comparaison en intégration continue, elle,
-  n'a jamais tourné. Si elle échoue au premier passage, la cause la plus probable est
-  l'écart entre le Chromium du conteneur et celui d'ici — dans ce cas, régénérer les
-  captures DANS le conteneur et commiter ce résultat-là.
+- **Les captures dépendent de l'environnement qui les produit.** Réserve levée pour la
+  partie qui était incertaine : la comparaison a tourné en intégration continue, et l'écart
+  supposé entre le Chromium du conteneur et celui d'une machine de développement s'est
+  vérifié — six fichiers sur vingt-quatre. D'où `npm run captures:conteneur`, et la règle
+  qu'on ne commite que sa sortie. Ce qui reste inconnu : le comportement le jour où
+  l'étiquette du conteneur changera. L'étape « concordance » du workflow refusera la
+  révision, ce qui est le but, mais personne ne l'a encore vue le faire.
 - **Les largeurs étroites ont été mesurées dans un moteur de rendu, pas sur un appareil.**
   La page a été ouverte dans Chromium à 320, 360, 390, 414 et 768 px, en thème clair et
   sombre, dans les trois langues, avec émulation tactile — trente combinaisons. Ce que

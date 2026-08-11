@@ -65,6 +65,9 @@ jobs:
   #      comparaison échouerait à chaque poussée et quelqu'un supprimerait ce travail au
   #      bout d'un mois. Son étiquette doit suivre la version de `playwright` dans le
   #      lockfile — l'étape « concordance » ci-dessous refuse qu'elles divergent.
+  #      Ce n'est pas une précaution théorique : six des vingt-quatre fichiers engendrés
+  #      sur une machine de développement différaient de ceux du conteneur. Les captures
+  #      commitées sont donc CELLES DU CONTENEUR, produites par `npm run captures:conteneur`.
   #   2. L'application extraite à LA MÊME RÉVISION que celle des captures, lue dans
   #      `scripts/captures.source.json`. Comparer à la pointe de `main` ferait échouer ce
   #      travail à chaque changement de l'application, ce qui n'est pas la question posée
@@ -78,6 +81,14 @@ jobs:
     container: mcr.microsoft.com/playwright:v1.62.1-noble
     steps:
       - uses: actions/checkout@v4
+
+      # Le conteneur tourne en `root`, le dépôt extrait appartient à l'utilisateur du
+      # runner : git refuse alors de reconnaître son propre dossier de travail et répond
+      # « Not a git repository ». La comparaison finale échouait là-dessus, APRÈS avoir
+      # régénéré les vingt-quatre captures sans encombre — un échec qui n'avait rien à voir
+      # avec les captures elles-mêmes.
+      - name: Autoriser git à lire le dossier de travail
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: L'étiquette du conteneur suit-elle le lockfile ?
         run: |
