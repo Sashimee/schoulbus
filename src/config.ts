@@ -28,10 +28,14 @@ export const URL_APP = 'https://sashimee.github.io/bus-scolaire-beckerich'
  * aux mêmes endroits, dans les mêmes mots. Les deux états sont testés (`src/tests/`) :
  * il n'existe pas d'état intermédiaire où la moitié des liens serait revenue.
  *
- * Ce que cet interrupteur ne couvre PAS, faute d'être du code : le `<noscript>` de
- * `index.html`, qui est du HTML statique. Il ne nomme donc plus l'application du tout.
+ * Ce que cet interrupteur ne couvre pas lui-même, faute d'être du code : le `<noscript>`
+ * de `index.html`, qui est du HTML statique. Un test tient désormais l'invariant à sa
+ * place (`rendu.test.ts`), de sorte que les deux ne peuvent plus se contredire.
+ *
+ * Passée à `true` le jour où l'application est devenue publique : elle est en ligne et en
+ * service réel — un représentant de l'école y a publié de vraies perturbations.
  */
-export const APP_PUBLIEE = false
+export const APP_PUBLIEE = true
 
 /**
  * La source officielle. Elle n'est pas décorative : le site est indépendant de la

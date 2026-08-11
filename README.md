@@ -36,12 +36,48 @@ npm run jetons:reprendre   # les reprendre depuis l'application
 npm run chiffres           # régénérer src/contenu/chiffres.ts depuis les données
 npm run assets:qr          # régénérer le QR vers URL_APP
 npm run assets:partage     # régénérer les vignettes de partage et les icônes matricielles
+npm run captures           # rephotographier l'application (voir plus bas)
 ```
+
+### Les écrans montrés sont de vraies captures
+
+Les quatre téléphones de la page contiennent des photographies de l'application, pas des
+reconstructions : `public/captures/{écran}-{langue}-{thème}.webp`, soit quatre écrans ×
+trois langues × deux thèmes = vingt-quatre fichiers, produits par `npm run captures`.
+
+Ils l'ont longtemps été. `src/composants/Ecrans.tsx` redessinait les écrans en DOM et en
+CSS, ce qui suivait le thème et la langue sans effort et ne pixellisait jamais. Mais une
+reconstruction est une deuxième source de vérité sur le même produit, et c'est la deuxième
+qui dérive : la nôtre annonçait « Étape 2 sur 4 » quand l'assistant en compte sept, plaçait
+la journée courte le mercredi quand ce sont le mardi et le jeudi, et donnait une adresse
+dans une rue qui n'existe pas. Aucun test ne pouvait le voir, faute d'avoir quoi comparer.
+
+Le script photographie le **serveur de développement de l'application**, jamais le site
+publié, et neutralise tout ce qui n'est pas reproductible : horloge figée au mardi
+22 septembre 2026 à 07:25, tuiles de carte servies depuis `scripts/fixtures/tuiles/`,
+perturbations et traductions servies vides, révision affichée fixée à celle qui est
+photographiée. Le foyer de démonstration est posé par le **lien de partage de
+l'application** — une interface publique et versionnée — et non par une clé de stockage
+recopiée ici. Son adresse est au niveau de la rue, jamais au numéro : la fiche de la
+semaine dessine le vrai voisinage sur une carte.
+
+Trois choses que le script REFUSE de laisser passer, plutôt que de produire une image qui
+a l'air d'aller : une tuile absente des fixtures, une carte modale par-dessus l'écran, un
+foyer incomplet. Il vérifie aussi le poids — 60 ko par fichier, 1,4 Mo pour l'ensemble.
+
+Les captures sont **déterministes au bit près** dans un conteneur donné, ce qui est toute
+la condition pour que l'intégration continue puisse les comparer. C'est aussi ce qui
+explique le conteneur épinglé (`mcr.microsoft.com/playwright:v…-noble`) dans
+`.github/workflows/verifier.yml` : la pile de polices et la version de Chromium décident du
+rendu au pixel près.
+
+> Les tuiles de `scripts/fixtures/tuiles/` proviennent d'OpenStreetMap et sont soumises à
+> l'ODbL. L'attribution est rendue dans l'image elle-même, par Leaflet.
 
 ### Les ressources engendrées sont commitées
 
-`public/partage*.png`, `public/apple-touch-icon.png`, `public/favicon-32.png` et
-`public/qr-application.svg` ne sont PAS produits par `npm run build`. Ils sont engendrés à
+`public/partage*.png`, `public/apple-touch-icon.png`, `public/favicon-32.png`,
+`public/qr-application.svg` et `public/captures/` ne sont PAS produits par `npm run build`. Ils sont engendrés à
 la main, puis commités — sans quoi la construction, et donc le conteneur, dépendraient de
 `satori`, de `resvg` et d'une bibliothèque de QR pour redessiner à l'identique des fichiers
 qui ne changent qu'avec le titre de la page.
@@ -116,35 +152,41 @@ le partage.
 le jour où l'application prend un domaine propre, cette ligne change, et le QR se
 régénère avec `npm run assets:qr`.
 
-### Pour l'instant, ils n'y mènent pas
+### Et maintenant, ils y mènent
 
-`APP_PUBLIEE` vaut `false` dans `src/config.ts`. Tant que c'est le cas, la vitrine
-**décrit** l'application sans conduire à elle : pas de bouton, pas de QR, pas d'entrée de
-pied de page, et pas de `SoftwareApplication` dans le balisage structuré. À leur place, une
-mention « bientôt disponible » dans le héros et dans la section finale, et un renvoi vers
-le plan officiel de la commune — la seule source qui existe aujourd'hui.
+`APP_PUBLIEE` vaut `true` dans `src/config.ts`. L'application est en ligne et en service
+réel — un représentant de l'école y a publié de vraies perturbations. Les boutons, le QR,
+les entrées de pied de page et le `SoftwareApplication` du balisage structuré sont donc
+revenus, tous en même temps, aux endroits où ils étaient prévus.
 
-Le jour de la publication, cette ligne passe à `true` et tout revient d'un coup, aux mêmes
-endroits, dans les mêmes mots. Deux choses restent alors à faire à la main, parce qu'elles
-ne sont pas du code :
+L'interrupteur reste un interrupteur : le repasser à `false` retire tout d'un coup, et les
+deux états sont toujours testés (`src/tests/rendu.test.ts`). Le risque que ces tests
+couvrent n'est pas le tri d'aujourd'hui, c'est la section ajoutée dans six mois.
 
-- le `<noscript>` d'`index.html`, qui ne nomme plus l'application ;
-- le lien de la maquette, s'il change d'adresse (`npm run assets:qr`).
+Deux choses n'étaient pas du code et devaient être faites à la main le jour de la
+publication : le `<noscript>` d'`index.html`, et la régénération du QR. La première est
+faite — et **elle n'est plus une affaire de mémoire** : un test vérifie désormais que le
+`<noscript>` nomme l'application si et seulement si `APP_PUBLIEE` le dit. La seconde s'est
+révélée sans effet, `URL_APP` n'ayant pas changé.
 
-Les deux états sont testés. `src/tests/rendu.test.ts` vérifie qu'aucune page rendue ne
-contient `URL_APP` tant que l'interrupteur est fermé, et que les appels à l'action
-reviennent quand il s'ouvre — le risque n'est pas le tri d'aujourd'hui, c'est la section
-ajoutée dans six mois qui reprendrait un lien d'un ancien exemple.
-
-Une nuance à connaître : l'adresse de l'application reste présente dans le paquet
-JavaScript, comme donnée de configuration. Aucun lien n'y mène et aucune page ne l'affiche,
-mais elle est lisible par qui ouvre le fichier. Elle l'est de toute façon dans ce dépôt.
+Une nuance à connaître : l'adresse de l'application était déjà présente dans le paquet
+JavaScript avant la publication, comme donnée de configuration — lisible par qui ouvrait le
+fichier, même si aucun lien n'y menait. Elle l'est de toute façon dans ce dépôt.
 
 ## Réserves ouvertes
 
 - **La traduction luxembourgeoise n'a pas été relue par une personne dont c'est la langue
   maternelle.** C'est la langue du foyer dans une bonne part de la commune ; une tournure
-  fausse s'y remarque immédiatement. À faire relire avant toute mise en ligne publique.
+  fausse s'y remarque immédiatement.
+  Cette réserve a changé de nature : `APP_PUBLIEE` vaut désormais `true`, donc la page est
+  en ligne et mène à l'application. Ce qui était « à faire relire avant publication » est
+  maintenant **publié sans relecture**, devant le public le plus à même de le remarquer.
+  C'est la réserve la plus urgente des cinq.
+- **Les captures n'ont été produites que sur une machine.** Elles sont reproductibles au
+  bit près ici, trois exécutions de suite ; la comparaison en intégration continue, elle,
+  n'a jamais tourné. Si elle échoue au premier passage, la cause la plus probable est
+  l'écart entre le Chromium du conteneur et celui d'ici — dans ce cas, régénérer les
+  captures DANS le conteneur et commiter ce résultat-là.
 - **Les largeurs étroites ont été mesurées dans un moteur de rendu, pas sur un appareil.**
   La page a été ouverte dans Chromium à 320, 360, 390, 414 et 768 px, en thème clair et
   sombre, dans les trois langues, avec émulation tactile — trente combinaisons. Ce que
