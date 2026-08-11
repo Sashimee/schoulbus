@@ -172,36 +172,43 @@ le partage.
 le jour où l'application prend un domaine propre, cette ligne change, et le QR se
 régénère avec `npm run assets:qr`.
 
-### Et maintenant, ils y mènent
+### Pour l'instant, ils n'y mènent pas
 
-`APP_PUBLIEE` vaut `true` dans `src/config.ts`. L'application est en ligne et en service
-réel — un représentant de l'école y a publié de vraies perturbations. Les boutons, le QR,
-les entrées de pied de page et le `SoftwareApplication` du balisage structuré sont donc
-revenus, tous en même temps, aux endroits où ils étaient prévus.
+`APP_PUBLIEE` vaut `false` dans `src/config.ts`. L'application est encore en développement,
+et la vitrine la **décrit** sans y conduire : pas de bouton, pas de QR, pas d'entrée de pied
+de page, pas de `SoftwareApplication` dans le balisage structuré. À leur place, une mention
+« bientôt disponible » dans le héros et dans la section finale, et un renvoi vers le plan
+officiel de la commune.
 
-L'interrupteur reste un interrupteur : le repasser à `false` retire tout d'un coup, et les
-deux états sont toujours testés (`src/tests/rendu.test.ts`). Le risque que ces tests
-couvrent n'est pas le tri d'aujourd'hui, c'est la section ajoutée dans six mois.
+L'interrupteur a été ouvert un jour, puis refermé le lendemain. C'est son usage prévu, et la
+démonstration qu'il en est bien un : les deux bascules n'ont demandé qu'une constante et une
+ligne de HTML statique, les deux états restant testés (`src/tests/rendu.test.ts`).
 
-Deux choses n'étaient pas du code et devaient être faites à la main le jour de la
-publication : le `<noscript>` d'`index.html`, et la régénération du QR. La première est
-faite — et **elle n'est plus une affaire de mémoire** : un test vérifie désormais que le
-`<noscript>` nomme l'application si et seulement si `APP_PUBLIEE` le dit. La seconde s'est
-révélée sans effet, `URL_APP` n'ayant pas changé.
+Une seule chose n'est pas du code : le `<noscript>` d'`index.html`. Elle n'est plus pour
+autant une affaire de mémoire — un test vérifie que ce bloc nomme l'application **si et
+seulement si** `APP_PUBLIEE` le dit, et il a effectivement réclamé la correction lors de
+cette refermeture.
 
-Une nuance à connaître : l'adresse de l'application était déjà présente dans le paquet
-JavaScript avant la publication, comme donnée de configuration — lisible par qui ouvrait le
-fichier, même si aucun lien n'y menait. Elle l'est de toute façon dans ce dépôt.
+Deux nuances à connaître, parce qu'elles limitent ce que « ne mène pas à l'application »
+veut dire :
+
+- **L'application reste joignable.** Elle est publiée sur GitHub Pages ; qui connaît
+  l'adresse y entre. Retirer les liens d'ici ne la dépublie pas — cela se décide dans son
+  dépôt à elle.
+- **Son adresse reste dans le paquet JavaScript**, comme donnée de configuration :
+  `sansApplication()` en a besoin pour filtrer le pied de page. Elle est lisible par qui
+  ouvre le fichier, et de toute façon présente dans ce dépôt.
 
 ## Réserves ouvertes
 
 - **La traduction luxembourgeoise n'a pas été relue par une personne dont c'est la langue
   maternelle.** C'est la langue du foyer dans une bonne part de la commune ; une tournure
   fausse s'y remarque immédiatement.
-  Cette réserve a changé de nature : `APP_PUBLIEE` vaut désormais `true`, donc la page est
-  en ligne et mène à l'application. Ce qui était « à faire relire avant publication » est
-  maintenant **publié sans relecture**, devant le public le plus à même de le remarquer.
-  C'est la réserve la plus urgente des cinq.
+  La vitrine, elle, **est publiée** — dans les trois langues, dont celle-ci. Refermer
+  l'interrupteur retire les liens vers l'application ; cela ne retire pas du luxembourgeois
+  non relu de devant le public le plus à même de le remarquer. La réserve perd donc en
+  gravité, pas en existence : elle reste la seule des cinq qui demande une personne plutôt
+  qu'un commit.
 - **Les captures dépendent de l'environnement qui les produit.** Réserve levée pour la
   partie qui était incertaine : la comparaison a tourné en intégration continue, et l'écart
   supposé entre le Chromium du conteneur et celui d'une machine de développement s'est

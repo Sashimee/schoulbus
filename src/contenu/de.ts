@@ -322,14 +322,16 @@ export const de: Contenu = {
     surtitre: 'Es ist 07:25 Uhr.',
     heure: '07:45',
     titre: 'Sechzehn Minuten, bis Sie losmüssen.',
+    // Kein Imperativ, solange die Anwendung nicht erreichbar ist — Begründung siehe `fr.ts`.
     chapeau:
-      `Sie mussten ihn nicht suchen. Füllen Sie die Seite einmal aus — und die Uhrzeit steht an ` +
-      `jedem folgenden Morgen da.`,
+      `So wird der Morgen aussehen: eine Uhrzeit, und die Zeit, die bis zum Losgehen bleibt. ` +
+      `Nichts zu suchen, nichts zu vergleichen, an keinem Morgen daran zu denken.`,
     action: 'App öffnen',
     qr: 'Oder scannen, um sie auf dem Telefon zu öffnen',
     bientot:
-      `Die Anwendung ist noch nicht öffentlich. Diese Seite beschreibt, was sie können wird; ` +
-      `bis dahin bleibt der offizielle Plan der Gemeinde die einzige Quelle.`,
+      `Die Anwendung ist noch in Entwicklung. Diese Seite beschreibt, was sie tut; sie führt ` +
+      `noch nicht dorthin. Bis dahin bleibt der offizielle Plan der Gemeinde die Quelle, die ` +
+      `es zu lesen gilt.`,
   },
 
   pied: {

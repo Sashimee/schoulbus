@@ -32,10 +32,17 @@ export const URL_APP = 'https://sashimee.github.io/bus-scolaire-beckerich'
  * de `index.html`, qui est du HTML statique. Un test tient désormais l'invariant à sa
  * place (`rendu.test.ts`), de sorte que les deux ne peuvent plus se contredire.
  *
- * Passée à `true` le jour où l'application est devenue publique : elle est en ligne et en
- * service réel — un représentant de l'école y a publié de vraies perturbations.
+ * Refermée : l'application est encore en développement, et la vitrine redevient une page de
+ * présentation seule. Elle a été ouverte un temps, puis refermée le lendemain — c'est
+ * exactement l'usage prévu, et la raison pour laquelle c'est un interrupteur.
+ *
+ * Attention à ce que ce `false` ne dit PAS : il retire les chemins depuis cette page, il ne
+ * rend pas l'application inaccessible. Elle reste publiée sur GitHub Pages, et `URL_APP`
+ * demeure dans le paquet JavaScript comme donnée de configuration — `sansApplication()` en
+ * a besoin pour filtrer le pied de page. Qui connaît l'adresse y entre. Rendre l'application
+ * réellement inatteignable se décide dans son dépôt à elle, pas ici.
  */
-export const APP_PUBLIEE = true
+export const APP_PUBLIEE = false
 
 /**
  * La source officielle. Elle n'est pas décorative : le site est indépendant de la

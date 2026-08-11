@@ -353,14 +353,24 @@ export const fr: Contenu = {
     surtitre: 'Il est 07:25.',
     heure: '07:45',
     titre: 'Il reste seize minutes avant de sortir.',
+    // Pas d'impératif tant que l'application n'est pas joignable : cette phrase est affichée
+    // juste au-dessus du bloc qui annonce qu'il n'y a rien à ouvrir. Demander un geste, puis
+    // dire dans le paragraphe suivant qu'il est impossible, use la confiance du lecteur plus
+    // vite que n'importe quelle maladresse de style.
     chapeau:
-      `Vous n’avez pas eu à le chercher. Remplissez le site une fois, et l’heure sera là tous ` +
-      `les matins suivants.`,
+      `Ce sera l’écran du matin : une heure, et le temps qu’il reste avant de sortir. Rien à ` +
+      `chercher, rien à comparer, aucun matin à y repenser.`,
     action: 'Ouvrir l’application',
     qr: 'Ou scannez pour l’ouvrir sur le téléphone',
+    // Trois choses vraies, et pas une de plus. « Pas encore ouverte au public » serait faux :
+    // l'application est joignable sur GitHub Pages par qui en connaît l'adresse. Le futur
+    // (« ce qu'elle fera ») le serait aussi, puisque les captures montrent un logiciel qui
+    // tourne. La page CHOISIT de ne pas y mener — ce n'est pas la même chose que prétendre
+    // qu'on ne le peut pas.
     bientot:
-      `L’application n’est pas encore ouverte au public. Cette page décrit ce qu’elle fera ; ` +
-      `en attendant, le plan officiel de la commune reste la seule source à consulter.`,
+      `L’application est encore en développement. Cette page décrit ce qu’elle fait ; elle ` +
+      `n’y conduit pas encore. En attendant, le plan officiel de la commune reste la source ` +
+      `à consulter.`,
   },
 
   pied: {
