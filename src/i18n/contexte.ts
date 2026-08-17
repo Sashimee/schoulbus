@@ -5,25 +5,31 @@
  * soit des composantes, soit autre chose, jamais les deux — sinon le rechargement à
  * chaud perd l'état de la page à chaque frappe.
  *
- * Trois langues, trois adresses distinctes :
+ * Quatre langues, quatre adresses distinctes :
  *
  *     /        français   (langue de référence, celle de l'application)
  *     /de/     allemand
  *     /lb/     luxembourgeois
+ *     /en/     anglais
  *
  * Chacune est pré-rendue en HTML statique à la construction. Un moteur de recherche
- * trouve donc trois pages complètes, et non une coquille vide qui attendrait JavaScript
+ * trouve donc quatre pages complètes, et non une coquille vide qui attendrait JavaScript
  * — ce qui, pour une page dont le rôle est justement d'être trouvée, serait absurde.
+ *
+ * La LISTE, elle, n'est pas ici : elle vit dans `../contenu/langues.ts`, que les scripts
+ * de construction savent lire — ce fichier-ci ne s'ouvre pas hors du navigateur.
  */
 import { createContext, useContext } from 'react'
 import { mentionsPretes } from '../config.ts'
 import type { Contenu, Langue } from '../contenu/type.ts'
+import { LANGUES } from '../contenu/langues.ts'
 import { fr } from '../contenu/fr.ts'
 import { de } from '../contenu/de.ts'
 import { lb } from '../contenu/lb.ts'
+import { en } from '../contenu/en.ts'
 
-export const CONTENUS: Record<Langue, Contenu> = { fr, de, lb }
-export const LANGUES: Langue[] = ['fr', 'de', 'lb']
+export const CONTENUS: Record<Langue, Contenu> = { fr, de, lb, en }
+export { LANGUES }
 
 /** Le préfixe sous lequel le site est servi ('/' en général). */
 const base = import.meta.env.BASE_URL
@@ -49,10 +55,11 @@ export function cheminLangue(langue: Langue): string {
  * `contact` est la seule qui attende quelque chose du visiteur, et la seule à porter
  * l'adresse à laquelle on écrit. Elle la porte SEULE, délibérément : le pied de page et
  * l'en-tête mènent à la page, jamais à un `mailto:`, de sorte que l'adresse figure dans
- * trois fichiers pré-rendus au lieu des dix-huit qu'aurait produits un lien dans le pied
- * de page. Son formulaire n'envoie rien — il ouvre le logiciel de courrier de qui écrit.
+ * quatre fichiers pré-rendus — un par langue — au lieu de la totalité qu'aurait produite
+ * un lien dans le pied de page, présent lui sur chaque page de chaque langue.
+ * Son formulaire n'envoie rien — il ouvre le logiciel de courrier de qui écrit.
  *
- * Chacune est pré-rendue dans les trois langues.
+ * Chacune est pré-rendue dans les quatre langues.
  */
 export type Page = 'accueil' | 'mentions' | 'independance' | 'contact'
 

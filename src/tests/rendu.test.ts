@@ -172,7 +172,7 @@ describe('pré-rendu', () => {
    * La page « Indépendance ».
    *
    * Elle n'est conditionnée par rien — contrairement aux mentions, qui attendent l'adresse
-   * de l'éditeur — donc elle doit exister dans les trois langues, toujours.
+   * de l'éditeur — donc elle doit exister dans les quatre langues, toujours.
    */
   it.each(LANGUES)('%s : la page indépendance est engendrée et se désigne elle-même', (langue) => {
     expect(PAGES).toContain('independance')
@@ -200,7 +200,7 @@ describe('pré-rendu', () => {
    */
   /*
    * La page de contact. Comme l'indépendance, elle n'est conditionnée par rien : elle
-   * existe dans les trois langues, toujours.
+   * existe dans les quatre langues, toujours.
    */
   it.each(LANGUES)('%s : la page contact est engendrée et se désigne elle-même', (langue) => {
     expect(PAGES).toContain('contact')
@@ -228,7 +228,7 @@ describe('pré-rendu', () => {
   /*
    * Et elle ne se lit QUE là.
    *
-   * Le pied de page paraît sur l'accueil des trois langues : y écrire l'adresse la ferait
+   * Le pied de page paraît sur l'accueil des quatre langues : y écrire l'adresse la ferait
    * entrer dans tous les fichiers pré-rendus au lieu des trois pages de contact. C'est la
    * seule mesure du projet qui réduise réellement ce qu'un aspirateur d'adresses ramasse,
    * et elle ne tient qu'à une convention — d'où ce test, qui la rappellera à qui voudra un

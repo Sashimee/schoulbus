@@ -4,7 +4,7 @@
  *     node scripts/captures.mjs              (itération locale)
  *     npm run captures                       (dans le conteneur épinglé — le seul qui compte)
  *
- * Quatre écrans × trois langues × deux thèmes = vingt-quatre fichiers, engendrés depuis
+ * Quatre écrans × quatre langues × deux thèmes = trente-deux fichiers, engendrés depuis
  * l'application elle-même. Les fichiers sont VERSIONNÉS : la vitrine doit pouvoir se
  * construire seule, sans l'application à côté, exactement comme pour `build-chiffres.mjs`
  * et les vignettes de partage.
@@ -63,18 +63,46 @@ const TRAVAIL = resolve(ici, '../public/.captures-en-cours')
 const TUILES = resolve(ici, 'fixtures/tuiles')
 const PROVENANCE = resolve(ici, 'captures.source.json')
 
-const LANGUES = ['fr', 'de', 'lb']
-/** L'application résout sa langue depuis `navigator.languages` faute de préférence. */
-const ETIQUETTE_LOCALE = { fr: 'fr-LU', de: 'de-LU', lb: 'lb-LU' }
+const { LANGUES } = await import('../src/contenu/langues.ts')
+/**
+ * L'application résout sa langue depuis `navigator.languages` faute de préférence : elle
+ * en prend les deux premières lettres. C'est donc le TERRITOIRE qui est libre ici, et la
+ * langue qui ne l'est pas.
+ *
+ * Une entrée manquante vaut `undefined`, que Playwright remplace par sa locale par défaut.
+ * La prise ne s'arrête pas : elle produit des captures d'une AUTRE langue, classées sous le
+ * nom de celle qu'on croyait photographier. C'est la panne la plus coûteuse de ce script,
+ * parce qu'elle a l'air d'aller. D'où le contrôle qui suit, plutôt qu'une confiance.
+ */
+const ETIQUETTE_LOCALE = { fr: 'fr-LU', de: 'de-LU', lb: 'lb-LU', en: 'en-GB' }
+const sansLocale = LANGUES.filter((l) => !ETIQUETTE_LOCALE[l])
+if (sansLocale.length > 0) {
+  console.error(
+    `Aucune locale déclarée pour : ${sansLocale.join(', ')}.\n` +
+      `Compléter ETIQUETTE_LOCALE — sans quoi les captures seraient prises dans la langue ` +
+      `par défaut du navigateur et enregistrées sous le nom de celles-ci.`,
+  )
+  process.exit(1)
+}
 const PORT = Number(process.env.PORT_CAPTURES ?? 5183)
 const RAFRAICHIR_TUILES = process.argv.includes('--rafraichir-tuiles')
 
 /** Le poids est une décision, pas une conséquence. Le script la fait respecter. */
 const POIDS_FICHIER_MAX = 60 * 1024
-const POIDS_TOTAL_MAX = 1.4 * 1024 * 1024
+/*
+ * 1,8 Mo, et non 1,4 : le plafond avait été posé pour vingt-quatre fichiers, et l'anglais
+ * en ajoute huit. Ce n'est donc pas la dépense par écran qui a bougé — elle reste d'une
+ * quarantaine de kilo-octets —, c'est le nombre d'écrans.
+ *
+ * Il reste un CHIFFRE ÉCRIT, et non `LANGUES.length × THEMES.length × …` : dérivé, il
+ * s'ajusterait tout seul et cesserait de dire quoi que ce soit. On veut qu'une cinquième
+ * langue vienne buter ici et oblige à reprendre la décision, plutôt qu'elle n'y entre sans
+ * que personne ait à peser ce que la page fait descendre.
+ */
+const POIDS_TOTAL_MAX = 1.8 * 1024 * 1024
 /*
  * 0,68 plutôt que 0,73 : l'écran du plan est un tableau de chiffres sur toute la hauteur,
- * donc l'image la plus dense des vingt-quatre, et c'est lui qui fixe le point haut. À
+ * donc l'image la plus dense du lot, et c'est lui qui fixe le point haut. À
  * 0,73 il dépassait le budget de deux kilo-octets ; l'écart ne se voit pas sur du texte
  * rendu à deux fois la densité, le dépassement se serait vu au chargement.
  */
@@ -214,7 +242,7 @@ function lancerServeur(revision) {
         BASE_PATH: '/',
         /*
          * L'application tire sa version de `GITHUB_SHA`, et retombe sur « dev » quand la
-         * variable manque. Le pied de page l'affiche : sans cela, les vingt-quatre
+         * variable manque. Le pied de page l'affiche : sans cela, les trente-deux
          * captures porteraient la mention « Version dev », qui n'apprend rien à un parent
          * et trahit la façon dont l'image a été faite. On lui donne donc la révision
          * réellement photographiée — la même que celle inscrite dans
@@ -615,7 +643,7 @@ try {
 
   /*
    * On écrit dans un dossier de travail, et l'on ne remplace les captures versionnées
-   * qu'une fois les vingt-quatre prises et validées. Vider `public/captures` d'emblée
+   * qu'une fois les trente-deux prises et validées. Vider `public/captures` d'emblée
    * faisait qu'une exécution interrompue — tuile manquante, sélecteur qui bouge — laissait
    * le dépôt sans aucune capture, c'est-à-dire dans un état pire que celui d'avant.
    */

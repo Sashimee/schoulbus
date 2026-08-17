@@ -16,11 +16,11 @@
  * fichier de police que le site sert déjà et convertit le texte en tracés : la vignette
  * est exacte, et identique partout.
  *
- * Le texte n'est pas écrit ici. Il est lu depuis `src/contenu/{fr,de,lb}.ts`, comme le
+ * Le texte n'est pas écrit ici. Il est lu depuis `src/contenu/{fr,de,lb,en}.ts`, comme le
  * QR lit `config.ts` : une phrase recopiée dans un script finit par contredire la page.
  * C'est aussi pourquoi la vignette ne dit rien que la page ne dise déjà — aucune des
- * trois langues n'a eu à être traduite pour elle, et le luxembourgeois n'attend donc
- * pas une relecture de plus.
+ * quatre langues n'a eu à être traduite pour elle, et ni le luxembourgeois ni l'anglais
+ * n'attendent donc une relecture de plus.
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
@@ -162,8 +162,15 @@ async function enPng(element, largeur, hauteur) {
  * c'est ce qui garantit que la balise `og:image` désigne un fichier qui existe.
  */
 const { imagePartage } = await import('../src/config.ts')
+/*
+ * La liste des langues, lue et non recopiée. `langues.ts` existe pour cela : il ne tire ni
+ * React ni `import.meta.env`, et s'ouvre donc sous Node nu. Une liste recopiée ici aurait
+ * simplement sauté une langue en silence — la balise `og:image` de la page anglaise aurait
+ * désigné un fichier que personne n'engendre.
+ */
+const { LANGUES } = await import('../src/contenu/langues.ts')
 
-for (const langue of ['fr', 'de', 'lb']) {
+for (const langue of LANGUES) {
   const module = await import(`../src/contenu/${langue}.ts`)
   const nom = imagePartage(langue)
   const png = await enPng(vignette(module[langue]), 1200, 630)

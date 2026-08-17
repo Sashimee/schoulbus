@@ -69,7 +69,7 @@ export function PiedDePage() {
            * mènerait à une 404.
            *
            * Le contact est un lien vers la PAGE, jamais un `mailto:`. Le pied de page
-           * paraît sur l'accueil des trois langues ; y écrire l'adresse la ferait entrer
+           * paraît sur l'accueil des quatre langues ; y écrire l'adresse la ferait entrer
            * dans tous les fichiers pré-rendus au lieu des trois pages de contact, pour
            * un clic gagné. C'est la seule mesure du projet qui réduise réellement ce
            * qu'un aspirateur d'adresses ramasse, et elle ne coûte rien.

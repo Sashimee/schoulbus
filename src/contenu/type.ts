@@ -2,16 +2,22 @@
  * La forme du contenu, écrite une fois.
  *
  * Le type n'est pas de la décoration : il fait échouer la compilation quand une des
- * trois langues perd un paragraphe. L'application se protège autrement — un dictionnaire
+ * quatre langues perd un paragraphe. L'application se protège autrement — un dictionnaire
  * plat, avec repli sur le français —, mais elle a cinq langues et deux mille clés. La
- * vitrine en a trois et une centaine : le type est plus sûr, et il se lit.
+ * vitrine en a quatre et une centaine : le type est plus sûr, et il se lit.
  *
  * Une règle de rédaction traverse tout le fichier : la vitrine ne promet rien que
  * l'application ne tienne. Pas de « toujours à l'heure », pas de « suivi en temps réel ».
  * Le site affiche un plan officiel personnalisé, il ne sait pas où est le bus.
  */
 
-export type Langue = 'fr' | 'de' | 'lb'
+/*
+ * La liste vit dans `langues.ts`, que les scripts Node savent lire. Réexportée ici parce
+ * que c'est `type.ts` que tout le reste importe déjà : déplacer la déclaration ne doit pas
+ * obliger vingt fichiers à changer d'adresse.
+ */
+export type { Langue } from './langues.ts'
+import type { Langue } from './langues.ts'
 
 /*
  * Les catégories du formulaire de contact.
@@ -23,7 +29,7 @@ export type Langue = 'fr' | 'de' | 'lb'
  * état qui n'existe pas. On y vient pour se renseigner, pas pour rapporter.
  *
  * Un type et non des chaînes libres : `horaire` déclenche le renvoi vers la commune, et
- * une faute de frappe dans l'une des trois langues aurait fait disparaître ce renvoi
+ * une faute de frappe dans l'une des quatre langues aurait fait disparaître ce renvoi
  * là-bas seulement — c'est-à-dire précisément là où personne ne le relirait.
  */
 export type CleCategorie = 'interet' | 'question' | 'horaire' | 'autre'
@@ -41,7 +47,7 @@ export type Tuile = {
   /*
    * Pas de largeur ici. La composition de la grille est posée par rang dans
    * `sections.css` : la largeur d'une tuile décrit la mise en page, pas la fonction, et
-   * un rang recopié dans les trois langues finirait par diverger dans l'une d'elles.
+   * un rang recopié dans les quatre langues finirait par diverger dans l'une d'elles.
    */
 }
 
@@ -240,9 +246,9 @@ export type Contenu = {
     /** La légende du groupe de catégories. Un `fieldset` sans `legend` n'annonce rien. */
     categorieLegende: string
     /*
-     * Les catégories, dans le même ORDRE et avec les mêmes clés dans les trois langues —
+     * Les catégories, dans le même ORDRE et avec les mêmes clés dans les quatre langues —
      * la clé entre dans l'objet du courriel, et une clé traduite rendrait les règles de
-     * tri de la boîte fausses dans deux langues sur trois. Un test le tient.
+     * tri de la boîte fausses dans trois langues sur quatre. Un test le tient.
      */
     categories: { cle: CleCategorie; texte: string }[]
     /*

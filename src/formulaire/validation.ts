@@ -41,7 +41,7 @@ export const MESSAGE_MIN = 10
  * le voie.
  *
  * Huit cents caractères, et le chiffre est MESURÉ, pas choisi : au pire cas réel — les
- * intitulés les plus longs des trois langues, un nom au maximum, une adresse longue et un
+ * intitulés les plus longs des quatre langues, un nom au maximum, une adresse longue et un
  * texte français ordinaire —, l'adresse assemblée pèse 1622 caractères. Mille en
  * donnaient 1936, c'est-à-dire sous la limite mais sans marge, et une marge nulle est ce
  * qui casse le jour où un intitulé s'allonge d'un mot. Un test tient les deux bouts.

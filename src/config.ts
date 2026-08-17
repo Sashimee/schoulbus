@@ -18,7 +18,7 @@ export const URL_APP = 'https://sashimee.github.io/bus-scolaire-beckerich'
  *
  * Un interrupteur plutôt qu'une suppression, pour deux raisons.
  *
- * La première est que les textes des appels à l'action existent en trois langues et ont
+ * La première est que les textes des appels à l'action existent en quatre langues et ont
  * été relus. Les effacer maintenant, ce serait réinventer dans quelques semaines une
  * formulation luxembourgeoise qui attend déjà sa relecture — une deuxième fois, et sans
  * nécessité.
@@ -107,7 +107,7 @@ export const NOM_EDITEUR = 'Alex Baskewitsch'
  * coordonnées personnelles ne se publient pas à la légère.
  *
  * Elle ne figure QUE sur la page de contact. Le pied de page, l'en-tête et l'accueil
- * mènent à la page, pas à l'adresse : trois fichiers pré-rendus la portent au lieu des
+ * mènent à la page, pas à l'adresse : quatre fichiers pré-rendus la portent au lieu des
  * dix-huit qu'aurait produits un `mailto:` dans le pied de page.
  */
 export const ADRESSE_CONTACT = 'info@schoulbus.lu'

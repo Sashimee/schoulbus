@@ -90,7 +90,7 @@ describe('adresse de courriel', () => {
   /*
    * Les deux gardes de longueur, et pourquoi il en faut deux.
    *
-   * Le pire cas se construit avec les intitulés les plus longs des trois langues, un nom
+   * Le pire cas se construit avec les intitulés les plus longs des quatre langues, un nom
    * au maximum et une adresse longue — c'est-à-dire tout ce qui s'ajoute au message sans
    * que la personne qui écrit y puisse quoi que ce soit.
    */
@@ -190,11 +190,11 @@ describe('validation du formulaire', () => {
   })
 
   /*
-   * Chaque code rendu par `valider` doit avoir un texte dans les trois langues. Sans ce
+   * Chaque code rendu par `valider` doit avoir un texte dans les quatre langues. Sans ce
    * test, un code ajouté sans traduction s'afficherait comme `undefined` sous le champ —
    * et seulement pour qui commet précisément cette faute-là.
    */
-  it('chaque code d’erreur a un texte dans les trois langues', () => {
+  it('chaque code d’erreur a un texte dans les quatre langues', () => {
     const codes = [
       valider({ ...COMPLET, nom: '' }).nom,
       valider({ ...COMPLET, courriel: 'x' }).courriel,

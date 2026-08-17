@@ -91,12 +91,14 @@ describe('adresses des langues', () => {
     expect(cheminLangue('fr')).toBe('/')
     expect(cheminLangue('de')).toBe('/de/')
     expect(cheminLangue('lb')).toBe('/lb/')
+    expect(cheminLangue('en')).toBe('/en/')
   })
 
   it('retrouve la langue depuis le chemin, et retombe sur le français', () => {
     expect(langueDuChemin('/')).toBe('fr')
     expect(langueDuChemin('/de/')).toBe('de')
     expect(langueDuChemin('/lb/')).toBe('lb')
+    expect(langueDuChemin('/en/')).toBe('en')
     /*
      * Une adresse inconnue doit montrer la page, pas une erreur. `/pt/` n'est pas un
      * exemple pris au hasard : le portugais est une des cinq langues de l'application, et

@@ -1,5 +1,5 @@
 /*
- * Pré-rendu des trois langues en HTML statique.
+ * Pré-rendu des quatre langues en HTML statique.
  *
  *     dist/index.html      français
  *     dist/de/index.html   allemand

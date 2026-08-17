@@ -374,9 +374,25 @@
     }
 
     /*
-     * Même sans le nom, l'en-tête ne tient pas sur une ligne QUAND LE BOUTON EST LÀ : il
-     * reste 272 px utiles, et le bus, les trois langues et le bouton en réclament une
-     * trentaine de plus. Le bouton passe donc sur une deuxième ligne, sur toute la largeur.
+     * La place, comptée — c'est le calcul qui commande les trois règles qui suivent.
+     *
+     * Sur 320 px : 320 − 2×12 (`inset-inline`) − 2×1 (trait) − 24 (rembourrage) = 270 px
+     * utiles. Ce qui les occupe, une fois le nom retiré et le thème caché :
+     *
+     *     bus 44 + écart 16 + langues + écart 8 + contact 44
+     *
+     * Le groupe des langues vaut `n × 44 + (n−1) × 3 + 6 + 2`. À trois langues il mesure
+     * 146, et le compte tombe à 258 : ça passe. À QUATRE il mesure 193, et le compte monte
+     * à 305 — trente-cinq de trop. Rien ne déborde pour autant, `flex-wrap` étant là :
+     * le groupe d'actions descend d'une ligne, et l'en-tête flottant reste alors sur deux
+     * rangs en permanence, y compris sans bouton d'ouverture.
+     *
+     * D'où l'ajustement ci-dessous, qui rend 37 px et ramène le compte à 276 pour 278
+     * disponibles. Deux pixels : c'est mince, et c'est mesuré dans un navigateur, pas
+     * seulement calculé — les capitales espacées de 0,08 em arrondissent où elles veulent.
+     *
+     * Même sans le nom, l'en-tête ne tient toujours pas sur une ligne QUAND LE BOUTON EST
+     * LÀ : celui-ci passe sur une deuxième ligne, sur toute la largeur.
      *
      * Deux lignes plutôt qu'un élément sacrifié : retirer le bouton priverait le
      * téléphone — d'où vient l'essentiel du public — du seul appel à l'action qui
@@ -393,6 +409,34 @@
     .entete {
       flex-wrap: wrap;
       row-gap: var(--espace-2);
+      /* Les 37 px du calcul ci-dessus : 16 ici, 5 sur le creux du groupe, 16 sur les
+       * segments eux-mêmes. Le rembourrage de tête se resserre parce que le bus a déjà
+       * sa propre cible de 44 px — l'air qu'on lui retire, il ne le perd pas. */
+      column-gap: var(--espace-2);
+      padding-inline-start: var(--espace-2);
+    }
+    .entete .segments {
+      gap: 2px;
+      padding: 2px;
+    }
+    /*
+     * 40 px, et non 44 : la seule dérogation du site à la cible tactile de 44 px, et elle
+     * ne porte que sur la LARGEUR — la hauteur reste à 44. Un segment de langue est une
+     * cible de deux lettres au milieu d'un groupe de quatre, entourée de 3 px de creux :
+     * le critère WCAG 2.5.8 (24 px, niveau AA) reste tenu avec une marge confortable, le
+     * 2.5.5 (44 px, AAA) ne l'est plus.
+     *
+     * L'échange se fait contre l'autre issue possible, qui était de retirer le lien de
+     * contact de l'en-tête sous 30 rem. Elle coûtait davantage : ce lien est le seul
+     * moyen d'écrire qui accompagne la lecture, et l'argument qui l'a mis là tient encore
+     * quatre lignes plus bas. Quatre pixels de largeur sur un segment valent mieux qu'un
+     * chemin retiré.
+     *
+     * Ne pas remonter ce nombre sans refaire le calcul du bloc précédent : à 44 px,
+     * l'en-tête repasse sur deux lignes sur les téléphones de 320 px.
+     */
+    .entete .segments--langue .segments__choix {
+      min-inline-size: 40px;
     }
     .entete__actions {
       flex-wrap: wrap;
