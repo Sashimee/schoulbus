@@ -23,6 +23,7 @@ import { CHIFFRES } from './chiffres.ts'
 export const lb: Contenu = {
   langue: 'lb',
   codeLangue: 'lb',
+  localePartage: 'lb_LU',
 
   meta: {
     titre: 'Schoulbus Biekerech — d’Zäite vun Ären Kanner, ouni nozedenken',

@@ -1,6 +1,6 @@
 /*
  * Le type `Contenu` garantit qu'aucune clé ne manque. Il ne garantit pas qu'une clé
- * contienne autre chose qu'une chaîne vide, ni que les trois langues aient le même
+ * contienne autre chose qu'une chaîne vide, ni que les quatre langues aient le même
  * nombre de tuiles — deux erreurs qui passent la compilation et cassent la page.
  *
  * Il ne teste pas la QUALITÉ des traductions : aucun test ne le peut. La réserve sur la
@@ -29,7 +29,7 @@ describe('contenu', () => {
     expect(vides).toEqual([])
   })
 
-  it('les trois langues ont le même nombre de tuiles, de temps et de points', () => {
+  it('les quatre langues ont le même nombre de tuiles, de temps et de points', () => {
     const formes = LANGUES.map((l) => ({
       tuiles: CONTENUS[l].fonctions.tuiles.length,
       temps: CONTENUS[l].recit.temps.length,
@@ -43,7 +43,7 @@ describe('contenu', () => {
     expect(new Set(formes.map((f) => JSON.stringify(f))).size).toBe(1)
   })
 
-  it('les icônes des tuiles sont les mêmes dans les trois langues', () => {
+  it('les icônes des tuiles sont les mêmes dans les quatre langues', () => {
     // L'icône est une donnée de mise en page, pas une traduction : elle doit être
     // identique partout, sinon la même fonction change de dessin selon la langue.
     const suites = LANGUES.map((l) => CONTENUS[l].fonctions.tuiles.map((t) => t.icone).join(','))
@@ -67,6 +67,23 @@ describe('contenu', () => {
     }
   })
 
+  /*
+   * La locale de partage était naguère assemblée au rendu, en collant `_LU` au code de la
+   * langue. Tant que le site n'a parlé que des langues du Luxembourg, cela s'est vu juste ;
+   * l'anglais, lui, aurait pris `en_LU` — un territoire qui ne le désigne pas, dans la
+   * seule balise qu'un réseau social lise pour choisir la version à ouvrir.
+   *
+   * Ce test tient les deux moitiés de la règle : la forme (`xx_YY`), et l'accord avec le
+   * code de la langue. Ce qu'il ne peut pas tenir, c'est le CHOIX du territoire — que
+   * `en_GB` plutôt que `en_US` soit le bon se lit dans le commentaire de `type.ts`.
+   */
+  it('chaque langue annonce une locale de partage bien formée', () => {
+    for (const l of LANGUES) {
+      const { codeLangue, localePartage } = CONTENUS[l]
+      expect(localePartage).toMatch(/^[a-z]{2}_[A-Z]{2}$/)
+      expect(localePartage.startsWith(`${codeLangue}_`)).toBe(true)
+    }
+  })
 })
 
 describe('adresses des langues', () => {
@@ -80,7 +97,12 @@ describe('adresses des langues', () => {
     expect(langueDuChemin('/')).toBe('fr')
     expect(langueDuChemin('/de/')).toBe('de')
     expect(langueDuChemin('/lb/')).toBe('lb')
-    // Une adresse inconnue doit montrer la page, pas une erreur.
+    /*
+     * Une adresse inconnue doit montrer la page, pas une erreur. `/pt/` n'est pas un
+     * exemple pris au hasard : le portugais est une des cinq langues de l'application, et
+     * la vitrine ne le parle pas. C'est exactement le genre d'adresse qu'un lecteur essaie
+     * après avoir vu la section « cinq langues ».
+     */
     expect(langueDuChemin('/pt/')).toBe('fr')
     expect(langueDuChemin('/nimporte/quoi')).toBe('fr')
   })

@@ -353,12 +353,19 @@ describe('pré-rendu', () => {
     expect(html.includes('qr-application.svg')).toBe(APP_PUBLIEE)
   })
 
-  it.each(LANGUES)('%s : annonce les deux autres langues au partage', (langue) => {
+  /*
+   * La locale est LUE dans le contenu, et non reconstruite ici.
+   *
+   * Ce test la fabriquait naguère en collant `_LU` au code de la langue — c'est-à-dire
+   * qu'il refaisait le calcul du code au lieu de le vérifier, et qu'il aurait donc validé
+   * `en_LU` avec le même entrain. Ce que le code compose, un test ne doit pas le composer
+   * une seconde fois : il ne prouve alors que sa propre existence.
+   */
+  it.each(LANGUES)('%s : annonce les autres langues au partage', (langue) => {
     const { tete } = rendre(langue)
-    const autres = LANGUES.filter((l) => l !== langue)
-    for (const l of autres) {
-      expect(tete).toContain(`og:locale:alternate" content="${l}_LU"`)
+    for (const l of LANGUES.filter((l) => l !== langue)) {
+      expect(tete).toContain(`og:locale:alternate" content="${CONTENUS[l].localePartage}"`)
     }
-    expect(tete).toContain(`og:locale" content="${langue}_LU"`)
+    expect(tete).toContain(`og:locale" content="${CONTENUS[langue].localePartage}"`)
   })
 })

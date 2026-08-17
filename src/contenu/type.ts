@@ -47,8 +47,23 @@ export type Tuile = {
 
 export type Contenu = {
   langue: Langue
-  /** Attribut `lang` du document, et `og:locale`. */
+  /** Attribut `lang` du document, `hreflang`, et `inLanguage` du balisage structuré. */
   codeLangue: string
+  /**
+   * La locale de partage (`og:locale`), au format `langue_TERRITOIRE`.
+   *
+   * Un champ, et non `${codeLangue}_LU` assemblé au moment de rendre : la concaténation
+   * tenait pour acquis que toute langue du site fût une langue DU LUXEMBOURG. L'anglais
+   * ne l'est pas — il s'adresse précisément aux familles qui n'ont ni le français, ni
+   * l'allemand, ni le luxembourgeois —, et `en_LU` désignerait une variante qui n'existe
+   * nulle part.
+   *
+   * `codeLangue` reste sans territoire (`en`, et non `en-GB`) : c'est lui qui porte
+   * `lang`, `hreflang` et `inLanguage`, où restreindre à une région écarterait des
+   * lecteurs que la page vise. Open Graph est le seul à réclamer un territoire, et le
+   * seul à en recevoir un.
+   */
+  localePartage: string
   meta: {
     titre: string
     description: string

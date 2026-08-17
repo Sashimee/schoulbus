@@ -90,7 +90,7 @@ function donneesStructurees(langue: Langue, url: string, vignette: string): stri
     applicationCategory: 'TravelApplication',
     // Une application web installable : elle tourne partout où tourne un navigateur.
     operatingSystem: 'Web',
-    // Les cinq langues de l'application, et non les trois de la vitrine.
+    // Les cinq langues de l'application, et non les quatre de la vitrine.
     inLanguage: ['fr', 'de', 'lb', 'pt', 'en'],
     isAccessibleForFree: true,
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
@@ -169,8 +169,8 @@ export function rendre(
   const { titre, description } = textesDePage(langue, page)
 
   /*
-   * Les alternatives de langue. `hreflang` dit à un moteur que ces trois adresses sont
-   * la même page en trois langues, et non trois pages qui se copient — sans quoi elles
+   * Les alternatives de langue. `hreflang` dit à un moteur que ces quatre adresses sont
+   * la même page en quatre langues, et non quatre pages qui se copient — sans quoi elles
    * se concurrenceraient l'une l'autre dans les résultats. Elles pointent la MÊME page
    * dans les autres langues, pas l'accueil : depuis les mentions allemandes, on doit
    * arriver aux mentions françaises.
@@ -184,7 +184,7 @@ export function rendre(
    * qu'une version : un partage dans un groupe germanophone ouvrirait la page française.
    */
   const localesAlternatives = LANGUES.filter((l) => l !== langue)
-    .map((l) => `    <meta property="og:locale:alternate" content="${CONTENUS[l].codeLangue}_LU" />`)
+    .map((l) => `    <meta property="og:locale:alternate" content="${CONTENUS[l].localePartage}" />`)
     .join('\n')
 
   // La vignette de la langue rendue, pas celle du français (voir `imagePartage`).
@@ -236,7 +236,7 @@ export function rendre(
     `    <meta property="og:image:width" content="1200" />`,
     `    <meta property="og:image:height" content="630" />`,
     `    <meta property="og:image:alt" content="${echapper(contenu.general.marque)}" />`,
-    `    <meta property="og:locale" content="${contenu.codeLangue}_LU" />`,
+    `    <meta property="og:locale" content="${contenu.localePartage}" />`,
     localesAlternatives,
     // `summary_large_image` : la vignette occupe toute la largeur de la carte, ce qui
     // rend la mention d'indépendance lisible au lieu d'une miniature carrée.

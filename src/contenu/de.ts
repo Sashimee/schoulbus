@@ -20,6 +20,7 @@ import { CHIFFRES } from './chiffres.ts'
 export const de: Contenu = {
   langue: 'de',
   codeLangue: 'de',
+  localePartage: 'de_LU',
 
   meta: {
     titre: 'Schulbus Beckerich — die Abfahrtszeiten Ihrer Kinder, ohne Nachdenken',
