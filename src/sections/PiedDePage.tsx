@@ -34,6 +34,8 @@ export function PiedDePage() {
    * de sorte qu'un lien ne peut pas mener à une adresse que le pré-rendu n'écrit pas.
    */
   const pagesInternes = [
+    // Le contact vient en tête : c'est la seule des trois qui attende quelque chose.
+    { page: 'contact' as const, texte: contenu.pied.lienContact },
     { page: 'independance' as const, texte: contenu.independance.titre },
     { page: 'mentions' as const, texte: contenu.pied.lienMentions },
   ].filter((p) => PAGES.includes(p.page))
@@ -65,6 +67,12 @@ export function PiedDePage() {
            * Chaque entrée n'apparaît que si sa page existe : les mentions ne sont pas
            * engendrées tant que l'adresse de l'éditeur n'est pas renseignée, et le lien
            * mènerait à une 404.
+           *
+           * Le contact est un lien vers la PAGE, jamais un `mailto:`. Le pied de page
+           * paraît sur l'accueil des trois langues ; y écrire l'adresse la ferait entrer
+           * dans tous les fichiers pré-rendus au lieu des trois pages de contact, pour
+           * un clic gagné. C'est la seule mesure du projet qui réduise réellement ce
+           * qu'un aspirateur d'adresses ramasse, et elle ne coûte rien.
            */}
           {(siteVisibles.length > 0 || pagesInternes.length > 0) && (
             <nav aria-label={contenu.pied.titreSite}>

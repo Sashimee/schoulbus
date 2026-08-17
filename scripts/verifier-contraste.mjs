@@ -66,8 +66,8 @@ const THEMES = {
  * par la ligne « encre sur le rail », qui a la même opacité.
  */
 const VOILES = {
-  sombre: { surface: 0.07, rail: 0.12 },
-  clair: { surface: 0.55, rail: 0.6 },
+  sombre: { surface: 0.07, rail: 0.12, creux: 0.05 },
+  clair: { surface: 0.55, rail: 0.6, creux: 0.5 },
 }
 
 /**
@@ -93,6 +93,12 @@ function couples(t, v) {
     ['encre', t.encre, v.rail, 'marque et bouton de l’en-tête flottant'],
     ['encre-douce', t.encreDouce, v.rail, 'langue et thème non sélectionnés'],
     ['accent', t.accent, v.rail, 'entrée courante du rail de la maquette'],
+    /*
+     * Le formulaire de contact. `--fond-creux` n'entrait dans aucun couple avant lui :
+     * c'est le voile du creux d'un champ, et le site n'en avait aucun.
+     */
+    ['encre', t.encre, v.creux, 'texte saisi dans un champ du formulaire de contact'],
+    ['danger', t.danger, 0, 'message d’erreur d’un champ, et résumé au-dessus du formulaire'],
   ]
 }
 

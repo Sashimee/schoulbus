@@ -24,6 +24,26 @@ captures d'écran (engendrées par script). Ne pas mélanger les deux.
 | Langues | 5 (fr, de, lb, pt, en) | 3 (fr, de, lb) |
 | Données | garde ce que la famille saisit | **aucune donnée, aucun cookie, aucune mesure** |
 
+## Le formulaire de contact n'envoie rien
+
+`/contact/` porte un vrai formulaire, et il **n'émet aucune requête**. À la validation, il
+assemble une adresse `mailto:` et laisse le logiciel de courrier de la personne l'ouvrir :
+c'est elle qui envoie, depuis chez elle.
+
+Ce n'est pas un détail d'implémentation, c'est ce qui permet à trois choses de rester
+vraies en même temps — la ligne du pied de page qui dit que la page n'appelle aucun
+serveur, la CSP qui porte `connect-src 'self'` et `form-action 'none'`, et le fait qu'il y
+ait tout de même un moyen d'écrire. **Un formulaire qui posterait quelque part romprait les
+trois d'un coup.** Avant de proposer un service d'envoi, relire cette ligne.
+
+Deux conséquences à connaître avant d'y toucher :
+
+- **Sans JavaScript, le formulaire est inerte.** D'où l'adresse en clair AVANT lui sur la
+  page — c'est le vrai chemin de secours, et son ordre n'est pas cosmétique.
+- **L'adresse ne paraît que sur `/contact/`.** Le pied de page, l'en-tête et la coda de
+  l'accueil mènent à la PAGE, jamais à un `mailto:` : trois fichiers pré-rendus la portent
+  au lieu de neuf. Un test tient l'invariant (`rendu.test.ts`).
+
 ## Le flux de branches — à lire avant de toucher à quoi que ce soit
 
 **`main` EST LE SITE EN PRODUCTION.** Ce qui y arrive part en ligne. On n'y travaille
@@ -232,8 +252,9 @@ dessiné à 76 px sur 1200 px : **24 caractères par ligne au plus.**
 | --- | --- |
 | `src/contenu/` | Tout le texte, les chiffres engendrés, le manifeste des captures. |
 | `src/sections/` | Une composante par section de l'accueil, dans l'ordre de `App.tsx`. Disposition seulement. |
-| `src/pages/` | Les pages hors accueil : `independance` (toujours engendrée), `mentions` (seulement si `ADRESSE_EDITEUR` est renseignée). Le nom de la page EST son segment d'adresse — même règle dans `cheminPage()` et dans le `dossier()` du pré-rendu. |
-| `src/composants/` | Briques réutilisées : `Appareil` (le téléphone), `Ecrans` (les captures), `Icones`, `SchemaConfidentialite`. |
+| `src/pages/` | Les pages hors accueil : `independance` et `contact` (toujours engendrées), `mentions` (seulement si `ADRESSE_EDITEUR` est renseignée). Le nom de la page EST son segment d'adresse — même règle dans `cheminPage()` et dans le `dossier()` du pré-rendu. |
+| `src/composants/` | Briques réutilisées : `Appareil` (le téléphone), `Ecrans` (les captures), `Icones`, `SchemaConfidentialite`, `FormulaireContact`. |
+| `src/formulaire/` | La logique du formulaire de contact, sans React : validation et assemblage du `mailto:`. |
 | `src/mouvement/` | Niveau de mouvement, révélation au défilement, fond WebGL, curseur. |
 | `src/styles/` | `jetons.css` (copie de l'application), puis vitrine / composants / sections. |
 | `scripts/` | Tout ce qui engendre : captures, chiffres, vignettes, QR, jetons, contrastes, pré-rendu. |

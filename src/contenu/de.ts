@@ -7,6 +7,7 @@
  */
 import type { Contenu } from './type.ts'
 import {
+  ADRESSE_CONTACT,
   ADRESSE_EDITEUR,
   NOM_EDITEUR,
   URL_APP,
@@ -353,6 +354,7 @@ export const de: Contenu = {
     mention: 'Von einem Elternteil, in Beckerich.',
     source: `Daten: offizieller Plan der Gemeinde, Schuljahre ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: "Impressum",
+    lienContact: 'Kontakt',
     viePrivee: 'Diese Seite setzt keine Cookies, misst nichts und ruft keinen Server auf.',
   },
 
@@ -365,10 +367,64 @@ Anschrift: ${ADRESSE_EDITEUR}`,
     hebergeurTitre: `Hosting`,
     hebergeurCorps: `Die Seite besteht aus statischen Dateien, die von einem durch den Herausgeber gemieteten Server ausgeliefert werden. Besuchsdaten werden dort nicht aufbewahrt.`,
     donneesTitre: `Personenbezogene Daten`,
-    donneesCorps: `Diese Seite setzt keine Cookies, misst keine Zugriffe und ruft keinen Dienst Dritter auf. Es werden keine personenbezogenen Daten erhoben; es gibt daher nichts einzusehen, zu berichtigen oder zu löschen. Die Anwendung selbst behält, was Sie dort eingeben, ausschließlich auf Ihrem Gerät — ihre Seite „Grenzen" führt das aus.`,
+    donneesCorps: `Diese Seite setzt keine Cookies, misst keine Zugriffe und ruft keinen Dienst Dritter auf. Von der Seite selbst werden keine personenbezogenen Daten erhoben; es gibt daher nichts einzusehen, zu berichtigen oder zu löschen.
+Wenn Sie hingegen an ${ADRESSE_CONTACT} schreiben, landen Ihre Nachricht und die Adresse, von der sie kommt, in einem gewöhnlichen Postfach. Sie dienen dort ausschließlich der Antwort, werden an niemanden weitergegeben und nach Abschluss des Austauschs gelöscht.
+Die Anwendung selbst behält, was Sie dort eingeben, ausschließlich auf Ihrem Gerät — ihre Seite „Grenzen" führt das aus.`,
     responsabiliteTitre: `Haftung`,
     responsabiliteCorps: `Die angezeigten Zeiten stammen aus dem offiziellen Plan der Gemeinde und sind sorgfältig übertragen, jedoch ohne Gewähr. Im Zweifel oder bei Abweichungen gilt das offizielle Dokument der Gemeinde.`,
     retour: `Zurück zur Startseite`,
+  },
+
+  contact: {
+    titre: 'Schreiben',
+    intro:
+      `Die Anwendung ist noch in Entwicklung. Wenn Sie Interesse haben oder wissen möchten, ` +
+      `was sie können wird: hier entlang. Das Formular verschickt selbst nichts — es ` +
+      `bereitet die E-Mail in Ihrem Programm vor, abgeschickt wird sie von Ihnen.`,
+    note:
+      `Von dieser Seite geht nichts ab. Die Schaltfläche öffnet Ihr E-Mail-Programm mit einer ` +
+      `fertig geschriebenen Nachricht; Sie lesen sie noch einmal und entscheiden. Was Sie ` +
+      `abschicken, erreicht ${NOM_EDITEUR}, dient der Antwort, wird an niemanden ` +
+      `weitergegeben und nach Abschluss des Austauschs gelöscht.`,
+    categorieLegende: 'Worum geht es?',
+    categories: [
+      { cle: 'interet', texte: 'Die Anwendung interessiert mich' },
+      { cle: 'question', texte: 'Eine Frage zum Projekt' },
+      { cle: 'horaire', texte: 'Eine Frage zu den Fahrzeiten selbst' },
+      { cle: 'autre', texte: 'Etwas anderes' },
+    ],
+    renvoiCommune:
+      `Diese Seite ist nicht die der Gemeinde, und die Anwendung ist noch nicht offen: hier ` +
+      `gibt es vorerst also keine Zeiten nachzusehen. Für die heute geltenden Zeiten ist der ` +
+      `offizielle Plan der Gemeinde maßgeblich.`,
+    nomEtiquette: 'Ihr Name',
+    courrielEtiquette: 'Ihre E-Mail-Adresse',
+    courrielAide: 'Sie dient der Antwort, sonst nichts.',
+    messageEtiquette: 'Ihre Nachricht',
+    messageAide: 'Schreiben Sie, woher Sie kommen und was Sie wissen möchten — dann wird die Antwort brauchbarer.',
+    compteur: 'Noch {n} Zeichen',
+    envoyer: 'E-Mail vorbereiten',
+    sujetPrefixe: '[schoulbus.lu]',
+    ouvertTitre: 'Ihr E-Mail-Programm sollte sich geöffnet haben',
+    ouvertTexte:
+      `Die Nachricht steht dort bereits; abzuschicken ist sie noch. Ist nichts passiert, ist ` +
+      `auf diesem Gerät kein E-Mail-Programm hinterlegt — die Adresse unten lässt sich von ` +
+      `Hand übernehmen.`,
+    directTitre: 'Direkt schreiben',
+    directTexte: 'Ohne den Umweg über das Formular:',
+    erreurResume: 'Die E-Mail wurde nicht vorbereitet: mindestens ein Feld braucht noch etwas.',
+    erreurs: {
+      requis: 'Dieses Feld wird gebraucht.',
+      courrielInvalide: 'Diese Adresse sieht nicht wie eine E-Mail-Adresse aus.',
+      tropCourt: 'Ein paar Worte mehr würden helfen.',
+      tropLong: 'Das ist zu lang für eine so vorbereitete E-Mail.',
+    },
+    retour: 'Zurück zur Startseite',
+    brefTitre: 'Eine Frage zur Anwendung?',
+    brefTexte:
+      `Sie ist noch in Entwicklung. Wer mehr wissen möchte, oder einfach sagen will, dass ` +
+      `sie ihn interessiert: dafür gibt es eine Adresse.`,
+    brefAction: 'Schreiben',
   },
 
 }

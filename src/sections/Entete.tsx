@@ -13,13 +13,15 @@
 import { m, useMotionValueEvent, useScroll, useSpring } from 'motion/react'
 import { useState } from 'react'
 import { Bouton } from '../composants/Bouton.tsx'
+import { Icone } from '../composants/Icones.tsx'
 import { LogoBus } from '../composants/LogoBus.tsx'
 import { ChoixLangue, ChoixTheme } from '../composants/Selecteurs.tsx'
 import { APP_PUBLIEE, URL_APP } from '../config.ts'
-import { useContenu } from '../i18n/contexte.ts'
+import { cheminPage, useContenu, useLangue } from '../i18n/contexte.ts'
 
 export function Entete() {
   const contenu = useContenu()
+  const { langue } = useLangue()
   const { scrollY, scrollYProgress } = useScroll()
   const [visible, setVisible] = useState(false)
 
@@ -44,11 +46,37 @@ export function Entete() {
       <div className="entete__actions">
         <ChoixLangue />
         <ChoixTheme />
+
         {/*
-         * Rien ne remplace le bouton ici. L'en-tête accompagne la lecture ; y afficher
-         * « bientôt disponible » sur toute la hauteur de la page répéterait dix fois une
-         * information que le héros et la section finale donnent déjà, chacune à leur place.
+         * Le contact, et lui seul, accompagne la lecture.
+         *
+         * Cette place est longtemps restée vide, et la raison qu'on en donnait visait
+         * « bientôt disponible » : afficher sur toute la hauteur de la page une
+         * information que le héros et la section finale donnent déjà, chacune à la
+         * sienne, l'aurait répétée dix fois pour rien. L'argument tenait à la
+         * RÉPÉTITION, et il tient toujours — le bouton d'ouverture ci-dessous ne
+         * reparaît qu'avec l'application.
+         *
+         * Il ne couvre pas ce lien-ci. Signaler un horaire faux n'est écrit nulle part
+         * ailleurs qu'au pied de page, c'est-à-dire au bout de dix écrans : la personne
+         * qui repère l'erreur la repère en lisant, pas en arrivant en bas. C'est la
+         * seule chose qu'on puisse faire depuis n'importe quel point de la page.
+         *
+         * Sous 30 rem, il se réduit à son enveloppe et reste sur la ligne (voir
+         * `.entete__contact` dans `composants.css`) : la règle voisine qui fait descendre
+         * un bouton d'en-tête sur une deuxième ligne pleine largeur vise le bouton
+         * d'ouverture, plus large, et l'appliquer ici coûterait soixante pixels de
+         * hauteur en permanence sur téléphone.
          */}
+        <Bouton
+          href={cheminPage(langue, 'contact')}
+          variante="fantome"
+          className="entete__contact"
+        >
+          <Icone nom="courrier" className="lien__icone" />
+          <span>{contenu.pied.lienContact}</span>
+        </Bouton>
+
         {APP_PUBLIEE && (
           <Bouton href={URL_APP} variante="primaire" externe>
             {contenu.general.ouvrirApp}

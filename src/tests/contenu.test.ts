@@ -37,6 +37,7 @@ describe('contenu', () => {
       limites: CONTENUS[l].limites.items.length,
       horsligne: CONTENUS[l].horsligne.points.length,
       mots: CONTENUS[l].langues.mots.length,
+      categories: CONTENUS[l].contact.categories.length,
     }))
     // Une tuile oubliée dans une traduction produit une grille bancale, pas une erreur.
     expect(new Set(formes.map((f) => JSON.stringify(f))).size).toBe(1)
@@ -46,6 +47,16 @@ describe('contenu', () => {
     // L'icône est une donnée de mise en page, pas une traduction : elle doit être
     // identique partout, sinon la même fonction change de dessin selon la langue.
     const suites = LANGUES.map((l) => CONTENUS[l].fonctions.tuiles.map((t) => t.icone).join(','))
+    expect(new Set(suites).size).toBe(1)
+  })
+
+  it('les catégories de contact portent les mêmes clés, dans le même ordre', () => {
+    /*
+     * La clé n'est pas une traduction : elle entre dans l'objet du courriel, et c'est
+     * elle qui déclenche le renvoi vers la commune. Traduite dans une langue seulement,
+     * le renvoi disparaîtrait là-bas — c'est-à-dire précisément là où personne ne relit.
+     */
+    const suites = LANGUES.map((l) => CONTENUS[l].contact.categories.map((c) => c.cle).join(','))
     expect(new Set(suites).size).toBe(1)
   })
 

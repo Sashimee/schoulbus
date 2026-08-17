@@ -113,8 +113,8 @@ function dateDuContenu() {
 }
 
 /*
- * Le plan du site. Trois adresses, aucune priorité déclarée : elles valent la même
- * chose, et un moteur qui reçoit des priorités inventées les ignore de toute façon.
+ * Le plan du site. Aucune priorité déclarée : les pages valent la même chose, et un
+ * moteur qui reçoit des priorités inventées les ignore de toute façon.
  */
 const origine = (process.env.URL_PUBLIQUE ?? 'https://schoulbus.lu').replace(/\/$/, '')
 const modifie = dateDuContenu()
@@ -127,8 +127,9 @@ const adresse = (langue, page) => {
 const sitemap = [
   '<?xml version="1.0" encoding="UTF-8"?>',
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
-  // Six adresses : deux pages dans trois langues. Les alternatives d'une entrée pointent
-  // la MÊME page dans les autres langues, jamais l'accueil.
+  // Une entrée par page et par langue — le compte suit `PAGES`, il ne s'écrit pas ici.
+  // Les alternatives d'une entrée pointent la MÊME page dans les autres langues, jamais
+  // l'accueil.
   ...PAGES.flatMap((page) =>
     LANGUES.map((l) => {
       const liens = LANGUES.map(

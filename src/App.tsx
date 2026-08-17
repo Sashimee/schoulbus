@@ -5,11 +5,19 @@
  * ordinaire :
  *
  *   héros → chiffres → récit → fonctions → confidentialité → langues → hors ligne
- *   → LIMITES → appel final
+ *   → LIMITES → appel final → courrier
  *
  * Ce que le site ne sait pas faire vient AVANT qu'on demande à quiconque de l'ouvrir.
  * C'est l'ordre qu'a retenu l'application elle-même, et l'inverser aurait fait de cette
  * page une plaquette qui trahit le projet qu'elle présente.
+ *
+ * `Courrier` vient après l'appel final, et n'entre donc PAS entre les limites et lui —
+ * l'ordre ci-dessus est intact. C'est une coda : deux lignes et un lien vers la page de
+ * contact, à voix basse. Elle est là parce que l'appel final ne peut RIEN proposer d'autre
+ * tant que l'application n'est pas ouverte : il annonce « bientôt » et s'arrête. Qui vient
+ * de lire dix écrans et voudrait en savoir plus n'a, sinon, que le pied de page — et
+ * attendre d'un pied de page qu'il recueille l'intérêt de quelqu'un, c'est en attendre
+ * beaucoup.
  *
  * La mention d'indépendance tenait naguère sa propre section, ici, entre les limites et
  * l'appel final. Elle a sa page désormais (`pages/Independance.tsx`), atteignable depuis
@@ -40,6 +48,7 @@ import { Langues } from './sections/Langues.tsx'
 import { HorsLigne } from './sections/HorsLigne.tsx'
 import { Limites } from './sections/Limites.tsx'
 import { AppelFinal } from './sections/AppelFinal.tsx'
+import { Courrier } from './sections/Courrier.tsx'
 import { PiedDePage } from './sections/PiedDePage.tsx'
 
 const chargerFonctions = () => import('./mouvement/fonctions-motion.ts').then((m) => m.default)
@@ -69,6 +78,7 @@ export function App() {
         <HorsLigne />
         <Limites />
         <AppelFinal />
+        <Courrier />
       </main>
 
       <PiedDePage />

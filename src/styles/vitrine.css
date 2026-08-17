@@ -347,6 +347,23 @@
   .bande--texte {
     max-inline-size: var(--vitrine-texte);
   }
+  /*
+   * Dans une colonne de lecture, les titres descendent d'un cran.
+   *
+   * L'échelle des `h2` est taillée pour les sections de l'accueil, où un titre occupe
+   * seul la largeur de l'écran. Posée dans une colonne de texte, elle produit un `h2`
+   * aussi grand que le `h1` au-dessus — voire plus grand à l'œil, dès que son libellé est
+   * le plus long des deux. La hiérarchie s'inverse, et c'est le sous-titre qu'on lit en
+   * premier.
+   *
+   * Réglé ici plutôt que page par page : `.bande--texte` désigne exactement les endroits
+   * concernés — les trois pages nues et la coda de l'accueil —, et rien de l'argumentaire.
+   */
+  .bande--texte h2 {
+    font-size: var(--vitrine-titre-3);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
 
   .section {
     position: relative;

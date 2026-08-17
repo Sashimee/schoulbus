@@ -19,6 +19,7 @@ import { createElement } from 'react'
 import { renderToString } from 'react-dom/server'
 import { App } from './App.tsx'
 import { FournisseurI18n } from './i18n/Fournisseur.tsx'
+import { Contact } from './pages/Contact.tsx'
 import { Independance } from './pages/Independance.tsx'
 import { Mentions } from './pages/Mentions.tsx'
 import { CONTENUS, LANGUES, PAGES, cheminPage, type Page } from './i18n/contexte.ts'
@@ -127,6 +128,12 @@ function textesDePage(langue: Langue, page: Page) {
       description: echapper(c.independance.texte),
     }
   }
+  if (page === 'contact') {
+    return {
+      titre: echapper(`${c.contact.titre} — ${c.general.marque}`),
+      description: echapper(c.contact.intro),
+    }
+  }
   return { titre: echapper(c.meta.titre), description: echapper(c.meta.description) }
 }
 
@@ -136,11 +143,25 @@ export function rendre(
 ): { html: string; tete: string; codeLangue: string } {
   const contenu = CONTENUS[langue]
 
+  /*
+   * Le jumeau de l'aiguillage de `entree.tsx`. Les deux doivent rendre le MÊME arbre pour
+   * la même adresse, sinon React jette l'HTML reçu et refait tout — en silence, à la seule
+   * différence près d'un premier affichage plus lent que personne ne mesure.
+   */
+  const composante =
+    page === 'mentions'
+      ? Mentions
+      : page === 'independance'
+        ? Independance
+        : page === 'contact'
+          ? Contact
+          : App
+
   const html = renderToString(
     createElement(
       FournisseurI18n,
       { langueInitiale: langue, pageInitiale: page },
-      createElement(page === 'mentions' ? Mentions : page === 'independance' ? Independance : App),
+      createElement(composante),
     ),
   )
 

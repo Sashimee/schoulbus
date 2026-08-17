@@ -43,6 +43,9 @@ const TRACES = {
   telecharger: 'M12 4v10M8 11l4 4 4-4M5 17v2a1 1 0 001 1h12a1 1 0 001-1v-2',
   appareil: 'M8 3h8a1 1 0 011 1v16a1 1 0 01-1 1H8a1 1 0 01-1-1V4a1 1 0 011-1zM10.5 18h3',
 
+  /* --- Contact --- */
+  courrier: 'M4 6h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V7a1 1 0 011-1zM3.5 7.5l8.5 6 8.5-6',
+
   /* --- Divers --- */
   fleche: 'M5 12h14M13 6l6 6-6 6',
   externe: 'M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5',

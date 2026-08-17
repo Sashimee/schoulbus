@@ -17,6 +17,7 @@ import { describe, expect, it } from 'vitest'
 import { rendre } from '../entree-serveur.ts'
 import { CONTENUS, LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
 import {
+  ADRESSE_CONTACT,
   APP_PUBLIEE,
   URL_APP,
   URL_SOURCE_OFFICIELLE,
@@ -197,6 +198,65 @@ describe('pré-rendu', () => {
    * entier le renvoi vers la source officielle — silencieusement, et alors même que
    * `config.ts` exige que « le lien doit rester visible partout où l'on parle d'horaires ».
    */
+  /*
+   * La page de contact. Comme l'indépendance, elle n'est conditionnée par rien : elle
+   * existe dans les trois langues, toujours.
+   */
+  it.each(LANGUES)('%s : la page contact est engendrée et se désigne elle-même', (langue) => {
+    expect(PAGES).toContain('contact')
+    const { html, tete } = rendre(langue, 'contact')
+
+    expect(html).toContain(CONTENUS[langue].contact.titre)
+    expect(tete).toContain(`${cheminPage(langue, 'contact')}" />`)
+    expect(tete).not.toContain('application/ld+json')
+  })
+
+  /*
+   * L'adresse doit être lisible SANS JavaScript.
+   *
+   * Le formulaire, lui, en a besoin : il assemble son `mailto:` dans le navigateur. Si le
+   * pré-rendu ne portait pas l'adresse en clair, la page serait un cul-de-sac pour qui
+   * n'exécute pas de script — sur un site dont c'est justement l'engagement de pré-rendre
+   * tout son HTML.
+   */
+  it.each(LANGUES)('%s : l’adresse de contact se lit sans JavaScript', (langue) => {
+    const { html } = rendre(langue, 'contact')
+    expect(html).toContain(ADRESSE_CONTACT)
+    expect(html).toContain(`mailto:${ADRESSE_CONTACT}`)
+  })
+
+  /*
+   * Et elle ne se lit QUE là.
+   *
+   * Le pied de page paraît sur l'accueil des trois langues : y écrire l'adresse la ferait
+   * entrer dans tous les fichiers pré-rendus au lieu des trois pages de contact. C'est la
+   * seule mesure du projet qui réduise réellement ce qu'un aspirateur d'adresses ramasse,
+   * et elle ne tient qu'à une convention — d'où ce test, qui la rappellera à qui voudra un
+   * jour mettre l'adresse dans le pied de page « pour rendre service ».
+   */
+  it('l’adresse de contact ne figure que sur la page de contact', () => {
+    for (const langue of LANGUES) {
+      for (const page of PAGES) {
+        if (page === 'contact') continue
+        const { html, tete } = rendre(langue, page)
+        expect(`${html}${tete}`, `${langue}/${page}`).not.toContain(ADRESSE_CONTACT)
+      }
+    }
+  })
+
+  it('l’accueil mène au contact par ses trois entrées, et par elles seules', () => {
+    const { html } = rendre('fr')
+    const chemin = cheminPage('fr', 'contact')
+
+    /*
+     * Trois, et le compte est exact plutôt que minimal : l'en-tête flottant qui
+     * accompagne la lecture, la coda après l'appel final, et le pied de page. Un
+     * quatrième lien serait une décision — la page en a déjà autant qu'elle en supporte
+     * sans se mettre à réclamer.
+     */
+    expect(html.split(`href="${chemin}"`).length - 1).toBe(3)
+  })
+
   it.each(LANGUES)('%s : le renvoi vers le plan officiel survit à l’interrupteur', (langue) => {
     const { html } = rendre(langue, 'independance')
     expect(html).toContain(URL_SOURCE_OFFICIELLE)

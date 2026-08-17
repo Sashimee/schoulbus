@@ -13,6 +13,21 @@
 
 export type Langue = 'fr' | 'de' | 'lb'
 
+/*
+ * Les catégories du formulaire de contact.
+ *
+ * Elles disent CE POUR QUOI la page existe, et c'est pour cela qu'aucune ne propose de
+ * signaler une erreur : l'application n'est pas encore ouverte (`APP_PUBLIEE`), personne
+ * ne peut donc y avoir vu quoi que ce soit de faux. Une page qui appellerait des rapports
+ * de panne sur un logiciel que nul n'a pu essayer serait la première du site à parler d'un
+ * état qui n'existe pas. On y vient pour se renseigner, pas pour rapporter.
+ *
+ * Un type et non des chaînes libres : `horaire` déclenche le renvoi vers la commune, et
+ * une faute de frappe dans l'une des trois langues aurait fait disparaître ce renvoi
+ * là-bas seulement — c'est-à-dire précisément là où personne ne le relirait.
+ */
+export type CleCategorie = 'interet' | 'question' | 'horaire' | 'autre'
+
 export type Temps = {
   titre: string
   texte: string
@@ -165,6 +180,8 @@ export type Contenu = {
     viePrivee: string
     /** Le lien vers la page des mentions légales, dans la colonne « Le projet ». */
     lienMentions: string
+    /** Le lien vers la page de contact. Il sert au pied de page ET à l'en-tête. */
+    lienContact: string
   }
 
   /*
@@ -186,5 +203,79 @@ export type Contenu = {
     responsabiliteTitre: string
     responsabiliteCorps: string
     retour: string
+  }
+
+  /*
+   * Le contact. Une page à part, comme les mentions et l'indépendance, et pour la même
+   * raison : l'accueil va des faits à l'application, et un formulaire au milieu ferait
+   * dévier la lecture avant qu'elle ait servi.
+   *
+   * Ce que le formulaire est, et qu'il faut avoir en tête en écrivant ces textes : il
+   * n'envoie rien. Il assemble une adresse `mailto:` et ouvre le logiciel de courrier de
+   * la personne, qui décide seule d'envoyer. Aucune de ces chaînes ne doit donc laisser
+   * croire à un envoi depuis la page — ce serait le seul endroit du site où l'on
+   * promettrait quelque chose que le code ne fait pas.
+   */
+  contact: {
+    titre: string
+    /** Ce que cette page permet. Sert aussi de description aux moteurs de recherche. */
+    intro: string
+    /** Ce que le formulaire fait vraiment, et ce qu'il ne fait pas. */
+    note: string
+    /** La légende du groupe de catégories. Un `fieldset` sans `legend` n'annonce rien. */
+    categorieLegende: string
+    /*
+     * Les catégories, dans le même ORDRE et avec les mêmes clés dans les trois langues —
+     * la clé entre dans l'objet du courriel, et une clé traduite rendrait les règles de
+     * tri de la boîte fausses dans deux langues sur trois. Un test le tient.
+     */
+    categories: { cle: CleCategorie; texte: string }[]
+    /*
+     * Le renvoi vers la commune, montré quand la catégorie « horaire » est choisie.
+     *
+     * Ce n'est pas une politesse. Quelqu'un qui cherche l'heure d'un bus tombera sur ce
+     * site, et rien dans son adresse ne dit qu'il n'est pas celui de la commune : le
+     * premier principe du projet est de ne pas passer pour elle. S'y ajoute qu'il n'y a
+     * rien à consulter ici pour l'instant, l'application n'étant pas ouverte. Répondre
+     * « voyez le plan officiel » vaut mieux que laisser croire à un guichet.
+     */
+    renvoiCommune: string
+    nomEtiquette: string
+    courrielEtiquette: string
+    courrielAide: string
+    messageEtiquette: string
+    messageAide: string
+    /** Le compte des caractères restants. `{n}` y est remplacé par le nombre. */
+    compteur: string
+    envoyer: string
+    /** Ce qui précède la catégorie dans l'objet du courriel, pour qu'il se trie. */
+    sujetPrefixe: string
+    /*
+     * Ce qui s'affiche APRÈS avoir ouvert le logiciel de courrier. Nécessaire, et non
+     * décoratif : sur un appareil sans logiciel de courrier configuré, `mailto:` ne fait
+     * rien de visible, et sans ce message la page paraît cassée.
+     */
+    ouvertTitre: string
+    ouvertTexte: string
+    /** L'adresse en clair, pour qui préfère écrire lui-même — ou n'a pas de JavaScript. */
+    directTitre: string
+    directTexte: string
+    /** Annoncé au-dessus du formulaire quand l'envoi a été refusé. */
+    erreurResume: string
+    erreurs: {
+      requis: string
+      courrielInvalide: string
+      tropCourt: string
+      tropLong: string
+    }
+    retour: string
+    /*
+     * Le rappel au bas de l'accueil. Un épilogue, pas un second appel à l'action :
+     * l'appel final referme la page sur l'heure par laquelle elle s'est ouverte, et une
+     * deuxième demande juste après lui prendrait ce qu'il a.
+     */
+    brefTitre: string
+    brefTexte: string
+    brefAction: string
   }
 }

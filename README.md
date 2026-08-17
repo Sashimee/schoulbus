@@ -163,6 +163,9 @@ dist/lb/index.html                luxembourgeois
 dist/independance/index.html      la mention d'indépendance, une page par langue
 dist/de/independance/index.html
 dist/lb/independance/index.html
+dist/contact/index.html           le formulaire et l'adresse, une page par langue
+dist/de/contact/index.html
+dist/lb/contact/index.html
 ```
 
 L'indépendance a sa page depuis qu'elle a quitté l'accueil, où elle tenait une section
@@ -171,6 +174,15 @@ disparu : l'accueil continue de dire « site indépendant » dans son étiquette
 page et sa vignette de partage, et la page porte la phrase qui n'existe nulle part ailleurs
 — celle qui dit que le document de la commune fait foi. On y accède par un lien discret du
 pied de page.
+
+Le contact a la sienne pour une raison différente : c'est la seule page qui attende quelque
+chose du visiteur, et la seule à porter l'adresse à laquelle on écrit. Son formulaire
+**n'envoie rien** — il assemble un `mailto:` et ouvre le logiciel de courrier de la personne,
+de sorte que la page continue de n'appeler aucun serveur et que la politique de sécurité n'a
+pas eu à être desserrée. L'adresse est écrite en clair au-dessus du formulaire, parce que
+c'est le seul chemin qui fonctionne sans JavaScript. On y accède depuis l'en-tête flottant,
+depuis une coda au bas de l'accueil et depuis le pied de page — trois liens vers la page,
+jamais vers l'adresse.
 
 Les mentions légales viendront s'ajouter en quatrième page le jour où `ADRESSE_EDITEUR`
 sera renseignée (voir plus bas).
@@ -217,6 +229,9 @@ veut dire :
 - **La traduction luxembourgeoise n'a pas été relue par une personne dont c'est la langue
   maternelle.** C'est la langue du foyer dans une bonne part de la commune ; une tournure
   fausse s'y remarque immédiatement.
+  Le bloc `contact` **aggrave cette réserve plutôt qu'il ne la laisse en l'état** : ce sont
+  des libellés de champ et des messages d'erreur, c'est-à-dire les phrases qu'on relit le
+  plus attentivement — et qu'on lit au moment précis où l'on s'apprête à écrire à quelqu'un.
   La vitrine, elle, **est publiée** — dans les trois langues, dont celle-ci. Refermer
   l'interrupteur retire les liens vers l'application ; cela ne retire pas du luxembourgeois
   non relu de devant le public le plus à même de le remarquer. La réserve perd donc en
@@ -247,6 +262,19 @@ veut dire :
 - **Le nuage WebGL n'a été vu qu'à l'arrêt.** L'environnement de vérification suspendait
   les images d'animation ; la composition a été validée sur une image fixe, le mouvement
   seulement relu dans le code.
+- **Le site offre un moyen d'écrire, mais ne publie pas encore ses mentions légales.**
+  `/contact/` est en ligne dans les trois langues, alors qu'`ADRESSE_EDITEUR` vaut toujours
+  le remplaçant et que la page de mentions n'est donc pas engendrée. La note sous le
+  formulaire nomme le destinataire, ce qui est le minimum ; l'identification complète de
+  l'éditeur, elle, attend une ligne de `src/config.ts`. La phrase qui décrit ce que devient
+  un message reçu est **déjà écrite** dans `mentions.donneesCorps`, dans les trois langues :
+  elle paraîtra d'elle-même le jour où l'adresse sera renseignée.
+- **Le formulaire de contact n'a été essayé qu'avec un navigateur sans logiciel de courrier
+  associé.** Le comportement observé est donc celui du cas dégradé — la page reste en place
+  et affiche son message de repli, ce qui est précisément ce qu'on voulait vérifier. Ce qui
+  ne l'a PAS été : qu'un client réel (Thunderbird, Outlook, Mail iOS) ouvre bien le brouillon
+  avec l'objet, les accents et les retours à la ligne attendus. L'assemblage de l'adresse est
+  couvert par des tests unitaires, sa remise au système ne l'est par rien.
 - **Le conteneur n'a pas encore tourné ailleurs qu'ici.** L'image se construit, se lance,
   et ses en-têtes ont été relevés à la main (voir plus bas) — mais sur cette machine, en
   HTTP, sans Traefik devant. Le point à surveiller au premier déploiement est

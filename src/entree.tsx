@@ -19,6 +19,7 @@
 import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { App } from './App.tsx'
+import { Contact } from './pages/Contact.tsx'
 import { Independance } from './pages/Independance.tsx'
 import { Mentions } from './pages/Mentions.tsx'
 import { FournisseurI18n } from './i18n/Fournisseur.tsx'
@@ -38,7 +39,22 @@ if (racine) {
         langueInitiale={langueDuChemin(window.location.pathname)}
         pageInitiale={page}
       >
-        {page === 'mentions' ? <Mentions /> : page === 'independance' ? <Independance /> : <App />}
+        {/*
+         * Le même aiguillage existe dans `entree-serveur.ts`, et les deux doivent rendre
+         * le MÊME arbre pour la même adresse : c'est la condition de l'hydratation. Les
+         * tenir d'accord à la main est le prix de ne pas exporter une table de
+         * composantes depuis `i18n/contexte.ts`, que `react-refresh` refuserait — ce
+         * fichier-là n'a le droit d'exporter que des non-composantes (voir son en-tête).
+         */}
+        {page === 'mentions' ? (
+          <Mentions />
+        ) : page === 'independance' ? (
+          <Independance />
+        ) : page === 'contact' ? (
+          <Contact />
+        ) : (
+          <App />
+        )}
       </FournisseurI18n>
     </StrictMode>
   )

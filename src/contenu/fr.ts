@@ -27,6 +27,7 @@
  */
 import type { Contenu } from './type.ts'
 import {
+  ADRESSE_CONTACT,
   ADRESSE_EDITEUR,
   NOM_EDITEUR,
   URL_APP,
@@ -392,6 +393,7 @@ export const fr: Contenu = {
     mention: 'Fait par un parent, à Beckerich.',
     source: `Données : plan officiel de la commune, années scolaires ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: "Mentions légales",
+    lienContact: 'Contact',
     viePrivee: 'Cette page ne pose aucun cookie, ne mesure rien, et n’appelle aucun serveur.',
   },
 
@@ -404,10 +406,64 @@ Adresse : ${ADRESSE_EDITEUR}`,
     hebergeurTitre: `Hébergement`,
     hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur loué par l'éditeur. Aucune donnée de visite n'y est conservée.`,
     donneesTitre: `Données personnelles`,
-    donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l'audience et n'adresse aucune requête à un service tiers. Aucune donnée personnelle n'est collectée, et il n'y a donc rien à consulter, à corriger ni à effacer. L'application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
+    donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l'audience et n'adresse aucune requête à un service tiers. Aucune donnée personnelle n'est collectée par le site lui-même, et il n'y a donc rien à consulter, à corriger ni à effacer.
+Si vous écrivez à ${ADRESSE_CONTACT}, en revanche, votre message et l'adresse d'où il part arrivent dans une boîte aux lettres ordinaire. Ils y servent uniquement à vous répondre, ne sont transmis à personne, et sont effacés une fois l'échange terminé.
+L'application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
     responsabiliteTitre: `Responsabilité`,
     responsabiliteCorps: `Les horaires affichés sont repris du plan officiel de la commune et retranscrits avec soin, sans garantie d'exactitude. En cas de doute ou de divergence, c'est le document officiel de la commune qui fait foi.`,
     retour: `Retour à la page d'accueil`,
+  },
+
+  contact: {
+    titre: 'Écrire',
+    intro:
+      `L’application est encore en développement. Si elle vous intéresse, ou si vous vous ` +
+      `demandez ce qu’elle fera, voici par où passer. Le formulaire n’envoie rien lui-même ` +
+      `— il prépare le courriel dans votre logiciel, et c’est vous qui l’envoyez.`,
+    note:
+      `Rien ne part de cette page. Le bouton ouvre votre logiciel de courrier avec un ` +
+      `message déjà écrit ; vous le relisez, et vous décidez. Ce que vous envoyez arrive ` +
+      `chez ${NOM_EDITEUR}, sert à vous répondre, n’est transmis à personne et est effacé ` +
+      `une fois l’échange terminé.`,
+    categorieLegende: 'De quoi s’agit-il ?',
+    categories: [
+      { cle: 'interet', texte: 'L’application m’intéresse' },
+      { cle: 'question', texte: 'Une question sur le projet' },
+      { cle: 'horaire', texte: 'Une question sur les horaires eux-mêmes' },
+      { cle: 'autre', texte: 'Autre chose' },
+    ],
+    renvoiCommune:
+      `Ce site n’est pas celui de la commune, et l’application n’est pas encore ouverte : ` +
+      `il n’y a donc pas d’horaire à consulter ici pour l’instant. Pour les horaires en ` +
+      `vigueur aujourd’hui, c’est le plan officiel de la commune qui fait foi.`,
+    nomEtiquette: 'Votre nom',
+    courrielEtiquette: 'Votre adresse électronique',
+    courrielAide: 'Elle sert à vous répondre, et à rien d’autre.',
+    messageEtiquette: 'Votre message',
+    messageAide: 'Dites d’où vous écrivez et ce que vous cherchez à savoir : la réponse sera plus utile.',
+    compteur: '{n} caractères restants',
+    envoyer: 'Préparer le courriel',
+    sujetPrefixe: '[schoulbus.lu]',
+    ouvertTitre: 'Votre logiciel de courrier devrait s’être ouvert',
+    ouvertTexte:
+      `Le message y est déjà écrit ; il reste à l’envoyer. Si rien ne s’est passé, c’est ` +
+      `qu’aucun logiciel de courrier n’est associé sur cet appareil — l’adresse ci-dessous ` +
+      `se recopie à la main.`,
+    directTitre: 'Écrire directement',
+    directTexte: 'Sans passer par le formulaire :',
+    erreurResume: 'Le courriel n’a pas été préparé : un champ au moins demande à être repris.',
+    erreurs: {
+      requis: 'Ce champ est nécessaire.',
+      courrielInvalide: 'Cette adresse ne ressemble pas à une adresse électronique.',
+      tropCourt: 'Quelques mots de plus aideraient à comprendre.',
+      tropLong: 'C’est trop long pour un courriel préparé de cette façon.',
+    },
+    retour: 'Retour à la page d’accueil',
+    brefTitre: 'Une question sur l’application ?',
+    brefTexte:
+      `Elle est encore en développement. Pour en savoir plus, ou simplement pour dire ` +
+      `qu’elle vous intéresse, il y a une adresse.`,
+    brefAction: 'Écrire',
   },
 
 }

@@ -409,6 +409,39 @@
     .entete__actions > .aimant > .bouton {
       inline-size: 100%;
     }
+
+    /*
+     * Le contact, lui, NE DESCEND PAS — et cette règle vient après l'autre exprès : à
+     * spécificité égale, c'est l'ordre qui tranche.
+     *
+     * La règle du dessus vise le bouton d'ouverture, qui porte un verbe et une largeur.
+     * Le contact se réduit ici à son enveloppe et tient à côté des langues : 44 px de
+     * plus sur les 272 restants, contre les soixante pixels de hauteur qu'aurait coûtés
+     * une deuxième ligne — en permanence, puisque ce lien-là ne dépend d'aucun
+     * interrupteur.
+     *
+     * Le libellé reste dans le document : c'est le nom accessible du lien, comme pour la
+     * marque quelques règles plus haut. Il cesse seulement d'être dessiné.
+     */
+    .entete__actions > .entete__contact {
+      flex: 0 0 auto;
+      justify-content: center;
+      padding-inline: 0;
+      min-inline-size: var(--cible);
+    }
+    .entete__contact > span {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+    .entete__contact > .lien__icone {
+      margin-inline-start: 0;
+    }
   }
 
   .pied .segments__choix {
@@ -633,5 +666,143 @@
     inline-size: 18px;
     block-size: 18px;
     stroke-width: 1.75;
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Formulaire de contact
+   *
+   * Le seul formulaire du site. Rien n'est enveloppé dans `.carte` : un voile
+   * `--surface` sous chaque encre ajouterait trois couples de contraste à vérifier
+   * là où deux suffisent, pour un cadre dont la page n'a pas besoin.
+   * ------------------------------------------------------------------ */
+  .formulaire {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espace-5);
+  }
+
+  .champ {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espace-2);
+  }
+
+  /* Un `fieldset` arrive avec un cadre et des marges que personne n'a demandés. */
+  .champ--groupe {
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .champ__etiquette {
+    padding: 0;
+    font-size: var(--texte-m);
+    font-weight: 600;
+    color: var(--encre);
+  }
+
+  .champ__aide {
+    font-size: var(--texte-s);
+    color: var(--encre-douce);
+  }
+
+  .champ__erreur {
+    font-size: var(--texte-s);
+    color: var(--danger);
+  }
+
+  .champ__saisie {
+    /*
+     * `font: inherit` d'abord : un champ n'hérite PAS de la police de la page, et sans
+     * cette ligne la saisie s'affiche dans la police système pendant que tout le reste
+     * est en IBM Plex.
+     *
+     * Puis `--texte-l`, soit 16 px, et pas moins. En deçà, iOS grossit la page au moment
+     * où le curseur entre dans le champ, et ne la redescend pas : on se retrouve à écrire
+     * dans une page zoomée qu'il faut refermer à la main.
+     */
+    font: inherit;
+    font-size: var(--texte-l);
+    inline-size: 100%;
+    min-block-size: var(--cible);
+    padding: var(--espace-3);
+    color: var(--encre);
+    background: var(--fond-creux);
+    border: var(--trait) solid var(--bord);
+    border-radius: var(--rayon-s);
+  }
+
+  .champ__saisie--long {
+    min-block-size: calc(var(--cible) * 3);
+    /* Verticalement seulement : élargir un champ casse la colonne de texte autour. */
+    resize: vertical;
+  }
+
+  /*
+   * La couleur ne porte jamais l'erreur à elle seule — le message écrit dessous et
+   * `aria-invalid` la portent aussi. Le trait ne fait que la rendre repérable d'un coup
+   * d'œil quand on remonte un formulaire long.
+   */
+  .champ[data-invalide='oui'] .champ__saisie {
+    border-color: var(--danger-bord);
+  }
+
+  .champ__choix {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espace-1);
+  }
+
+  /*
+   * Le bouton radio reste celui du système : dessiné par la plateforme, il suit le thème
+   * grâce au `color-scheme` posé sur `:root`, et il annonce son état sans qu'on ait à le
+   * réécrire. C'est l'étiquette entière qui porte la cible tactile, pas la pastille.
+   */
+  .choix {
+    display: flex;
+    align-items: center;
+    gap: var(--espace-3);
+    min-block-size: var(--cible);
+    cursor: pointer;
+  }
+  .choix input {
+    inline-size: 1.15rem;
+    block-size: 1.15rem;
+    flex: none;
+    accent-color: var(--accent);
+  }
+
+  .formulaire__resume {
+    font-size: var(--texte-m);
+    color: var(--danger);
+  }
+
+  .formulaire__renvoi,
+  .formulaire__etat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espace-2);
+    padding: var(--espace-4);
+    background: var(--surface);
+    border: var(--trait) solid var(--bord);
+    border-radius: var(--rayon-m);
+    font-size: var(--texte-m);
+  }
+
+  .contact-direct__adresse {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espace-2);
+    min-block-size: var(--cible);
+    font-size: var(--texte-xl);
+  }
+  /*
+   * `.lien__icone` porte une marge de tête, faite pour la flèche qui SUIT le libellé
+   * d'un lien sortant. Ici l'enveloppe précède l'adresse, et l'espacement vient déjà du
+   * `gap` : la marge doublerait l'écart, du mauvais côté.
+   */
+  .contact-direct__adresse > .lien__icone {
+    margin-inline-start: 0;
   }
 }

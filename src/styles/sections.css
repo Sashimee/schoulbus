@@ -714,6 +714,23 @@
   }
 
   /* ------------------------------------------------------------------ *
+   * Courrier — la coda de l'accueil
+   *
+   * Volontairement plus resserrée que les autres sections : elle vient APRÈS l'appel
+   * final, qui referme la page, et doit se lire comme une note de bas de page et non
+   * comme une seconde demande. D'où l'espacement réduit de moitié et l'absence de toute
+   * surface — pas de `.carte`, pas d'accent. Si ce bloc devait un jour peser autant que
+   * celui du dessus, c'est sa place qu'il faudrait revoir, pas son style.
+   * ------------------------------------------------------------------ */
+  .courrier {
+    padding-block: 0 var(--espace-7);
+    text-align: center;
+  }
+  .courrier .rangee {
+    justify-content: center;
+  }
+
+  /* ------------------------------------------------------------------ *
    * Pied de page
    * ------------------------------------------------------------------ */
   .pied {

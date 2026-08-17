@@ -10,6 +10,7 @@
  */
 import type { Contenu } from './type.ts'
 import {
+  ADRESSE_CONTACT,
   ADRESSE_EDITEUR,
   NOM_EDITEUR,
   URL_APP,
@@ -355,6 +356,7 @@ export const lb: Contenu = {
     mention: 'Vun engem Elterendeel, zu Biekerech.',
     source: `Donnéeën: offizielle Plang vun der Gemeng, Schouljoren ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: "Impressum",
+    lienContact: 'Kontakt',
     viePrivee: 'Dës Säit setzt keng Cookien, mëscht keng Miessung, a rifft kee Server un.',
   },
 
@@ -367,10 +369,64 @@ Adress: ${ADRESSE_EDITEUR}`,
     hebergeurTitre: `Hosting`,
     hebergeurCorps: `D'Säit besteet aus statesche Fichieren, déi vun engem Server ausgeliwwert ginn, deen den Erausginner lount. Do gi keng Besuchsdonnéeën opbewahrt.`,
     donneesTitre: `Perséinlech Donnéeën`,
-    donneesCorps: `Dës Säit setzt keng Cookien, mëscht keng Zougrëffsmiessung a rifft kee frieme Service un. Et gi keng perséinlech Donnéeën gesammelt; et gëtt also näischt anzegesinn, ze verbesseren oder ze läschen. D'Applikatioun selwer behält dat, wat Dir do aginn, nëmmen op Ärem Apparat — hir Säit „Grenzen" beschreift dat.`,
+    donneesCorps: `Dës Säit setzt keng Cookien, mëscht keng Zougrëffsmiessung a rifft kee frieme Service un. Vun der Säit selwer gi keng perséinlech Donnéeën gesammelt; et gëtt also näischt anzegesinn, ze verbesseren oder ze läschen.
+Wann Dir awer un ${ADRESSE_CONTACT} schreift, kommen Är Noriicht an d'Adress, vun där se kënnt, an eng ganz normal Boîte. Si déngen do nëmmen fir d'Äntwert, gi kengem weiderginn, a gi geläscht, wann den Austausch ofgeschloss ass.
+D'Applikatioun selwer behält dat, wat Dir do aginn, nëmmen op Ärem Apparat — hir Säit „Grenzen" beschreift dat.`,
     responsabiliteTitre: `Haftung`,
     responsabiliteCorps: `D'ugewisen Zäite kommen aus dem offizielle Plang vun der Gemeng a sinn suergfälteg iwwerdroen, awer ouni Garantie. Am Zweifel oder bei Ofwäichunge gëllt dat offiziellt Dokument vun der Gemeng.`,
     retour: `Zréck op d'Startsäit`,
+  },
+
+  contact: {
+    titre: 'Schreiwen',
+    intro:
+      `D'Applikatioun ass nach an der Entwécklung. Wann se Iech intresséiert, oder wann Dir ` +
+      `wësse wëllt, wat se kënne wäert: hei laanscht. De Formulaire verschéckt selwer ` +
+      `näischt — hie bereet d'E-Mail an Ärem Programm vir, ewechgeschéckt gëtt se vun Iech.`,
+    note:
+      `Vun dëser Säit geet näischt fort. De Knäppchen mécht Äert E-Mail-Programm mat enger ` +
+      `fäerdeg geschriwwener Noriicht op; Dir liest se nach eng Kéier duerch an entscheet. ` +
+      `Wat Dir ewechschéckt, kënnt beim ${NOM_EDITEUR} un, déngt fir d'Äntwert, gëtt kengem ` +
+      `weiderginn a gëtt geläscht, wann den Austausch ofgeschloss ass.`,
+    categorieLegende: 'Ëm wat geet et?',
+    categories: [
+      { cle: 'interet', texte: 'D’Applikatioun intresséiert mech' },
+      { cle: 'question', texte: 'Eng Fro zum Projet' },
+      { cle: 'horaire', texte: 'Eng Fro zu de Buszäite selwer' },
+      { cle: 'autre', texte: 'Eppes anescht' },
+    ],
+    renvoiCommune:
+      `Dës Säit ass net déi vun der Gemeng, an d'Applikatioun ass nach net op: hei gëtt et ` +
+      `fir de Moment also keng Zäiten nozekucken. Fir d'Zäiten, déi haut gëllen, ass den ` +
+      `offizielle Plang vun der Gemeng maassgeevend.`,
+    nomEtiquette: 'Ären Numm',
+    courrielEtiquette: 'Är E-Mail-Adress',
+    courrielAide: 'Si déngt fir d’Äntwert, soss näischt.',
+    messageEtiquette: 'Är Noriicht',
+    messageAide: 'Schreift, vu wou Dir kommt a wat Dir wësse wëllt — da gëtt d’Äntwert méi brauchbar.',
+    compteur: 'Nach {n} Zeechen',
+    envoyer: 'E-Mail viraberouden',
+    sujetPrefixe: '[schoulbus.lu]',
+    ouvertTitre: 'Äert E-Mail-Programm sollt opgaang sinn',
+    ouvertTexte:
+      `D'Noriicht steet do schonn; ewechzeschécken ass se nach. Ass näischt geschitt, ass op ` +
+      `dësem Apparat kee E-Mail-Programm hannerluecht — d'Adress hei ënnen léisst sech mat ` +
+      `der Hand iwwerhuelen.`,
+    directTitre: 'Direkt schreiwen',
+    directTexte: 'Ouni den Ëmwee iwwer de Formulaire:',
+    erreurResume: 'D’E-Mail gouf net viraberout: op mannst ee Feld brauch nach eppes.',
+    erreurs: {
+      requis: 'Dëst Feld gëtt gebraucht.',
+      courrielInvalide: 'Dës Adress gesäit net wéi eng E-Mail-Adress aus.',
+      tropCourt: 'E puer Wierder méi géifen hëllefen.',
+      tropLong: 'Dat ass ze laang fir eng esou virbereet E-Mail.',
+    },
+    retour: 'Zréck op d’Startsäit',
+    brefTitre: 'Eng Fro zur Applikatioun?',
+    brefTexte:
+      `Si ass nach an der Entwécklung. Wien méi wësse wëll, oder einfach soe wëll, datt se ` +
+      `hien intresséiert: dofir gëtt et eng Adress.`,
+    brefAction: 'Schreiwen',
   },
 
 }

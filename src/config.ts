@@ -96,6 +96,22 @@ export const ADRESSE_EDITEUR = 'ADRESSE-À-COMPLÉTER'
 /** Le nom de l'éditeur. Repris des crédits de l'application. */
 export const NOM_EDITEUR = 'Alex Baskewitsch'
 
+/**
+ * L'adresse à laquelle on écrit.
+ *
+ * Une adresse de RÔLE, et non celle d'une personne. Elle paraît en clair dans le HTML
+ * pré-rendu, où n'importe quel moissonneur la lit — c'est le prix d'une page qui reste
+ * lisible sans JavaScript, et masquer l'adresse par un script la retirerait justement à
+ * qui n'en exécute pas. Une adresse de rôle se filtre, se réoriente et se remplace sans
+ * toucher à une boîte privée ; `ADRESSE_EDITEUR` deux lignes plus haut dit assez que les
+ * coordonnées personnelles ne se publient pas à la légère.
+ *
+ * Elle ne figure QUE sur la page de contact. Le pied de page, l'en-tête et l'accueil
+ * mènent à la page, pas à l'adresse : trois fichiers pré-rendus la portent au lieu des
+ * dix-huit qu'aurait produits un `mailto:` dans le pied de page.
+ */
+export const ADRESSE_CONTACT = 'info@schoulbus.lu'
+
 /** Les mentions légales sont-elles complètes, et donc publiables ? */
 export function mentionsPretes(): boolean {
   return !ADRESSE_EDITEUR.includes('À-COMPLÉTER')
