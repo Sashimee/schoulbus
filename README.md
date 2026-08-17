@@ -12,7 +12,7 @@ par script, et son adresse, posée dans un seul fichier.
 | Rôle | outil quotidien, personnalisé par enfant | page publique, une seule fois lue |
 | Rendu | application monopage | HTML statique pré-rendu, une page par langue |
 | Référencement | `noindex` — ne doit pas concurrencer la page officielle de la commune | indexée, c'est son métier |
-| Langues | fr, de, lb, pt, en | fr, de, lb |
+| Langues | fr, de, lb, pt, en | fr, de, lb, en |
 | Données | horaires, arrêts, adresses | aucune — elle ne fait que décrire |
 
 ## Le flux de branches
@@ -32,7 +32,7 @@ entier. La vérification continue tourne sur `dev`, sur `main` et sur les *pull 
 
 ```bash
 npm run dev          # serveur de développement
-npm run build        # construction + pré-rendu des trois langues dans dist/
+npm run build        # construction + pré-rendu des quatre langues dans dist/
 npm run preview      # sert dist/ tel qu'il sera publié
 npm run verifier     # types, lint, tests, contrastes, dérive des jetons
 ```
@@ -57,7 +57,7 @@ npm run captures:conteneur # la même chose dans le conteneur épinglé — CELL
 
 Les quatre téléphones de la page contiennent des photographies de l'application, pas des
 reconstructions : `public/captures/{écran}-{langue}-{thème}.webp`, soit quatre écrans ×
-trois langues × deux thèmes = vingt-quatre fichiers, produits par `npm run captures`.
+quatre langues × deux thèmes = trente-deux fichiers, produits par `npm run captures`.
 
 Ils l'ont longtemps été. `src/composants/Ecrans.tsx` redessinait les écrans en DOM et en
 CSS, ce qui suivait le thème et la langue sans effort et ne pixellisait jamais. Mais une
@@ -81,7 +81,7 @@ foyer incomplet. Il vérifie aussi le poids — 60 ko par fichier, 1,4 Mo pour l
 
 Les captures sont **déterministes au bit près à environnement égal**, ce qui est toute la
 condition pour que l'intégration continue puisse les comparer. « À environnement égal » est
-la partie qui compte : six des vingt-quatre fichiers engendrés sur une machine de
+la partie qui compte : six des vingt-quatre fichiers d'alors, engendrés sur une machine de
 développement diffèrent de ceux du conteneur, la pile de polices et la version de Chromium
 décidant du rendu au pixel près.
 
@@ -153,7 +153,7 @@ Deux règles s'appliquent à toute animation ajoutée ici :
 ### Le pré-rendu
 
 `npm run build` enchaîne trois étapes : construction du paquet client, construction d'un
-paquet serveur (`src/entree-serveur.ts`), puis `scripts/prerendu.mjs`, qui rend les trois
+paquet serveur (`src/entree-serveur.ts`), puis `scripts/prerendu.mjs`, qui rend les quatre
 langues en HTML complet et écrit `sitemap.xml` et `robots.txt`.
 
 ```
@@ -188,7 +188,7 @@ Les mentions légales viendront s'ajouter en quatrième page le jour où `ADRESS
 sera renseignée (voir plus bas).
 
 Le changement de langue dans la page ne recharge rien : le contenu est déjà dans le
-paquet, seule l'adresse est mise à jour. Les trois URL existent pour les moteurs et pour
+paquet, seule l'adresse est mise à jour. Les quatre URL existent pour les moteurs et pour
 le partage.
 
 ### Où mènent les liens
@@ -232,42 +232,69 @@ veut dire :
   Le bloc `contact` **aggrave cette réserve plutôt qu'il ne la laisse en l'état** : ce sont
   des libellés de champ et des messages d'erreur, c'est-à-dire les phrases qu'on relit le
   plus attentivement — et qu'on lit au moment précis où l'on s'apprête à écrire à quelqu'un.
-  La vitrine, elle, **est publiée** — dans les trois langues, dont celle-ci. Refermer
+  La vitrine, elle, **est publiée** — dans les quatre langues, dont celle-ci. Refermer
   l'interrupteur retire les liens vers l'application ; cela ne retire pas du luxembourgeois
   non relu de devant le public le plus à même de le remarquer. La réserve perd donc en
-  gravité, pas en existence : elle reste la seule des cinq qui demande une personne plutôt
-  qu'un commit.
+  gravité, pas en existence : elle demande une personne plutôt qu'un commit.
+- **La traduction anglaise n'a pas été relue non plus, et la réserve y est double.** Elle a
+  été écrite depuis le français, puis alignée sur le vocabulaire de
+  `../bus-scolaire-beckerich/src/i18n/en.json` — c'est-à-dire sur une source qui n'a pas été
+  relue davantage : les crédits de l'application ne mentionnent personne pour l'anglais.
+  **L'alignement sur l'application ne lève donc pas la réserve, il la propage** ; ce qu'il
+  garantit, c'est seulement que les deux textes se trompent de la même façon plutôt que
+  chacun de la sienne.
+  Elle pèse moins lourd que celle du luxembourgeois, et il vaut mieux dire pourquoi que le
+  laisser entendre : l'anglais n'est la langue du foyer de presque personne dans la commune.
+  Il sert aux familles qui n'ont ni le français, ni l'allemand, ni le luxembourgeois — et
+  qui, pour cette raison même, ne sont pas en position de repérer une tournure fautive. Une
+  maladresse s'y remarque donc moins ; elle s'y répare moins aussi.
+  Ce qu'un relecteur doit vérifier autant que la grammaire : la constance du registre
+  britannique annoncé par `localePartage` (`en_GB`) — *municipality*, *timetable*,
+  *after-school centre*, *centre*, jamais *schedule* ni *center*. Un mélange
+  britannique/américain est ce qui se voit en premier.
 - **Les captures dépendent de l'environnement qui les produit.** Réserve levée pour la
   partie qui était incertaine : la comparaison a tourné en intégration continue, et l'écart
   supposé entre le Chromium du conteneur et celui d'une machine de développement s'est
-  vérifié — six fichiers sur vingt-quatre. D'où `npm run captures:conteneur`, et la règle
+  vérifié — six fichiers sur les vingt-quatre d'alors. D'où `npm run captures:conteneur`, et la règle
   qu'on ne commite que sa sortie. Ce qui reste inconnu : le comportement le jour où
   l'étiquette du conteneur changera. L'étape « concordance » du workflow refusera la
   révision, ce qui est le but, mais personne ne l'a encore vue le faire.
 - **Les largeurs étroites ont été mesurées dans un moteur de rendu, pas sur un appareil.**
   La page a été ouverte dans Chromium à 320, 360, 390, 414 et 768 px, en thème clair et
-  sombre, dans les trois langues, avec émulation tactile — trente combinaisons. Ce que
+  sombre, dans les quatre langues, avec émulation tactile — quarante combinaisons. Ce que
   cette réserve annonçait sans le savoir s'y trouvait : la colonne de texte du héros
   mesurait 390 px sur un écran de 320, et le titre comme le chapeau étaient COUPÉS, sans
   défilement pour aller les chercher (voir le commentaire de `.heros__grille > *`). C'est
-  corrigé, et vérifié : plus aucune cible tactile sous 44 px, plus de texte tronqué.
+  corrigé, et vérifié : plus de texte tronqué.
   Restent deux pixels de débord de document, dus au ruban des langues, que `overflow-x:
   clip` retient et que rien ne laisse voir.
+  **L'arrivée de l'anglais a rouvert cette mesure**, la quatrième langue ajoutant 47 px au
+  groupe de segments : sans retouche, l'en-tête flottant passait sur DEUX RANGS en
+  permanence sous 30 rem. Remesuré à 320, 360, 390 et 414 px, dans les deux thèmes et les
+  quatre langues — trente-deux relevés : un seul rang partout, aucun débord horizontal,
+  segment de langue à 40,9 × 44,0 px. C'est la contrepartie assumée, et la seule dérogation
+  du site à la cible de 44 px : voir `CLAUDE.md`, § Conventions.
   Ce qui n'a toujours PAS été fait : ouvrir la page sur un vrai téléphone. Un émulateur ne
   rend ni les polices du système, ni la barre d'adresse qui mange la hauteur, ni les
   marges de sécurité d'un écran à encoche — ces dernières sont posées dans la feuille de
   style, jamais vues à l'œuvre.
+- **Le repli sans JavaScript est en français dans les quatre langues.** Le bloc
+  `<noscript>` d'`index.html` est du HTML statique, et `scripts/prerendu.mjs` ne remplace
+  que le `<title>`, la description, les métas de partage, le corps et l'attribut `lang`.
+  Ce n'est pas une régression — c'était déjà vrai de `/de/` et de `/lb/` —, mais cela se
+  voit d'autant plus qu'il y a de langues, et c'est justement la personne sans JavaScript
+  qui n'a aucun autre chemin pour comprendre où elle est tombée.
 - **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` compose
   ce que le navigateur devrait afficher ; il ne lit pas l'écran.
 - **Le nuage WebGL n'a été vu qu'à l'arrêt.** L'environnement de vérification suspendait
   les images d'animation ; la composition a été validée sur une image fixe, le mouvement
   seulement relu dans le code.
 - **Le site offre un moyen d'écrire, mais ne publie pas encore ses mentions légales.**
-  `/contact/` est en ligne dans les trois langues, alors qu'`ADRESSE_EDITEUR` vaut toujours
+  `/contact/` est en ligne dans les quatre langues, alors qu'`ADRESSE_EDITEUR` vaut toujours
   le remplaçant et que la page de mentions n'est donc pas engendrée. La note sous le
   formulaire nomme le destinataire, ce qui est le minimum ; l'identification complète de
   l'éditeur, elle, attend une ligne de `src/config.ts`. La phrase qui décrit ce que devient
-  un message reçu est **déjà écrite** dans `mentions.donneesCorps`, dans les trois langues :
+  un message reçu est **déjà écrite** dans `mentions.donneesCorps`, dans les quatre langues :
   elle paraîtra d'elle-même le jour où l'adresse sera renseignée.
 - **Le formulaire de contact n'a été essayé qu'avec un navigateur sans logiciel de courrier
   associé.** Le comportement observé est donc celui du cas dégradé — la page reste en place

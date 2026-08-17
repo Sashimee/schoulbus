@@ -21,7 +21,7 @@ captures d'écran (engendrées par script). Ne pas mélanger les deux.
 | --- | --- | --- |
 | Rôle | outil quotidien, personnalisé | page lue une fois |
 | Forme | SPA, `noindex` | HTML statique pré-rendu par langue, indexé |
-| Langues | 5 (fr, de, lb, pt, en) | 3 (fr, de, lb) |
+| Langues | 5 (fr, de, lb, pt, en) | 4 (fr, de, lb, en) |
 | Données | garde ce que la famille saisit | **aucune donnée, aucun cookie, aucune mesure** |
 
 ## Le formulaire de contact n'envoie rien
@@ -41,8 +41,8 @@ Deux conséquences à connaître avant d'y toucher :
 - **Sans JavaScript, le formulaire est inerte.** D'où l'adresse en clair AVANT lui sur la
   page — c'est le vrai chemin de secours, et son ordre n'est pas cosmétique.
 - **L'adresse ne paraît que sur `/contact/`.** Le pied de page, l'en-tête et la coda de
-  l'accueil mènent à la PAGE, jamais à un `mailto:` : trois fichiers pré-rendus la portent
-  au lieu de neuf. Un test tient l'invariant (`rendu.test.ts`).
+  l'accueil mènent à la PAGE, jamais à un `mailto:` : quatre fichiers pré-rendus la portent
+  au lieu de douze. Un test tient l'invariant (`rendu.test.ts`).
 
 ## Le flux de branches — à lire avant de toucher à quoi que ce soit
 
@@ -104,18 +104,24 @@ poussée seule, sans PR, n'est vue par personne ni par rien.
   une composante.** Une seule exception documentée : le `scaleX` de la barre de progression
   (`sections/Entete.tsx`). Cibles tactiles ≥ 44 px ; chaque couple encre/fond tient
   ≥ 4.5:1 sur la composition réelle.
+  **Une exception, et une seule** : sous 30 rem, un segment de langue de l'en-tête mesure
+  40 px de large pour 44 de haut (`styles/composants.css`). La quatrième langue faisait
+  passer l'en-tête flottant sur deux rangs en permanence sur les téléphones de 320 px ;
+  l'autre issue était de retirer le lien de contact de l'en-tête, ce qui coûtait plus cher.
+  Le critère WCAG 2.5.8 (24 px, AA) reste tenu avec de la marge, le 2.5.5 (44 px, AAA) ne
+  l'est plus. Le calcul complet est dans le commentaire, à refaire avant d'y toucher.
 - **`src/styles/jetons.css` n'est pas écrit ici.** C'est une copie conforme de la couche
   `tokens` de `../bus-scolaire-beckerich/src/index.css`. Le modifier à la main fait échouer
   `npm run jetons:verifier`. Pour le mettre à jour : `npm run jetons:reprendre`.
 - **Aucun texte visible en dur dans une composante** : tout passe par `useContenu()` et
-  `src/contenu/{fr,de,lb}.ts`.
+  `src/contenu/{fr,de,lb,en}.ts`.
 - Les commentaires expliquent **pourquoi**, pas quoi.
 
 ## Commandes
 
 ```bash
 npm run dev                 # serveur de développement
-npm run build               # client + SSR + pré-rendu des trois langues dans dist/
+npm run build               # client + SSR + pré-rendu des quatre langues dans dist/
 npm run preview             # sert dist/ tel qu'il sera publié
 npm run verifier            # typecheck + lint + tests + contrastes + dérive des jetons
 ```
@@ -142,14 +148,14 @@ npm run captures:conteneur  # la même chose dans le conteneur épinglé — CEL
 
 ### Le contenu est une donnée, pas du JSX
 
-Tout le texte de la page vit dans `src/contenu/{fr,de,lb}.ts`, typé par
+Tout le texte de la page vit dans `src/contenu/{fr,de,lb,en}.ts`, typé par
 `src/contenu/type.ts`. Les sections de `src/sections/` ne font que le disposer. Conséquence
 pratique : **on modifie un texte sans ouvrir une composante**, et le compilateur refuse une
-clé manquante dans l'une des trois langues.
+clé manquante dans l'une des quatre langues.
 
 `src/tests/contenu.test.ts` impose en plus ce que le type ne peut pas dire : aucune chaîne
 vide, **le même nombre** de tuiles, de temps, de points, de limites et de mots dans les
-trois langues, et la même suite d'icônes. **Les trois langues bougent donc ensemble ou pas
+quatre langues, et la même suite d'icônes. **Les quatre langues bougent donc ensemble ou pas
 du tout** — réécrire `fr.ts` seul fait échouer les tests, et c'est voulu.
 
 Deux contraintes de grille, qui ne sont pas dans le type mais dans `src/styles/sections.css` :
@@ -168,7 +174,7 @@ l'application est absente. Chemin surchargeable par `DEPOT_APP`.
 
 ### Les écrans montrés sont de vraies captures
 
-`public/captures/{écran}-{langue}-{thème}.webp` — 4 écrans × 3 langues × 2 thèmes = 24
+`public/captures/{écran}-{langue}-{thème}.webp` — 4 écrans × 4 langues × 2 thèmes = 32
 fichiers, engendrés par `scripts/captures.mjs`, affichés par `src/composants/Ecrans.tsx`,
 et dont l'existence est vérifiée par `src/tests/rendu.test.ts`. Le manifeste partagé par
 ces trois lecteurs est `src/contenu/captures.ts` : **une règle de nommage, trois
@@ -189,9 +195,10 @@ l'application** — interface publique et versionnée — et son adresse est au 
 rue, jamais au numéro : la fiche de la semaine dessine le vrai voisinage sur une carte.
 
 > **Ce sont les captures DU CONTENEUR qui sont commitées.** `npm run captures` sert à
-> itérer ; `npm run captures:conteneur` produit ce qui est versionné. Six des vingt-quatre
-> fichiers diffèrent entre une machine de développement et le conteneur — les six
-> `semaine-*`, c'est-à-dire le seul écran qui porte une carte Leaflet. Commiter la sortie
+> itérer ; `npm run captures:conteneur` produit ce qui est versionné. À l'époque où il y en
+> avait vingt-quatre, six différaient entre une machine de développement et le conteneur —
+> les six `semaine-*`, c'est-à-dire le seul écran qui porte une carte Leaflet ; l'écart n'a
+> pas de raison de se limiter à eux, c'est simplement le seul écran où il a été mesuré. Commiter la sortie
 > de `npm run captures` fait échouer l'intégration continue **sans que rien ne soit faux
 > dans les images**, ce qui est la façon la plus déroutante d'échouer.
 
@@ -209,11 +216,46 @@ phrase qu'il croit fausse.
 dist/index.html      français (langue de référence, à la racine)
 dist/de/index.html   allemand
 dist/lb/index.html   luxembourgeois
+dist/en/index.html   anglais
 ```
 
 Contrainte qui gouverne `entree-serveur.ts` : **ce qui est rendu là doit être exactement ce
 que le navigateur rendra à l'hydratation.** D'où le niveau de mouvement qui démarre à
 `aucun` des deux côtés, et aucune lecture de `window` pendant le rendu.
+
+### Ajouter une langue : ce qui suit tout seul, et ce qui ne suit pas
+
+La liste vit dans `src/contenu/langues.ts`, et **elle seule**. Un module sans React et sans
+`import.meta.env`, précisément pour que `scripts/build-partage.mjs` et
+`scripts/captures.mjs` puissent la lire au lieu de la recopier. Le pré-rendu, le plan du
+site, les `hreflang`, le sélecteur de langue et tous les tests en découlent.
+
+Trois choses n'en découlent pas :
+
+1. **`nginx.conf` porte une ligne par langue** — `location = /en { return 301 /en/; }`.
+   Rien ne la vérifie : `npm run verifier`, les tests et l'étape « image » de l'intégration
+   continue ne demandent jamais rien à nginx. Une langue oubliée là répond 404 sur `/xx`
+   pendant que `/xx/` fonctionne, et personne ne le voit avant qu'un visiteur tape
+   l'adresse. Le seul contrôle est manuel :
+   `docker build -t vitrine:essai . && docker run --rm -p 8080:80 vitrine:essai`, puis
+   `curl -sI localhost:8080/en`.
+2. **`ETIQUETTE_LOCALE` dans `scripts/captures.mjs`** donne à Playwright la locale du
+   navigateur. Une entrée manquante ne fait pas échouer la prise : elle produit des captures
+   dans une AUTRE langue, enregistrées sous le nom de celle qu'on croyait photographier.
+   Un contrôle en tête de script arrête maintenant le lot plutôt que de livrer ces images.
+3. **Le budget de poids des captures** (`POIDS_TOTAL_MAX`) est un chiffre écrit, pas un
+   calcul : une langue de plus doit venir y buter et faire reprendre la décision.
+
+### `codeLangue` et `localePartage` ne disent pas la même chose
+
+`codeLangue` porte l'attribut `lang` du document, les `hreflang` et l'`inLanguage` du
+balisage : une langue, sans territoire. `localePartage` ne sert qu'à `og:locale`, la seule
+balise qui en réclame un.
+
+Les deux étaient assemblées jusqu'ici — `${codeLangue}_LU` —, ce qui tenait tant que le
+site ne parlait que des langues du Luxembourg. L'anglais aurait pris `en_LU` : un
+territoire qui ne le désigne pas, dans la balise qu'un réseau social lit pour choisir la
+version à ouvrir. D'où `en_GB`, écrit dans `src/contenu/en.ts` et non calculé.
 
 ### Le mouvement est étagé, pas interrupté
 
@@ -243,7 +285,7 @@ refuse la révision s'ils ont bougé.
 
 Conséquence à connaître : `scripts/build-partage.mjs` **importe** les modules de contenu et
 lit `general.marque`, `heros.titre` et `heros.etiquette`. Toucher à l'une de ces trois clés
-change les trois vignettes → `npm run assets:partage` puis commiter. Et `heros.titre` est
+change les quatre vignettes → `npm run assets:partage` puis commiter. Et `heros.titre` est
 dessiné à 76 px sur 1200 px : **24 caractères par ligne au plus.**
 
 ## Carte du dépôt
@@ -281,3 +323,11 @@ s'y calcule ; l'en-tête HTTP ne porte que `frame-ancestors`.
 la vitrine, elle, est bel et bien publiée — refermer l'interrupteur ne change rien à cela. C'est la langue du foyer dans une bonne part de la commune ; une
 tournure fausse s'y remarque immédiatement et décrédibilise le reste. Voir l'en-tête de
 `src/contenu/lb.ts` et les réserves du README.
+
+L'anglais n'a pas été relu non plus, et la réserve est double puisqu'il s'aligne sur le
+vocabulaire d'`../bus-scolaire-beckerich/src/i18n/en.json`, qui n'a pas été relu davantage.
+Elle reste moins urgente que celle du luxembourgeois, pour une raison qu'il faut énoncer
+plutôt que laisser entendre : l'anglais n'est la langue du foyer de presque personne ici,
+il sert aux familles qui n'ont aucune des trois autres — et qui, pour cette raison même, ne
+sont pas en position de repérer la faute. Elle se voit moins ; elle se répare moins aussi.
+Voir l'en-tête de `src/contenu/en.ts` et les réserves du README.
