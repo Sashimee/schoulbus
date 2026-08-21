@@ -6,6 +6,12 @@
  * seraient sous la cible tactile de 44 px imposée par le projet. Ici, elles sont à
  * bonne taille, et c'est le seul endroit où une personne sur téléphone peut changer de
  * langue.
+ *
+ * ELLES COMPTENT CINQ SEGMENTS DEPUIS LA REFONTE, et non plus trois. Sur un téléphone
+ * étroit, cinq pastilles de 44 px ne tiennent pas sur une ligne : la commande passe à la
+ * ligne au lieu de comprimer ses cibles. Une cible tactile qu'on rétrécit pour tenir dans
+ * la largeur est une cible qu'on rate, et c'est la langue qu'on rate — donc la première
+ * chose dont une famille lusophone a besoin sur cette page.
  */
 import { LogoBus } from '../composants/LogoBus.tsx'
 import { ChoixLangue, ChoixTheme } from '../composants/Selecteurs.tsx'
@@ -111,7 +117,7 @@ export function PiedDePage() {
             <span>{contenu.pied.source}</span>
             {/*
              * La promesse de la PAGE, distincte de celle de l'application dont parle la
-             * section « Confidentialité ». Elle est vérifiable depuis la barre d'outils
+             * carte sombre de `Principes`. Elle est vérifiable depuis la barre d'outils
              * du navigateur, et c'est bien pour cela qu'elle est écrite : une page qui
              * l'affirme sans la tenir se fait prendre en dix secondes.
              */}

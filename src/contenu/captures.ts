@@ -30,7 +30,18 @@ import type { Langue } from './type.ts'
 export type Theme = 'clair' | 'sombre'
 export const THEMES: Theme[] = ['clair', 'sombre']
 
-/** Les quatre écrans montrés. L'ordre est celui du récit. */
+/**
+ * Les quatre écrans montrés.
+ *
+ * L'ORDRE EST CELUI DE LA BANDE DE LA PAGE, et il a changé avec la refonte : on commence
+ * par l'écran du matin, qui est le produit, et on finit par l'assistant, qu'on ne voit
+ * qu'une fois. On montrait le plan d'abord, du temps où la page racontait le problème
+ * avant de montrer la solution — la page ne raconte plus, elle montre.
+ *
+ * `Ecrans.tsx` apparie cette liste à `contenu.ecrans.cartes` PAR POSITION : les deux
+ * listes ont donc le même ordre, et `contenu.test.ts` vérifie qu'elles ont la même
+ * longueur dans les cinq langues.
+ */
 export type NomEcran = 'plan' | 'assistant' | 'aujourdhui' | 'semaine'
 
 export type Ecran = {
@@ -63,9 +74,10 @@ export type Ecran = {
   /**
    * L'élément à amener en haut de l'écran avant la prise, s'il en faut un.
    *
-   * Un sélecteur plutôt qu'un nombre de pixels : le même écran n'a pas la même hauteur en
-   * français, en allemand et en luxembourgeois, et un défilement de 1 400 px cadrerait
-   * juste dans une langue et de travers dans les deux autres. Déclaré ici plutôt que
+   * Un sélecteur plutôt qu'un nombre de pixels : le même écran n'a pas la même hauteur
+   * dans les cinq langues — l'allemand et le luxembourgeois débordent là où le français
+   * tient —, et un défilement de 1 400 px cadrerait juste dans une langue et de travers
+   * dans les quatre autres. Déclaré ici plutôt que
    * deviné dans le script, pour qu'une capture prise « un peu plus bas » reste refaisable
    * à l'identique par quelqu'un d'autre.
    */
@@ -78,14 +90,14 @@ export type Ecran = {
  * et surtout rien à extraire d'un stockage interne.
  */
 export const ECRANS: Ecran[] = [
+  // Le lien « Voir la semaine » d'une carte d'enfant : pas de carte, pas de lien.
+  { nom: 'aujourdhui', chemin: '/', pret: 'a[href*="/enfant/"]', parEnfant: true },
+  { nom: 'semaine', chemin: '/enfant/partage-0', pret: '.leaflet-container' },
   // Le haut de `/plan` porte les avertissements ; ce qu'on veut montrer, ce sont les
   // horaires recopiés. On cadre donc sur le premier tableau.
   { nom: 'plan', chemin: '/plan', pret: 'table', cadrer: 'table' },
   // Le champ « Prénom » de la première étape : il n'apparaît qu'une fois le formulaire monté.
   { nom: 'assistant', chemin: '/enfant/partage-0/assistant', pret: 'input' },
-  // Le lien « Voir la semaine » d'une carte d'enfant : pas de carte, pas de lien.
-  { nom: 'aujourdhui', chemin: '/', pret: 'a[href*="/enfant/"]', parEnfant: true },
-  { nom: 'semaine', chemin: '/enfant/partage-0', pret: '.leaflet-container' },
 ]
 
 /*

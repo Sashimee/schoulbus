@@ -2,20 +2,61 @@
  * La forme du contenu, écrite une fois.
  *
  * Le type n'est pas de la décoration : il fait échouer la compilation quand une des
- * trois langues perd un paragraphe. L'application se protège autrement — un dictionnaire
- * plat, avec repli sur le français —, mais elle a cinq langues et deux mille clés. La
- * vitrine en a trois et une centaine : le type est plus sûr, et il se lit.
+ * cinq langues perd un paragraphe. L'application se protège autrement — un dictionnaire
+ * plat, avec repli sur le français —, mais elle a deux mille clés. La vitrine en a une
+ * centaine : le type est plus sûr, et il se lit.
  *
  * Une règle de rédaction traverse tout le fichier : la vitrine ne promet rien que
  * l'application ne tienne. Pas de « toujours à l'heure », pas de « suivi en temps réel ».
  * Le site affiche un plan officiel personnalisé, il ne sait pas où est le bus.
+ *
+ * CE QUE LA REFONTE A RETIRÉ D'ICI, et pourquoi c'est écrit plutôt qu'oublié :
+ *
+ *   `recit`           les quatre « temps » du matin. La démonstration est passée au
+ *                     héros, qui la fait en une capture et quatre lignes au lieu de
+ *                     quatre paragraphes.
+ *   `confidentialite` devenu `principes.donnees` — le schéma dessiné et ses trois points
+ *                     disaient en une section ce que la carte sombre dit en trois phrases.
+ *   `langues`         le ruban des cinq langues. Le sélecteur de l'en-tête en montre
+ *                     désormais cinq : une section qui répétait « nous parlons cinq
+ *                     langues » au-dessus d'un sélecteur qui en propose cinq était une
+ *                     démonstration de ce qui était déjà à l'écran.
+ *   `horsligne`       devenu `principes.horsLigne`.
+ *
+ * Ces quatre-là ne sont pas « à réintroduire plus tard ». Ce qu'ils disaient de vrai est
+ * dans les limites, dans les tuiles ou dans les principes ; ce qu'ils disaient en trop
+ * était de la longueur.
  */
 
-export type Langue = 'fr' | 'de' | 'lb'
+/**
+ * Les cinq langues.
+ *
+ * La vitrine en parlait trois (fr, de, lb) quand l'application en parlait cinq, et la
+ * page l'annonçait elle-même dans sa bande de chiffres : « 5 langues, dont le
+ * luxembourgeois ». Une page de présentation qui vante cinq langues en trois langues se
+ * contredit à voix haute. Le portugais et l'anglais sont donc ici aussi.
+ *
+ * L'ordre est celui de l'application : les trois langues du pays, puis les deux autres.
+ */
+export type Langue = 'fr' | 'de' | 'lb' | 'pt' | 'en'
 
-export type Temps = {
-  titre: string
+/**
+ * Une ligne d'annotation du héros : à gauche une valeur qu'on lit dans la capture,
+ * à droite ce qu'elle veut dire.
+ *
+ * `valeur` est TOUJOURS lisible sur `public/captures/aujourdhui-{langue}-*.webp`. C'est
+ * la contrainte dure du fichier : le lecteur voit l'écran à côté de la phrase.
+ */
+export type LigneHeros = {
+  valeur: string
   texte: string
+  /**
+   * `compte` marque LA ligne du décompte — celle qui porte le point et la seule à
+   * prendre le corail. Une seule ligne des quatre l'a, et `contenu.test.ts` le vérifie
+   * dans les cinq langues : le corail signale ce qui presse, et il ne le signale plus
+   * du tout s'il est sur toutes les lignes.
+   */
+  compte?: true
 }
 
 export type Tuile = {
@@ -23,11 +64,30 @@ export type Tuile = {
   texte: string
   /** Icône du jeu de `composants/Icones.tsx`. */
   icone: string
-  /*
-   * Pas de largeur ici. La composition de la grille est posée par rang dans
-   * `sections.css` : la largeur d'une tuile décrit la mise en page, pas la fonction, et
-   * un rang recopié dans les trois langues finirait par diverger dans l'une d'elles.
+  /**
+   * La seule tuile dont l'icône est en corail : les perturbations.
+   *
+   * Posé sur la donnée et non sur un `nth-child` en CSS, parce qu'une règle de position
+   * se décale sans bruit dès qu'on réordonne les tuiles — et qu'elle ne peut pas être
+   * vérifiée langue par langue.
    */
+  ton?: 'alerte'
+  /*
+   * Pas de largeur ici. La composition de la grille est posée par `auto-fit` dans
+   * `sections.css` : la largeur d'une tuile décrit la mise en page, pas la fonction, et
+   * un rang recopié dans cinq langues finirait par diverger dans l'une d'elles.
+   */
+}
+
+/** Une des quatre captures montrées, avec ce qu'on en dit. */
+export type CarteEcran = {
+  titre: string
+  texte: string
+}
+
+export type Limite = {
+  titre: string
+  texte: string
 }
 
 export type Contenu = {
@@ -57,13 +117,14 @@ export type Contenu = {
     etiquette: string
     /** Découpé en lignes ; chaque mot est révélé séparément. */
     titre: string[]
-    chapeau: string
-    heure: string
-    legendeTitre: string
-    legendeDetail: string
+    /** Le texte alternatif de la capture du héros. Il décrit l'écran, pas la marque. */
+    altCapture: string
+    /** Les quatre annotations, dans l'ordre où on lit l'écran. */
+    lignes: [LigneHeros, LigneHeros, LigneHeros, LigneHeros]
     actionPrincipale: string
     actionSecondaire: string
-    invite: string
+    /** Sous les actions : ce que la capture est, et de quand elle date. */
+    legende: string
   }
   chiffres: {
     arrets: string
@@ -79,48 +140,50 @@ export type Contenu = {
      * l'application compte ses pages vues, et une notification suppose un identifiant
      * d'appareil déposé sur un serveur le temps de l'abonnement. La note n'est pas une
      * précaution juridique, c'est ce qui rend le chiffre vrai.
+     *
+     * LA MAQUETTE NE LA PORTAIT PAS. Elle a été rétablie : afficher « 0 » en grand sans
+     * elle, dans la même page qui énumère six limites, aurait été la seule affirmation
+     * de la vitrine que l'application ne tient pas.
      */
     envoiNote: string
   }
-  recit: {
-    etiquette: string
+  /** La bande des quatre captures. */
+  ecrans: {
     titre: string
-    chapeau: string
-    temps: [Temps, Temps, Temps, Temps]
+    note: string
+    cartes: [CarteEcran, CarteEcran, CarteEcran, CarteEcran]
   }
   fonctions: {
     etiquette: string
     titre: string
-    chapeau: string
     tuiles: Tuile[]
   }
-  confidentialite: {
-    etiquette: string
-    titre: string
-    chapeau: string
-    points: { titre: string; texte: string }[]
-    legendeSchema: string
-  }
-  langues: {
-    etiquette: string
-    titre: string
-    chapeau: string
-    /** Le titre de l'application dans chacune des cinq langues qu'elle parle. */
-    mots: { code: string; texte: string }[]
-  }
-  horsligne: {
-    etiquette: string
-    titre: string
-    chapeau: string
-    points: string[]
-    action: string
-    legendeSignal: string
+  /**
+   * Les deux cartes de principe : ce que le logiciel ne fait pas de vos données, et ce
+   * qu'il fait sans réseau. Elles ont remplacé deux sections entières.
+   */
+  principes: {
+    donnees: {
+      etiquette: string
+      titre: string
+      texte: string
+    }
+    horsLigne: {
+      etiquette: string
+      titre: string
+      /**
+       * `ton: 'nuance'` porte la puce ambre — la seule des trois qui dise une
+       * restriction. Taire la carte du trajet à pied ici, c'est promettre un « tout hors
+       * ligne » que la fiche de la semaine dément dès qu'on l'ouvre sans réseau.
+       */
+      points: { texte: string; ton?: 'nuance' }[]
+    }
   }
   limites: {
-    etiquette: string
     titre: string
-    chapeau: string
-    items: { titre: string; texte: string }[]
+    /** La note en chiffres, à côté du titre : combien de limites, et pourquoi ici. */
+    note: string
+    items: Limite[]
     lien: string
   }
   /**
@@ -139,7 +202,18 @@ export type Contenu = {
   final: {
     surtitre: string
     heure: string
-    titre: string
+    /** Sous l'heure de la tuile : d'où part ce départ-là. */
+    legendeHeure: string
+    /*
+     * Le titre est coupé en trois parce que son milieu est en corail — c'est le seul mot
+     * coloré de la page, et il désigne le temps qui reste. Le découper dans le contenu
+     * plutôt que d'y glisser une balise évite d'avoir du HTML dans un fichier de texte,
+     * et laisse chaque langue placer son accent où sa grammaire le met : l'allemand ne
+     * met pas « sechzehn Minuten » à la même place que le français.
+     */
+    titreAvant: string
+    titreAccent: string
+    titreApres: string
     chapeau: string
     action: string
     qr: string
@@ -157,10 +231,10 @@ export type Contenu = {
     mention: string
     source: string
     /*
-     * Ce que la vitrine ne fait pas. La section « Confidentialité » le dit déjà de
-     * l'APPLICATION ; cette ligne-ci parle de la PAGE qu'on est en train de lire, et
-     * c'est une autre promesse — une page de présentation qui vante l'absence de
-     * traqueurs tout en en portant serait le mensonge le plus banal du web.
+     * Ce que la vitrine ne fait pas. La carte « données » le dit déjà de l'APPLICATION ;
+     * cette ligne-ci parle de la PAGE qu'on est en train de lire, et c'est une autre
+     * promesse — une page de présentation qui vante l'absence de traqueurs tout en en
+     * portant serait le mensonge le plus banal du web.
      */
     viePrivee: string
     /** Le lien vers la page des mentions légales, dans la colonne « Le projet ». */

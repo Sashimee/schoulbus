@@ -21,7 +21,7 @@ captures d'écran (engendrées par script). Ne pas mélanger les deux.
 | --- | --- | --- |
 | Rôle | outil quotidien, personnalisé | page lue une fois |
 | Forme | SPA, `noindex` | HTML statique pré-rendu par langue, indexé |
-| Langues | 5 (fr, de, lb, pt, en) | 3 (fr, de, lb) |
+| Langues | 5 (fr, de, lb, pt, en) | 5 (fr, de, lb, pt, en) |
 | Données | garde ce que la famille saisit | **aucune donnée, aucun cookie, aucune mesure** |
 
 ## Le flux de branches — à lire avant de toucher à quoi que ce soit
@@ -68,6 +68,10 @@ poussée seule, sans PR, n'est vue par personne ni par rien.
    l'heure », pas de « suivi en temps réel » : le site affiche un plan officiel
    personnalisé, il ne sait pas où est le bus. Toute affirmation ajoutée ici doit être
    vérifiable dans `../bus-scolaire-beckerich`. Voir l'en-tête de `src/contenu/type.ts`.
+   Cas concret : la bande de chiffres affiche « 0 » en grand, et la note qui le CADRE
+   (`chiffres.envoiNote`) est ce qui le rend vrai — deux choses sortent bel et bien de
+   l'appareil. La supprimer pour alléger la page ferait de ce zéro la seule affirmation
+   du site que l'application ne tient pas.
 2. **La section « Limites » vient AVANT l'appel final.** C'est l'ordre choisi par
    l'application elle-même (`src/App.tsx`), et il ne s'inverse pas pour gagner un clic.
 3. **Le registre est celui de l'application, pas celui d'une page de vente.** Énoncer une
@@ -77,25 +81,32 @@ poussée seule, sans PR, n'est vue par personne ni par rien.
 
 ## Conventions
 
-- **Tout est écrit en français** : composantes (`Appareil`, `Revele`, `PiedDePage`),
+- **Tout est écrit en français** : composantes (`Cadre`, `Revele`, `PiedDePage`),
   fichiers (`entree-serveur.ts`, `mouvement/`), variables, commentaires. Même règle que
   dans l'application.
-- **Aucune valeur brute hors de `src/styles/jetons.css`**, et **aucun `style={{ … }}` dans
-  une composante.** Une seule exception documentée : le `scaleX` de la barre de progression
-  (`sections/Entete.tsx`). Cibles tactiles ≥ 44 px ; chaque couple encre/fond tient
-  ≥ 4.5:1 sur la composition réelle.
+- **Aucune valeur brute hors de la couche des jetons**, et **aucun `style={{ … }}` dans
+  une composante — plus aucune exception** depuis que la barre de progression a quitté
+  l'en-tête. Cibles tactiles ≥ 44 px ; chaque couple encre/fond tient ≥ 4,5:1 (3:1 pour les
+  deux couples de grands caractères, nommés dans `scripts/verifier-contraste.mjs`).
 - **`src/styles/jetons.css` n'est pas écrit ici.** C'est une copie conforme de la couche
   `tokens` de `../bus-scolaire-beckerich/src/index.css`. Le modifier à la main fait échouer
   `npm run jetons:verifier`. Pour le mettre à jour : `npm run jetons:reprendre`.
+- **MAIS LES COULEURS NE VIENNENT PLUS DE LÀ.** La vitrine a sa propre palette — crème,
+  sarcelle, corail — déclarée dans la couche `vitrine` de `src/styles/vitrine.css`, qui
+  redéfinit les rôles (`--encre`, `--surface`, `--accent`…) APRÈS la couche `tokens`. Tout
+  ce qui lit `var(--encre)` obtient la valeur de la vitrine, et `jetons.css` reste intact.
+  Sémantique à ne pas diluer : **sarcelle = ce qui est vrai** (heures, arrêts, action
+  principale), **corail = ce qui presse ou ce qui nuance** (décompte, limites, « bientôt »).
+  Rien de décoratif ne prend le corail.
 - **Aucun texte visible en dur dans une composante** : tout passe par `useContenu()` et
-  `src/contenu/{fr,de,lb}.ts`.
+  `src/contenu/{fr,de,lb,pt,en}.ts`.
 - Les commentaires expliquent **pourquoi**, pas quoi.
 
 ## Commandes
 
 ```bash
 npm run dev                 # serveur de développement
-npm run build               # client + SSR + pré-rendu des trois langues dans dist/
+npm run build               # client + SSR + pré-rendu des cinq langues dans dist/
 npm run preview             # sert dist/ tel qu'il sera publié
 npm run verifier            # typecheck + lint + tests + contrastes + dérive des jetons
 ```
@@ -122,22 +133,27 @@ npm run captures:conteneur  # la même chose dans le conteneur épinglé — CEL
 
 ### Le contenu est une donnée, pas du JSX
 
-Tout le texte de la page vit dans `src/contenu/{fr,de,lb}.ts`, typé par
+Tout le texte de la page vit dans `src/contenu/{fr,de,lb,pt,en}.ts`, typé par
 `src/contenu/type.ts`. Les sections de `src/sections/` ne font que le disposer. Conséquence
 pratique : **on modifie un texte sans ouvrir une composante**, et le compilateur refuse une
-clé manquante dans l'une des trois langues.
+clé manquante dans l'une des cinq langues.
 
 `src/tests/contenu.test.ts` impose en plus ce que le type ne peut pas dire : aucune chaîne
-vide, **le même nombre** de tuiles, de temps, de points, de limites et de mots dans les
-trois langues, et la même suite d'icônes. **Les trois langues bougent donc ensemble ou pas
-du tout** — réécrire `fr.ts` seul fait échouer les tests, et c'est voulu.
+vide, **le même nombre** de tuiles, d'écrans, de lignes de héros, de limites et de points
+dans les **cinq** langues, la même suite d'icônes, une seule tuile en corail, une seule
+ligne de décompte, une seule puce de nuance, et 24 signes au plus par ligne de
+`heros.titre`. **Les cinq langues bougent donc ensemble ou pas du tout** — réécrire `fr.ts`
+seul fait échouer les tests, et c'est voulu.
 
-Deux contraintes de grille, qui ne sont pas dans le type mais dans `src/styles/sections.css` :
+Une contrainte de grille, qui n'est pas dans le type mais dans `src/styles/sections.css` :
 
-- `.limites__liste` est une grille de trois colonnes → **3 ou 6 items, jamais 4 ni 5.**
-- Le bento des fonctions a 6 colonnes et pose ses portées **par position**
-  (`nth-child(1)` et `(6)` → `span 4` ; `(8)` et `(9)` → `span 3`) → **9 tuiles**, sinon la
-  composition se casse en silence.
+- `.limites__liste` pose trois colonnes → **3 ou 6 items, jamais 4 ni 5.** Un test le tient.
+
+Le bento à six colonnes et ses portées par `nth-child` **n'existent plus**. Les neuf tuiles
+sont égales et `auto-fit` compte les colonnes : ajouter ou déplacer une tuile ne demande
+plus de règle CSS. La seule tuile qui se distingue est celle des perturbations, dont
+l'icône est en corail — porté par la DONNÉE (`ton: 'alerte'`), jamais par un rang, pour
+qu'elle suive la tuile quand on la déplace.
 
 ### Les chiffres sont comptés, pas écrits
 
@@ -148,7 +164,7 @@ l'application est absente. Chemin surchargeable par `DEPOT_APP`.
 
 ### Les écrans montrés sont de vraies captures
 
-`public/captures/{écran}-{langue}-{thème}.webp` — 4 écrans × 3 langues × 2 thèmes = 24
+`public/captures/{écran}-{langue}-{thème}.webp` — 4 écrans × 5 langues × 2 thèmes = 40
 fichiers, engendrés par `scripts/captures.mjs`, affichés par `src/composants/Ecrans.tsx`,
 et dont l'existence est vérifiée par `src/tests/rendu.test.ts`. Le manifeste partagé par
 ces trois lecteurs est `src/contenu/captures.ts` : **une règle de nommage, trois
@@ -203,7 +219,8 @@ concorder. Deux règles pour toute animation ajoutée :
 
 1. **Rien d'important ne dépend d'une animation pour être visible.** D'où l'entrée du héros
    en CSS pure, et `Revele` qui rend un élément nu quand le niveau vaut `aucun`.
-2. **Seuls `transform` et `opacity`** (et les uniformes du shader).
+2. **Seuls `transform` et `opacity`.** (La réserve « et les uniformes du shader » est
+   tombée avec le shader : il n'y a plus de fond WebGL.)
 
 ### Les liens, et l'interrupteur
 
@@ -233,8 +250,8 @@ dessiné à 76 px sur 1200 px : **24 caractères par ligne au plus.**
 | `src/contenu/` | Tout le texte, les chiffres engendrés, le manifeste des captures. |
 | `src/sections/` | Une composante par section de l'accueil, dans l'ordre de `App.tsx`. Disposition seulement. |
 | `src/pages/` | Les pages hors accueil : `independance` (toujours engendrée), `mentions` (seulement si `ADRESSE_EDITEUR` est renseignée). Le nom de la page EST son segment d'adresse — même règle dans `cheminPage()` et dans le `dossier()` du pré-rendu. |
-| `src/composants/` | Briques réutilisées : `Appareil` (le téléphone), `Ecrans` (les captures), `Icones`, `SchemaConfidentialite`. |
-| `src/mouvement/` | Niveau de mouvement, révélation au défilement, fond WebGL, curseur. |
+| `src/composants/` | Briques réutilisées : `Cadre` (l'encadrement d'une capture), `Ecrans` (les captures), `Icones`, `Bouton`, `LogoBus`, `Selecteurs`. |
+| `src/mouvement/` | Niveau de mouvement, révélation au défilement, défilement doux, aimant des boutons. |
 | `src/styles/` | `jetons.css` (copie de l'application), puis vitrine / composants / sections. |
 | `scripts/` | Tout ce qui engendre : captures, chiffres, vignettes, QR, jetons, contrastes, pré-rendu. |
 | `src/tests/` | Invariants du contenu et du rendu. |
@@ -257,6 +274,24 @@ s'y calcule ; l'en-tête HTTP ne porte que `frame-ancestors`.
 ## Réserve la plus urgente
 
 **Le luxembourgeois n'a pas été relu par une personne dont c'est la langue maternelle**, et
-la vitrine, elle, est bel et bien publiée — refermer l'interrupteur ne change rien à cela. C'est la langue du foyer dans une bonne part de la commune ; une
-tournure fausse s'y remarque immédiatement et décrédibilise le reste. Voir l'en-tête de
-`src/contenu/lb.ts` et les réserves du README.
+la refonte a réécrit presque chaque chaîne du fichier — une phrase d'une ligne pardonne
+moins qu'un paragraphe, faute de contexte autour pour rattraper un mot mal choisi. Le
+portugais et l'anglais sont dans le même cas, en première rédaction. C'est la langue du
+foyer dans une bonne part de la commune, et la vitrine est publiée : refermer
+l'interrupteur ne change rien à cela. C'est la seule réserve du projet qui demande une
+personne plutôt qu'une commande. Voir l'en-tête de `src/contenu/lb.ts` et les réserves du
+README.
+
+## Un piège connu : régénérer les captures
+
+`scripts/captures.mjs` photographie l'application **à la révision inscrite dans
+`scripts/captures.source.json`**, et non à son `HEAD` — c'est ce que fait l'intégration
+continue. Sur un `HEAD` plus récent, le script échoue sur un clic introuvable
+(« J'ai compris ») parce que l'écran d'avertissement a bougé. Sortir l'application à cette
+révision d'abord :
+
+```bash
+git -C ../bus-scolaire-beckerich checkout 509b621   # la révision de captures.source.json
+npm run captures:conteneur
+git -C ../bus-scolaire-beckerich checkout main
+```

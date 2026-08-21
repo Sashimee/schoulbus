@@ -16,7 +16,7 @@
  * fichier de police que le site sert déjà et convertit le texte en tracés : la vignette
  * est exacte, et identique partout.
  *
- * Le texte n'est pas écrit ici. Il est lu depuis `src/contenu/{fr,de,lb}.ts`, comme le
+ * Le texte n'est pas écrit ici. Il est lu depuis `src/contenu/{fr,de,lb,pt,en}.ts`, comme le
  * QR lit `config.ts` : une phrase recopiée dans un script finit par contredire la page.
  * C'est aussi pourquoi la vignette ne dit rien que la page ne dise déjà — aucune des
  * trois langues n'a eu à être traduite pour elle, et le luxembourgeois n'attend donc
@@ -38,22 +38,44 @@ const PUBLIC = resolve(racine, 'public')
  * documente déjà. Recopiées à la main faute de savoir lire une variable CSS ici — à
  * réaligner si la charte bouge.
  */
-const FOND = '#0e1a2e'
-const FOND_HAUT = '#142b47'
-const FOND_BAS = '#080d19'
-const ACCENT = '#a9dcf5'
-const ENCRE = '#e9eff6'
-const ENCRE_DOUCE = '#c2cdda'
+/*
+ * La palette de la vignette, reprise de la couche `vitrine` de `src/styles/vitrine.css`.
+ *
+ * C'est LE THÈME CLAIR qui est retenu, et il faut choisir : une vignette est une image
+ * fixe, elle ne suit pas la préférence de qui la regarde. Le crème est le visage de la
+ * refonte, celui de la maquette, et il se distingue mieux dans un fil de discussion —
+ * qui est le seul endroit où cette image est vue.
+ *
+ * Le fond n'est plus un dégradé mais une surface unie, comme la page : les trois arrêts
+ * portent donc la même valeur. Ils restent trois parce que `satori` compose le dégradé
+ * qu'on lui donne, et qu'écrire ici trois fois la même couleur dit explicitement qu'il
+ * n'y a plus de dégradé — plutôt que de laisser croire qu'on a oublié de le retirer.
+ */
+const FOND = '#fbf6ef'
+const FOND_HAUT = '#fbf6ef'
+const FOND_BAS = '#fbf6ef'
+/* Sarcelle profonde : c'est la couleur des heures et des arrêts dans la page. */
+const ACCENT = '#0b3f45'
+/* Sarcelle d'action, celle de la pastille de la marque et des icônes. */
+const SARCELLE = '#0f5a61'
+const ENCRE = '#1c2725'
+const ENCRE_DOUCE = '#4a5654'
 
 /** Le bus de `public/favicon.svg`, à la géométrie près. */
+/*
+ * La marque, dans le même dessin que `src/composants/LogoBus.tsx` — au pixel près, et
+ * dans le même sens depuis la refonte : une tuile sarcelle, une carrosserie crème.
+ * Sur le fond crème de la vignette, l'ancienne pastille couleur fond n'aurait eu aucun
+ * contour.
+ */
 const MARQUE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="${FOND}"/>
-  <rect x="116" y="112" width="280" height="248" rx="44" fill="${ACCENT}"/>
-  <rect x="152" y="152" width="208" height="104" rx="20" fill="${FOND}"/>
-  <circle cx="180" cy="306" r="24" fill="${FOND}"/>
-  <circle cx="332" cy="306" r="24" fill="${FOND}"/>
-  <rect x="150" y="360" width="52" height="46" rx="16" fill="${ENCRE}"/>
-  <rect x="310" y="360" width="52" height="46" rx="16" fill="${ENCRE}"/>
+  <rect width="512" height="512" rx="112" fill="${SARCELLE}"/>
+  <rect x="116" y="112" width="280" height="248" rx="44" fill="${FOND}"/>
+  <rect x="152" y="152" width="208" height="104" rx="20" fill="${SARCELLE}"/>
+  <circle cx="180" cy="306" r="24" fill="${SARCELLE}"/>
+  <circle cx="332" cy="306" r="24" fill="${SARCELLE}"/>
+  <rect x="150" y="360" width="52" height="46" rx="16" fill="${FOND}"/>
+  <rect x="310" y="360" width="52" height="46" rx="16" fill="${FOND}"/>
 </svg>`
 
 const marqueDataUri = `data:image/svg+xml;base64,${Buffer.from(MARQUE_SVG).toString('base64')}`
@@ -163,7 +185,19 @@ async function enPng(element, largeur, hauteur) {
  */
 const { imagePartage } = await import('../src/config.ts')
 
-for (const langue of ['fr', 'de', 'lb']) {
+/*
+ * LA LISTE DOIT SUIVRE `LANGUES` de `src/i18n/contexte.ts`.
+ *
+ * Elle est recopiée plutôt qu'importée : `contexte.ts` lit `import.meta.env.BASE_URL`,
+ * qui n'existe pas hors de Vite, et l'importer ici ferait échouer le script pour une
+ * variable dont il n'a aucun usage.
+ *
+ * La duplication n'est pas laissée sans garde-fou : `rendu.test.ts` vérifie pour CHAQUE
+ * langue que la vignette annoncée par le pré-rendu existe sur le disque. Une langue
+ * ajoutée là-bas et oubliée ici fait donc échouer les tests, avec le nom du fichier
+ * manquant.
+ */
+for (const langue of ['fr', 'de', 'lb', 'pt', 'en']) {
   const module = await import(`../src/contenu/${langue}.ts`)
   const nom = imagePartage(langue)
   const png = await enPng(vignette(module[langue]), 1200, 630)

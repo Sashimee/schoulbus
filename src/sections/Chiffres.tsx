@@ -12,6 +12,11 @@
  * aille les chercher dans les limites. Un chiffre juste qu'on laisse se relire de travers
  * est un chiffre faux.
  *
+ * LA MAQUETTE DE LA REFONTE AVAIT PERDU CETTE NOTE. Elle est rétablie : la même page
+ * énumère six limites dont la dernière dit exactement ce qui sort de l'appareil, et un
+ * « 0 » en 32 px sans nuance à trois écrans de là aurait été la seule affirmation de la
+ * vitrine que l'application ne tienne pas.
+ *
  * Le décompte s'arrête à la première valeur atteinte et ne rejoue pas. Un compteur qui
  * repart à chaque passage devant lui transforme un fait en animation.
  */
@@ -49,18 +54,28 @@ export function Chiffres() {
   const compte = niveau !== 'aucun' && vu
 
   const entrees = [
-    { valeur: CHIFFRES.arrets, libelle: contenu.chiffres.arrets },
-    { valeur: CHIFFRES.villages, libelle: contenu.chiffres.villages },
-    { valeur: CHIFFRES.langues, libelle: contenu.chiffres.langues },
-    { valeur: CHIFFRES.donneesFamilleEnvoyees, libelle: contenu.chiffres.envoi },
+    { valeur: CHIFFRES.arrets, libelle: contenu.chiffres.arrets, zero: false },
+    { valeur: CHIFFRES.villages, libelle: contenu.chiffres.villages, zero: false },
+    { valeur: CHIFFRES.langues, libelle: contenu.chiffres.langues, zero: false },
+    { valeur: CHIFFRES.donneesFamilleEnvoyees, libelle: contenu.chiffres.envoi, zero: true },
   ]
 
   return (
     <section className="section section--serree">
       <div className="bande">
+        {/*
+         * La grille en « filets » : l'écart d'un pixel entre les cellules laisse voir le
+         * fond du conteneur, qui EST la ligne de séparation. Une bordure par cellule
+         * doublerait chaque trait intérieur ; ici il n'y en a jamais qu'un, et il survit
+         * au repli en deux puis une colonne sans qu'aucune règle ne le rattrape.
+         */}
         <div className="chiffres" ref={ref}>
           {entrees.map((e, i) => (
-            <Revele key={e.libelle} rang={i}>
+            <Revele
+              key={e.libelle}
+              rang={i}
+              className={`chiffre${e.zero ? ' chiffre--zero' : ''}`}
+            >
               <div className="chiffre__valeur">
                 <Compteur valeur={e.valeur} actif={compte} />
               </div>

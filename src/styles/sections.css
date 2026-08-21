@@ -1,12 +1,25 @@
 /*
- * La mise en page, section par section.
+ * La mise en page, section par section, dans l'ordre de `App.tsx`.
  *
- * Une règle tient tout le fichier : la page se lit d'abord en une colonne. Les grilles
- * à deux et trois colonnes n'apparaissent qu'au-dessus de 48 rem, le même point de
- * bascule que la navigation de l'application — pas un de plus, pour que deux projets
- * frères ne se contredisent pas sur ce qu'est « un grand écran ».
+ * Les couleurs, l'échelle typographique et les espacements viennent tous de la couche des
+ * jetons — `jetons.css` pour ce que la vitrine partage avec l'application, la couche
+ * `vitrine` de `vitrine.css` pour la palette et les échelles qui lui sont propres. Ce
+ * fichier ne pose que des dimensions de MISE EN PAGE : des bases de flexbox, des planchers
+ * de `minmax`, des seuils de repli. Elles ne décrivent pas la charte, elles décrivent
+ * cette page-ci.
+ *
+ * UNE DÉCISION TRAVERSE TOUT LE FICHIER : la page n'a plus de point de rupture.
+ *
+ * Elle en avait trois (40, 48 et 62 rem), et chacun était un endroit où quelqu'un devait
+ * se souvenir d'aller quand il ajoutait une carte. La refonte les remplace par
+ * `repeat(auto-fit, minmax(X, 1fr))` et par des rangées flexibles qui se replient d'
+ * elles-mêmes : le nombre de colonnes tombe de la largeur disponible, et une tuile de plus
+ * ne demande aucune règle de plus. Les deux seules `media` qui restent visent des
+ * CAPACITÉS et non des largeurs — le pointeur grossier, et la préférence de mouvement.
+ *
+ * Le seul repli qu'on ne pouvait pas confier à `auto-fit` est celui de la grille en
+ * filets : voir le commentaire de `.chiffres`.
  */
-
 @layer sections {
   /* ------------------------------------------------------------------ *
    * Rideau d'ouverture
@@ -51,82 +64,120 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * Héros
+   * L'en-tête, collant du premier pixel au dernier
    * ------------------------------------------------------------------ */
-  .heros {
-    position: relative;
+  .entete {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 20;
     display: flex;
     align-items: center;
-    min-block-size: 100svh;
-    /* L'en-tête flottant n'est pas encore là au chargement : inutile de lui réserver
-       la place qu'il ne prendra qu'après 60 % de défilement. */
-    padding-block: clamp(5rem, 11vh, 8rem) var(--vitrine-section);
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--espace-4);
+    padding: var(--espace-3) var(--gouttiere);
+    /* Une barre translucide et floutée : ce qui défile dessous reste deviné, pas caché. */
+    background: var(--rail);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-block-end: var(--trait) solid var(--bord);
   }
-
-  .heros__grille {
-    display: grid;
-    gap: var(--espace-7);
+  .entete__actions {
+    display: flex;
     align-items: center;
+    gap: var(--espace-2);
   }
   /*
-   * La ligne la plus importante de ce fichier.
-   *
-   * Un élément de grille a `min-width: auto`, ce qui l'empêche de descendre sous sa
-   * largeur de contenu minimale. Le téléphone de la maquette mesure 390 px fixes ; sa
-   * piste ne pouvait donc pas descendre sous 390, et comme le héros n'a qu'UNE colonne
-   * sous 62 rem, la colonne de TEXTE était étirée à 390 elle aussi. Sur un écran de
-   * 320 px, le titre, le chapeau et l'heure débordaient de 86 px — et comme le corps
-   * porte `overflow-x: clip`, rien ne défilait : le texte était simplement COUPÉ. « Les
-   * horaires du bu », « la commune de Becke ». Le `max-inline-size: 100%` de l'appareil
-   * ne pouvait pas l'éviter : pendant le calcul intrinsèque d'une piste, un pourcentage
-   * est cyclique, donc ignoré.
-   *
-   * C'est le défaut que la réserve du README annonçait sans le savoir — « les largeurs de
-   * téléphone n'ont pas été vues à l'écran ». Il ne se voyait qu'à l'écran.
+   * La marque est un lien (vers `#haut`), et l'en-tête ne se montre plus seulement après
+   * le héros : il est là du premier pixel au dernier. Ce lien est donc en permanence sous
+   * le doigt, et il doit tenir la cible de 44 px que le projet s'impose. La vignette, elle,
+   * reste à 30 px : c'est la zone cliquable qui grandit, pas le dessin.
    */
-  .heros__grille > * {
-    min-inline-size: 0;
+  .entete .marque {
+    min-block-size: var(--cible);
   }
-  @media (min-width: 62rem) {
-    .heros__grille {
-      /* `auto` sur la deuxième piste : le téléphone a une largeur fixe, tout le reste
-         de la ligne revient au texte. */
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: var(--espace-7);
+  /*
+   * La marque perd son nom sur les écrans les plus étroits et ne garde que sa vignette.
+   * Le nom du site est dans le `<title>`, dans le héros et dans le pied de page ; ce qui
+   * ne peut pas disparaître de cette barre, c'est le sélecteur de langue.
+   */
+  @media (max-width: 26rem) {
+    .marque__nom {
+      display: none;
     }
   }
 
+  /* ------------------------------------------------------------------ *
+   * Héros
+   *
+   * Une rangée qui se replie : la capture à gauche, les annotations à droite, et l'une
+   * sous l'autre dès que les deux ne tiennent plus. La capture passe DESSUS quand ça se
+   * replie — c'est elle la démonstration, et un titre seul en haut d'un téléphone ne
+   * montre rien.
+   * ------------------------------------------------------------------ */
+  .heros {
+    padding-block: var(--vitrine-section) var(--vitrine-section-serree);
+    /*
+     * Le halo de la capture est posé en `inset: … -10% …` : il déborde volontairement du
+     * cadre pour le décoller du fond. Sur un écran de 390 px, où la capture occupe toute
+     * la colonne, ces 10 % font 15 px de document plus large que la fenêtre. Le
+     * `overflow-x: clip` du corps l'empêchait de se VOIR, mais la page restait plus large
+     * qu'elle ne devait — mesuré, pas supposé.
+     *
+     * On coupe donc au bord de la section. Le halo n'y perd rien : ce qu'on rogne est la
+     * frange du dégradé, déjà à opacité nulle, et sur un écran large le cadre est loin
+     * des bords, donc rien n'est rogné du tout.
+     */
+    overflow-x: clip;
+  }
+
+  .heros__grille {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+
+  .heros__appareil {
+    flex: 0 1 360px;
+    min-inline-size: 0;
+    max-inline-size: min(360px, 100%);
+  }
+
   .heros__texte {
+    flex: 1 1 420px;
+    min-inline-size: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--espace-5);
-    max-inline-size: 40rem;
+    align-items: flex-start;
+    gap: var(--espace-4);
   }
 
   /*
-   * L'étiquette du héros est la seule du site à porter une phrase entière — « Site
-   * indépendant · Année scolaire 2025/2026 ». Le `white-space: nowrap` des étiquettes est
-   * juste pour les courtes (« Sans réseau »), mais coupait celle-ci à « ANNÉE SCOLAIRE
-   * 20 » sur un écran étroit : la mention d'indépendance, tronquée, dans la première
-   * chose qu'on lit. Elle passe donc à la ligne quand il le faut.
+   * L'étiquette du héros porte une phrase entière — « Site indépendant · 2025/2026 ·
+   * 2026/2027 ». Elle passe donc à la ligne quand il le faut, au lieu d'être tronquée :
+   * la mention d'indépendance coupée en deux dans la première chose qu'on lit serait le
+   * pire endroit de la page où économiser une ligne.
    */
-  .heros .etiquette {
+  .heros .etiquette--calme {
     white-space: normal;
   }
 
-  /*
-   * Le titre se révèle mot à mot, chaque mot sortant d'une fenêtre qui le rogne. La
-   * fenêtre est `overflow: hidden` sur un `span` en ligne — d'où le `padding-block`
-   * compensé par la marge : sans lui, les jambages des « g » et des « p » seraient
-   * coupés par leur propre masque.
-   */
   .heros__titre {
+    margin-block-start: var(--espace-2);
+    max-inline-size: 20em;
     text-wrap: balance;
   }
   /* Chaque ligne du titre occupe la sienne, sans `<br>` : le texte reste d'un tenant. */
   .ligne-titre {
     display: block;
   }
+  /*
+   * Le titre se révèle mot à mot, chaque mot sortant d'une fenêtre qui le rogne. La
+   * fenêtre est `overflow: hidden` sur un `span` en ligne — d'où le `padding-block`
+   * compensé par la marge : sans lui, les jambages des « g » et des « p » seraient
+   * coupés par leur propre masque.
+   */
   .mot {
     display: inline-block;
     overflow: hidden;
@@ -200,13 +251,13 @@
   .heros__texte > .etiquette {
     animation-delay: 0s;
   }
-  .heros__texte > .chapeau {
+  .heros__texte > .heros__lignes {
     animation-delay: 0.5s;
   }
-  .heros__texte > .heros__horloge {
+  .heros__texte > .heros__actions {
     animation-delay: 0.62s;
   }
-  .heros__texte > .heros__actions {
+  .heros__texte > .heros__legende {
     animation-delay: 0.72s;
   }
   .heros__appareil {
@@ -214,564 +265,543 @@
     animation-delay: 0.34s;
   }
 
-  /* L'heure géante du héros. */
-  .heros__horloge {
-    display: flex;
-    align-items: center;
-    gap: var(--espace-4);
-    /*
-     * L'heure géante et sa légende tiennent côte à côte dès qu'il y a la place, et
-     * passent l'une sous l'autre quand il n'y en a plus. Sans cela, la colonne de texte
-     * ne pouvait pas descendre sous la somme des deux, et c'est elle qui débordait.
-     */
-    flex-wrap: wrap;
+  /* ------------------------------------------------------------------ *
+   * Les quatre annotations du héros.
+   *
+   * Une grille à deux colonnes par ligne, et non un tableau : la colonne de gauche garde
+   * sa largeur à toutes les tailles, de sorte que les quatre valeurs restent alignées
+   * les unes sous les autres. C'est ce que fait la chasse fixe pour les chiffres, en
+   * vertical.
+   * ------------------------------------------------------------------ */
+  .heros__lignes {
+    align-self: stretch;
+    margin-block-start: var(--espace-3);
   }
-  .heros__heure {
+  .heros__ligne {
+    display: grid;
+    grid-template-columns: clamp(6.5rem, 14vw, 9.375rem) minmax(0, 1fr);
+    gap: clamp(1rem, 2.5vw, 1.5rem);
+    padding-block: var(--espace-3);
+    border-block-start: var(--trait) solid var(--bord);
+  }
+  /* La dernière ferme la série : sans son filet bas, la liste a l'air interrompue. */
+  .heros__ligne:last-child {
+    border-block-end: var(--trait) solid var(--bord);
+  }
+
+  .heros__valeur {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espace-2);
     font-family: var(--police-chiffres);
     font-variant-numeric: tabular-nums;
-    font-size: var(--vitrine-heure);
+    font-size: var(--vitrine-nombre-petit);
     font-weight: 600;
-    line-height: 0.82;
-    letter-spacing: -0.045em;
-    color: var(--accent);
+    line-height: 1.2;
+    color: var(--accent-2);
   }
-  .heros__legende {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espace-1);
-    font-size: var(--texte-s);
+  /*
+   * Les deux PREMIÈRES valeurs sont plus grandes que les deux suivantes.
+   *
+   * Posé par rang, et c'est admis ici alors que ça ne l'était pas pour la grille des
+   * fonctions — la différence tient au type : `heros.lignes` est un quadruplet figé
+   * (`[LigneHeros, LigneHeros, LigneHeros, LigneHeros]`), il ne peut ni grandir ni
+   * rétrécir sans que le compilateur le refuse dans les cinq langues. Le rang est donc
+   * stable par construction, ce que la liste de tuiles n'était pas.
+   *
+   * Et la hiérarchie qu'il pose est réelle : les deux premières lignes sont des heures,
+   * les deux suivantes des noms. On lit d'abord quand, ensuite qui et où.
+   */
+  .heros__ligne:nth-child(-n + 2) .heros__valeur {
+    font-size: var(--vitrine-nombre);
+    line-height: 1;
+  }
+
+  /* La ligne du décompte est la SEULE en corail de tout le héros. Voir la sémantique
+     des deux accents en tête de `vitrine.css`. */
+  .heros__valeur--compte {
+    color: var(--vitrine-corail-encre);
+  }
+  .heros__point {
+    inline-size: 10px;
+    block-size: 10px;
+    border-radius: 999px;
+    background: currentColor;
+    flex: none;
+  }
+  /*
+   * PAS DE BATTEMENT ICI, et c'est délibéré.
+   *
+   * Dans l'application, ce point bat sous les huit minutes — c'est le signal qui dit
+   * « il est temps de sortir ». La page, elle, montre une valeur FIGÉE à seize minutes,
+   * celle de la capture d'à côté. Un point qui battrait quand même dirait le contraire de
+   * ce que l'écran affiche juste à sa gauche, et il le dirait en permanence, ce qui est
+   * la façon la plus sûre de vider un signal de son sens.
+   *
+   * La règle a été écrite, puis retirée : un sélecteur qu'aucun état du DOM ne peut
+   * satisfaire est du code mort avec une histoire. Le jour où cette valeur devient
+   * vivante, on écrira la règle ET l'état qui la déclenche, ensemble.
+   */
+
+  .heros__glose {
+    align-self: center;
+    font-size: var(--texte-l);
+    line-height: 1.4;
     color: var(--encre-douce);
-    max-inline-size: 14rem;
-    /* Alignée sur le bas de l'heure, pas sur sa ligne de base : une capitale de 6 rem
-       et un texte de 13 px n'ont pas de ligne de base commune qui veuille dire quelque
-       chose. */
-    align-self: flex-end;
-    padding-block-end: 0.35rem;
   }
 
   .heros__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--espace-3);
-  }
-
-  .heros__appareil {
-    justify-self: center;
-    /* Sous 62 rem, l'appareil passe sous le texte et se réduit. */
-    transform: scale(0.82);
-    transform-origin: center top;
-    margin-block-end: -8rem;
-  }
-  @media (min-width: 62rem) {
-    .heros__appareil {
-      transform: none;
-      margin-block-end: 0;
-    }
-  }
-
-  /* L'invite de défilement, en bas du héros. */
-  .heros__invite {
-    position: absolute;
-    inset-block-end: var(--espace-5);
-    inset-inline-start: 50%;
-    translate: -50% 0;
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: var(--espace-2);
-    font-size: var(--texte-xs);
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--encre-douce);
+    gap: var(--espace-3);
+    margin-block-start: var(--espace-4);
   }
-  .heros__invite-trait {
-    inline-size: 1px;
-    block-size: 42px;
-    background: linear-gradient(to bottom, var(--accent), transparent);
-  }
-  @media (max-width: 48rem) {
-    .heros__invite {
-      display: none;
-    }
+
+  .heros__legende {
+    font-size: var(--texte-s);
+    color: var(--vitrine-encre-faible);
   }
 
   /* ------------------------------------------------------------------ *
-   * Bandeau de chiffres
+   * Bandeau de chiffres — la grille « en filets »
+   *
+   * L'écart d'un pixel entre les cellules laisse voir le fond du conteneur, qui EST la
+   * ligne de séparation. Une bordure par cellule doublerait chaque trait intérieur ; ici
+   * il n'y en a jamais qu'un, et il survit au repli sans qu'aucune règle ne le rattrape.
+   *
+   * C'est aussi la raison pour laquelle le plancher du `minmax` est généreux (200 px) :
+   * sous cette largeur, une cellule casserait son nombre et son libellé sur trop de
+   * lignes, et l'`auto-fit` doit replier AVANT que ça n'arrive.
    * ------------------------------------------------------------------ */
   .chiffres {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--espace-5);
-    padding-block: var(--espace-6);
-    border-block: var(--trait) solid var(--bord);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--trait);
+    border-radius: var(--rayon-m);
+    border: var(--trait) solid var(--bord);
+    background: var(--bord);
+    overflow: hidden;
   }
-  @media (min-width: 48rem) {
-    .chiffres {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
+  .chiffre {
+    padding: var(--espace-5) var(--espace-5);
+    background: var(--surface);
+  }
+  /* Le zéro se détache : c'est le seul des quatre qui ne compte pas une chose mais une
+     absence, et c'est le seul qui porte une note sous la bande. */
+  .chiffre--zero {
+    background: var(--fond-creux);
   }
   .chiffre__valeur {
     font-family: var(--police-chiffres);
     font-variant-numeric: tabular-nums;
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: var(--vitrine-heure);
     font-weight: 600;
     line-height: 1;
-    letter-spacing: -0.04em;
-    color: var(--accent);
+    letter-spacing: -0.03em;
+    color: var(--accent-2);
+  }
+  .chiffre--zero .chiffre__valeur {
+    color: var(--vitrine-corail-encre);
   }
   .chiffre__libelle {
-    margin-block-start: var(--espace-2);
-    font-size: var(--texte-s);
-    color: var(--encre-douce);
+    margin-block-start: var(--espace-1);
+    font-size: var(--texte-m);
+    color: var(--vitrine-encre-faible);
   }
   /*
-   * La note qui cadre le zéro. Elle est sous la bande, pas dans une des quatre colonnes :
-   * elle porte sur un seul des chiffres, mais la lire en petit à côté de son libellé
-   * reviendrait à l'enterrer. Largeur limitée pour rester une phrase et non un paragraphe.
+   * La note qui cadre le zéro. Elle est sous la bande, pas dans la cellule : elle porte
+   * sur un seul des quatre chiffres, mais la lire en petit à côté de son libellé
+   * reviendrait à l'enterrer — et c'est elle qui rend le chiffre vrai.
    */
   .chiffres__note {
     max-inline-size: 62ch;
     margin-block-start: var(--espace-4);
-    font-size: var(--texte-s);
+    font-size: var(--texte-m);
+    color: var(--vitrine-encre-faible);
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Les bandes teintées : les écrans, et les limites.
+   *
+   * Elles alternent avec le fond de page pour découper la lecture. Le filet haut et bas
+   * n'est pas décoratif : sur les deux thèmes, l'écart entre `--fond` et
+   * `--surface-haute` est volontairement faible — deux crèmes voisines, deux gris-vert
+   * voisins — et sans filet la bande ne se distinguerait pas du tout sur un écran mal
+   * calibré.
+   * ------------------------------------------------------------------ */
+  .bande-teintee {
+    background: var(--surface-haute);
+    border-block: var(--trait) solid var(--bord);
+  }
+
+  .entete-bande {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--espace-6);
+  }
+  .entete-bande h2 {
+    max-inline-size: 20em;
+  }
+  .entete-bande__note {
+    max-inline-size: 24em;
+    font-size: var(--texte-l);
     color: var(--encre-douce);
   }
 
   /* ------------------------------------------------------------------ *
-   * Récit — l'appareil reste, le texte défile
+   * La bande des quatre écrans
    * ------------------------------------------------------------------ */
-  .recit {
-    position: relative;
-  }
-  .recit__grille {
+  .ecrans {
     display: grid;
-    gap: var(--espace-6);
-  }
-  /* Même raison que dans le héros : la colonne collante porte le même appareil de 390 px. */
-  .recit__grille > * {
-    min-inline-size: 0;
-  }
-  @media (min-width: 62rem) {
-    .recit__grille {
-      grid-template-columns: auto minmax(0, 1fr);
-      gap: var(--espace-7);
-      align-items: start;
-    }
-  }
-
-  /*
-   * La colonne collante. `align-self: start` est indispensable : dans une grille, un
-   * élément est étiré par défaut, et un élément étiré ne colle jamais — il occupe déjà
-   * toute la hauteur de la piste.
-   */
-  .recit__appareil {
-    display: none;
-  }
-  @media (min-width: 62rem) {
-    .recit__appareil {
-      display: block;
-      position: sticky;
-      inset-block-start: max(var(--espace-6), calc(50svh - var(--vitrine-appareil-h) / 2));
-      align-self: start;
-      justify-self: center;
-    }
-  }
-
-  /* L'enveloppe qui porte le fondu d'un écran à l'autre. Elle doit remplir le cadre,
-     sinon l'écran qu'elle contient perd sa hauteur pendant la transition. */
-  .recit__vue {
-    block-size: 100%;
-  }
-
-  .recit__temps {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vitrine-section);
-  }
-  .recit__temp {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espace-4);
-    max-inline-size: var(--vitrine-texte);
-  }
-  @media (min-width: 62rem) {
-    .recit__temp {
-      min-block-size: 70svh;
-      justify-content: center;
-    }
-  }
-  .recit__numero {
-    font-family: var(--police-chiffres);
-    font-size: var(--texte-s);
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    color: var(--accent);
-  }
-
-  /*
-   * Sous 62 rem, l'appareil collant disparaît : un téléphone dessiné dans un téléphone
-   * réel ne dit rien. Chaque temps du récit reçoit alors sa propre vignette.
-   */
-  .recit__vignette {
-    margin-block-start: var(--espace-4);
-  }
-  @media (min-width: 62rem) {
-    .recit__vignette {
-      display: none;
-    }
-  }
-
-  /* ------------------------------------------------------------------ *
-   * Fonctions — grille asymétrique
-   * ------------------------------------------------------------------ */
-  .bento {
-    display: grid;
-    gap: var(--espace-4);
-    grid-template-columns: repeat(1, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(216px, 1fr));
+    gap: var(--espace-5);
     margin-block-start: var(--espace-6);
   }
-  @media (min-width: 40rem) {
-    .bento {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .ecrans__titre {
+    margin-block-start: var(--espace-3);
   }
-  @media (min-width: 62rem) {
-    .bento {
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-    }
-
-    /*
-     * Six colonnes, et des tuiles de largeurs inégales : c'est l'inégalité qui fait lire
-     * la grille comme une composition plutôt que comme un tableau.
-     *
-     * Les largeurs sont posées par RANG, ici, et non portées par le contenu. Deux
-     * raisons. D'abord, la largeur d'une tuile est une propriété de la mise en page, pas
-     * une propriété de la fonction qu'elle décrit. Ensuite, un rang écrit dans les trois
-     * fichiers de langue finit par diverger dans l'un d'eux, et la grille se met à
-     * changer de composition selon la langue lue.
-     *
-     * Les rangs choisis remplissent exactement quatre rangées de six :
-     *
-     *     4 + 2          la fiche de la semaine, puis le plan officiel
-     *     2 + 2 + 2      agenda, perturbations, feuille à imprimer
-     *     4 + 2          partage, puis les repas
-     *     3 + 3          adresses dérogatoires, périscolaire
-     *
-     * Une rangée incomplète se lit comme un oubli, pas comme une respiration : c'est
-     * exactement ce que donnait la version précédente, où trois rangées sur quatre
-     * laissaient un sixième de vide au bout.
-     */
-    .bento__tuile {
-      grid-column: span 2;
-    }
-    .bento__tuile:nth-child(1),
-    .bento__tuile:nth-child(6) {
-      grid-column: span 4;
-    }
-    .bento__tuile:nth-child(8),
-    .bento__tuile:nth-child(9) {
-      grid-column: span 3;
-    }
-  }
-
-  /*
-   * La tuile est la case de la grille ; la carte de verre la remplit entièrement. Sans
-   * `block-size: 100%`, deux cartes voisines de hauteurs de texte différentes laissent
-   * un vide sous la plus courte, et la grille se met à ressembler à un escalier.
-   */
-  .bento__tuile > .carte {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espace-3);
-    block-size: 100%;
-  }
-  .bento__tuile h3 {
-    font-size: var(--texte-xl);
-  }
-  .bento__tuile p {
-    color: var(--encre-douce);
+  .ecrans__texte {
+    margin-block-start: var(--espace-1);
     font-size: var(--texte-m);
+    line-height: 1.45;
+    color: var(--vitrine-encre-faible);
   }
 
   /* ------------------------------------------------------------------ *
-   * Confidentialité
+   * Les fonctions
    * ------------------------------------------------------------------ */
-  .confid__grille {
+  .fonctions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+  }
+  /*
+   * L'en-tête reste collé pendant que les neuf tuiles défilent à côté. `align-self` n'a
+   * pas à être forcé ici, contrairement à une grille : dans une rangée flexible dont les
+   * éléments sont alignés en haut, l'élément n'est pas étiré, et un élément étiré ne
+   * colle jamais.
+   *
+   * Le décrochage se fait tout seul : quand la rangée se replie, la colonne d'en-tête
+   * occupe toute la largeur, et un élément collant dont le conteneur fait sa hauteur ne
+   * colle à rien. Aucune `media` n'est nécessaire pour l'annuler.
+   */
+  .fonctions__entete {
+    flex: 1 1 280px;
+    min-inline-size: 0;
+    position: sticky;
+    inset-block-start: 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--espace-3);
+  }
+
+  .tuiles {
+    flex: 1.6 1 460px;
+    min-inline-size: 0;
     display: grid;
-    gap: var(--espace-6);
-    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
+    gap: var(--trait);
+    border-radius: var(--rayon-m);
+    border: var(--trait) solid var(--bord);
+    background: var(--bord);
+    overflow: hidden;
   }
-  @media (min-width: 62rem) {
-    .confid__grille {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    }
+  .tuile {
+    padding: var(--espace-5);
+    background: var(--surface);
   }
-  .confid__toile {
-    inline-size: 100%;
-    aspect-ratio: 4 / 3;
+  .tuile__puce {
+    display: block;
+    color: var(--accent);
+  }
+  /* La seule icône en corail de la grille : les perturbations. Portée par la donnée
+     (`ton: 'alerte'`), jamais par un rang — voir `Fonctions.tsx`. */
+  .tuile__puce--alerte {
+    color: var(--vitrine-corail);
+  }
+  .tuile__titre {
+    margin-block-start: var(--espace-3);
+  }
+  .tuile__texte {
+    margin-block-start: var(--espace-1);
+    font-size: var(--texte-m);
+    line-height: 1.45;
+    color: var(--vitrine-encre-faible);
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Les deux principes
+   * ------------------------------------------------------------------ */
+  .principes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--espace-5);
+  }
+  .principe {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--espace-3);
+    padding: var(--espace-6);
     border-radius: var(--rayon-l);
   }
-  .confid__liste {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espace-4);
+  /*
+   * Le panneau sombre. Il l'est dans LES DEUX thèmes — c'est le seul bloc de la page qui
+   * inverse son encre, et cette inversion est ce qui le fait lire en premier. En thème
+   * sombre, il ne se confond pas avec le fond pour autant : sa teinte est nettement plus
+   * saturée que celle de la page, et il porte le seul bord accentué de la section.
+   */
+  .principe--panneau {
+    background: var(--vitrine-panneau);
+    color: var(--vitrine-sur-panneau);
+    border: var(--trait) solid var(--bord-accent);
   }
-  .confid__point {
-    display: flex;
-    gap: var(--espace-4);
-    align-items: flex-start;
-  }
-  .confid__point p {
-    margin-block-start: var(--espace-2);
-    color: var(--encre-douce);
-    font-size: var(--texte-m);
-  }
-  /* La légende du schéma appartient au schéma : elle se colle sous lui, pas au milieu
-     de la colonne. */
-  .confid__grille figure {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espace-3);
-  }
-  .confid__grille figcaption {
-    font-size: var(--texte-s);
-    text-align: center;
+  .principe--clair {
+    background: var(--surface);
+    border: var(--trait) solid var(--bord);
   }
 
-  /* ------------------------------------------------------------------ *
-   * Langues — ruban
-   * ------------------------------------------------------------------ */
-  .ruban {
+  .principe__titre {
+    font-size: var(--vitrine-titre-3);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .principe__texte {
+    max-inline-size: 34em;
+    line-height: 1.5;
+    color: var(--encre-douce);
+  }
+  .principe--panneau .principe__texte {
+    color: var(--vitrine-sur-panneau-2);
+  }
+
+  .principe__points {
     display: flex;
-    overflow: hidden;
-    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    flex-direction: column;
+    gap: var(--espace-2);
+    margin-block-start: var(--espace-2);
   }
-  .ruban__piste {
-    display: flex;
-    flex: none;
-    gap: var(--espace-6);
-    padding-inline-end: var(--espace-6);
-    animation: defile 32s linear infinite;
-  }
-  .ruban:hover .ruban__piste {
-    animation-play-state: paused;
-  }
-  .ruban__mot {
+  .principe__point {
     display: flex;
     align-items: baseline;
-    gap: var(--espace-3);
-    white-space: nowrap;
-    font-size: var(--vitrine-titre-3);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    gap: var(--espace-2);
+    font-size: var(--texte-m);
     color: var(--encre-douce);
   }
-  .ruban__code {
-    font-family: var(--police-chiffres);
-    font-size: var(--texte-xs);
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-
-  /* ------------------------------------------------------------------ *
-   * Hors ligne
-   * ------------------------------------------------------------------ */
-  .horsligne__grille {
-    display: grid;
-    gap: var(--espace-6);
-    align-items: center;
-  }
-  @media (min-width: 62rem) {
-    .horsligne__grille {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
-    }
-  }
-  .horsligne__points {
-    margin-block-start: var(--espace-6);
-  }
-  .horsligne__action {
-    margin-block-start: var(--espace-5);
-  }
-  .signal {
-    display: flex;
-    align-items: flex-end;
-    gap: 4px;
-    block-size: 28px;
-  }
-  /*
-   * Les quatre traits d'une barre de réseau. Leurs hauteurs sont posées ici, par rang :
-   * elles décrivent un dessin, pas une donnée, et une hauteur écrite dans la composante
-   * serait la seule valeur brute de tout le projet à vivre hors de la feuille de style.
-   */
-  .signal__barre {
+  .principe__puce {
     inline-size: 6px;
+    block-size: 6px;
+    border-radius: 999px;
     background: var(--accent);
-    border-radius: 2px;
-    transform-origin: 50% 100%;
+    flex: none;
   }
-  .signal__barre:nth-child(1) {
-    block-size: 8px;
-  }
-  .signal__barre:nth-child(2) {
-    block-size: 14px;
-  }
-  .signal__barre:nth-child(3) {
-    block-size: 20px;
-  }
-  .signal__barre:nth-child(4) {
-    block-size: 26px;
+  /* La seule puce ambre de la page : celle des trois qui dit une restriction. */
+  .principe__point--nuance .principe__puce {
+    background: var(--attention);
   }
 
   /* ------------------------------------------------------------------ *
-   * Limites — le contre-temps calme de la page
+   * Les limites
+   *
+   * Le contre-temps de la page : pas de carte, pas d'ombre, pas de surface. Un filet
+   * corail en haut de chaque colonne, du texte, et rien d'autre.
    * ------------------------------------------------------------------ */
+  .limites__entete {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--espace-4);
+  }
+  .limites__note {
+    font-size: var(--texte-s);
+    color: var(--vitrine-corail-encre);
+  }
+
+  /*
+   * TROIS COLONNES AU PLUS, et le plancher du `minmax` est ce qui le garantit.
+   *
+   * À 248 px — la valeur de la maquette — quatre colonnes tiennent dans la bande de
+   * 1 240 px, et les six limites se posaient en 4 + 2. La deuxième rangée à moitié vide
+   * est exactement ce que la règle « trois ou six, jamais quatre ni cinq » existe pour
+   * empêcher : sur cette section-là, un trou se lit comme une limite qu'on aurait retirée.
+   * Mesuré sur la page construite, pas déduit.
+   *
+   * 280 px est le plancher qui fait basculer le calcul : quatre colonnes réclameraient
+   * 4 × 280 + 3 × 32 = 1 216 px pour 1 176 px disponibles, donc `auto-fit` en pose trois.
+   * En dessous, il tombe à deux puis à une, et six items remplissent encore leurs rangées.
+   */
   .limites__liste {
     display: grid;
-    gap: var(--espace-4);
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+    gap: var(--espace-5) var(--espace-6);
     margin-block-start: var(--espace-6);
-  }
-  @media (min-width: 48rem) {
-    .limites__liste {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
   }
   .limites__item {
     padding-block-start: var(--espace-4);
-    border-block-start: var(--trait-fort) solid var(--bord);
+    border-block-start: var(--trait-fort) solid var(--vitrine-filet-corail);
   }
-  .limites__item p {
-    margin-block-start: var(--espace-2);
-    color: var(--encre-douce);
+  .limites__texte {
+    margin-block-start: var(--espace-1);
     font-size: var(--texte-m);
+    line-height: 1.5;
+    color: var(--vitrine-encre-faible);
+  }
+
+  .limites__lien {
+    margin-block-start: var(--espace-6);
+    font-size: var(--texte-m);
+    font-weight: 600;
+  }
+  /* La flèche est posée en CSS : elle est décorative, et un lecteur d'écran n'a pas à
+     entendre « flèche vers la droite » à la fin du libellé. */
+  .limites__lien a::after {
+    content: ' \2192';
   }
 
   /* ------------------------------------------------------------------ *
-   * Appel final
+   * L'appel final
    * ------------------------------------------------------------------ */
   .final {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     align-items: center;
-    gap: var(--espace-5);
-    text-align: center;
-    padding-block: var(--vitrine-section);
+    gap: clamp(1.75rem, 4vw, 3rem);
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+    border-radius: var(--rayon-l);
+    background: var(--surface);
+    border: var(--trait) solid var(--bord);
+    box-shadow: var(--ombre-2);
+  }
+  .final__texte {
+    flex: 1 1 420px;
+    min-inline-size: 0;
+  }
+  .final__surtitre {
+    font-size: var(--texte-m);
+    color: var(--vitrine-encre-faible);
+  }
+  .final__titre {
+    margin-block-start: var(--espace-2);
+    font-size: var(--vitrine-titre-2);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+  /* Le seul mot coloré de la page entière, et il désigne le temps qui reste. */
+  .final__accent {
+    color: var(--vitrine-corail);
+  }
+  .final__chapeau {
+    max-inline-size: 34em;
+    margin-block-start: var(--espace-3);
+    font-size: var(--vitrine-chapeau);
+    line-height: 1.5;
+    color: var(--encre-douce);
+  }
+  .final__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espace-3);
+    margin-block-start: var(--espace-5);
+  }
+  .final__qr {
+    display: flex;
+    align-items: center;
+    gap: var(--espace-4);
+    margin-block-start: var(--espace-5);
+    font-size: var(--texte-s);
+  }
+
+  /* La tuile de droite : l'heure du départ, telle qu'elle est dans la capture du héros. */
+  .final__tuile {
+    flex: 0 1 200px;
+    display: grid;
+    place-items: center;
+    gap: var(--espace-2);
+    padding: var(--espace-4);
+    border-radius: var(--rayon-m);
+    background: var(--fond-creux);
   }
   .final__heure {
     font-family: var(--police-chiffres);
     font-variant-numeric: tabular-nums;
     font-size: var(--vitrine-heure);
     font-weight: 600;
-    line-height: 0.85;
-    letter-spacing: -0.045em;
-    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--accent-2);
   }
-  /* La colonne de lecture est centrée ici, contrairement au reste de la page. */
-  .final__chapeau {
-    margin-inline: auto;
-  }
-  .final__qr {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--espace-3);
-    margin-block-start: var(--espace-4);
-  }
-
-  /*
-   * L'annonce qui remplace l'appel à l'action. Même pile centrée que le QR ci-dessus,
-   * pour la même raison : `align-items: center` garde l'étiquette à la largeur de son
-   * texte. Étirée sur toute la colonne, une pastille cesse d'être une pastille et se lit
-   * comme un bandeau d'alerte — ce qu'une bonne nouvelle n'est pas.
-   */
-  .final__bientot {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--espace-3);
-    max-inline-size: var(--vitrine-texte);
-    margin-block-start: var(--espace-4);
-  }
-  /*
-   * Ce bouton-ci a le droit de passer à la ligne, contrairement à tous les autres.
-   *
-   * `.bouton` interdit la coupure parce qu'un appel à l'action tient en deux mots et se
-   * lit d'un bloc. Celui-ci porte une phrase entière — « Den offiziellen Plan auf
-   * kanner.beckerich.lu ansehen » — qui débordait de 47 px en allemand sur un écran de
-   * 320. Le débordement n'est apparu qu'à la mesure : à l'œil, la page semblait correcte.
-   */
-  .final__bientot .bouton {
-    white-space: normal;
-    text-align: center;
-  }
-  @media (max-width: 48rem) {
-    /* Un QR ne sert à rien sur l'appareil qui l'afficherait : le lien suffit. */
-    .final__qr {
-      display: none;
-    }
+  .final__legende {
+    font-size: var(--texte-s);
+    color: var(--vitrine-encre-faible);
   }
 
   /* ------------------------------------------------------------------ *
-   * Pied de page
+   * Le pied de page
    * ------------------------------------------------------------------ */
   .pied {
-    padding-block: var(--vitrine-section-serree);
+    background: var(--surface-haute);
     border-block-start: var(--trait) solid var(--bord);
-    /*
-     * La barre d'accueil des téléphones sans bouton recouvre le bas de l'écran. Ici la
-     * marge de sécurité S'AJOUTE au rythme de la section, au lieu de le remplacer comme
-     * dans `.bande` : c'est la dernière chose de la page, et ce sont les commandes de
-     * langue et de thème en version tactile qui s'y trouvent.
-     */
-    padding-block-end: calc(var(--vitrine-section-serree) + env(safe-area-inset-bottom));
+    padding-block: var(--vitrine-section-serree);
   }
   .pied__grille {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
     gap: var(--espace-6);
   }
-  @media (min-width: 48rem) {
-    .pied__grille {
-      grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr));
-    }
+  .pied__grille > *:first-child {
+    flex: 1 1 22rem;
+    max-inline-size: 30em;
   }
   .pied__titre {
-    font-size: var(--texte-xs);
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-size: var(--texte-s);
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--encre-douce);
-    margin-block-end: var(--espace-3);
+    color: var(--vitrine-encre-faible);
   }
   .pied__liens {
     display: flex;
     flex-direction: column;
-    gap: var(--espace-2);
+    margin-block-start: var(--espace-2);
     font-size: var(--texte-m);
   }
+  /*
+   * Une cible de lien dans un pied de page reste une cible tactile.
+   *
+   * La règle existait, la refonte l'avait perdue, et une capture d'écran mesurée l'a
+   * rattrapée : les liens tombaient à 23 px. C'est le seul endroit du site où ces pages
+   * sont atteignables, et il n'existe nulle part une version « à taille pleine » sur
+   * laquelle se rabattre — contrairement aux sélecteurs de l'en-tête, qui ont la leur
+   * juste en dessous. L'écart de gouttière est repris par la hauteur minimale, ce qui
+   * rend la colonne à peine plus haute qu'avec des liens serrés.
+   */
   .pied__liens a {
-    color: var(--encre-douce);
-    text-decoration: none;
-    /* Une cible de lien dans un pied de page reste une cible tactile. */
-    min-block-size: var(--cible);
     display: inline-flex;
     align-items: center;
+    min-block-size: var(--cible);
+    color: var(--encre-douce);
   }
   .pied__liens a:hover {
     color: var(--encre);
-    text-decoration: underline;
   }
   .pied__bas {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--espace-4);
-    align-items: center;
     justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--espace-5);
     margin-block-start: var(--espace-6);
     padding-block-start: var(--espace-5);
     border-block-start: var(--trait) solid var(--bord);
     font-size: var(--texte-s);
-    color: var(--encre-douce);
+    color: var(--vitrine-encre-faible);
   }
 }

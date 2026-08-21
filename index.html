@@ -8,9 +8,15 @@
       name="description"
       content="Le plan du bus scolaire de la commune de Beckerich, personnalisé pour chaque enfant : arrêt le plus proche, prochain départ, fiche de la semaine. Site indépendant, hors ligne, sans compte."
     />
-    <!-- La couleur de barre suit le thème, exactement comme dans l'application. -->
-    <meta name="theme-color" content="#0e1a2e" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#e1e7ee" media="(prefers-color-scheme: light)" />
+    <!--
+      La couleur de barre suit le thème. Elle ne suit PLUS celle de l'application : la
+      vitrine a sa propre charte depuis la refonte (voir la couche `vitrine` de
+      `src/styles/vitrine.css`), et une barre système bleu nuit au-dessus d'une page crème
+      se lit comme un défaut d'affichage. Les deux valeurs sont `--vitrine-creme` dans
+      chacun des deux thèmes.
+    -->
+    <meta name="theme-color" content="#121a19" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbf6ef" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <!--
       Le SVG suffit aux navigateurs. Les deux lignes qui suivent servent ailleurs :

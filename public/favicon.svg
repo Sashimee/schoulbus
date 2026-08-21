@@ -1,18 +1,30 @@
 <!--
   Le bus, même géométrie que `public/favicon.svg` de l'application.
 
-  Les couleurs, elles, sont celles de la palette courante (lot 18 « verre ») : `--fond`
-  #0e1a2e, `--accent` #a9dcf5, `--encre` #e9eff6. L'icône de l'application est restée sur
-  l'ancienne palette (#14161f / #82a9ff) — son propre script de génération le note comme
-  un oubli de la refonte. La vitrine ne recopie donc pas ces valeurs : elle serait née
-  désaccordée de sa propre charte.
+  Les couleurs sont celles de la charte de la VITRINE, qui n'est plus celle de
+  l'application depuis la refonte : `--vitrine-sarcelle` #0f5a61 pour la pastille et les
+  creux, `--vitrine-creme` #fbf6ef pour la carrosserie (voir la couche `vitrine` de
+  `src/styles/vitrine.css`).
+
+  Le sens du dessin s'est INVERSÉ avec elle. La pastille portait la couleur du fond et la
+  carrosserie l'accent ; c'est le contraire à présent. Un favicon est vu à 16 px sur
+  l'onglet d'un navigateur dont le fond est presque toujours clair : une pastille crème y
+  était un carré blanc avec quelque chose de vaguement bleu dedans.
+
+  Ce fichier est la SOURCE des icônes matricielles : `npm run assets:partage` le lit pour
+  écrire `apple-touch-icon.png` et `favicon-32.png`. Le modifier sans relancer le script
+  laisse trois icônes qui ne se ressemblent plus, et l'intégration continue le voit.
+
+  Le même dessin existe deux fois de plus, et les trois doivent bouger ensemble :
+  `src/composants/LogoBus.tsx` (en jetons, pour qu'il suive le thème) et `MARQUE_SVG` dans
+  `scripts/build-partage.mjs` (en dur, pour les vignettes de partage).
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#0e1a2e"/>
-  <rect x="116" y="112" width="280" height="248" rx="44" fill="#a9dcf5"/>
-  <rect x="152" y="152" width="208" height="104" rx="20" fill="#0e1a2e"/>
-  <circle cx="180" cy="306" r="24" fill="#0e1a2e"/>
-  <circle cx="332" cy="306" r="24" fill="#0e1a2e"/>
-  <rect x="150" y="360" width="52" height="46" rx="16" fill="#e9eff6"/>
-  <rect x="310" y="360" width="52" height="46" rx="16" fill="#e9eff6"/>
+  <rect width="512" height="512" rx="112" fill="#0f5a61"/>
+  <rect x="116" y="112" width="280" height="248" rx="44" fill="#fbf6ef"/>
+  <rect x="152" y="152" width="208" height="104" rx="20" fill="#0f5a61"/>
+  <circle cx="180" cy="306" r="24" fill="#0f5a61"/>
+  <circle cx="332" cy="306" r="24" fill="#0f5a61"/>
+  <rect x="150" y="360" width="52" height="46" rx="16" fill="#fbf6ef"/>
+  <rect x="310" y="360" width="52" height="46" rx="16" fill="#fbf6ef"/>
 </svg>
