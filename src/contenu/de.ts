@@ -1,9 +1,18 @@
 /*
- * Allemand. Traduit depuis `fr.ts`, qui reste la référence.
+ * Deutsch — übersetzt aus `fr.ts`, nicht umgekehrt.
  *
- * Le vouvoiement est de rigueur : la page s'adresse à des parents qu'on ne connaît pas.
- * Les noms propres — Beckerich, Huttange, Dillendapp — gardent leur graphie officielle,
- * celle du document de la commune.
+ * Ton wie in der Anwendung: einen Sachverhalt nennen, dann sagen, was die Software damit
+ * macht. Keine Werbesprache, kein Aphorismus. Der Abschnitt „Grenzen" steht VOR der
+ * Schlussaufforderung — das ist die Reihenfolge der Anwendung selbst.
+ *
+ * ZWEI HARTE VORGABEN, vor jeder Änderung zu lesen:
+ *
+ *  1. Die Zahlen im Kopf der Seite und im Schluss sind DIE DER BILDSCHIRMAUFNAHME. Der
+ *     Leser sieht den Bildschirm neben dem Satz; weichen sie ab, hält er den Satz für
+ *     falsch. Auf `public/captures/aujourdhui-de-*.webp` steht „in 16 Min." — deshalb
+ *     „16 Min." und nicht „16 min".
+ *  2. `heros.titre` wird in den Teilen-Vorschaubildern mit 76 px auf 1200 px Breite
+ *     gezeichnet: HÖCHSTENS 24 ZEICHEN PRO ZEILE, danach `npm run assets:partage`.
  */
 import type { Contenu } from './type.ts'
 import {
@@ -41,19 +50,23 @@ export const de: Contenu = {
   },
 
   heros: {
-    etiquette: `Unabhängige Seite · Schuljahre ${CHIFFRES.anneesCouvertes.join(' und ')}`,
-    titre: ['Die Buszeiten', 'Ihrer Kinder,', 'ohne Nachdenken.'],
-    chapeau:
-      `Der offizielle Plan der Gemeinde Beckerich, Kind für Kind aufbereitet: die nächste ` +
-      `Haltestelle, die Uhrzeit seines Busses und die Zeit, die es zu Fuß dorthin braucht. ` +
-      `Mehr zeigt der Startbildschirm nicht.`,
-    // 07:45 — dieselbe Uhrzeit wie auf der Bildschirmaufnahme daneben.
-    heure: '07:45',
-    legendeTitre: 'Nächste Abfahrt',
-    legendeDetail: 'Léa · Hovelange · Kneppchen · 4 Min. zu Fuß',
+    etiquette: `Unabhängige Seite · ${CHIFFRES.anneesCouvertes.join(' · ')}`,
+    // 23 und 18 Zeichen: unter der Grenze von 24 für das Teilen-Vorschaubild.
+    titre: ['Was Sie um 07:25 sehen,', 'an einem Dienstag.'],
+    altCapture: `Startbildschirm der App: die Karte von Léa, Bus um 07:45 am Kneppchen.`,
+    lignes: [
+      { valeur: '07:45', texte: 'die Zeit ihres Busses, an ihrer Haltestelle' },
+      {
+        valeur: '16 Min.',
+        texte: 'bis Sie losmüssen, die 4 Minuten Fußweg schon abgezogen',
+        compte: true,
+      },
+      { valeur: 'Kneppchen', texte: 'die nächste Haltestelle zu Ihrer Adresse' },
+      { valeur: 'Léa · Noah', texte: 'eine Karte je Kind, in der Reihenfolge der Abfahrten' },
+    ],
     actionPrincipale: 'App öffnen',
-    actionSecondaire: 'Was die Seite nicht weiß',
-    invite: 'Scrollen',
+    actionSecondaire: 'Was die Seite nicht kann',
+    legende: 'Echte Aufnahme · 22. September 2026, 07:25 Uhr',
   },
 
   chiffres: {
@@ -68,240 +81,124 @@ export const de: Contenu = {
       `anonyme Gerätekennung auf einem Server. Weder Ihre Adresse noch die Vornamen noch die Zyklen.`,
   },
 
-  recit: {
-    etiquette: 'Morgens',
-    titre: 'Zwanzig Minuten, und eine Spalte zu finden.',
-    chapeau:
-      `Der offizielle Plan stimmt. Er ist nur lang, dicht und für die ganze Gemeinde auf ` +
-      `einmal geschrieben — nicht für ein bestimmtes Kind, an einem Dienstag, um sieben Uhr.`,
-    temps: [
+  ecrans: {
+    titre: 'Vier Bildschirme, und das ist das ganze Produkt.',
+    note: `Echte Aufnahmen der Anwendung, Dienstag, 22. September 2026 um 07:25 Uhr.`,
+    cartes: [
+      { titre: 'Der Morgenbildschirm', texte: 'Eine Uhrzeit je Kind, und sonst nichts.' },
+      { titre: 'Die Wochenübersicht', texte: 'Fünf Tage, und die Karte des Fußwegs.' },
       {
-        titre: 'Der Plan füllt fünf Seiten',
-        texte:
-          `Sieben Linien, elf Fahrten, dazu Fußnoten für die Tage, an denen die Regel wechselt. ` +
-          `Alles steht drin: Die Seite überträgt es Zeile für Zeile, ohne etwas zu entscheiden. ` +
-          `Bleibt nur, jeden Morgen die richtige Spalte für die richtige Ortschaft und den ` +
-          `richtigen Zyklus wiederzufinden.`,
+        titre: 'Der offizielle Plan, übertragen',
+        texte: `${CHIFFRES.lignes} Linien, ${CHIFFRES.arrets} Haltestellen, Tabelle für Tabelle.`,
       },
       {
-        titre: 'Sie füllen ihn ein einziges Mal aus',
-        texte:
-          `Sieben Fragen, eine pro Bildschirm: Adresse, Vorname, Zyklus, dann Bus, Mittag, ` +
-          `Betreuung und die Tage, die aus der Reihe fallen. Der Zyklus bestimmt die Schule, die ` +
-          `Adresse die Haltestelle. Das zweite Kind übernimmt die Einstellungen des älteren: zu ` +
-          `ändern bleiben ein Vorname und ein Zyklus.`,
-      },
-      {
-        titre: 'Danach bleibt nur noch eine Uhrzeit',
-        texte:
-          `Der Startbildschirm zeigt nichts außer der nächsten Abfahrt, sehr groß. Daneben „in ` +
-          `16 Min.“: die Zeit, die Ihnen bleibt, bis Sie LOSGEHEN müssen — der Fußweg zur ` +
-          `Haltestelle ist schon abgezogen. Wenn es so weit ist, beginnt ein Punkt zu pulsieren. ` +
-          `Nichts zu suchen, nichts aufzuklappen, nichts zu vergleichen.`,
-      },
-      {
-        titre: 'Der Rest folgt von selbst',
-        texte:
-          `Die ganze Woche eines Kindes auf einem Bildschirm, mit der Karte des Fußwegs zu ` +
-          `seiner Haltestelle; der offizielle Plan zum Nachprüfen; der Export in den Kalender des ` +
-          `Telefons; das A4-Blatt für den Kühlschrank. Nichts davon belastet den Morgenbildschirm.`,
+        titre: 'Sieben Fragen, ein einziges Mal',
+        texte: 'Die Adresse bestimmt die Haltestelle, der Zyklus die Schule.',
       },
     ],
   },
 
   fonctions: {
-    etiquette: 'Was drinsteckt',
-    titre: 'Alles, was ein Busplan allein nicht sagt.',
-    chapeau: `Jede Funktion beantwortet eine Situation, die Eltern in der Gemeinde erleben.`,
+    etiquette: 'Was drin ist',
+    titre: 'Neun Antworten auf neun Morgen, die sich nicht gleichen.',
     tuiles: [
       {
         icone: 'semaine',
-        titre: 'Der Wochenzettel',
-        texte:
-          `Die fünf Tage eines Kindes auf einem Bildschirm: Abfahrtszeit, Haltestelle, Schule, ` +
-          `Rückfahrt und eine Karte des Fußwegs zur Haltestelle. An manchen Tagen bringen Sie es ` +
-          `selbst hin oder holen es ab: Sagen Sie es, und diese Fahrten verschwinden, statt ` +
-          `unnötig dazustehen.`,
+        titre: 'Die Wochenübersicht',
+        texte: 'Die fünf Tage eines Kindes auf einem Bildschirm.',
       },
       {
         icone: 'plan',
-        titre: 'Der offizielle Plan, abgeschrieben',
-        texte:
-          `Die ${CHIFFRES.lignes} Linien und ${CHIFFRES.arrets} Haltestellen, Tabelle für ` +
-          `Tabelle übertragen, mit dem PDF der Gemeinde daneben.`,
+        titre: 'Der offizielle Plan, übertragen',
+        texte: 'Mit dem PDF der Gemeinde daneben.',
       },
       {
         icone: 'agenda',
         titre: 'In Ihren Kalender',
-        texte:
-          `Eine .ics-Datei pro Kind, oder eine einzige für alle Geschwister. Die Schulferien ` +
-          `sind bereits herausgerechnet.`,
+        texte: 'Eine .ics je Kind, Ferien schon abgezogen.',
       },
       {
         icone: 'alerte',
-        titre: 'Störungen',
-        texte:
-          `Eine Vertretung der Schule oder der Gemeinde meldet den Ausfall, indem sie fünf ` +
-          `Fragen beantwortet. Die ausgefallene Fahrt verschwindet vom Bildschirm, die ` +
-          `Verspätung erscheint durchgestrichen und korrigiert. Eine Mitteilung kann warnen — ` +
-          `garantieren kann sie nichts.`,
+        ton: 'alerte',
+        titre: 'Die Störungen',
+        texte: 'Die ausgefallene Fahrt verschwindet vom Bildschirm.',
       },
       {
         icone: 'imprimer',
         titre: 'Das Blatt für den Kühlschrank',
-        texte:
-          `Eine A4-Seite pro Kind, oder alle Geschwister auf einem Blatt. In Schwarzweiß, ohne ` +
-          `Verlauf und ohne grauen Hintergrund.`,
+        texte: 'Eine A4-Seite, in Schwarzweiß.',
       },
       {
         icone: 'partage',
-        titre: 'Teilen, QR-Code und Übernahme',
-        texte:
-          `Ein Link — oder ein QR-Code — für die Großeltern oder die Tagesmutter: Sie sehen ` +
-          `denselben Bildschirm wie Sie. Derselbe Link hilft auf dem iPhone, wo die installierte ` +
-          `App nicht sieht, was Sie in Safari eingegeben hatten.`,
+        titre: 'Teilen, QR und Übernahme',
+        texte: 'Die Großeltern sehen denselben Bildschirm.',
       },
       {
         icone: 'repas',
-        titre: 'Mittags daheim, oder nicht',
-        texte:
-          `Ein Kind kann montags im Dillendapp essen und dienstags heimfahren. Das Mittagessen ` +
-          `wird tageweise eingestellt, und die Fahrten richten sich danach.`,
+        titre: 'Mittags zu Hause, oder nicht',
+        texte: 'Das Essen wird Tag für Tag eingestellt.',
       },
       {
         icone: 'adresse',
         titre: 'Dienstags bei der Oma',
-        texte:
-          `Eine andere Adresse für einen einzigen Tag — und für eine einzige Tageszeit: morgens, ` +
-          `mittags oder abends. Die nächstgelegene Haltestelle wird für diesen Tag neu berechnet.`,
+        texte: 'Eine andere Adresse für einen einzigen Tag.',
       },
       {
         icone: 'horloge',
         titre: 'Die Betreuung',
-        texte:
-          `Montags bringen Sie es ins Dillendapp, donnerstags holen Sie es ab. Die möglichen ` +
-          `Zeiten sind durch die Öffnungszeiten der Maison Relais begrenzt und durch den Bus ` +
-          `seines Zyklus weiter eingegrenzt. An Abenden, an denen Sie nicht kommen können, ` +
-          `verweist der Zettel auf den Bummelbus.`,
+        texte: 'Montags gebracht, donnerstags abgeholt.',
       },
     ],
   },
 
-  confidentialite: {
-    etiquette: 'Der erste Grundsatz',
-    titre: 'Keine Daten Ihrer Familie verlassen das Gerät.',
-    chapeau:
-      `Das ist keine Absichtserklärung, sondern eine Eigenschaft des Codes. Wohnadresse, ` +
-      `Vornamen und Zyklen liegen im Speicher Ihres Browsers, und die Seite hat keinen Ort, ` +
-      `an den sie sie schicken könnte.`,
-    points: [
-      {
-        titre: 'Nichts zu senden, nichts zu verlieren',
-        texte:
-          `Kein Konto, keine Anmeldung, kein Passwort. Was Sie eingeben, bleibt im Browser des ` +
-          `Geräts, auf dem Sie es eingegeben haben — und eine Schaltfläche in den Einstellungen ` +
-          `löscht alles wieder.`,
-      },
-      {
-        titre: 'Die Adresssuche läuft offline',
-        texte:
-          `Die ${CHIFFRES.rues} Straßen der Gemeinde — ${CHIFFRES.adresses} Adressen — stecken ` +
-          `in der Seite selbst. Ihre Straße einzutippen fragt keinen Kartendienst: niemand ` +
-          `draußen erfährt, wo Sie wohnen. Dafür kennt die Suche auch nur diese eine Gemeinde.`,
-      },
-      {
-        titre: 'Geteilt wird hinter dem Rautezeichen',
-        texte:
-          `Ein geteilter Link legt die Einstellungen in den Fragmentteil der Adresse — den Teil ` +
-          `nach dem „#". Browser senden ihn niemals an den Server. Der Link funktioniert, und ` +
-          `niemand hat ihn unterwegs mitgelesen.`,
-      },
-    ],
-    legendeSchema: 'Was der Browser behält — und was ihn nicht verlässt.',
-  },
-
-  langues: {
-    etiquette: 'Fünf Sprachen',
-    titre: 'Auch die, die zu Hause gesprochen wird.',
-    chapeau:
-      `Die App ist auf Französisch, Deutsch, Luxemburgisch, Portugiesisch und Englisch ` +
-      `verfügbar. Übersetzungskorrekturen werden ohne neuen Build veröffentlicht — ein morgens ` +
-      `gemeldeter Fehler kann nachmittags behoben sein.`,
-    mots: [
-      { code: 'fr', texte: 'Bus scolaire Beckerich' },
-      { code: 'de', texte: 'Schulbus Beckerich' },
-      { code: 'lb', texte: 'Schoulbus Biekerech' },
-      { code: 'pt', texte: 'Autocarro escolar Beckerich' },
-      { code: 'en', texte: 'Beckerich school bus' },
-    ],
-  },
-
-  horsligne: {
-    etiquette: 'An der Haltestelle',
-    titre: 'Die Fahrzeiten bleiben auch ohne Netz lesbar.',
-    chapeau:
-      `Die Seite lässt sich wie eine App installieren und behält alles Nötige auf dem Gerät. ` +
-      `An der Haltestelle, mit einem Balken Empfang, steht die Uhrzeit schon da: sie musste ` +
-      `nicht geladen werden.`,
-    points: [
-      'Installiert sich aus dem Browser, ohne App-Store',
-      'Öffnet, ohne auf das Netz zu warten',
-      'Schriften, Fahrpläne und Adressen sind bereits da',
-      'Aktualisiert sich von selbst, sobald das Netz zurück ist',
-      'Nur die Karte des Fußwegs braucht noch das Netz',
-    ],
-    action: 'So wird sie installiert',
-    legendeSignal: 'Ohne Netz',
+  principes: {
+    donnees: {
+      etiquette: 'Der erste Grundsatz',
+      titre: 'Keine Daten Ihrer Familie verlassen das Gerät.',
+      texte:
+        `Kein Konto, kein Passwort. Die ${CHIFFRES.rues} Straßen der Gemeinde stecken in der ` +
+        `Seite selbst: Ihre einzutippen fragt keinen Kartendienst.`,
+    },
+    horsLigne: {
+      etiquette: 'An der Haltestelle',
+      titre: 'Die Uhrzeit steht schon da, ohne Netz.',
+      points: [
+        { texte: 'Installiert sich aus dem Browser, ohne App-Store' },
+        { texte: 'Schriften, Fahrzeiten und Adressen sind schon da' },
+        { texte: 'Nur die Karte des Fußwegs braucht noch das Netz', ton: 'nuance' },
+      ],
+    },
   },
 
   limites: {
-    etiquette: 'Ehrlichkeit',
-    titre: 'Was diese Seite nicht weiß.',
-    chapeau: `Das kann diese Seite nicht — und das macht sie nur näherungsweise.`,
-    // Sechs Einträge, nicht fünf: siehe die Begründung in `fr.ts`.
+    titre: 'Was diese Seite nicht kann.',
+    note: `sechs Grenzen, bevor wir Sie bitten, sie zu öffnen`,
     items: [
       {
-        titre: 'Die Gehzeiten sind geschätzt',
-        texte:
-          `Sie werden in Luftlinie berechnet, um ein Drittel für Umwege erhöht, mit 4,5 km/h. ` +
-          `Das ist keine Wegbeschreibung: eine Steigung, ein Bahnübergang oder ein ` +
-          `sechsjähriges Kind verändern das Ergebnis.`,
+        titre: 'Die Fußwege sind geschätzt',
+        texte: `Luftlinie, um ein Drittel erhöht, mit 4,5 km/h. Das ist keine Route.`,
       },
       {
-        titre: 'Die Fahrzeiten sind eine Abschrift',
-        texte:
-          `Sie sind dem Dokument der Gemeinde entnommen, sorgfältig und ohne Gewähr. Die ` +
-          `Gemeinde kann es ohne Vorankündigung ändern. Bei Abweichungen gilt das offizielle ` +
-          `Dokument.`,
+        titre: 'Die Fahrzeiten sind eine Übertragung',
+        texte: `Bei Abweichungen gilt das offizielle Dokument der Gemeinde.`,
       },
       {
-        titre: 'Der Plan gilt für zwei Jahre — auf eine mündliche Zusage hin',
-        texte:
-          `Die Gemeinde hat im August 2026 telefonisch bestätigt, dass sich die Zeiten für ` +
-          `${CHIFFRES.anneesCouvertes[1]} nicht ändern. Eine mündliche Zusage ist kein Dokument: ` +
-          `Sie bleibt zu jedem Schuljahresbeginn zu prüfen, und die Seite sagt das dort, wo sie ` +
-          `das Jahr anzeigt.`,
+        titre: 'Der Plan beruht auf einer mündlichen Zusage',
+        texte: `Die Gemeinde hat im August 2026 telefonisch bestätigt, für ${CHIFFRES.anneesCouvertes[1]}.`,
       },
       {
-        titre: 'Eine Mitteilung ist keine Garantie',
-        texte:
-          `Ein ausgeschaltetes Telefon, ein „Nicht stören“, ein gestörter Mitteilungsdienst — ` +
-          `und sie kommt nicht an. Schule und Gemeinde bleiben der offizielle Informationsweg; ` +
-          `die App ersetzt ihn nicht.`,
+        titre: 'Eine Benachrichtigung ist keine Garantie',
+        texte: `Schule und Gemeinde bleiben der offizielle Informationsweg.`,
       },
       {
         titre: 'Die Adresssuche endet an der Gemeindegrenze',
-        texte:
-          `Sie kennt nur die ${CHIFFRES.rues} Straßen von Beckerich. Wohnt man anderswo — bei ` +
-          `den Großeltern, im Nachbarort — muss man die Haltestelle selbst angeben, und die ` +
-          `Gehzeit bleibt unbekannt.`,
+        texte: `Anderswo muss man die Haltestelle selbst nennen, ohne Fußweg.`,
       },
       {
-        titre: 'Zwei Dinge verlassen das Gerät doch',
+        titre: 'Zwei Dinge gehen dennoch hinaus',
         texte:
-          `Die App zählt ihre Seitenaufrufe, und wer Benachrichtigungen einschaltet, hinterlegt ` +
-          `für die Dauer des Abonnements eine anonyme Gerätekennung auf einem Server. Nichts von ` +
-          `dem, was Sie eingeben, geht mit.`,
+          `Die Seitenaufrufe, und eine anonyme Gerätekennung, wenn Sie Benachrichtigungen ` +
+          `einschalten.`,
       },
     ],
     lien: 'Die Seite „Grenzen" lesen',
@@ -321,7 +218,10 @@ export const de: Contenu = {
     // Dieselben Zahlen wie auf der Bildschirmaufnahme im Kopf der Seite.
     surtitre: 'Es ist 07:25 Uhr.',
     heure: '07:45',
-    titre: 'Sechzehn Minuten, bis Sie losmüssen.',
+    legendeHeure: 'Abfahrt · Kneppchen',
+    titreAvant: 'Es bleiben ',
+    titreAccent: 'sechzehn Minuten',
+    titreApres: ', bis Sie losmüssen.',
     // Kein Imperativ, solange die Anwendung nicht erreichbar ist — Begründung siehe `fr.ts`.
     chapeau:
       `So wird der Morgen aussehen: eine Uhrzeit, und die Zeit, die bis zum Losgehen bleibt. ` +
@@ -346,13 +246,11 @@ export const de: Contenu = {
         { texte: 'Grenzen der Seite', url: URL_LIMITES },
         { texte: 'Unabhängigkeit', url: URL_INDEPENDANCE },
       ],
-      projet: [
-        { texte: 'Dank und Mitwirkende', url: URL_CREDITS },
-      ],
+      projet: [{ texte: 'Dank und Mitwirkende', url: URL_CREDITS }],
     },
     mention: 'Von einem Elternteil, in Beckerich.',
-    source: `Daten: offizieller Plan der Gemeinde, Schuljahre ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
-    lienMentions: "Impressum",
+    source: `Daten: offizieller Plan der Gemeinde, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
+    lienMentions: 'Impressum',
     viePrivee: 'Diese Seite setzt keine Cookies, misst nichts und ruft keinen Server auf.',
   },
 
@@ -370,5 +268,4 @@ Anschrift: ${ADRESSE_EDITEUR}`,
     responsabiliteCorps: `Die angezeigten Zeiten stammen aus dem offiziellen Plan der Gemeinde und sind sorgfältig übertragen, jedoch ohne Gewähr. Im Zweifel oder bei Abweichungen gilt das offizielle Dokument der Gemeinde.`,
     retour: `Zurück zur Startseite`,
   },
-
 }

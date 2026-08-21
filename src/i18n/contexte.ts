@@ -5,15 +5,22 @@
  * soit des composantes, soit autre chose, jamais les deux — sinon le rechargement à
  * chaud perd l'état de la page à chaque frappe.
  *
- * Trois langues, trois adresses distinctes :
+ * Cinq langues, cinq adresses distinctes :
  *
- *     /        français   (langue de référence, celle de l'application)
+ *     /        français        (langue de référence, celle de l'application)
  *     /de/     allemand
  *     /lb/     luxembourgeois
+ *     /pt/     portugais
+ *     /en/     anglais
  *
  * Chacune est pré-rendue en HTML statique à la construction. Un moteur de recherche
- * trouve donc trois pages complètes, et non une coquille vide qui attendrait JavaScript
+ * trouve donc cinq pages complètes, et non une coquille vide qui attendrait JavaScript
  * — ce qui, pour une page dont le rôle est justement d'être trouvée, serait absurde.
+ *
+ * LA VITRINE N'EN PARLAIT QUE TROIS jusqu'à la refonte, quand l'application en parlait
+ * cinq — et la page l'annonçait elle-même en grand dans sa bande de chiffres. Une page
+ * qui vante cinq langues en trois langues se contredit à voix haute, et elle se contredit
+ * précisément devant les deux familles qui avaient le plus besoin d'être lues.
  */
 import { createContext, useContext } from 'react'
 import { mentionsPretes } from '../config.ts'
@@ -21,9 +28,12 @@ import type { Contenu, Langue } from '../contenu/type.ts'
 import { fr } from '../contenu/fr.ts'
 import { de } from '../contenu/de.ts'
 import { lb } from '../contenu/lb.ts'
+import { pt } from '../contenu/pt.ts'
+import { en } from '../contenu/en.ts'
 
-export const CONTENUS: Record<Langue, Contenu> = { fr, de, lb }
-export const LANGUES: Langue[] = ['fr', 'de', 'lb']
+export const CONTENUS: Record<Langue, Contenu> = { fr, de, lb, pt, en }
+/* L'ordre est celui de l'application : les trois langues du pays, puis les deux autres. */
+export const LANGUES: Langue[] = ['fr', 'de', 'lb', 'pt', 'en']
 
 /** Le préfixe sous lequel le site est servi ('/' en général). */
 const base = import.meta.env.BASE_URL
@@ -46,7 +56,7 @@ export function cheminLangue(langue: Langue): string {
  * sa vignette de partage, et cette page-ci porte la phrase qui n'existe nulle part ailleurs
  * — celle qui dit lequel, du document communal ou de ce site, fait foi.
  *
- * Chacune est pré-rendue dans les trois langues.
+ * Chacune est pré-rendue dans les cinq langues.
  */
 export type Page = 'accueil' | 'mentions' | 'independance'
 

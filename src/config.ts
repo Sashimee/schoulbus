@@ -18,10 +18,10 @@ export const URL_APP = 'https://sashimee.github.io/bus-scolaire-beckerich'
  *
  * Un interrupteur plutôt qu'une suppression, pour deux raisons.
  *
- * La première est que les textes des appels à l'action existent en trois langues et ont
- * été relus. Les effacer maintenant, ce serait réinventer dans quelques semaines une
- * formulation luxembourgeoise qui attend déjà sa relecture — une deuxième fois, et sans
- * nécessité.
+ * La première est que les textes des appels à l'action existent en cinq langues. Les
+ * effacer maintenant, ce serait réinventer dans quelques semaines une formulation
+ * luxembourgeoise et une formulation portugaise qui attendent déjà leur relecture — une
+ * deuxième fois, et sans nécessité.
  *
  * La seconde est qu'un lien qu'on retire à la main revient à la main. Le jour où
  * l'application sera publiée, cette ligne passe à `true` et tout réapparaît d'un coup,
@@ -89,7 +89,8 @@ export function imagePartage(langue: string): string {
  * ni engendrée, ni annoncée au plan du site, ni liée depuis le pied de page (voir `PAGES`
  * dans `i18n/contexte.ts`). Une page de mentions légales qui afficherait
  * « adresse à compléter » serait pire que pas de page du tout — elle prouverait qu'on ne
- * l'a pas relue. Le jour où cette ligne est remplie, les six adresses apparaissent.
+ * l'a pas relue. Le jour où cette ligne est remplie, les cinq adresses apparaissent — une
+ * par langue.
  */
 export const ADRESSE_EDITEUR = 'ADRESSE-À-COMPLÉTER'
 

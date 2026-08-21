@@ -29,13 +29,24 @@
  * basculent ensemble. Une image `loading="lazy"` dans un sous-arbre `display: none` n'est
  * pas téléchargée : une seule descend, l'autre à la demande si l'on bascule.
  *
- * L'APPAREIL RESTE `aria-hidden`
- * ------------------------------
- * L'argument d'origine ne faiblit pas, il se renforce : une capture contient PLUS de texte
- * incident qu'une maquette, et tout ce qu'elle montre est déjà dit en toutes lettres dans
- * la section d'à côté. Un lecteur d'écran qui la traverserait entendrait « 07:45, dans 16
- * min, Hovelange · Kneppchen » hors de tout contexte. Une image qui redit son voisinage
- * est décorative, et se déclare comme telle.
+ * LE CADRE RESTE `aria-hidden`, SAUF DANS LE HÉROS
+ * ------------------------------------------------
+ * L'argument d'origine ne faiblit pas : une capture contient PLUS de texte incident
+ * qu'une maquette, et tout ce qu'elle montre est déjà dit en toutes lettres à côté
+ * d'elle. Un lecteur d'écran qui traverserait celle de la bande des quatre écrans
+ * entendrait « 07:45, dans 16 min, Hovelange · Kneppchen » hors de tout contexte, juste
+ * avant de lire le titre qui l'explique. Une image qui redit son voisinage est
+ * décorative, et se déclare comme telle.
+ *
+ * La capture du héros fait exception depuis la refonte, parce que sa situation a changé :
+ * elle n'illustre plus un paragraphe, elle EST la démonstration, et les quatre lignes
+ * d'annotation qui l'accompagnent nomment des valeurs qu'on ne peut lire que sur elle.
+ * D'où `heros.altCapture`, qui décrit l'écran — et non la marque.
+ *
+ * NOTE SUR `alt` VIDE ET LES DEUX THÈMES : les deux variantes portent le même `alt`.
+ * C'est voulu. Une seule des deux est affichée à un instant donné (l'autre est sous
+ * `display: none`, invisible aussi pour les technologies d'assistance), il n'y a donc
+ * jamais de description en double.
  */
 import { HAUTEUR_IMAGE, LARGEUR_IMAGE, THEMES, fichierCapture } from '../contenu/captures.ts'
 import type { NomEcran } from '../contenu/captures.ts'
@@ -47,7 +58,7 @@ import { useLangue } from '../i18n/contexte.ts'
  * `width`/`height` portent les dimensions réelles du fichier : le rapport est donc connu
  * avant que le moindre octet n'arrive, et la page ne sursaute pas au chargement.
  */
-export function Capture({ ecran }: { ecran: NomEcran }) {
+export function Capture({ ecran, alt = '' }: { ecran: NomEcran; alt?: string }) {
   const { langue } = useLangue()
 
   return (
@@ -59,7 +70,7 @@ export function Capture({ ecran }: { ecran: NomEcran }) {
           src={`${import.meta.env.BASE_URL}${fichierCapture(ecran, langue, theme)}`}
           width={LARGEUR_IMAGE}
           height={HAUTEUR_IMAGE}
-          alt=""
+          alt={alt}
           /*
            * `lazy` PARTOUT, y compris pour le héros, et c'est ce qui fait descendre un
            * seul fichier au lieu de deux : une image différée dans un sous-arbre

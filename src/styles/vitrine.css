@@ -62,6 +62,174 @@
 }
 
 @layer vitrine {
+  /* ------------------------------------------------------------------ *
+   * La palette de la vitrine.
+   *
+   * C'EST LE SEUL ENDROIT OÙ LA VITRINE S'ÉCARTE DE L'APPLICATION.
+   *
+   * Jusqu'ici les deux partageaient une charte : verre bleu sur dégradé sombre, reprise
+   * telle quelle dans `jetons.css`. La vitrine a désormais la sienne — crème, sarcelle,
+   * corail — parce que les deux objets n'ont pas le même travail. L'application est un
+   * outil qu'on ouvre à 07:25 dans une main, et son fond sombre sert la lisibilité d'une
+   * heure lue à bout de bras. La page qu'on lit une fois, elle, doit d'abord donner envie
+   * de la lire jusqu'aux limites — et un dégradé sombre lit « produit », pas « voisin qui
+   * explique ».
+   *
+   * La méthode, en revanche, ne change pas : rien n'est écrit en dur ailleurs, et
+   * `jetons.css` n'est PAS touché — il reste la copie conforme de l'application, et
+   * `npm run jetons:verifier` continue de passer. Ce bloc redéfinit les RÔLES
+   * (`--encre`, `--surface`, `--accent`…) depuis la couche `vitrine`, qui vient après
+   * `tokens` dans l'ordre déclaré en tête de fichier. Tout ce qui lisait `var(--encre)`
+   * lit donc la nouvelle valeur sans être réécrit, et l'on garde une seule liste de rôles
+   * pour les deux dépôts.
+   *
+   * Sémantique des deux accents, à ne pas diluer :
+   *   sarcelle = ce qui est vrai et vérifiable — heures, arrêts, action principale ;
+   *   corail   = ce qui presse ou ce qui nuance — décompte, limites, « bientôt ».
+   * Rien de décoratif ne prend le corail. Une page qui met sa couleur d'alerte partout
+   * n'a plus de couleur d'alerte.
+   *
+   * Contrastes : tous les couples encre/fond réellement composés tiennent >= 4,5:1, et
+   * les deux couples de grands caractères (le corail vif) >= 3:1. Le détail, et la raison
+   * de chaque seuil, sont dans `scripts/verifier-contraste.mjs` — qui échoue si l'une des
+   * valeurs ci-dessous bouge sans qu'on refasse le calcul.
+   * ------------------------------------------------------------------ */
+  :root {
+    /* Les valeurs brutes de la charte, nommées une fois. */
+    --vitrine-creme: #121a19;
+    --vitrine-creme-bande: #171f1e;
+    --vitrine-creme-creux: #1d2725;
+    --vitrine-blanc: #1a2422;
+    --vitrine-encre: #f2ece3;
+    --vitrine-encre-80: #c4ccc9;
+    --vitrine-encre-60: #9ba6a3;
+    --vitrine-sarcelle: #6fc3c6;
+    --vitrine-sarcelle-forte: #a5dedf;
+    --vitrine-sarcelle-pale: #16302f;
+    --vitrine-panneau: #0d3a40;
+    --vitrine-sur-panneau: #eaf2f0;
+    --vitrine-sur-panneau-2: #c6dad8;
+    --vitrine-sur-panneau-3: #9cc7c6;
+    --vitrine-corail: #ff8c66;
+    --vitrine-corail-encre: #ffae91;
+    --vitrine-corail-pale: #3a2018;
+    --vitrine-ambre: #e0a44e;
+    --vitrine-filet: rgb(242 236 227 / 0.14);
+    --vitrine-filet-corail: rgb(255 140 102 / 0.4);
+
+    /* Les rôles de l'application, redirigés vers la charte de la vitrine. */
+    --fond: var(--vitrine-creme);
+    /*
+     * `--degrade` et `--halo` NE SONT PLUS REDÉFINIS ICI, et ce n'est pas un oubli.
+     * `jetons.css` les définit toujours — c'est la copie conforme de l'application, elle
+     * ne se modifie pas —, mais plus une seule règle de la vitrine ne les lit depuis que
+     * `.fond` a disparu avec le nuage WebGL. Les redéfinir aurait donné à croire qu'ils
+     * peignent quelque chose.
+     */
+    --fond-creux: var(--vitrine-creme-creux);
+    --surface: var(--vitrine-blanc);
+    --surface-haute: var(--vitrine-creme-bande);
+    --surface-accent: var(--vitrine-sarcelle-pale);
+    --rail: rgb(18 26 25 / 0.86);
+
+    --bord: var(--vitrine-filet);
+    --bord-accent: rgb(111 195 198 / 0.32);
+    /* Une seule ombre, très étalée et très basse : des cartes posées sur du papier, pas
+       des vitres en lévitation. L'arête de verre de l'application n'a plus d'objet. */
+    --lustre: 0 18px 40px -30px rgb(0 0 0 / 0.55);
+    --ombre-2: 0 26px 60px -40px rgb(0 0 0 / 0.5);
+    --ombre-3: 0 30px 70px -40px rgb(0 0 0 / 0.6);
+
+    --encre: var(--vitrine-encre);
+    --encre-douce: var(--vitrine-encre-80);
+    /* Le troisième niveau d'encre : légendes, notes, colonnes de pied de page. */
+    --vitrine-encre-faible: var(--vitrine-encre-60);
+
+    --accent: var(--vitrine-sarcelle);
+    --accent-2: var(--vitrine-sarcelle-forte);
+    --plein: var(--vitrine-sarcelle);
+    --encre-sur-plein: #0b2a2e;
+
+    --attention: var(--vitrine-ambre);
+    --attention-fond: rgb(224 164 78 / 0.12);
+    --attention-bord: rgb(224 164 78 / 0.34);
+
+    color-scheme: dark;
+  }
+
+  /*
+   * Le thème clair — celui de la maquette, et celui que voit la majorité des lecteurs.
+   *
+   * Écrit deux fois, comme dans `jetons.css` et pour la même raison : une media query ne
+   * peut pas figurer dans un sélecteur. Les valeurs de ce bloc sont celles de la
+   * maquette, à une exception documentée : l'ambre `#B77410` n'y tenait que 3,75:1 sur
+   * `--surface` alors qu'il porte la puce d'une nuance qu'on doit pouvoir lire. Il est
+   * assombri à `#8F5A0B` (5,69:1), même teinte, même rôle.
+   */
+  :root[data-theme='clair'] {
+    --vitrine-creme: #fbf6ef;
+    --vitrine-creme-bande: #f6efe4;
+    --vitrine-creme-creux: #f3ebdf;
+    --vitrine-blanc: #fffdf9;
+    --vitrine-encre: #1c2725;
+    --vitrine-encre-80: #4a5654;
+    --vitrine-encre-60: #5a6664;
+    --vitrine-sarcelle: #0f5a61;
+    --vitrine-sarcelle-forte: #0b3f45;
+    --vitrine-sarcelle-pale: #e3edeb;
+    --vitrine-panneau: #0b3f45;
+    --vitrine-corail: #d9502f;
+    --vitrine-corail-encre: #a9381f;
+    --vitrine-corail-pale: #fcede7;
+    --vitrine-ambre: #8f5a0b;
+    --vitrine-filet: rgb(28 39 37 / 0.12);
+    --vitrine-filet-corail: rgb(217 80 47 / 0.4);
+
+    --rail: rgb(251 246 239 / 0.86);
+    --bord-accent: rgb(15 90 97 / 0.28);
+    --lustre: 0 18px 40px -30px rgb(11 63 69 / 0.55);
+    --ombre-2: 0 26px 60px -40px rgb(11 63 69 / 0.5);
+    --ombre-3: 0 30px 70px -40px rgb(11 63 69 / 0.6);
+    --encre-sur-plein: var(--vitrine-creme);
+    --attention-fond: rgb(143 90 11 / 0.1);
+    --attention-bord: rgb(143 90 11 / 0.3);
+
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme='sombre']) {
+      --vitrine-creme: #fbf6ef;
+      --vitrine-creme-bande: #f6efe4;
+      --vitrine-creme-creux: #f3ebdf;
+      --vitrine-blanc: #fffdf9;
+      --vitrine-encre: #1c2725;
+      --vitrine-encre-80: #4a5654;
+      --vitrine-encre-60: #5a6664;
+      --vitrine-sarcelle: #0f5a61;
+      --vitrine-sarcelle-forte: #0b3f45;
+      --vitrine-sarcelle-pale: #e3edeb;
+      --vitrine-panneau: #0b3f45;
+      --vitrine-corail: #d9502f;
+      --vitrine-corail-encre: #a9381f;
+      --vitrine-corail-pale: #fcede7;
+      --vitrine-ambre: #8f5a0b;
+      --vitrine-filet: rgb(28 39 37 / 0.12);
+      --vitrine-filet-corail: rgb(217 80 47 / 0.4);
+
+      --rail: rgb(251 246 239 / 0.86);
+      --bord-accent: rgb(15 90 97 / 0.28);
+      --lustre: 0 18px 40px -30px rgb(11 63 69 / 0.55);
+      --ombre-2: 0 26px 60px -40px rgb(11 63 69 / 0.5);
+      --ombre-3: 0 30px 70px -40px rgb(11 63 69 / 0.6);
+      --encre-sur-plein: var(--vitrine-creme);
+      --attention-fond: rgb(143 90 11 / 0.1);
+      --attention-bord: rgb(143 90 11 / 0.3);
+
+      color-scheme: light;
+    }
+  }
+
   :root {
     /*
      * Échelle d'affichage. L'application s'arrête à `--texte-4xl` (2,25 rem) parce
@@ -77,18 +245,31 @@
      * 6 rem y tombait à six lignes au lieu de trois, et une phrase de trois lignes
      * cassée en six ne se lit plus d'un coup d'œil — ce qu'on lui demandait.
      */
-    --vitrine-titre-1: clamp(2.5rem, 5vw, 4.5rem);
-    --vitrine-titre-2: clamp(1.875rem, 3.6vw, 3rem);
-    --vitrine-titre-3: clamp(1.375rem, 2.2vw, 1.875rem);
+    /*
+     * L'échelle d'affichage s'est RESSERRÉE avec la refonte.
+     *
+     * Le titre montait à 4,5 rem (72 px) et la page criait avant d'avoir rien dit. Le
+     * héros ne porte plus la démonstration : c'est la capture, annotée de quatre lignes,
+     * qui l'assure. Le titre n'a donc plus à faire le travail tout seul, et 54 px lui
+     * suffisent — la borne basse remonte en revanche à 34 px, parce que c'est à 360 px de
+     * large que la phrase doit encore tenir en deux lignes.
+     */
+    --vitrine-titre-1: clamp(2.125rem, 4.2vw, 3.375rem);
+    --vitrine-titre-2: clamp(1.625rem, 2.6vw, 2.25rem);
+    --vitrine-titre-3: clamp(1.375rem, 2vw, 1.625rem);
+    /* Le titre d'une carte ou d'une tuile : au corps du texte, distingué par la graisse. */
+    --vitrine-titre-carte: var(--texte-l);
     /* Le paragraphe d'introduction d'une section : plus grand que le corps, sans être un titre. */
-    --vitrine-chapeau: clamp(1.0625rem, 1.5vw, 1.375rem);
+    --vitrine-chapeau: clamp(1.0625rem, 1.5vw, 1.125rem);
 
     /*
-     * L'heure du héros. L'application borne la sienne à 3,875 rem parce qu'elle vit dans
-     * un écran de téléphone tenu à bout de bras ; ici elle est le sujet de la page, et
-     * doit se lire d'un coup d'œil sur un écran de bureau à un mètre.
+     * Les nombres. Il n'y a plus d'« heure géante » : le héros montre la vraie, dans la
+     * capture, et la répéter en 6 rem à côté ferait deux fois la même chose. Ne restent
+     * que les chiffres tabulaires des lignes d'annotation et de la tuile finale.
      */
-    --vitrine-heure: clamp(3.5rem, 8.5vw, 6.5rem);
+    --vitrine-heure: clamp(2rem, 5vw, 2.75rem);
+    --vitrine-nombre: 1.75rem;
+    --vitrine-nombre-petit: 1.3125rem;
 
     /*
      * Durées longues. La règle de l'application — tout finit sous la demi-seconde —
@@ -98,13 +279,24 @@
     --vitrine-lent: 0.9s;
     --vitrine-tres-lent: 1.4s;
 
-    /* Rythme vertical. Une section respire, sinon la page se lit comme un formulaire. */
-    --vitrine-section: clamp(5.5rem, 12vh, 9.5rem);
-    --vitrine-section-serree: clamp(3.5rem, 7vh, 6rem);
+    /*
+     * Rythme vertical. Il s'est resserré lui aussi, et pour une raison mesurable : la
+     * page compte désormais neuf sections au lieu de treize, mais chacune est plus dense.
+     * À 12vh de respiration, le lecteur traversait deux écrans de vide entre deux idées
+     * — ce qui, sur une page dont le sujet est « rien à chercher », se lit comme un aveu.
+     */
+    --vitrine-section: clamp(2.75rem, 6vw, 4.5rem);
+    --vitrine-section-serree: clamp(2rem, 4vw, 3rem);
+
+    /*
+     * La gouttière de la vitrine. Celle de l'application (`--espace-4`, 16 px) est
+     * calibrée pour un écran de téléphone ; une bande de 1240 px collée au bord de la
+     * fenêtre sur un écran de bureau n'a pas de marge où poser le regard.
+     */
+    --gouttiere: clamp(1.25rem, 4vw, 2rem);
 
     /* Largeurs. `--largeur` (46 rem) reste celle de l'application, trop étroite ici. */
-    --vitrine-large: 78rem;
-    --vitrine-moyen: 62rem;
+    --vitrine-large: 77.5rem;
     --vitrine-texte: 38rem; /* colonne de lecture : ~70 signes */
 
     /* L'appareil de la maquette, au millimètre près (Schulbus App - Produktion). */
@@ -128,14 +320,13 @@
 
   body {
     /*
-     * Le fond n'est pas ici mais dans `.fond`, en position fixe : la page mesure une
-     * dizaine d'écrans, et un dégradé posé sur le `body` s'étirerait sur toute cette
-     * hauteur — les arrêts se retrouveraient à des kilomètres les uns des autres, et le
-     * halo disparaîtrait de l'écran dès le deuxième défilement.
+     * LE FOND EST ICI, DE NOUVEAU.
      *
-     * `background-attachment: fixed` réglerait cela sur le papier ; l'application l'a
-     * abandonné (saccades au défilement sur téléphone, ignoré par iOS). Un élément fixe
-     * derrière le contenu obtient le même résultat sans le coût.
+     * Il vivait dans un élément fixe (`.fond`) parce qu'il était un dégradé : posé sur le
+     * `body`, un dégradé s'étire sur toute la hauteur du document — une dizaine d'écrans —
+     * et ses arrêts se retrouvent à des kilomètres les uns des autres. La charte de la
+     * refonte pose une surface UNIE, qui n'a ni arrêt ni étirement : une couleur de fond
+     * sur le corps suffit, et la page se débarrasse d'un élément fixe de plus.
      */
     background-color: var(--fond);
     color: var(--encre);
@@ -150,30 +341,45 @@
   h1 {
     font-size: var(--vitrine-titre-1);
     font-weight: 600;
-    line-height: 0.95;
-    letter-spacing: -0.04em;
+    line-height: 1.03;
+    letter-spacing: -0.03em;
   }
   h2 {
     font-size: var(--vitrine-titre-2);
     font-weight: 600;
-    line-height: 1;
-    letter-spacing: -0.035em;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
   }
   h3 {
-    font-size: var(--vitrine-titre-3);
+    font-size: var(--vitrine-titre-carte);
     font-weight: 600;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    line-height: 1.3;
+    letter-spacing: 0;
   }
   h4 {
     font-size: var(--texte-xl);
     letter-spacing: -0.01em;
   }
 
+  /*
+   * Le lien est souligné AU SURVOL, pas au repos.
+   *
+   * L'inverse serait plus prudent, et c'est bien ce que fait l'application. Mais la page
+   * pose des liens à l'intérieur de blocs qui sont déjà des surfaces cliquables entières,
+   * et un soulignement permanent y hachait chaque carte. La couleur sarcelle, à 7,36:1
+   * sur le fond de page, ne repose pas que sur elle-même : chaque lien de la page est
+   * soit dans une liste de liens, soit une pastille, soit terminé par une flèche.
+   */
   a {
     color: var(--accent);
+    text-decoration: none;
     text-underline-offset: 3px;
     overflow-wrap: anywhere;
+    transition: color var(--vitrine-lent) var(--sortie);
+  }
+  a:hover {
+    color: var(--accent-2);
+    text-decoration: underline;
   }
 
   /* Les suites de caractères qu'on lit colonne par colonne. Comme dans l'application. */
@@ -196,38 +402,17 @@
   }
 
   /*
-   * Le fond de page : dégradé, deux halos, et — si l'appareil le porte — le canevas du
-   * nuage animé par-dessus. Fixe, derrière tout le reste, insensible au pointeur.
+   * IL N'Y A PLUS DE FOND.
+   *
+   * La vitrine portait un dégradé, deux halos et un nuage animé en WebGL, repris de
+   * l'application. La refonte pose une surface unie — et un shader qui peint du crème
+   * uni est un shader qu'on maintient pour rien. `mouvement/Fond.tsx`, `fond.glsl.ts` et
+   * le curseur personnalisé qui l'accompagnait ont été retirés avec lui.
+   *
+   * Ce que la page y gagne n'est pas décoratif : le premier rendu ne compile plus de
+   * shader, et le thème n'a plus qu'une couleur de fond à changer au lieu d'un dégradé,
+   * de deux halos et d'un jeu d'uniformes.
    */
-  .fond {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      radial-gradient(58% 40% at 88% 2%, var(--halo) 0%, transparent 70%),
-      radial-gradient(50% 36% at -8% 64%, var(--halo) 0%, transparent 70%), var(--degrade);
-    background-repeat: no-repeat;
-    background-color: var(--fond);
-  }
-
-  .fond__toile {
-    position: absolute;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    /*
-     * Le canevas se fond dans le dégradé CSS au lieu de le remplacer : si le shader
-     * échoue à mi-course, ou si la première image tarde, il reste le fond de
-     * l'application dessous, et non du noir.
-     */
-    opacity: 0;
-    transition: opacity var(--vitrine-tres-lent) var(--sortie);
-  }
-  .fond__toile[data-prete='oui'] {
-    opacity: 1;
-  }
-
   /* ------------------------------------------------------------------ *
    * Mouvements nommés.
    *
@@ -268,6 +453,13 @@
       transform: scale(1.06);
     }
   }
+
+  /*
+   * `battement` — le clignotement du point de décompte de l'application — n'est PAS repris
+   * ici. La vitrine affiche une valeur figée à seize minutes, celle de la capture ; le
+   * seuil d'urgence de l'application est à huit. L'animation n'aurait donc aucun état où
+   * se déclencher. Voir `.heros__point` dans `sections.css`.
+   */
 
   /*
    * Le ruban des langues, en boucle.
@@ -341,9 +533,6 @@
     padding-inline: max(var(--gouttiere), env(safe-area-inset-left))
       max(var(--gouttiere), env(safe-area-inset-right));
   }
-  .bande--moyen {
-    max-inline-size: var(--vitrine-moyen);
-  }
   .bande--texte {
     max-inline-size: var(--vitrine-texte);
   }
@@ -358,9 +547,6 @@
 
   .texte-doux {
     color: var(--encre-douce);
-  }
-  .texte-accent {
-    color: var(--accent);
   }
   .chapeau {
     font-size: var(--vitrine-chapeau);
@@ -384,9 +570,6 @@
   }
   .pile--4 {
     gap: var(--espace-4);
-  }
-  .pile--5 {
-    gap: var(--espace-5);
   }
   .pile--6 {
     gap: var(--espace-6);
@@ -431,15 +614,13 @@
   }
 
   /*
-   * L'en-tête d'une section : étiquette, titre, chapeau. Toujours la même pile, toujours
-   * le même écart — c'est ce qui fait qu'on reconnaît un début de section sans le lire.
+   * `.entete-section` a disparu : elle imposait la même pile étiquette/titre/chapeau à
+   * toutes les sections, et la refonte leur en donne trois formes distinctes — la rangée
+   * à bases alignées des bandes teintées (`.entete-bande`), la colonne collante des
+   * fonctions (`.fonctions__entete`), et la ligne à lignes de base communes des limites
+   * (`.limites__entete`). Une seule règle pour trois dispositions aurait été surchargée
+   * trois fois, ce qui revient à ne pas l'avoir.
    */
-  .entete-section {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--espace-4);
-  }
 
   /*
    * `content-visibility: auto` a été essayé sur les sections basses, puis retiré.

@@ -12,7 +12,7 @@ par script, et son adresse, posée dans un seul fichier.
 | Rôle | outil quotidien, personnalisé par enfant | page publique, une seule fois lue |
 | Rendu | application monopage | HTML statique pré-rendu, une page par langue |
 | Référencement | `noindex` — ne doit pas concurrencer la page officielle de la commune | indexée, c'est son métier |
-| Langues | fr, de, lb, pt, en | fr, de, lb |
+| Langues | fr, de, lb, pt, en | fr, de, lb, pt, en |
 | Données | horaires, arrêts, adresses | aucune — elle ne fait que décrire |
 
 ## Le flux de branches
@@ -32,7 +32,7 @@ entier. La vérification continue tourne sur `dev`, sur `main` et sur les *pull 
 
 ```bash
 npm run dev          # serveur de développement
-npm run build        # construction + pré-rendu des trois langues dans dist/
+npm run build        # construction + pré-rendu des cinq langues dans dist/
 npm run preview      # sert dist/ tel qu'il sera publié
 npm run verifier     # types, lint, tests, contrastes, dérive des jetons
 ```
@@ -55,9 +55,9 @@ npm run captures:conteneur # la même chose dans le conteneur épinglé — CELL
 
 ### Les écrans montrés sont de vraies captures
 
-Les quatre téléphones de la page contiennent des photographies de l'application, pas des
-reconstructions : `public/captures/{écran}-{langue}-{thème}.webp`, soit quatre écrans ×
-trois langues × deux thèmes = vingt-quatre fichiers, produits par `npm run captures`.
+Les cinq cadres de la page — celui du héros et les quatre de la bande « Quatre écrans » —
+contiennent des photographies de l'application, pas des reconstructions : `public/captures/{écran}-{langue}-{thème}.webp`, soit quatre écrans ×
+cinq langues × deux thèmes = quarante fichiers, produits par `npm run captures`.
 
 Ils l'ont longtemps été. `src/composants/Ecrans.tsx` redessinait les écrans en DOM et en
 CSS, ce qui suivait le thème et la langue sans effort et ne pixellisait jamais. Mais une
@@ -111,20 +111,42 @@ distingue ce script de celui de l'application, dont la vignette prend la police 
 
 ## Ce qu'il faut savoir avant d'y toucher
 
-### La charte n'est pas écrite ici
+### La charte est écrite ici, désormais — et seulement la charte
 
-`src/styles/jetons.css` est une **copie conforme** de la couche `tokens` de
+Il faut distinguer deux choses qui vivaient au même endroit.
+
+**`src/styles/jetons.css` reste une copie conforme** de la couche `tokens` de
 l'application. On ne la modifie pas : on modifie celle de l'application, puis
 `npm run jetons:reprendre`. `npm run jetons:verifier` échoue si les deux ont divergé, et
-fait partie de `npm run verifier`.
+fait partie de `npm run verifier`. Ce fichier n'a pas été touché par la refonte.
 
-Ce que la vitrine ajoute en propre — échelle d'affichage, durées longues, rythme des
-sections — vit dans `src/styles/vitrine.css`, préfixé `--vitrine-`.
+**Les COULEURS, elles, ne viennent plus de là.** La vitrine a sa propre palette — crème,
+sarcelle, corail — déclarée dans la couche `vitrine` de `src/styles/vitrine.css`, qui
+redéfinit les rôles (`--encre`, `--surface`, `--accent`…) après la couche `tokens` dans la
+cascade. Tout ce qui lisait `var(--encre)` lit la nouvelle valeur sans avoir été réécrit,
+et `jetons.css` continue de passer son contrôle de dérive.
+
+Pourquoi cet écart, alors que les deux dépôts partageaient tout : l'application est un
+outil qu'on ouvre à 07:25 dans une main, et son fond sombre sert la lisibilité d'une heure
+lue à bout de bras. La page qu'on lit une fois doit d'abord donner envie de la lire
+jusqu'aux limites, et un dégradé sombre y lit « produit » plutôt que « voisin qui
+explique ». Le prix est réel et il est assumé : les deux sites ne se ressemblent plus au
+premier coup d'œil, et une capture de l'application posée dans un cadre crème montre deux
+palettes à la fois.
+
+Sémantique des deux accents, à ne pas diluer : **sarcelle = ce qui est vrai et
+vérifiable** (heures, arrêts, action principale) ; **corail = ce qui presse ou ce qui
+nuance** (décompte, limites, « bientôt »). Rien de décoratif ne prend le corail.
 
 Comme dans l'application : **aucune valeur brute hors de la couche des jetons, aucun
-`style={{…}}` dans une composante, toute cible tactile ≥ 44 px, tout couple encre/fond
-vérifié à 4,5:1** sur la composition réelle — dégradé, halo, voile de verre. Le pire cas
-courant est à 5,20:1 (`npm run contraste`).
+`style={{…}}` dans une composante** — il n'y a plus d'exception depuis que la barre de
+progression a disparu de l'en-tête —, **toute cible tactile ≥ 44 px, tout couple
+encre/fond vérifié à 4,5:1**. Les surfaces étant désormais opaques, `npm run contraste` ne
+simule plus d'empilement : il calcule exactement. Le pire cas est à **5,05:1** en thème
+clair et **6,12:1** en sombre. Deux couples seulement sont vérifiés à 3:1, le seuil des
+grands caractères et des éléments non textuels : le corail vif du mot « seize minutes »
+(28 à 42 px, graisse 600) et le tracé de l'icône des perturbations. Le script nomme chaque
+couple et l'endroit où il se rencontre.
 
 ### Le mouvement est étagé, pas interrupté
 
@@ -132,9 +154,15 @@ courant est à 5,20:1 (`npm run contraste`).
 
 | Niveau | Quand | Ce qui tourne |
 | --- | --- | --- |
-| `complet` | souris, écran large, WebGL2, ≥ 4 cœurs | nuage WebGL, défilement doux, curseur, brouillage, aimants, projecteurs |
-| `reduit` | tactile, ou machine modeste | dégradé CSS au lieu du nuage ; révélations au défilement conservées |
+| `complet` | souris, écran large, ≥ 4 cœurs | défilement doux, aimants des boutons, révélations au défilement |
+| `reduit` | tactile, ou machine modeste | révélations au défilement conservées, défilement natif |
 | `aucun` | « réduire les animations » demandé | rien ne bouge, tout est lisible |
+
+La refonte a **retiré le nuage WebGL, le curseur personnalisé, le brouillage de l'heure et
+les projecteurs des cartes**. La charte pose une surface unie : un shader qui peint du
+crème uni est un shader qu'on maintient pour rien, et une lueur qui suit la souris sur du
+papier crème ne ressemble à rien. Le niveau `complet` a donc beaucoup moins à faire
+qu'avant, et le premier rendu ne compile plus de shader.
 
 Le premier rendu est **toujours** `aucun` — c'est aussi ce que produit le pré-rendu, et
 les deux doivent concorder pour que React hydrate au lieu de tout refaire.
@@ -153,17 +181,24 @@ Deux règles s'appliquent à toute animation ajoutée ici :
 ### Le pré-rendu
 
 `npm run build` enchaîne trois étapes : construction du paquet client, construction d'un
-paquet serveur (`src/entree-serveur.ts`), puis `scripts/prerendu.mjs`, qui rend les trois
+paquet serveur (`src/entree-serveur.ts`), puis `scripts/prerendu.mjs`, qui rend les cinq
 langues en HTML complet et écrit `sitemap.xml` et `robots.txt`.
 
 ```
 dist/index.html                   français (langue de référence, à la racine)
 dist/de/index.html                allemand
 dist/lb/index.html                luxembourgeois
+dist/pt/index.html                portugais
+dist/en/index.html                anglais
 dist/independance/index.html      la mention d'indépendance, une page par langue
-dist/de/independance/index.html
-dist/lb/independance/index.html
+dist/de/independance/index.html   … et ainsi de suite pour lb, pt, en
 ```
+
+La vitrine parlait trois langues quand l'application en parlait cinq — et sa propre bande
+de chiffres annonçait « 5 langues, dont le luxembourgeois ». Une page qui vante cinq
+langues en trois langues se contredit à voix haute, et elle se contredit devant les deux
+familles qui avaient le plus besoin d'être lues. Un test lie désormais les deux nombres
+(`contenu.test.ts`).
 
 L'indépendance a sa page depuis qu'elle a quitté l'accueil, où elle tenait une section
 entière juste avant l'appel final. Elle n'est plus au premier plan, mais elle n'a pas
@@ -176,8 +211,14 @@ Les mentions légales viendront s'ajouter en quatrième page le jour où `ADRESS
 sera renseignée (voir plus bas).
 
 Le changement de langue dans la page ne recharge rien : le contenu est déjà dans le
-paquet, seule l'adresse est mise à jour. Les trois URL existent pour les moteurs et pour
+paquet, seule l'adresse est mise à jour. Les cinq URL existent pour les moteurs et pour
 le partage.
+
+Attention aux **locales Open Graph** : elles ne sont pas le code de langue suivi de `_LU`.
+`fr_LU`, `de_LU` et `lb_LU` existent ; `pt_LU` et `en_LU` non, et les réseaux qui lisent
+ces balises les ignorent en silence — le partage retombe alors sur la langue par défaut,
+exactement là où cela coûte le plus. Le portugais prend `pt_PT` et l'anglais `en_GB`
+(`entree-serveur.ts`, et un test qui le tient).
 
 ### Où mènent les liens
 
@@ -214,43 +255,90 @@ veut dire :
 
 ## Réserves ouvertes
 
-- **La traduction luxembourgeoise n'a pas été relue par une personne dont c'est la langue
-  maternelle.** C'est la langue du foyer dans une bonne part de la commune ; une tournure
-  fausse s'y remarque immédiatement.
-  La vitrine, elle, **est publiée** — dans les trois langues, dont celle-ci. Refermer
-  l'interrupteur retire les liens vers l'application ; cela ne retire pas du luxembourgeois
-  non relu de devant le public le plus à même de le remarquer. La réserve perd donc en
-  gravité, pas en existence : elle reste la seule des cinq qui demande une personne plutôt
-  qu'un commit.
-- **Les captures dépendent de l'environnement qui les produit.** Réserve levée pour la
-  partie qui était incertaine : la comparaison a tourné en intégration continue, et l'écart
-  supposé entre le Chromium du conteneur et celui d'une machine de développement s'est
-  vérifié — six fichiers sur vingt-quatre. D'où `npm run captures:conteneur`, et la règle
-  qu'on ne commite que sa sortie. Ce qui reste inconnu : le comportement le jour où
-  l'étiquette du conteneur changera. L'étape « concordance » du workflow refusera la
-  révision, ce qui est le but, mais personne ne l'a encore vue le faire.
-- **Les largeurs étroites ont été mesurées dans un moteur de rendu, pas sur un appareil.**
-  La page a été ouverte dans Chromium à 320, 360, 390, 414 et 768 px, en thème clair et
-  sombre, dans les trois langues, avec émulation tactile — trente combinaisons. Ce que
-  cette réserve annonçait sans le savoir s'y trouvait : la colonne de texte du héros
-  mesurait 390 px sur un écran de 320, et le titre comme le chapeau étaient COUPÉS, sans
-  défilement pour aller les chercher (voir le commentaire de `.heros__grille > *`). C'est
-  corrigé, et vérifié : plus aucune cible tactile sous 44 px, plus de texte tronqué.
-  Restent deux pixels de débord de document, dus au ruban des langues, que `overflow-x:
-  clip` retient et que rien ne laisse voir.
-  Ce qui n'a toujours PAS été fait : ouvrir la page sur un vrai téléphone. Un émulateur ne
-  rend ni les polices du système, ni la barre d'adresse qui mange la hauteur, ni les
-  marges de sécurité d'un écran à encoche — ces dernières sont posées dans la feuille de
-  style, jamais vues à l'œuvre.
-- **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` compose
-  ce que le navigateur devrait afficher ; il ne lit pas l'écran.
-- **Le nuage WebGL n'a été vu qu'à l'arrêt.** L'environnement de vérification suspendait
-  les images d'animation ; la composition a été validée sur une image fixe, le mouvement
-  seulement relu dans le code.
+La refonte en a levé cinq et en a ouvert deux. Elles sont classées par ce qu'elles coûtent
+à refermer, la plus chère d'abord.
+
+- **Les traductions portugaise et anglaise sont des premières rédactions**, et la
+  luxembourgeoise l'est redevenue. Le vocabulaire suit celui de l'application
+  (`paragem`/`morada`, `stop`/`on foot`) plutôt qu'un dictionnaire, ce qui écarte le
+  contresens mais pas la maladresse. Pour le luxembourgeois, la réserve **s'est aggravée** :
+  la refonte a réécrit presque chaque chaîne du fichier, les tuiles et les limites passant
+  d'un paragraphe à une ligne — et une phrase courte pardonne moins qu'une longue, faute de
+  contexte autour pour rattraper un mot mal choisi. C'est la langue du foyer dans une bonne
+  part de la commune, et la vitrine est publiée. **C'est la seule réserve qui demande une
+  personne plutôt qu'une commande.**
+
+- **Le thème sombre est une DÉRIVATION, pas une maquette.** La maquette approuvée ne
+  définit que le thème clair. Les valeurs sombres — crème inversé en vert-noir, sarcelle et
+  corail éclaircis — ont été construites ici, en tenant les rôles et la sémantique des deux
+  accents. Elles ont depuis été calculées (pire couple à 6,12:1, plus confortable qu'en
+  clair) **et regardées** : la page entière a été capturée dans les deux thèmes, et les
+  captures de l'application y basculent bien avec elle. Ce qui reste non validé est le
+  GOÛT : personne d'autre que la machine n'a encore donné son avis sur ce vert-noir.
+
+- **La page n'a toujours pas été ouverte sur un vrai téléphone.** Un émulateur ne rend ni
+  les polices du système, ni la barre d'adresse qui mange la hauteur, ni les marges de
+  sécurité d'un écran à encoche — ces dernières sont posées dans la feuille de style,
+  jamais vues à l'œuvre.
+
+- **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` calcule
+  ce que le navigateur devrait afficher ; il ne lit pas l'écran. La refonte a rendu ce
+  calcul plus fiable — les surfaces sont opaques, il n'y a plus d'empilement de voiles à
+  simuler — mais pas différent de nature.
+
+- **Les captures dépendent de l'environnement qui les produit.** Réserve inchangée sur le
+  fond : six fichiers sur vingt-quatre différaient entre le conteneur et une machine de
+  développement — les `semaine-*`, seul écran qui porte une carte Leaflet. D'où
+  `npm run captures:conteneur`, et la règle qu'on ne commite que sa sortie. Avec quarante
+  fichiers, l'écart attendu passe mécaniquement à dix. Ce qui reste inconnu : le
+  comportement le jour où l'étiquette du conteneur changera.
+  *Note pratique apprise en refaisant les captures :* le script photographie l'application
+  **à la révision inscrite dans `scripts/captures.source.json`** (aujourd'hui `509b621`),
+  pas à son `HEAD`. Sur un `HEAD` plus récent, l'avertissement d'indépendance ne s'ouvrait
+  plus au même endroit et le script échouait sur un clic introuvable. Sortir l'application
+  à cette révision avant de lancer les captures, comme le fait l'intégration continue.
+
 - **Le conteneur n'a pas encore tourné ailleurs qu'ici.** L'image se construit, se lance,
   et ses en-têtes ont été relevés à la main (voir plus bas) — mais sur cette machine, en
   HTTP, sans Traefik devant. Le point à surveiller au premier déploiement est
   `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
+
+### Réserves levées par cette refonte
+
+- *« Le nuage WebGL n'a été vu qu'à l'arrêt. »* — Il n'y a plus de nuage WebGL. `Fond.tsx`,
+  `fond.glsl.ts` et le curseur personnalisé ont été retirés avec le dégradé qu'ils
+  animaient. La réserve disparaît avec son objet, ce qui est la seule bonne façon d'en
+  refermer une.
+
+- *« La construction n'a pas été vérifiée. »* — `npm run verifier` passe : 81 tests sur 81,
+  contrastes tenus dans les deux thèmes, jetons conformes à l'application. `npm run build`
+  pré-rend les cinq langues et leurs pages d'indépendance.
+
+- *« Il manque seize captures et cinq vignettes de partage. »* — Les quarante captures ont
+  été engendrées dans le conteneur épinglé, et les vingt-quatre existantes en sont
+  ressorties **octet pour octet identiques** : la reproductibilité est vérifiée, pas
+  supposée. Les cinq vignettes et les icônes matricielles ont été régénérées.
+
+- *« La mise en page n'a été vue par aucun navigateur. »* — Elle a été construite, servie et
+  mesurée dans Chromium à 390, 600, 768, 900, 1024, 1280 et 1440 px, dans les deux thèmes,
+  plus un profil tactile (Pixel 7). Trois défauts s'y trouvaient, tous corrigés :
+  1. **15 px de débord de document** à 390 px, dus au halo du héros (`inset: … -10% …`) ;
+     la section le coupe désormais à son bord.
+  2. **Les liens du pied de page étaient tombés à 23 px de haut.** La règle des 44 px
+     existait avant la refonte et je l'avais perdue en réécrivant `sections.css`. Rétablie —
+     c'est le seul endroit d'où ces pages sont atteignables.
+  3. **Les six limites se posaient en 4 + 2.** Le plancher de 248 px de la maquette laisse
+     entrer quatre colonnes dans une bande de 1 240 px ; la deuxième rangée à moitié vide
+     est exactement ce que la règle « trois ou six » existe pour empêcher. Plancher porté à
+     280 px, ce qui force trois colonnes.
+  Reste, sur pointeur fin uniquement, les sélecteurs de l'en-tête à 34 px : c'est l'exception
+  documentée, et elle tient — sur pointeur grossier ils sont masqués, le pied de page les
+  porte à taille pleine, et le relevé sur Pixel 7 ne trouve **aucune** cible sous 44 px.
+
+- *« Le budget de poids des captures. »* — Il était global (1,4 Mio) et calibré sur trois
+  langues ; cinq langues le faisaient échouer sans qu'aucune image n'ait grossi. Il est
+  désormais **par langue** (480 ko), ce qui conserve la marge d'origine et ne se
+  redemandera plus à chaque langue ajoutée.
 
 ## Le déploiement
 
