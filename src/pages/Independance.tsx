@@ -36,7 +36,6 @@ export function Independance() {
         {contenu.general.sautContenu}
       </a>
 
-      <div className="fond" aria-hidden="true" />
 
       <main id="contenu" className="section">
         <div className="bande bande--texte pile pile--6">

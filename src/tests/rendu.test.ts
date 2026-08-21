@@ -8,7 +8,7 @@
  *   s'ouvrait parfaitement ; seule la vignette d'un lien partagé était vide — c'est-à-dire
  *   la seule chose que voit un groupe de parents avant de décider d'ouvrir le lien.
  * - Le QR partait d'un chemin relatif. Il s'affichait à la racine, donc en français, donc
- *   dans la langue où on relisait la page ; il manquait sur `/de/` et sur `/lb/`.
+ *   dans la langue où on relisait la page ; il manquait sur `/de/`, `/lb/`, `/pt/` et `/en/`.
  *
  * D'où la règle des deux : on vérifie que la balise pointe un fichier QUI EXISTE, et
  * qu'aucune adresse ne dépend du dossier depuis lequel la page est servie.
@@ -68,6 +68,20 @@ describe('pré-rendu', () => {
    * C'est le même raisonnement que pour `og:image` ci-dessus, et il vaut d'autant plus
    * ici : une capture manquante ne casse pas la page, elle laisse un cadre de téléphone
    * vide au milieu du récit — et ce cadre a l'air d'un choix de mise en page.
+   */
+  /*
+   * CE TEST ÉCHOUE TANT QUE LES CAPTURES PORTUGAISES ET ANGLAISES N'ONT PAS ÉTÉ PRISES.
+   *
+   * Le passage à cinq langues porte le manifeste de 24 à 40 fichiers. Les seize nouveaux
+   * (`{plan,assistant,aujourdhui,semaine}-{pt,en}-{clair,sombre}.webp`) se produisent avec
+   * `npm run captures:conteneur`, qui a besoin de Docker et du dépôt de l'application à
+   * côté — pas d'une modification de code.
+   *
+   * L'échec est VOULU et il est laissé tel quel. Le neutraliser en attendant reviendrait à
+   * publier `/pt/` et `/en/` avec les captures françaises, c'est-à-dire une page anglaise
+   * qui montre une interface française : exactement le genre d'écart que ce fichier
+   * existe pour attraper, et que le test suivant — « la page ne montre que les captures de
+   * sa langue » — interdit par ailleurs.
    */
   it('chaque capture annoncée par le manifeste existe sur le disque', () => {
     const manquantes = []
@@ -171,7 +185,7 @@ describe('pré-rendu', () => {
    * La page « Indépendance ».
    *
    * Elle n'est conditionnée par rien — contrairement aux mentions, qui attendent l'adresse
-   * de l'éditeur — donc elle doit exister dans les trois langues, toujours.
+   * de l'éditeur — donc elle doit exister dans les cinq langues, toujours.
    */
   it.each(LANGUES)('%s : la page indépendance est engendrée et se désigne elle-même', (langue) => {
     expect(PAGES).toContain('independance')
@@ -293,12 +307,29 @@ describe('pré-rendu', () => {
     expect(html.includes('qr-application.svg')).toBe(APP_PUBLIEE)
   })
 
-  it.each(LANGUES)('%s : annonce les deux autres langues au partage', (langue) => {
+  /*
+   * Les locales Open Graph.
+   *
+   * Elles ne sont PAS le code de langue suivi de `_LU`, et c'est la raison d'être de ce
+   * test. `fr_LU`, `de_LU` et `lb_LU` existent — trois langues officielles du pays. Le
+   * portugais et l'anglais n'ont pas cette propriété : `pt_LU` et `en_LU` ne sont pas des
+   * locales déclarées, et les réseaux qui lisent ces balises les ignorent en silence, ce
+   * qui fait retomber le partage sur la langue par défaut. Le défaut serait invisible
+   * exactement là où il coûte : dans le fil d'une famille lusophone.
+   */
+  const LOCALES_ATTENDUES: Record<string, string> = {
+    fr: 'fr_LU',
+    de: 'de_LU',
+    lb: 'lb_LU',
+    pt: 'pt_PT',
+    en: 'en_GB',
+  }
+
+  it.each(LANGUES)('%s : annonce les quatre autres langues au partage', (langue) => {
     const { tete } = rendre(langue)
-    const autres = LANGUES.filter((l) => l !== langue)
-    for (const l of autres) {
-      expect(tete).toContain(`og:locale:alternate" content="${l}_LU"`)
+    for (const l of LANGUES.filter((l) => l !== langue)) {
+      expect(tete).toContain(`og:locale:alternate" content="${LOCALES_ATTENDUES[l]}"`)
     }
-    expect(tete).toContain(`og:locale" content="${langue}_LU"`)
+    expect(tete).toContain(`og:locale" content="${LOCALES_ATTENDUES[langue]}"`)
   })
 })

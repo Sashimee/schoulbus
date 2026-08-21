@@ -28,6 +28,27 @@ import type { Langue } from './contenu/type.ts'
 
 export { LANGUES, PAGES }
 
+/*
+ * La locale Open Graph, qui n'est PAS le code de langue suivi du pays.
+ *
+ * `fr_LU`, `de_LU` et `lb_LU` existent : ce sont les trois langues officielles du
+ * Luxembourg, et un lecteur de ces pages-là est très probablement au Luxembourg. Le
+ * portugais et l'anglais n'ont pas cette propriété — `pt_LU` et `en_LU` ne sont pas des
+ * locales déclarées, et Facebook comme LinkedIn les ignorent en silence, ce qui fait
+ * retomber le partage sur la langue par défaut. On donne donc à ces deux-là leur locale
+ * standard, quitte à ce qu'elle nomme un autre pays que celui du lecteur : mieux vaut
+ * une locale reconnue qu'une locale exacte que personne ne lit.
+ */
+const LOCALES_OG: Record<Langue, string> = {
+  fr: 'fr_LU',
+  de: 'de_LU',
+  lb: 'lb_LU',
+  pt: 'pt_PT',
+  en: 'en_GB',
+}
+
+
+
 /**
  * Échappe ce qui entre dans un attribut HTML. Les textes viennent de nous, mais un
  * guillemet oublié dans une traduction casserait la page entière, silencieusement.
@@ -148,8 +169,8 @@ export function rendre(
   const { titre, description } = textesDePage(langue, page)
 
   /*
-   * Les alternatives de langue. `hreflang` dit à un moteur que ces trois adresses sont
-   * la même page en trois langues, et non trois pages qui se copient — sans quoi elles
+   * Les alternatives de langue. `hreflang` dit à un moteur que ces cinq adresses sont
+   * la même page en cinq langues, et non cinq pages qui se copient — sans quoi elles
    * se concurrenceraient l'une l'autre dans les résultats. Elles pointent la MÊME page
    * dans les autres langues, pas l'accueil : depuis les mentions allemandes, on doit
    * arriver aux mentions françaises.
@@ -163,7 +184,7 @@ export function rendre(
    * qu'une version : un partage dans un groupe germanophone ouvrirait la page française.
    */
   const localesAlternatives = LANGUES.filter((l) => l !== langue)
-    .map((l) => `    <meta property="og:locale:alternate" content="${CONTENUS[l].codeLangue}_LU" />`)
+    .map((l) => `    <meta property="og:locale:alternate" content="${LOCALES_OG[l]}" />`)
     .join('\n')
 
   // La vignette de la langue rendue, pas celle du français (voir `imagePartage`).
@@ -215,7 +236,7 @@ export function rendre(
     `    <meta property="og:image:width" content="1200" />`,
     `    <meta property="og:image:height" content="630" />`,
     `    <meta property="og:image:alt" content="${echapper(contenu.general.marque)}" />`,
-    `    <meta property="og:locale" content="${contenu.codeLangue}_LU" />`,
+    `    <meta property="og:locale" content="${LOCALES_OG[langue]}" />`,
     localesAlternatives,
     // `summary_large_image` : la vignette occupe toute la largeur de la carte, ce qui
     // rend la mention d'indépendance lisible au lieu d'une miniature carrée.

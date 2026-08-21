@@ -4,7 +4,7 @@
  *     node scripts/captures.mjs              (itération locale)
  *     npm run captures                       (dans le conteneur épinglé — le seul qui compte)
  *
- * Quatre écrans × trois langues × deux thèmes = vingt-quatre fichiers, engendrés depuis
+ * Quatre écrans × cinq langues × deux thèmes = quarante fichiers, engendrés depuis
  * l'application elle-même. Les fichiers sont VERSIONNÉS : la vitrine doit pouvoir se
  * construire seule, sans l'application à côté, exactement comme pour `build-chiffres.mjs`
  * et les vignettes de partage.
@@ -63,19 +63,48 @@ const TRAVAIL = resolve(ici, '../public/.captures-en-cours')
 const TUILES = resolve(ici, 'fixtures/tuiles')
 const PROVENANCE = resolve(ici, 'captures.source.json')
 
-const LANGUES = ['fr', 'de', 'lb']
-/** L'application résout sa langue depuis `navigator.languages` faute de préférence. */
-const ETIQUETTE_LOCALE = { fr: 'fr-LU', de: 'de-LU', lb: 'lb-LU' }
+/* Les cinq langues de la vitrine, dans l'ordre de `LANGUES` (`src/i18n/contexte.ts`). */
+const LANGUES = ['fr', 'de', 'lb', 'pt', 'en']
+/**
+ * L'application résout sa langue depuis `navigator.languages` faute de préférence.
+ *
+ * Le portugais et l'anglais ne prennent PAS le suffixe `-LU` : `pt-LU` et `en-LU` ne sont
+ * pas des locales déclarées, et un navigateur qui en reçoit une inconnue retombe sur sa
+ * langue par défaut — l'application se serait photographiée en français, avec un nom de
+ * fichier portugais. Le défaut n'aurait sauté aux yeux de personne, puisque les captures
+ * se relisent rarement dans une langue qu'on ne parle pas.
+ */
+const ETIQUETTE_LOCALE = {
+  fr: 'fr-LU',
+  de: 'de-LU',
+  lb: 'lb-LU',
+  pt: 'pt-PT',
+  en: 'en-GB',
+}
 const PORT = Number(process.env.PORT_CAPTURES ?? 5183)
 const RAFRAICHIR_TUILES = process.argv.includes('--rafraichir-tuiles')
 
 /** Le poids est une décision, pas une conséquence. Le script la fait respecter. */
 const POIDS_FICHIER_MAX = 60 * 1024
-const POIDS_TOTAL_MAX = 1.4 * 1024 * 1024
+/*
+ * LE BUDGET TOTAL EST PAR LANGUE, et non global.
+ *
+ * Il était global — 1,4 Mio — et calibré sur trois langues. Le passage à cinq l'a fait
+ * échouer pour la seule raison qu'il y avait deux langues de plus : les quarante fichiers
+ * pèsent 1 659 ko là où vingt-quatre en pesaient 1 048, sans qu'aucune image n'ait grossi.
+ * Un budget qu'on relève chaque fois qu'on ajoute une langue ne décide plus de rien, il
+ * enregistre.
+ *
+ * 480 ko par langue conserve exactement la marge d'origine (1 434 ko pour trois langues),
+ * et se trouve à 45 % au-dessus des 332 ko qu'une langue pèse réellement aujourd'hui. Ce
+ * qu'il continue d'attraper, et qui est le vrai risque : une qualité d'encodage relevée
+ * sans y penser, ou un écran ajouté au manifeste sans qu'on regarde ce qu'il coûte.
+ */
+const POIDS_PAR_LANGUE_MAX = 480 * 1024
 /*
  * 0,68 plutôt que 0,73 : l'écran du plan est un tableau de chiffres sur toute la hauteur,
- * donc l'image la plus dense des vingt-quatre, et c'est lui qui fixe le point haut. À
- * 0,73 il dépassait le budget de deux kilo-octets ; l'écart ne se voit pas sur du texte
+ * donc l'image la plus dense des quarante, et c'est lui qui fixe le point haut. À
+ * 0,73 il dépassait le budget par fichier ; l'écart ne se voit pas sur du texte
  * rendu à deux fois la densité, le dépassement se serait vu au chargement.
  */
 const QUALITE = 0.68
@@ -641,10 +670,12 @@ try {
         trop.map((p) => `  ${p.nom} — ${Math.round(p.poids / 1024)} ko`).join('\n'),
     )
   }
-  if (total > POIDS_TOTAL_MAX) {
+  const budgetTotal = POIDS_PAR_LANGUE_MAX * LANGUES.length
+  if (total > budgetTotal) {
     throw new Error(
       `L'ensemble des captures pèse ${Math.round(total / 1024)} ko, au-delà du budget de ` +
-        `${Math.round(POIDS_TOTAL_MAX / 1024)} ko.`,
+        `${Math.round(budgetTotal / 1024)} ko ` +
+        `(${Math.round(POIDS_PAR_LANGUE_MAX / 1024)} ko × ${LANGUES.length} langues).`,
     )
   }
 

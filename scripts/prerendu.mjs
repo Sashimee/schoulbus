@@ -1,5 +1,5 @@
 /*
- * Pré-rendu des trois langues en HTML statique.
+ * Pré-rendu des cinq langues en HTML statique.
  *
  *     dist/index.html      français
  *     dist/de/index.html   allemand
@@ -127,7 +127,7 @@ const adresse = (langue, page) => {
 const sitemap = [
   '<?xml version="1.0" encoding="UTF-8"?>',
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
-  // Six adresses : deux pages dans trois langues. Les alternatives d'une entrée pointent
+  // Dix adresses : deux pages dans cinq langues. Les alternatives d'une entrée pointent
   // la MÊME page dans les autres langues, jamais l'accueil.
   ...PAGES.flatMap((page) =>
     LANGUES.map((l) => {
