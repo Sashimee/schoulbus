@@ -124,7 +124,7 @@ function couplesTexte(t) {
     ['encre-faible', t.encreFaible, t.creux, 'légende « départ · Kneppchen » de la tuile finale'],
     ['sarcelle', t.sarcelle, t.fond, 'liens, sur-titres en chasse fixe'],
     ['sarcelle', t.sarcelle, t.bande, 'lien « Lire la page Limites »'],
-    ['sarcelle', t.sarcelle, t.surface, 'icônes des tuiles, puces de la carte claire'],
+    ['sarcelle', t.sarcelle, t.surface, 'puces de la carte claire'],
     ['sarcelle-forte', t.sarcelleForte, t.fond, 'valeurs des annotations du héros'],
     ['sarcelle-forte', t.sarcelleForte, t.surface, 'nombres de la bande de chiffres'],
     ['sarcelle-forte', t.sarcelleForte, t.creux, 'l’heure de la tuile finale'],
@@ -144,12 +144,23 @@ function couplesTexte(t) {
 /**
  * Les couples de GRANDS CARACTÈRES et d'éléments non textuels. Seuil 3:1.
  *
- * Deux, et il ne doit jamais y en avoir un troisième sans qu'on écrive ici pourquoi.
+ * Il y en a trois, et il ne doit jamais y en avoir un quatrième sans qu'on écrive ici
+ * pourquoi.
  */
 function couplesGrands(t) {
   return [
     ['corail', t.corail, t.surface, '« seize minutes » du titre final — 28 à 42 px, graisse 600'],
-    ['corail', t.corail, t.surface, 'le tracé de l’icône « perturbations » — 20 px, non textuel'],
+    /*
+     * Les deux tracés d'icône ne se rencontrent plus sur la surface de la tuile : ils sont
+     * posés sur une pastille de leur propre teinte, en aplat pâle (voir `.tuile__puce`).
+     * Le couple à vérifier a donc changé de fond, et le corail sur corail pâle est le plus
+     * serré des deux — 3,58:1 en clair, le seul de toute la page qui vive dans la moitié
+     * basse de sa marge. C'est ce qui rend cette ligne indispensable : éclaircir le corail
+     * pâle d'un cran, un jour, pour « adoucir » la pastille, ferait tomber le tracé sous
+     * son seuil sans qu'aucune autre vérification ne bronche.
+     */
+    ['sarcelle', t.sarcelle, t.sarcellePale, 'le tracé des icônes de tuile — 20 px, non textuel'],
+    ['corail', t.corail, t.corailPale, 'le tracé de l’icône « perturbations » — 20 px, non textuel'],
   ]
 }
 
