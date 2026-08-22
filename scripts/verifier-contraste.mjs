@@ -25,7 +25,7 @@
  * le seuil que la norme fixe pour les GRANDS caractères (>= 24 px, ou >= 18,66 px en
  * gras) et pour les éléments non textuels. Le corail vif `--vitrine-corail` ne sert qu'à
  * cela — le mot « seize minutes » du titre final, dessiné entre 28 et 42 px en graisse
- * 600, et le tracé d'une icône de 20 px. Partout où le corail devient du texte courant,
+ * 600, et le tracé d'une icône de 24 px. Partout où le corail devient du texte courant,
  * c'est `--vitrine-corail-encre` qui le porte, et lui est vérifié à 4,5.
  *
  * Chaque couple cite où il se rencontre. Tester le produit cartésien de toutes les encres
@@ -159,8 +159,8 @@ function couplesGrands(t) {
      * pâle d'un cran, un jour, pour « adoucir » la pastille, ferait tomber le tracé sous
      * son seuil sans qu'aucune autre vérification ne bronche.
      */
-    ['sarcelle', t.sarcelle, t.sarcellePale, 'le tracé des icônes de tuile — 20 px, non textuel'],
-    ['corail', t.corail, t.corailPale, 'le tracé de l’icône « perturbations » — 20 px, non textuel'],
+    ['sarcelle', t.sarcelle, t.sarcellePale, 'le tracé des icônes de tuile — 24 px, non textuel'],
+    ['corail', t.corail, t.corailPale, 'le tracé de l’icône « perturbations » — 24 px, non textuel'],
   ]
 }
 

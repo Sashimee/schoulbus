@@ -5,8 +5,9 @@
  * seul dans une boîte de 24, contour à 1,75, extrémités et jointures arrondies, couleur
  * héritée.
  *
- * LE JEU A MAIGRI AVEC LA REFONTE. Il portait dix-huit tracés ; il en reste dix — les
- * neuf des tuiles, et la flèche de lien sortant. Sont partis avec leurs sections : les
+ * LE JEU A MAIGRI AVEC LA REFONTE. Il portait dix-huit tracés ; il en reste douze — les
+ * neuf des tuiles, la flèche de lien sortant, et les deux du sélecteur de thème. Sont
+ * partis avec leurs sections : les
  * quatre du rail de la maquette de téléphone (accueil, enfants, réglages), les trois du
  * schéma de confidentialité (cadenas, loupe, dièse), et trois autres qu'aucune section
  * n'appelait plus. Une icône qu'on garde « au cas où » est une icône que personne ne
@@ -33,8 +34,22 @@ const TRACES = {
   adresse: 'M12 21s6.5-6 6.5-10.5a6.5 6.5 0 10-13 0C5.5 15 12 21 12 21zM12 8.5a2 2 0 100 4 2 2 0 000-4z',
   horloge: 'M12 21a9 9 0 100-18 9 9 0 000 18zM12 7.5V12l3 1.8',
 
-  /* --- Le seul tracé hors des tuiles : la flèche d'un lien sortant --- */
+  /* --- La flèche d'un lien sortant --- */
   externe: 'M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5',
+
+  /*
+   * --- Le sélecteur de thème ---
+   *
+   * Le soleil et le croissant, et non deux mots. « Clair » et « Sombre » demandaient de
+   * lire pour agir, dans cinq langues et dans une barre où la place manque ; ces deux
+   * dessins-là sont compris sans être lus, ce qui est exactement ce qu'on attend d'une
+   * commande qu'on actionne d'un pouce. Les mots ne disparaissent pas pour autant : ils
+   * restent le nom accessible du bouton (`aria-label`) et son infobulle — voir
+   * `Selecteurs.tsx`. Une icône seule sans nom accessible serait un bouton muet.
+   */
+  soleil:
+    'M12 8a4 4 0 100 8 4 4 0 000-8zM12 2.5v2M12 19.5v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2.5 12h2M19.5 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4',
+  lune: 'M12 3.2a6.4 6.4 0 008.8 8.8 8.8 8.8 0 11-8.8-8.8z',
 } as const
 
 export function Icone({ nom, className }: { nom: NomIcone; className?: string }) {
