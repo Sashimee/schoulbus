@@ -207,17 +207,57 @@
   }
 
   /*
+   * Le segment qui porte un dessin plutôt qu'un mot : le thème.
+   *
+   * Il est CARRÉ, et c'est le point. Un segment de texte tire sa largeur de son libellé —
+   * « Sombre » mesurait 70 px, « Clair » 54, et deux boutons voisins de largeurs
+   * différentes pour deux états symétriques se lisaient déjà mal. Un dessin n'a pas de
+   * libellé : sa boîte est donc posée ici, égale à sa hauteur, et les deux états ont
+   * enfin la même surface.
+   */
+  .segments__choix--icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--cible);
+    padding-inline: 0;
+  }
+  .segments__choix--icone svg {
+    inline-size: 18px;
+    block-size: 18px;
+  }
+
+  /*
    * Dans l'en-tête, les segments descendent sous la cible de 44 px pour tenir dans une
-   * barre de 60 px. C'est admis à UNE condition, et elle est tenue : le pied de page
-   * porte les deux mêmes commandes à taille pleine, et c'est là que va un doigt. Sur
-   * pointeur grossier, celles de l'en-tête disparaissent donc entièrement.
+   * barre de 60 px. C'est admis à UNE condition : qu'aucun doigt n'ait à les viser.
+   *
+   * ILS DISPARAISSAIENT DONC AU POINTEUR GROSSIER, et le pied de page restait le seul
+   * endroit d'où une personne sur téléphone pouvait changer de langue. C'était une page
+   * entière à faire défiler pour une commande dont on a besoin à la première ligne — et
+   * la langue est justement ce dont on a besoin AVANT de lire, pas après. Ce sont les
+   * segments qui grandissent maintenant, pas la commande qui s'en va.
+   *
+   * Ce que cela coûte en largeur est payé par l'étiquette « bientôt disponible », retirée
+   * de la barre au pointeur grossier : elle n'y est pas une commande, elle redit un état
+   * que le héros affiche trois lignes plus bas, en plus grand. Le pied de page garde ses
+   * deux mêmes commandes — non plus comme unique recours, mais parce qu'on y arrive avec
+   * la question « et en portugais ? » encore en tête.
    */
   .entete .segments__choix {
     min-block-size: 34px;
     padding-inline: var(--espace-2);
   }
+  .entete .segments__choix--icone {
+    inline-size: 34px;
+  }
   @media (pointer: coarse) {
-    .entete .segments {
+    .entete .segments__choix {
+      min-block-size: var(--cible);
+    }
+    .entete .segments__choix--icone {
+      inline-size: var(--cible);
+    }
+    .entete .etiquette--entete {
       display: none;
     }
   }

@@ -106,6 +106,27 @@
       display: none;
     }
   }
+  /*
+   * Au doigt, la barre porte les deux commandes à taille pleine (voir `composants.css`) :
+   * sept cibles de 44 px et une vignette. Sur 320 px de largeur utile — le téléphone le
+   * plus étroit encore répandu — elle passait à deux rangées pour SEPT pixels. Ce sont
+   * les deux gouttières intérieures qu'on reprend, jamais les cibles : un bouton rétréci
+   * se rate, un blanc rétréci se remarque à peine. Plus étroit encore, la barre se replie
+   * quand même, et c'est très bien — `flex-wrap` était déjà là pour ça.
+   *
+   * Ces deux règles sont ICI et non auprès des autres réglages d'en-tête de
+   * `composants.css` : `.entete` et `.entete__actions` sont déclarées dans ce fichier,
+   * donc dans la couche `sections`, qui passe après `composants`. Écrites là-bas, elles
+   * ne gagnaient pas.
+   */
+  @media (pointer: coarse) {
+    .entete {
+      gap: var(--espace-2);
+    }
+    .entete__actions {
+      gap: var(--espace-1);
+    }
+  }
 
   /* ------------------------------------------------------------------ *
    * Héros
@@ -537,16 +558,16 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    inline-size: 40px;
-    block-size: 40px;
+    inline-size: 46px;
+    block-size: 46px;
     flex: none;
     border-radius: var(--rayon-s);
     background: var(--surface-accent);
     color: var(--accent);
   }
   .tuile__puce svg {
-    inline-size: 20px;
-    block-size: 20px;
+    inline-size: 24px;
+    block-size: 24px;
   }
   /* La seule pastille en corail de la grille : les perturbations. */
   .tuile__puce--alerte {

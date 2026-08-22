@@ -2,10 +2,15 @@
  * Le pied de page.
  *
  * Il reprend les commandes de langue et de thème à taille pleine : celles de l'en-tête
- * mesurent 34 px de haut et sont masquées au pointeur grossier, faute de quoi elles
- * seraient sous la cible tactile de 44 px imposée par le projet. Ici, elles sont à
- * bonne taille, et c'est le seul endroit où une personne sur téléphone peut changer de
- * langue.
+ * mesurent 34 px de haut au pointeur fin, ce qui est sous la cible tactile de 44 px que
+ * le projet s'impose.
+ *
+ * CE N'EST PLUS LE SEUL ENDROIT OÙ UNE PERSONNE SUR TÉLÉPHONE PEUT CHANGER DE LANGUE.
+ * Ça l'était, et c'était une page entière à faire défiler pour une commande dont on a
+ * besoin à la première ligne : au pointeur grossier, les segments de l'en-tête passent
+ * désormais à 44 px au lieu de disparaître (voir `composants.css`). Ceux d'ici ne sont
+ * donc plus un recours mais une reprise — on arrive en bas de page avec la question
+ * « et en portugais ? » encore en tête, et il n'y a plus à remonter pour y répondre.
  *
  * ELLES COMPTENT CINQ SEGMENTS DEPUIS LA REFONTE, et non plus trois. Sur un téléphone
  * étroit, cinq pastilles de 44 px ne tiennent pas sur une ligne : la commande passe à la
