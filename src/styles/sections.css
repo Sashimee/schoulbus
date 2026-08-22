@@ -515,13 +515,42 @@
     padding: var(--espace-5);
     background: var(--surface);
   }
+  /*
+   * L'ICÔNE D'UNE TUILE A UNE TAILLE, ET C'EST ICI QU'ELLE S'ÉCRIT.
+   *
+   * Elle ne s'écrivait plus. Le `<svg>` du jeu d'icônes porte un `viewBox` et aucune
+   * dimension — c'est ce qui lui permet de prendre la taille que son emplacement lui
+   * donne, comme `.marque__logo` ou `.lien__icone` la lui donnent. Cet emplacement-ci ne
+   * lui en donnait aucune, et le navigateur applique alors son repli pour un remplacé
+   * sans dimension intrinsèque : la largeur du bloc. Neuf tracés de vingt-quatre unités
+   * dessinés à cent soixante pixels, un par tuile. Rien dans les tests ne pouvait le
+   * voir — le HTML était juste, c'est la feuille de style qui manquait une ligne.
+   *
+   * La pastille, elle, n'est pas une réparation mais un choix : le tracé seul, posé nu
+   * sur la surface de la tuile, n'a rien qui le rattache au bloc de texte qu'il coiffe.
+   * Un aplat pâle de la même teinte lui donne son assise, et surtout **il porte la
+   * sémantique** — la tuile des perturbations prend la pastille corail, et se distingue
+   * désormais d'un coup d'œil plutôt qu'au trait près. Cela vient toujours de la DONNÉE
+   * (`ton: 'alerte'`), jamais d'un rang : une tuile qu'on déplace emporte sa couleur.
+   */
   .tuile__puce {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 40px;
+    block-size: 40px;
+    flex: none;
+    border-radius: var(--rayon-s);
+    background: var(--surface-accent);
     color: var(--accent);
   }
-  /* La seule icône en corail de la grille : les perturbations. Portée par la donnée
-     (`ton: 'alerte'`), jamais par un rang — voir `Fonctions.tsx`. */
+  .tuile__puce svg {
+    inline-size: 20px;
+    block-size: 20px;
+  }
+  /* La seule pastille en corail de la grille : les perturbations. */
   .tuile__puce--alerte {
+    background: var(--vitrine-corail-pale);
     color: var(--vitrine-corail);
   }
   .tuile__titre {

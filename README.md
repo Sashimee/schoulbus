@@ -281,6 +281,17 @@ La refonte en a levé cinq et en a ouvert deux. Elles sont classées par ce qu'e
   sécurité d'un écran à encoche — ces dernières sont posées dans la feuille de style,
   jamais vues à l'œuvre.
 
+- **Les pastilles d'icône des tuiles n'ont été vues par aucun navigateur.** Elles corrigent
+  un défaut que la campagne de mesures dans Chromium, ci-dessous, n'a pas attrapé : les
+  neuf `<svg>` des tuiles n'avaient plus de règle de taille, et le navigateur leur
+  appliquait son repli pour un remplacé sans dimension intrinsèque — la largeur du bloc,
+  soit un tracé de vingt-quatre unités dessiné à cent soixante pixels. Le HTML était juste,
+  les 81 tests passaient, et seule une page affichée pouvait le dire. Le remplacement — une
+  pastille de 40 px, un tracé de 20 px, l'aplat pâle de la teinte de la tuile — a été
+  calculé (les deux couples tiennent, 6,87:1 et 6,57:1) mais **pas regardé** : aucun
+  navigateur n'était installable ici. C'est la moins chère des réserves à refermer, et
+  celle qui vient de rappeler ce que coûte de ne pas le faire.
+
 - **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` calcule
   ce que le navigateur devrait afficher ; il ne lit pas l'écran. La refonte a rendu ce
   calcul plus fiable — les surfaces sont opaques, il n'y a plus d'empilement de voiles à
