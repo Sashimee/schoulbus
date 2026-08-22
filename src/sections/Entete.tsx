@@ -5,8 +5,10 @@
  * dépassé, au motif qu'en haut de page il ne dirait rien que le héros ne dise déjà. Le
  * héros de la refonte commence par une capture, pas par une marque : sans en-tête, la
  * page s'ouvrait sur une photo d'écran sans que rien ne nomme le site auquel elle
- * appartient. Il est collant, translucide et flouté, et il porte la seule chose qu'on
- * puisse vouloir à tout moment — la langue.
+ * appartient. Il est collant, translucide et flouté, et il porte les deux seules choses
+ * qu'on puisse vouloir à tout moment — la langue et le thème. Au doigt aussi, désormais :
+ * ces deux commandes y grandissent au lieu de s'effacer, et le pied de page a cessé
+ * d'être le seul endroit d'où un téléphone pouvait les atteindre.
  *
  * LA BARRE DE PROGRESSION A DISPARU. Elle était cousue au bord bas et mise à jour par
  * `motion` hors du cycle de React, et c'était le SEUL `style={{ … }}` en ligne de toute

@@ -255,8 +255,9 @@ veut dire :
 
 ## Réserves ouvertes
 
-La refonte en a levé cinq et en a ouvert deux. Elles sont classées par ce qu'elles coûtent
-à refermer, la plus chère d'abord.
+La refonte en a levé cinq et en a ouvert deux ; deux autres se sont ouvertes puis
+refermées depuis, et sont listées avec les levées. Elles sont classées par ce qu'elles
+coûtent à refermer, la plus chère d'abord.
 
 - **Les traductions portugaise et anglaise sont des premières rédactions**, et la
   luxembourgeoise l'est redevenue. Le vocabulaire suit celui de l'application
@@ -281,17 +282,6 @@ La refonte en a levé cinq et en a ouvert deux. Elles sont classées par ce qu'e
   sécurité d'un écran à encoche — ces dernières sont posées dans la feuille de style,
   jamais vues à l'œuvre.
 
-- **Les pastilles d'icône des tuiles n'ont été vues par aucun navigateur.** Elles corrigent
-  un défaut que la campagne de mesures dans Chromium, ci-dessous, n'a pas attrapé : les
-  neuf `<svg>` des tuiles n'avaient plus de règle de taille, et le navigateur leur
-  appliquait son repli pour un remplacé sans dimension intrinsèque — la largeur du bloc,
-  soit un tracé de vingt-quatre unités dessiné à cent soixante pixels. Le HTML était juste,
-  les 81 tests passaient, et seule une page affichée pouvait le dire. Le remplacement — une
-  pastille de 40 px, un tracé de 20 px, l'aplat pâle de la teinte de la tuile — a été
-  calculé (les deux couples tiennent, 6,87:1 et 6,57:1) mais **pas regardé** : aucun
-  navigateur n'était installable ici. C'est la moins chère des réserves à refermer, et
-  celle qui vient de rappeler ce que coûte de ne pas le faire.
-
 - **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` calcule
   ce que le navigateur devrait afficher ; il ne lit pas l'écran. La refonte a rendu ce
   calcul plus fiable — les surfaces sont opaques, il n'y a plus d'empilement de voiles à
@@ -314,7 +304,7 @@ La refonte en a levé cinq et en a ouvert deux. Elles sont classées par ce qu'e
   HTTP, sans Traefik devant. Le point à surveiller au premier déploiement est
   `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
 
-### Réserves levées par cette refonte
+### Réserves levées
 
 - *« Le nuage WebGL n'a été vu qu'à l'arrêt. »* — Il n'y a plus de nuage WebGL. `Fond.tsx`,
   `fond.glsl.ts` et le curseur personnalisé ont été retirés avec le dégradé qu'ils
@@ -342,9 +332,37 @@ La refonte en a levé cinq et en a ouvert deux. Elles sont classées par ce qu'e
      entrer quatre colonnes dans une bande de 1 240 px ; la deuxième rangée à moitié vide
      est exactement ce que la règle « trois ou six » existe pour empêcher. Plancher porté à
      280 px, ce qui force trois colonnes.
+  4. **L'en-tête collant de la section « Fonctions » ne décrochait jamais.** Trouvé plus
+     tard, en photographiant la page défiler sur un profil tactile : replié, il restait
+     cloué à 6 rem du haut et les neuf tuiles passaient dessous, sans fond entre elles et
+     lui — deux textes superposés sur toute la hauteur de la section. La feuille de style
+     affirmait le contraire (« le décrochage se fait tout seul »), et le raisonnement était
+     faux : le bloc dans lequel un élément collant se déplace n'est pas sa propre rangée
+     flexible, c'est la boîte de son conteneur, tuiles comprises. Il ne colle désormais que
+     lorsqu'il y a un « à côté », par une requête de conteneur — la largeur dont la rangée
+     dispose, et non celle de la fenêtre. **Une capture fixe ne pouvait pas voir ce
+     défaut-là** : il ne se produit qu'en défilant.
   Reste, sur pointeur fin uniquement, les sélecteurs de l'en-tête à 34 px : c'est l'exception
-  documentée, et elle tient — sur pointeur grossier ils sont masqués, le pied de page les
-  porte à taille pleine, et le relevé sur Pixel 7 ne trouve **aucune** cible sous 44 px.
+  documentée, et elle tient — sur pointeur grossier ils passent à 44 px, et le relevé sur
+  Pixel 7 ne trouve **aucune** cible sous 44 px.
+
+- *« Les pastilles d'icône des tuiles n'ont été vues par aucun navigateur. »* — Elles l'ont
+  été. Chromium est installé ici depuis, et la page a été photographiée à 360, 390 et
+  1 280 px, dans les deux thèmes. La pastille passe à 46 px et le tracé à 24 px : à 40/20
+  les icônes se lisaient comme des vignettes de note de bas de page à côté du titre
+  qu'elles coiffent. Ce qui reste vrai de la réserve d'origine, et qui vaut d'être retenu :
+  le défaut qu'elle corrigeait — neuf tracés de 24 unités dessinés à 160 px, faute d'une
+  règle de taille — a traversé une campagne de mesures dans Chromium, 81 tests et une mise
+  en ligne. Le HTML était juste ; seule une page **regardée** pouvait le dire.
+
+- *« Sur téléphone, le pied de page est le seul endroit d'où changer de langue. »* — Il ne
+  l'est plus. Les segments de l'en-tête ne disparaissent plus au pointeur grossier : ils
+  passent à 44 px, et les deux gouttières intérieures de la barre se resserrent pour que
+  sept cibles et une vignette tiennent sur une rangée jusqu'à 360 px de large. L'étiquette
+  « bientôt disponible » quitte la barre au doigt — elle n'y est pas une commande, et le
+  héros la redit trois lignes plus bas. Le sélecteur de thème y perd ses mots au passage :
+  un soleil et un croissant, qui se comprennent sans être lus et ne coûtent pas cinq
+  traductions. Les mots restent le nom accessible du bouton et son infobulle.
 
 - *« Le budget de poids des captures. »* — Il était global (1,4 Mio) et calibré sur trois
   langues ; cinq langues le faisaient échouer sans qu'aucune image n'ait grossi. Il est

@@ -106,6 +106,27 @@
       display: none;
     }
   }
+  /*
+   * Au doigt, la barre porte les deux commandes à taille pleine (voir `composants.css`) :
+   * sept cibles de 44 px et une vignette. Sur 320 px de largeur utile — le téléphone le
+   * plus étroit encore répandu — elle passait à deux rangées pour SEPT pixels. Ce sont
+   * les deux gouttières intérieures qu'on reprend, jamais les cibles : un bouton rétréci
+   * se rate, un blanc rétréci se remarque à peine. Plus étroit encore, la barre se replie
+   * quand même, et c'est très bien — `flex-wrap` était déjà là pour ça.
+   *
+   * Ces deux règles sont ICI et non auprès des autres réglages d'en-tête de
+   * `composants.css` : `.entete` et `.entete__actions` sont déclarées dans ce fichier,
+   * donc dans la couche `sections`, qui passe après `composants`. Écrites là-bas, elles
+   * ne gagnaient pas.
+   */
+  @media (pointer: coarse) {
+    .entete {
+      gap: var(--espace-2);
+    }
+    .entete__actions {
+      gap: var(--espace-1);
+    }
+  }
 
   /* ------------------------------------------------------------------ *
    * Héros
@@ -478,6 +499,9 @@
     flex-wrap: wrap;
     align-items: flex-start;
     gap: clamp(1.75rem, 4vw, 3.5rem);
+    /* Le conteneur de requête du décollement, ci-dessous. `inline-size` et non `size` :
+       la hauteur de la rangée est celle des tuiles, et la contenir la mettrait à zéro. */
+    container-type: inline-size;
   }
   /*
    * L'en-tête reste collé pendant que les neuf tuiles défilent à côté. `align-self` n'a
@@ -485,19 +509,44 @@
    * éléments sont alignés en haut, l'élément n'est pas étiré, et un élément étiré ne
    * colle jamais.
    *
-   * Le décrochage se fait tout seul : quand la rangée se replie, la colonne d'en-tête
-   * occupe toute la largeur, et un élément collant dont le conteneur fait sa hauteur ne
-   * colle à rien. Aucune `media` n'est nécessaire pour l'annuler.
+   * IL NE COLLE QU'À PARTIR DU MOMENT OÙ IL Y A UN « À CÔTÉ ».
+   *
+   * Ce fichier a longtemps affirmé le contraire — « le décrochage se fait tout seul :
+   * quand la rangée se replie, la colonne d'en-tête occupe toute la largeur, et un
+   * élément collant dont le conteneur fait sa hauteur ne colle à rien ». C'est faux, et
+   * d'une façon qu'on ne voit qu'en regardant la page défiler sur un téléphone. Le bloc
+   * dans lequel un élément collant se déplace n'est pas sa propre rangée flexible : c'est
+   * la boîte de son conteneur, `.fonctions` entière, tuiles comprises. Replié, l'en-tête
+   * ne décrochait donc pas — il restait cloué à 6 rem du haut et les neuf tuiles
+   * défilaient DESSOUS, sans fond entre elles et lui. Deux textes superposés, illisibles
+   * l'un et l'autre, sur toute la hauteur de la section.
+   *
+   * La requête porte sur le CONTENEUR et non sur la fenêtre : ce qui décide du repli est
+   * la largeur dont cette rangée dispose, pas celle de l'écran — et c'est cette largeur-là
+   * qu'on interroge, plutôt que d'en déduire une taille de fenêtre qui cesserait d'être
+   * juste le jour où la bande change de gouttière.
+   *
+   * Le seuil est posé AU-DESSUS du point de repli, pas dessus. Mesuré : les tuiles passent
+   * à côté à partir de 776 px de boîte de contenu (une requête de conteneur mesure la
+   * boîte de contenu, pas la boîte de bordure — vérifié, et c'est ce qui rend le chiffre
+   * ci-dessous plus petit qu'une largeur de fenêtre). Le seuil est à 800. Les 24 px
+   * d'écart sont une marge délibérée : au-dessus, on perd une colonne qui ne colle pas
+   * dans une bande de largeurs de 24 px ; en dessous, on retrouve deux textes superposés.
+   * Les deux erreurs ne coûtent pas la même chose.
    */
   .fonctions__entete {
     flex: 1 1 280px;
     min-inline-size: 0;
-    position: sticky;
-    inset-block-start: 6rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: var(--espace-3);
+  }
+  @container (min-width: 50rem) {
+    .fonctions__entete {
+      position: sticky;
+      inset-block-start: 6rem;
+    }
   }
 
   .tuiles {
@@ -537,16 +586,16 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    inline-size: 40px;
-    block-size: 40px;
+    inline-size: 46px;
+    block-size: 46px;
     flex: none;
     border-radius: var(--rayon-s);
     background: var(--surface-accent);
     color: var(--accent);
   }
   .tuile__puce svg {
-    inline-size: 20px;
-    block-size: 20px;
+    inline-size: 24px;
+    block-size: 24px;
   }
   /* La seule pastille en corail de la grille : les perturbations. */
   .tuile__puce--alerte {
