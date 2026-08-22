@@ -499,6 +499,9 @@
     flex-wrap: wrap;
     align-items: flex-start;
     gap: clamp(1.75rem, 4vw, 3.5rem);
+    /* Le conteneur de requête du décollement, ci-dessous. `inline-size` et non `size` :
+       la hauteur de la rangée est celle des tuiles, et la contenir la mettrait à zéro. */
+    container-type: inline-size;
   }
   /*
    * L'en-tête reste collé pendant que les neuf tuiles défilent à côté. `align-self` n'a
@@ -506,19 +509,44 @@
    * éléments sont alignés en haut, l'élément n'est pas étiré, et un élément étiré ne
    * colle jamais.
    *
-   * Le décrochage se fait tout seul : quand la rangée se replie, la colonne d'en-tête
-   * occupe toute la largeur, et un élément collant dont le conteneur fait sa hauteur ne
-   * colle à rien. Aucune `media` n'est nécessaire pour l'annuler.
+   * IL NE COLLE QU'À PARTIR DU MOMENT OÙ IL Y A UN « À CÔTÉ ».
+   *
+   * Ce fichier a longtemps affirmé le contraire — « le décrochage se fait tout seul :
+   * quand la rangée se replie, la colonne d'en-tête occupe toute la largeur, et un
+   * élément collant dont le conteneur fait sa hauteur ne colle à rien ». C'est faux, et
+   * d'une façon qu'on ne voit qu'en regardant la page défiler sur un téléphone. Le bloc
+   * dans lequel un élément collant se déplace n'est pas sa propre rangée flexible : c'est
+   * la boîte de son conteneur, `.fonctions` entière, tuiles comprises. Replié, l'en-tête
+   * ne décrochait donc pas — il restait cloué à 6 rem du haut et les neuf tuiles
+   * défilaient DESSOUS, sans fond entre elles et lui. Deux textes superposés, illisibles
+   * l'un et l'autre, sur toute la hauteur de la section.
+   *
+   * La requête porte sur le CONTENEUR et non sur la fenêtre : ce qui décide du repli est
+   * la largeur dont cette rangée dispose, pas celle de l'écran — et c'est cette largeur-là
+   * qu'on interroge, plutôt que d'en déduire une taille de fenêtre qui cesserait d'être
+   * juste le jour où la bande change de gouttière.
+   *
+   * Le seuil est posé AU-DESSUS du point de repli, pas dessus. Mesuré : les tuiles passent
+   * à côté à partir de 776 px de boîte de contenu (une requête de conteneur mesure la
+   * boîte de contenu, pas la boîte de bordure — vérifié, et c'est ce qui rend le chiffre
+   * ci-dessous plus petit qu'une largeur de fenêtre). Le seuil est à 800. Les 24 px
+   * d'écart sont une marge délibérée : au-dessus, on perd une colonne qui ne colle pas
+   * dans une bande de largeurs de 24 px ; en dessous, on retrouve deux textes superposés.
+   * Les deux erreurs ne coûtent pas la même chose.
    */
   .fonctions__entete {
     flex: 1 1 280px;
     min-inline-size: 0;
-    position: sticky;
-    inset-block-start: 6rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: var(--espace-3);
+  }
+  @container (min-width: 50rem) {
+    .fonctions__entete {
+      position: sticky;
+      inset-block-start: 6rem;
+    }
   }
 
   .tuiles {

@@ -332,6 +332,16 @@ coûtent à refermer, la plus chère d'abord.
      entrer quatre colonnes dans une bande de 1 240 px ; la deuxième rangée à moitié vide
      est exactement ce que la règle « trois ou six » existe pour empêcher. Plancher porté à
      280 px, ce qui force trois colonnes.
+  4. **L'en-tête collant de la section « Fonctions » ne décrochait jamais.** Trouvé plus
+     tard, en photographiant la page défiler sur un profil tactile : replié, il restait
+     cloué à 6 rem du haut et les neuf tuiles passaient dessous, sans fond entre elles et
+     lui — deux textes superposés sur toute la hauteur de la section. La feuille de style
+     affirmait le contraire (« le décrochage se fait tout seul »), et le raisonnement était
+     faux : le bloc dans lequel un élément collant se déplace n'est pas sa propre rangée
+     flexible, c'est la boîte de son conteneur, tuiles comprises. Il ne colle désormais que
+     lorsqu'il y a un « à côté », par une requête de conteneur — la largeur dont la rangée
+     dispose, et non celle de la fenêtre. **Une capture fixe ne pouvait pas voir ce
+     défaut-là** : il ne se produit qu'en défilant.
   Reste, sur pointeur fin uniquement, les sélecteurs de l'en-tête à 34 px : c'est l'exception
   documentée, et elle tient — sur pointeur grossier ils passent à 44 px, et le relevé sur
   Pixel 7 ne trouve **aucune** cible sous 44 px.
