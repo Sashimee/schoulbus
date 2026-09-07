@@ -172,10 +172,58 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * Les sélecteurs de langue et de thème.
+   * La liste des langues.
    *
-   * Le rail se replie plutôt que de comprimer ses segments : cinq langues ne tiennent pas
-   * sur une ligne étroite, et une cible tactile rétrécie est une cible ratée.
+   * Une liste déroulante occupe la largeur d'un choix, là où le rail de cinq segments
+   * prenait celle de cinq et passait à la ligne dès que l'en-tête portait autre chose.
+   * Le `<select>` perd son habillage système (`appearance: none`) mais garde tout son
+   * comportement ; le chevron est un dessin posé par-dessus, hors de portée du pointeur
+   * pour que le clic aille au champ.
+   * ------------------------------------------------------------------ */
+  .liste-langue {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .liste-langue__champ {
+    appearance: none;
+    min-block-size: var(--cible);
+    padding-inline: var(--espace-3) var(--espace-6);
+    border: 0;
+    border-radius: 999px;
+    background: var(--surface-accent);
+    color: var(--accent-2);
+    font-family: inherit;
+    font-size: var(--texte-s);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  /*
+   * Les options sont dessinées par le système, qui n'hérite ni du fond de la page ni de
+   * son encre : sans ces deux lignes, un thème sombre ouvre une liste blanche.
+   */
+  .liste-langue__champ option {
+    background: var(--surface);
+    color: var(--encre);
+  }
+
+  .liste-langue__chevron {
+    position: absolute;
+    inset-inline-end: var(--espace-2);
+    inline-size: 16px;
+    block-size: 16px;
+    color: var(--accent-2);
+    pointer-events: none;
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Le sélecteur de thème.
+   *
+   * Le rail se replie plutôt que de comprimer ses segments : une cible tactile rétrécie
+   * est une cible ratée.
    * ------------------------------------------------------------------ */
   .segments {
     display: flex;
@@ -228,20 +276,21 @@
   }
 
   /*
-   * Dans l'en-tête, les segments descendent sous la cible de 44 px pour tenir dans une
-   * barre de 60 px. C'est admis à UNE condition : qu'aucun doigt n'ait à les viser.
+   * Dans l'en-tête, les deux commandes descendent sous la cible de 44 px pour tenir dans
+   * une barre de 60 px. C'est admis à UNE condition : qu'aucun doigt n'ait à les viser.
    *
-   * ILS DISPARAISSAIENT DONC AU POINTEUR GROSSIER, et le pied de page restait le seul
+   * ELLES DISPARAISSAIENT DONC AU POINTEUR GROSSIER, et le pied de page restait le seul
    * endroit d'où une personne sur téléphone pouvait changer de langue. C'était une page
    * entière à faire défiler pour une commande dont on a besoin à la première ligne — et
    * la langue est justement ce dont on a besoin AVANT de lire, pas après. Ce sont les
-   * segments qui grandissent maintenant, pas la commande qui s'en va.
+   * commandes qui grandissent maintenant, pas la commande qui s'en va.
    *
-   * Ce que cela coûte en largeur est payé par l'étiquette « bientôt disponible », retirée
-   * de la barre au pointeur grossier : elle n'y est pas une commande, elle redit un état
-   * que le héros affiche trois lignes plus bas, en plus grand. Le pied de page garde ses
-   * deux mêmes commandes — non plus comme unique recours, mais parce qu'on y arrive avec
-   * la question « et en portugais ? » encore en tête.
+   * Ce que cela coûte en largeur, c'est la liste des langues qui le paie : un choix au
+   * lieu de cinq. L'étiquette « bientôt disponible » quitte encore la barre au doigt tant
+   * que l'application n'est pas publiée — elle n'y est pas une commande, elle redit un
+   * état que le héros affiche trois lignes plus bas, en plus grand. Le pied de page garde
+   * ses deux mêmes commandes — non plus comme unique recours, mais parce qu'on y arrive
+   * avec la question « et en portugais ? » encore en tête.
    */
   .entete .segments__choix {
     min-block-size: 34px;
@@ -250,12 +299,41 @@
   .entete .segments__choix--icone {
     inline-size: 34px;
   }
+  .entete .liste-langue__champ {
+    min-block-size: 34px;
+  }
+  /*
+   * Le rail du thème ne se replie JAMAIS dans la barre : deux icônes empilées l'une sur
+   * l'autre ne se lisent plus comme deux états d'une même commande. S'il manque de la
+   * place, c'est la rangée entière qui passe à la ligne — voir `.entete__actions`.
+   */
+  .entete .segments {
+    flex-wrap: nowrap;
+  }
+  /*
+   * Le bouton de la barre est plus petit que ceux du corps, et insécable.
+   *
+   * Il porte la même taille qu'eux jusqu'à ce que l'application soit publiée et qu'il
+   * revienne dans l'en-tête : « Ouvrir l'application » y prenait alors 200 px et se
+   * coupait en deux lignes au milieu d'une barre de 60 px de haut. Un appel à l'action
+   * cassé en deux dit surtout que la barre est trop pleine. Il garde sa couleur, sa
+   * forme et sa cible de 44 px — il ne perd que deux pixels de corps et huit de
+   * gouttière, ce qui suffit à le tenir sur une ligne jusqu'aux téléphones étroits.
+   */
+  .entete .bouton {
+    font-size: var(--texte-m);
+    padding-inline: var(--espace-4);
+    white-space: nowrap;
+  }
   @media (pointer: coarse) {
     .entete .segments__choix {
       min-block-size: var(--cible);
     }
     .entete .segments__choix--icone {
       inline-size: var(--cible);
+    }
+    .entete .liste-langue__champ {
+      min-block-size: var(--cible);
     }
     .entete .etiquette--entete {
       display: none;
