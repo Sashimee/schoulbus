@@ -52,7 +52,7 @@ export const fr: Contenu = {
     description:
       `Le plan du bus scolaire de la commune de Beckerich, personnalisé pour chaque enfant : ` +
       `son arrêt, son heure, son école. Hors ligne, sans compte. ` +
-      `Site indépendant, sans lien avec la commune ni avec l'école.`,
+      `Site indépendant, sans lien avec la commune ni avec l’école.`,
   },
 
   general: {
@@ -94,9 +94,9 @@ export const fr: Contenu = {
     envoi: 'donnée de famille envoyée à un serveur',
     envoiValeur: '0',
     envoiNote:
-      `Deux choses sortent quand même : l'application compte ses pages vues, et activer ` +
-      `les notifications dépose un identifiant d'appareil anonyme sur un serveur, le temps ` +
-      `de l'abonnement. Ni votre adresse, ni les prénoms, ni les cycles.`,
+      `Deux choses sortent quand même : l’application compte ses pages vues, et activer ` +
+      `les notifications dépose un identifiant d’appareil anonyme sur un serveur, le temps ` +
+      `de l’abonnement. Ni votre adresse, ni les prénoms, ni les cycles.`,
   },
 
   ecrans: {
@@ -237,7 +237,7 @@ export const fr: Contenu = {
       `communale de Beckerich ni avec l’école. Il n’engage qu’elle-même. En cas de doute ou de ` +
       `divergence, c’est le document officiel de la commune qui fait foi.`,
     lien: 'Voir le plan officiel sur kanner.beckerich.lu',
-    retour: `Retour à la page d'accueil`,
+    retour: `Retour à la page d’accueil`,
   },
 
   final: {
@@ -291,16 +291,16 @@ export const fr: Contenu = {
 
   mentions: {
     titre: `Mentions légales`,
-    intro: `Cette page identifie qui publie ce site. Elle ne change rien à ce qu'il dit par ailleurs : le site reste indépendant, et le document officiel de la commune fait foi.`,
+    intro: `Cette page identifie qui publie ce site. Elle ne change rien à ce qu’il dit par ailleurs : le site reste indépendant, et le document officiel de la commune fait foi.`,
     editeurTitre: `Éditeur`,
-    editeurCorps: `Ce site est publié par ${NOM_EDITEUR}, à titre privé et non commercial. Il n'est ni commandé, ni validé, ni relu par l'administration communale de Beckerich, par l'école fondamentale ou par la maison relais.
+    editeurCorps: `Ce site est publié par ${NOM_EDITEUR}, à titre privé et non commercial. Il n’est ni commandé, ni validé, ni relu par l’administration communale de Beckerich, par l’école fondamentale ou par la maison relais.
 Adresse : ${ADRESSE_EDITEUR}`,
     hebergeurTitre: `Hébergement`,
-    hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur loué par l'éditeur. Aucune donnée de visite n'y est conservée.`,
+    hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur loué par l’éditeur. Aucune donnée de visite n’y est conservée.`,
     donneesTitre: `Données personnelles`,
-    donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l'audience et n'adresse aucune requête à un service tiers. Aucune donnée personnelle n'est collectée, et il n'y a donc rien à consulter, à corriger ni à effacer. L'application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
+    donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l’audience et n’adresse aucune requête à un service tiers. Aucune donnée personnelle n’est collectée, et il n’y a donc rien à consulter, à corriger ni à effacer. L’application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
     responsabiliteTitre: `Responsabilité`,
-    responsabiliteCorps: `Les horaires affichés sont repris du plan officiel de la commune et retranscrits avec soin, sans garantie d'exactitude. En cas de doute ou de divergence, c'est le document officiel de la commune qui fait foi.`,
-    retour: `Retour à la page d'accueil`,
+    responsabiliteCorps: `Les horaires affichés sont repris du plan officiel de la commune et retranscrits avec soin, sans garantie d’exactitude. En cas de doute ou de divergence, c’est le document officiel de la commune qui fait foi.`,
+    retour: `Retour à la page d’accueil`,
   },
 }

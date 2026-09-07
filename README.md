@@ -267,6 +267,22 @@ coûtent à refermer, la plus chère d'abord.
   part de la commune, et la vitrine est publiée. **C'est la seule réserve qui demande une
   personne plutôt qu'une commande.**
 
+  Une relecture systématique a eu lieu depuis, fichier contre fichier et contre les
+  dictionnaires de l'application. Ce qu'elle a corrigé : le luxembourgeois disait
+  `Haltestell` là où l'application dit `Statioun` — sept fois, dans la seule langue où le
+  mot de l'application n'était pas repris ; la règle de l'Eifel était fautive quatre fois
+  (`vun Ären Kanner`, `de Moie ausgesinn`, `a Optrag ginn`) ; `ka` en fin de phrase
+  reprenait son `nn` ; `Zweifel` est redevenu `Zweiwel` ; les guillemets allemands `„ … "`
+  se fermaient sur un pouce ASCII, en allemand comme en luxembourgeois ; les apostrophes
+  droites sont passées en apostrophes typographiques dans les cinq langues.
+
+  Ce qu'elle N'A PAS tranché, faute de compétence native, et qui reste à relire :
+  `Moiescher` (le pluriel de `Moien`), `dat ganzt Produit` (genre du mot `Produit`),
+  `stiechen an der Säit` (le verbe, calqué de l'allemand `stecken in`). En portugais,
+  `por um pai` traduit `un parent` par « un père » — l'application dit la même chose, donc
+  la corriger ici seul les ferait diverger. Une relecture native reste nécessaire :
+  ce qu'une machine sait vérifier est ce qui a une règle, et le naturel n'en a pas.
+
 - **Le thème sombre est une DÉRIVATION, pas une maquette.** La maquette approuvée ne
   définit que le thème clair. Les valeurs sombres — crème inversé en vert-noir, sarcelle et
   corail éclaircis — ont été construites ici, en tenant les rôles et la sémantique des deux

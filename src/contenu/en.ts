@@ -59,7 +59,7 @@ export const en: Contenu = {
     etiquette: `Independent site · ${CHIFFRES.anneesCouvertes.join(' · ')}`,
     // 22 and 13 characters: under the share thumbnail's limit of 24.
     titre: ['What you see at 07:25,', 'on a Tuesday.'],
-    altCapture: `The app's home screen: Léa's card, bus at 07:45 from the Kneppchen stop.`,
+    altCapture: `The app’s home screen: Léa’s card, bus at 07:45 from the Kneppchen stop.`,
     lignes: [
       { valeur: '07:45', texte: 'her bus time, at her own stop' },
       {
@@ -162,7 +162,7 @@ export const en: Contenu = {
       etiquette: 'The first principle',
       titre: 'No data about your family leaves the device.',
       texte:
-        `No account, no password. The municipality's ${CHIFFRES.rues} streets are carried ` +
+        `No account, no password. The municipality’s ${CHIFFRES.rues} streets are carried ` +
         `inside the site itself: typing yours queries no mapping service.`,
     },
     horsLigne: {
@@ -186,7 +186,7 @@ export const en: Contenu = {
       },
       {
         titre: 'The timetables are a transcription',
-        texte: `Where they differ, the municipality's official document prevails.`,
+        texte: `Where they differ, the municipality’s official document prevails.`,
       },
       {
         titre: 'The plan rests on a spoken confirmation',
@@ -213,7 +213,7 @@ export const en: Contenu = {
     texte:
       `It was made by a parent, privately, and has no link to the Beckerich municipal ` +
       `administration or to the school. It speaks only for itself. In case of doubt or ` +
-      `disagreement, the municipality's official document prevails.`,
+      `disagreement, the municipality’s official document prevails.`,
     lien: 'See the official plan on kanner.beckerich.lu',
     retour: `Back to the home page`,
   },
@@ -234,7 +234,7 @@ export const en: Contenu = {
     qr: 'Or scan to open it on the phone',
     bientot:
       `The app is still in development. This page describes what it does; it does not lead ` +
-      `there yet. In the meantime, the municipality's official plan remains the source to ` +
+      `there yet. In the meantime, the municipality’s official plan remains the source to ` +
       `consult.`,
   },
 
@@ -253,14 +253,14 @@ export const en: Contenu = {
       projet: [{ texte: 'Credits and thanks', url: URL_CREDITS }],
     },
     mention: 'Made by a parent, in Beckerich.',
-    source: `Data: the municipality's official plan, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
+    source: `Data: the municipality’s official plan, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Legal notice',
     viePrivee: 'This page sets no cookies, measures nothing, and calls no server.',
   },
 
   mentions: {
     titre: `Legal notice`,
-    intro: `This page states who publishes the site. It changes nothing else about it: the site remains independent, and the municipality's official document prevails.`,
+    intro: `This page states who publishes the site. It changes nothing else about it: the site remains independent, and the municipality’s official document prevails.`,
     editeurTitre: `Publisher`,
     editeurCorps: `This site is published by ${NOM_EDITEUR}, privately and non-commercially. It is neither commissioned, nor approved, nor reviewed by the Beckerich municipal administration, the primary school or the maison relais.
 Address: ${ADRESSE_EDITEUR}`,
@@ -269,7 +269,7 @@ Address: ${ADRESSE_EDITEUR}`,
     donneesTitre: `Personal data`,
     donneesCorps: `This page sets no cookies, does not measure audience and makes no request to any third-party service. No personal data is collected, so there is nothing to consult, correct or erase. The app itself keeps what you enter on your device alone; its “Limits” page sets that out in detail.`,
     responsabiliteTitre: `Liability`,
-    responsabiliteCorps: `The times shown are taken from the municipality's official plan and transcribed with care, without any guarantee of accuracy. In case of doubt or disagreement, the municipality's official document prevails.`,
+    responsabiliteCorps: `The times shown are taken from the municipality’s official plan and transcribed with care, without any guarantee of accuracy. In case of doubt or disagreement, the municipality’s official document prevails.`,
     retour: `Back to the home page`,
   },
 }
