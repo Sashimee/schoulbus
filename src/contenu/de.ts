@@ -2,7 +2,7 @@
  * Deutsch — übersetzt aus `fr.ts`, nicht umgekehrt.
  *
  * Ton wie in der Anwendung: einen Sachverhalt nennen, dann sagen, was die Software damit
- * macht. Keine Werbesprache, kein Aphorismus. Der Abschnitt „Grenzen" steht VOR der
+ * macht. Keine Werbesprache, kein Aphorismus. Der Abschnitt „Grenzen“ steht VOR der
  * Schlussaufforderung — das ist die Reihenfolge der Anwendung selbst.
  *
  * ZWEI HARTE VORGABEN, vor jeder Änderung zu lesen:
@@ -72,7 +72,7 @@ export const de: Contenu = {
   chiffres: {
     arrets: 'bediente Haltestellen',
     villages: 'Ortschaften der Gemeinde',
-    langues: 'Sprachen, auch Luxemburgisch',
+    langues: 'Sprachen, darunter Luxemburgisch',
     envoi: 'an einen Server gesendete Familiendaten',
     envoiValeur: '0',
     envoiNote:
@@ -157,7 +157,7 @@ export const de: Contenu = {
       titre: 'Keine Daten Ihrer Familie verlassen das Gerät.',
       texte:
         `Kein Konto, kein Passwort. Die ${CHIFFRES.rues} Straßen der Gemeinde stecken in der ` +
-        `Seite selbst: Ihre einzutippen fragt keinen Kartendienst.`,
+        `Seite selbst: Ihre einzutippen fragt keinen Kartendienst ab.`,
     },
     horsLigne: {
       etiquette: 'An der Haltestelle',
@@ -201,7 +201,7 @@ export const de: Contenu = {
           `einschalten.`,
       },
     ],
-    lien: 'Die Seite „Grenzen" lesen',
+    lien: 'Die Seite „Grenzen“ lesen',
   },
 
   independance: {
@@ -263,7 +263,7 @@ Anschrift: ${ADRESSE_EDITEUR}`,
     hebergeurTitre: `Hosting`,
     hebergeurCorps: `Die Seite besteht aus statischen Dateien, die von einem durch den Herausgeber gemieteten Server ausgeliefert werden. Besuchsdaten werden dort nicht aufbewahrt.`,
     donneesTitre: `Personenbezogene Daten`,
-    donneesCorps: `Diese Seite setzt keine Cookies, misst keine Zugriffe und ruft keinen Dienst Dritter auf. Es werden keine personenbezogenen Daten erhoben; es gibt daher nichts einzusehen, zu berichtigen oder zu löschen. Die Anwendung selbst behält, was Sie dort eingeben, ausschließlich auf Ihrem Gerät — ihre Seite „Grenzen" führt das aus.`,
+    donneesCorps: `Diese Seite setzt keine Cookies, misst keine Zugriffe und ruft keinen Dienst Dritter auf. Es werden keine personenbezogenen Daten erhoben; es gibt daher nichts einzusehen, zu berichtigen oder zu löschen. Die Anwendung selbst behält, was Sie dort eingeben, ausschließlich auf Ihrem Gerät — ihre Seite „Grenzen“ führt das aus.`,
     responsabiliteTitre: `Haftung`,
     responsabiliteCorps: `Die angezeigten Zeiten stammen aus dem offiziellen Plan der Gemeinde und sind sorgfältig übertragen, jedoch ohne Gewähr. Im Zweifel oder bei Abweichungen gilt das offizielle Dokument der Gemeinde.`,
     retour: `Zurück zur Startseite`,

@@ -160,7 +160,7 @@ export const pt: Contenu = {
       etiquette: 'O primeiro princípio',
       titre: 'Nenhum dado da sua família sai do aparelho.',
       texte:
-        `Sem conta, sem palavra-passe. As ${CHIFFRES.rues} ruas da comuna estão embarcadas no ` +
+        `Sem conta, sem palavra-passe. As ${CHIFFRES.rues} ruas da comuna vêm dentro do ` +
         `próprio site: escrever a sua não interroga nenhum serviço de cartografia.`,
     },
     horsLigne: {
