@@ -7,16 +7,16 @@
  *
  * CE N'EST PLUS LE SEUL ENDROIT OÙ UNE PERSONNE SUR TÉLÉPHONE PEUT CHANGER DE LANGUE.
  * Ça l'était, et c'était une page entière à faire défiler pour une commande dont on a
- * besoin à la première ligne : au pointeur grossier, les segments de l'en-tête passent
- * désormais à 44 px au lieu de disparaître (voir `composants.css`). Ceux d'ici ne sont
+ * besoin à la première ligne : au pointeur grossier, les commandes de l'en-tête passent
+ * désormais à 44 px au lieu de disparaître (voir `composants.css`). Celles d'ici ne sont
  * donc plus un recours mais une reprise — on arrive en bas de page avec la question
  * « et en portugais ? » encore en tête, et il n'y a plus à remonter pour y répondre.
  *
- * ELLES COMPTENT CINQ SEGMENTS DEPUIS LA REFONTE, et non plus trois. Sur un téléphone
- * étroit, cinq pastilles de 44 px ne tiennent pas sur une ligne : la commande passe à la
- * ligne au lieu de comprimer ses cibles. Une cible tactile qu'on rétrécit pour tenir dans
- * la largeur est une cible qu'on rate, et c'est la langue qu'on rate — donc la première
- * chose dont une famille lusophone a besoin sur cette page.
+ * LA LANGUE EST UNE LISTE DÉROULANTE, ici comme en haut, depuis que cinq segments ne
+ * tenaient plus dans la barre à côté du bouton d'ouverture. Le pied de page avait la
+ * place de les garder ; deux commandes qui ne se ressemblent pas d'un bout à l'autre de
+ * la page en font deux commandes à apprendre, et c'est la langue qu'on apprendrait deux
+ * fois — donc la première chose dont une famille lusophone a besoin sur cette page.
  */
 import { LogoBus } from '../composants/LogoBus.tsx'
 import { ChoixLangue, ChoixTheme } from '../composants/Selecteurs.tsx'

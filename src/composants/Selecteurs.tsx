@@ -1,23 +1,32 @@
 /*
  * Les deux commandes de la page : la langue et le thème.
  *
- * Elles sont faites de vrais `<button>` avec `aria-pressed`, et non d'un `<select>` ni
- * de liens. Trois raisons : l'état choisi doit être annoncé, la commande agit dans la
- * page sans la quitter, et un groupe de trois boutons visibles évite l'ouverture d'un
- * menu système qui, sur téléphone, recouvre la moitié de l'écran.
+ * LA LANGUE EST UNE LISTE DÉROULANTE, plus un rail de cinq segments. Le rail tenait
+ * tant que la barre n'avait rien d'autre à porter ; le jour où l'application a été
+ * publiée, le bouton « Ouvrir l'application » est revenu dans l'en-tête et les cinq
+ * segments sont passés à la ligne — « FR DE LB PT » sur une rangée, « EN » toute seule
+ * sur la suivante, le soleil et le croissant empilés à côté. Une liste occupe la largeur
+ * d'UN choix au lieu de cinq, et c'est la seule des deux commandes qui pouvait maigrir :
+ * le thème n'a que deux états, et les afficher côte à côte les rend comparables.
  *
- * Le groupe entier porte un `aria-label` : sans lui, un lecteur d'écran annonce cinq
- * boutons « FR », « DE », « LB »… sans dire de quoi il s'agit.
+ * C'est un `<select>` natif, et non un menu dessiné ici. Il s'ouvre au clavier, se
+ * parcourt aux flèches, annonce l'option choisie, et sur téléphone il ouvre la roue du
+ * système — celle que la personne a déjà manipulée ailleurs. Un menu maison demanderait
+ * de réécrire tout cela, et c'est précisément là que se logent les défauts
+ * d'accessibilité qu'aucun test de cette taille ne rattrape.
  *
- * LES DEUX COMMANDES NE SE RESSEMBLENT PLUS. La langue reste écrite — un code de deux
- * lettres est déjà un dessin, et aucune icône ne dit « portugais ». Le thème, lui, est
- * passé aux icônes : un soleil et un croissant se comprennent sans être lus, ce qui vaut
- * mieux qu'un mot à traduire cinq fois dans une barre où la place manque. Le mot ne
- * disparaît pas, il change de place — il devient le nom accessible du bouton et son
- * infobulle.
+ * Ce que le changement ne touche pas : la commande agit toujours DANS la page, sans la
+ * quitter (voir `Fournisseur.tsx`), et le nom du groupe reste porté — sans lui, un
+ * lecteur d'écran annonce « FR » sans dire de quoi il s'agit.
+ *
+ * Le thème, lui, reste deux segments à icônes : un soleil et un croissant se comprennent
+ * sans être lus, ce qui vaut mieux qu'un mot à traduire cinq fois dans une barre où la
+ * place manque. Le mot ne disparaît pas, il change de place — il devient le nom
+ * accessible du bouton et son infobulle.
  */
 import { Icone } from './Icones.tsx'
 import { LANGUES, useLangue } from '../i18n/contexte.ts'
+import type { Langue } from '../contenu/type.ts'
 import { useTheme, type Theme } from '../theme.ts'
 import { useContenu } from '../i18n/contexte.ts'
 
@@ -26,18 +35,20 @@ export function ChoixLangue() {
   const contenu = useContenu()
 
   return (
-    <div className="segments segments--langue" role="group" aria-label={contenu.general.choixLangue}>
-      {LANGUES.map((l) => (
-        <button
-          key={l}
-          type="button"
-          className="segments__choix"
-          aria-pressed={l === langue}
-          onClick={() => changerLangue(l)}
-        >
-          {l}
-        </button>
-      ))}
+    <div className="liste-langue">
+      <select
+        className="liste-langue__champ"
+        aria-label={contenu.general.choixLangue}
+        value={langue}
+        onChange={(evenement) => changerLangue(evenement.target.value as Langue)}
+      >
+        {LANGUES.map((l) => (
+          <option key={l} value={l}>
+            {l.toUpperCase()}
+          </option>
+        ))}
+      </select>
+      <Icone nom="chevron" className="liste-langue__chevron" />
     </div>
   )
 }

@@ -82,9 +82,17 @@
     -webkit-backdrop-filter: blur(14px);
     border-block-end: var(--trait) solid var(--bord);
   }
+  /*
+   * La rangée se replie plutôt que de comprimer ce qu'elle porte. Sur les téléphones les
+   * plus étroits, le bouton passe sous les deux commandes et reste aligné à droite : une
+   * rangée de plus se remarque à peine, un libellé coupé en deux se remarque tout de
+   * suite.
+   */
   .entete__actions {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: flex-end;
     gap: var(--espace-2);
   }
   /*
