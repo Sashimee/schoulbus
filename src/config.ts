@@ -1,13 +1,15 @@
 /*
  * Les adresses extérieures, en un seul endroit.
  *
- * `URL_APP` est provisoire : l'application vit aujourd'hui sur GitHub Pages. Le jour où
- * elle prend un domaine propre — `app.schoulbus.lu` ou un sous-chemin de `schoulbus.lu` —
- * c'est cette ligne qui change, et rien d'autre. Même discipline que le `BASE_PATH` de
- * l'application, pour la même raison : une adresse recopiée dans quinze composantes est
- * une adresse qu'on oublie de corriger dans trois d'entre elles.
+ * `URL_APP` a été provisoire : l'application a vécu sur GitHub Pages avant de prendre son
+ * domaine propre. Le déménagement n'a demandé que cette ligne — c'est ce que cette
+ * discipline achetait, et c'est la même que le `BASE_PATH` de l'application, pour la même
+ * raison : une adresse recopiée dans quinze composantes est une adresse qu'on oublie de
+ * corriger dans trois d'entre elles.
+ *
+ * Un changement d'adresse déplace aussi le QR : `npm run assets:qr`, puis commiter.
  */
-export const URL_APP = 'https://sashimee.github.io/bus-scolaire-beckerich'
+export const URL_APP = 'https://app.schoulbus.lu'
 
 /**
  * L'application est-elle publique ?
@@ -19,30 +21,24 @@ export const URL_APP = 'https://sashimee.github.io/bus-scolaire-beckerich'
  * Un interrupteur plutôt qu'une suppression, pour deux raisons.
  *
  * La première est que les textes des appels à l'action existent en cinq langues. Les
- * effacer maintenant, ce serait réinventer dans quelques semaines une formulation
- * luxembourgeoise et une formulation portugaise qui attendent déjà leur relecture — une
- * deuxième fois, et sans nécessité.
+ * effacer, ce serait réinventer plus tard une formulation luxembourgeoise et une
+ * formulation portugaise qui attendent déjà leur relecture — une deuxième fois, et sans
+ * nécessité.
  *
- * La seconde est qu'un lien qu'on retire à la main revient à la main. Le jour où
- * l'application sera publiée, cette ligne passe à `true` et tout réapparaît d'un coup,
- * aux mêmes endroits, dans les mêmes mots. Les deux états sont testés (`src/tests/`) :
- * il n'existe pas d'état intermédiaire où la moitié des liens serait revenue.
+ * La seconde est qu'un lien qu'on retire à la main revient à la main. Cette ligne à `true`,
+ * et tout réapparaît d'un coup, aux mêmes endroits, dans les mêmes mots. Les deux états
+ * sont testés (`src/tests/`) : il n'existe pas d'état intermédiaire où la moitié des liens
+ * serait revenue.
  *
  * Ce que cet interrupteur ne couvre pas lui-même, faute d'être du code : le `<noscript>`
- * de `index.html`, qui est du HTML statique. Un test tient désormais l'invariant à sa
- * place (`rendu.test.ts`), de sorte que les deux ne peuvent plus se contredire.
+ * d'`index.html`, qui est du HTML statique. Un test tient l'invariant à sa place
+ * (`rendu.test.ts`), de sorte que les deux ne peuvent plus se contredire.
  *
- * Refermée : l'application est encore en développement, et la vitrine redevient une page de
- * présentation seule. Elle a été ouverte un temps, puis refermée le lendemain — c'est
- * exactement l'usage prévu, et la raison pour laquelle c'est un interrupteur.
- *
- * Attention à ce que ce `false` ne dit PAS : il retire les chemins depuis cette page, il ne
- * rend pas l'application inaccessible. Elle reste publiée sur GitHub Pages, et `URL_APP`
- * demeure dans le paquet JavaScript comme donnée de configuration — `sansApplication()` en
- * a besoin pour filtrer le pied de page. Qui connaît l'adresse y entre. Rendre l'application
- * réellement inatteignable se décide dans son dépôt à elle, pas ici.
+ * Ouverte : l'application est publiée sur `app.schoulbus.lu`. Elle avait déjà été ouverte
+ * un jour puis refermée le lendemain, l'application n'étant pas prête — c'est exactement
+ * l'usage prévu, et la raison pour laquelle c'est un interrupteur, pas une suppression.
  */
-export const APP_PUBLIEE = false
+export const APP_PUBLIEE = true
 
 /**
  * La source officielle. Elle n'est pas décorative : le site est indépendant de la
