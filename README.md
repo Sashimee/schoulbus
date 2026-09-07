@@ -279,13 +279,14 @@ coûtent à refermer, la plus chère d'abord.
   les polices du système, ni la barre d'adresse qui mange la hauteur, ni les marges de
   sécurité d'un écran à encoche — ces dernières sont posées dans la feuille de style,
   jamais vues à l'œuvre.
-  **La réserve s'est aggravée avec la barre.** C'est un signalement depuis un téléphone
-  qui a montré les cinq segments repliés en deux rangées, et la liste déroulante qui les
-  remplace n'a PAS été regardée : elle a été posée sans navigateur sous la main (Chromium
-  ne se lance pas dans l'environnement où elle a été écrite). Le budget de largeur est
-  calculé — une liste à 64 px, deux cibles de 44 px, un bouton raccourci, et une rangée
-  qui se replie proprement s'il manque de la place — mais calculé n'est pas vu, et c'est
-  exactement le défaut qui a produit le signalement.
+  **La barre, elle, a été regardée** — la réserve ne la couvre plus. C'est un signalement
+  depuis un téléphone qui a montré les cinq segments de langue repliés en deux rangées ;
+  la liste déroulante qui les remplace a été mesurée et photographiée dans Chromium, au
+  doigt, à 320, 360, 393, 430, 768 et 1280 px, dans les deux thèmes. La rangée d'actions
+  demande 331 px : une rangée jusqu'à 360 px de large (deux avec la marque au-dessus),
+  une seule à partir de 393 px, et deux rangées d'actions seulement à 320 px, où elle n'a
+  plus que 296 px. Ce qui reste non vu est ce que la réserve dit depuis le début : les
+  polices du système, la barre d'adresse, les marges d'un écran à encoche.
 
 - **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` calcule
   ce que le navigateur devrait afficher ; il ne lit pas l'écran. La refonte a rendu ce
@@ -303,6 +304,17 @@ coûtent à refermer, la plus chère d'abord.
   pas à son `HEAD`. Sur un `HEAD` plus récent, l'avertissement d'indépendance ne s'ouvrait
   plus au même endroit et le script échouait sur un clic introuvable. Sortir l'application
   à cette révision avant de lancer les captures, comme le fait l'intégration continue.
+
+- **Un contexte WebGL par composante qui bouge.** `useNiveauMouvement` appelle
+  `webglDisponible()`, qui crée une toile et lui demande un contexte `webgl2` — et le
+  crochet est appelé onze fois dans l'arbre, dont une par `Revele`. Sur un poste à souris
+  et large, la page ouvre donc des dizaines de contextes en quelques millisecondes ;
+  Chromium en plafonne seize et se plaint (« Too many active WebGL contexts »), aucun
+  n'est relâché. Rien ne casse à l'écran — la mesure est juste, la page s'affiche — mais
+  c'est du travail pur pour un booléen qui ne change pas d'une composante à l'autre. Vu en
+  photographiant la barre : c'est ce qui faisait tomber le navigateur sans écran. La
+  réponse tient probablement en une ligne (mesurer une fois, partager le résultat), et
+  elle n'a pas été écrite ici parce que ce n'était pas le sujet du jour.
 
 - **Le conteneur n'a pas encore tourné ailleurs qu'ici.** L'image se construit, se lance,
   et ses en-têtes ont été relevés à la main (voir plus bas) — mais sur cette machine, en

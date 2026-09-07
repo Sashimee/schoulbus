@@ -113,6 +113,15 @@
     .marque__nom {
       display: none;
     }
+    /*
+     * Et la barre reprend ses deux gouttières. Mesuré sur un téléphone de 360 px : la
+     * rangée d'actions demande 331 px, la barre lui en laissait 320. Huit pixels de blanc
+     * de chaque côté font la différence entre une rangée et deux — et à cette largeur, le
+     * nom du site vient justement de quitter la barre, donc le blanc ne borde plus rien.
+     */
+    .entete {
+      padding-inline: var(--espace-3);
+    }
   }
   /*
    * Au doigt, la barre porte les deux commandes à taille pleine (voir `composants.css`) :
