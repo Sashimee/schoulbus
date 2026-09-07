@@ -279,6 +279,13 @@ coûtent à refermer, la plus chère d'abord.
   les polices du système, ni la barre d'adresse qui mange la hauteur, ni les marges de
   sécurité d'un écran à encoche — ces dernières sont posées dans la feuille de style,
   jamais vues à l'œuvre.
+  **La réserve s'est aggravée avec la barre.** C'est un signalement depuis un téléphone
+  qui a montré les cinq segments repliés en deux rangées, et la liste déroulante qui les
+  remplace n'a PAS été regardée : elle a été posée sans navigateur sous la main (Chromium
+  ne se lance pas dans l'environnement où elle a été écrite). Le budget de largeur est
+  calculé — une liste à 64 px, deux cibles de 44 px, un bouton raccourci, et une rangée
+  qui se replie proprement s'il manque de la place — mais calculé n'est pas vu, et c'est
+  exactement le défaut qui a produit le signalement.
 
 - **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` calcule
   ce que le navigateur devrait afficher ; il ne lit pas l'écran. La refonte a rendu ce
@@ -354,13 +361,21 @@ coûtent à refermer, la plus chère d'abord.
   en ligne. Le HTML était juste ; seule une page **regardée** pouvait le dire.
 
 - *« Sur téléphone, le pied de page est le seul endroit d'où changer de langue. »* — Il ne
-  l'est plus. Les segments de l'en-tête ne disparaissent plus au pointeur grossier : ils
-  passent à 44 px, et les deux gouttières intérieures de la barre se resserrent pour que
-  sept cibles et une vignette tiennent sur une rangée jusqu'à 360 px de large. L'étiquette
-  « bientôt disponible » quitte la barre au doigt — elle n'y est pas une commande, et le
-  héros la redit trois lignes plus bas. Le sélecteur de thème y perd ses mots au passage :
-  un soleil et un croissant, qui se comprennent sans être lus et ne coûtent pas cinq
-  traductions. Les mots restent le nom accessible du bouton et son infobulle.
+  l'est plus. Les commandes de l'en-tête ne disparaissent plus au pointeur grossier : elles
+  passent à 44 px, et les deux gouttières intérieures de la barre se resserrent pour qu'une
+  liste, deux cibles et une vignette tiennent sur une rangée. L'étiquette « bientôt
+  disponible » quitte la barre au doigt — elle n'y est pas une commande, et le héros la
+  redit trois lignes plus bas. Le sélecteur de thème y perd ses mots au passage : un soleil
+  et un croissant, qui se comprennent sans être lus et ne coûtent pas cinq traductions. Les
+  mots restent le nom accessible du bouton et son infobulle.
+
+  La langue, elle, a cessé d'être un rail de cinq segments : le retour du bouton
+  « Ouvrir l'application » dans la barre a fait passer les cinq pastilles à deux rangées,
+  le soleil et le croissant à deux étages, et le libellé du bouton à deux lignes. C'est
+  une **liste déroulante** depuis, en haut comme en bas de page — un `<select>` natif, qui
+  occupe la largeur d'un choix au lieu de cinq et n'a rien à réécrire du clavier ni du
+  lecteur d'écran. Le bouton de la barre y perd deux pixels de corps et huit de gouttière,
+  et devient insécable.
 
 - *« Le budget de poids des captures. »* — Il était global (1,4 Mio) et calibré sur trois
   langues ; cinq langues le faisaient échouer sans qu'aucune image n'ait grossi. Il est

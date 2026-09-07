@@ -235,6 +235,27 @@ describe('pré-rendu', () => {
     }
   })
 
+  /*
+   * La liste des langues offre les cinq, et désigne celle qu'on lit.
+   *
+   * Elle a remplacé un rail de cinq segments, où chaque langue était un bouton visible :
+   * une langue oubliée s'y voyait à l'œil nu. Dans une liste repliée, on ne voit que la
+   * langue courante — une option manquante ne se remarquerait qu'en l'ouvrant, et
+   * personne n'ouvre la liste dans la langue qu'il ne cherche pas.
+   *
+   * `selected` est vérifié parce que le `<select>` est rendu deux fois : par le pré-rendu
+   * et par le navigateur à l'hydratation. Si le serveur n'écrivait pas l'option choisie,
+   * la page allemande s'ouvrirait sur une liste affichant « FR ».
+   */
+  it.each(LANGUES)('%s : la liste des langues les offre toutes les cinq', (langue) => {
+    const { html } = rendre(langue)
+    for (const l of LANGUES) {
+      expect(html, `${langue} : ${l} manque à la liste`).toContain(`value="${l}"`)
+      expect(html).toContain(`>${l.toUpperCase()}</option>`)
+    }
+    expect(html).toContain(`value="${langue}" selected`)
+  })
+
   it('le pied de page ne propose les mentions que si elles existent', () => {
     const { html } = rendre('fr')
     expect(html.includes('/mentions/')).toBe(PAGES.includes('mentions'))

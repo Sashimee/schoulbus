@@ -5,9 +5,9 @@
  * seul dans une boîte de 24, contour à 1,75, extrémités et jointures arrondies, couleur
  * héritée.
  *
- * LE JEU A MAIGRI AVEC LA REFONTE. Il portait dix-huit tracés ; il en reste douze — les
- * neuf des tuiles, la flèche de lien sortant, et les deux du sélecteur de thème. Sont
- * partis avec leurs sections : les
+ * LE JEU A MAIGRI AVEC LA REFONTE. Il portait dix-huit tracés ; il en reste treize — les
+ * neuf des tuiles, le chevron de la liste des langues, la flèche de lien sortant, et les
+ * deux du sélecteur de thème. Sont partis avec leurs sections : les
  * quatre du rail de la maquette de téléphone (accueil, enfants, réglages), les trois du
  * schéma de confidentialité (cadenas, loupe, dièse), et trois autres qu'aucune section
  * n'appelait plus. Une icône qu'on garde « au cas où » est une icône que personne ne
@@ -33,6 +33,9 @@ const TRACES = {
   repas: 'M6 3v7a2 2 0 104 0V3M8 10v11M16.5 3c-1.6 1.6-1.6 5.4 0 7V21',
   adresse: 'M12 21s6.5-6 6.5-10.5a6.5 6.5 0 10-13 0C5.5 15 12 21 12 21zM12 8.5a2 2 0 100 4 2 2 0 000-4z',
   horloge: 'M12 21a9 9 0 100-18 9 9 0 000 18zM12 7.5V12l3 1.8',
+
+  /* --- Le chevron de la liste des langues --- */
+  chevron: 'M6 9.5l6 6 6-6',
 
   /* --- La flèche d'un lien sortant --- */
   externe: 'M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5',
