@@ -29,10 +29,10 @@ export const lb: Contenu = {
   codeLangue: 'lb',
 
   meta: {
-    titre: 'Schoulbus Biekerech — d’Zäite vun Ären Kanner, ouni nozedenken',
+    titre: 'Schoulbus Biekerech — d’Zäite vun Äre Kanner, ouni nozedenken',
     description:
       `De Schoulbusplang vun der Gemeng Biekerech, fir all Kand perséinlech opbereet: seng ` +
-      `Haltestell, seng Zäit, seng Schoul. Offline, ouni Kont. ` +
+      `Statioun, seng Zäit, seng Schoul. Offline, ouni Kont. ` +
       `Onofhängeg Säit, ouni Verbindung mat der Gemeng oder der Schoul.`,
   },
 
@@ -50,34 +50,34 @@ export const lb: Contenu = {
 
   heros: {
     etiquette: `Onofhängeg Säit · ${CHIFFRES.anneesCouvertes.join(' · ')}`,
-    // 23 an 13 Zeechen: ënner der Grenz vun 24 fir d'Deele-Virschaubild.
-    titre: ['Wat Dir um 07:25 gesitt', 'en Dënschdeg.'],
+    // 24 an 13 Zeechen: op der Grenz vun 24 fir d'Deele-Virschaubild.
+    titre: ['Wat Dir um 07:25 gesitt,', 'en Dënschdeg.'],
     altCapture: `Startbildschierm vun der App: d’Kaart vun der Léa, Bus um 07:45 um Kneppchen.`,
     lignes: [
-      { valeur: '07:45', texte: 'd’Zäit vun hirem Bus, op hirer Haltestell' },
+      { valeur: '07:45', texte: 'd’Zäit vun hirem Bus, op hirer Statioun' },
       {
         valeur: '16 Min.',
         texte: 'bis Dir lassmusst, déi 4 Minutte Fousswee scho ofgezunn',
         compte: true,
       },
-      { valeur: 'Kneppchen', texte: 'déi nooste Haltestell bei Ärer Adress' },
+      { valeur: 'Kneppchen', texte: 'déi nooste Statioun bei Ärer Adress' },
       { valeur: 'Léa · Noah', texte: 'eng Kaart pro Kand, an der Reiefolleg vun den Offaarten' },
     ],
     actionPrincipale: 'App opmaachen',
-    actionSecondaire: 'Wat d’Säit net ka',
+    actionSecondaire: 'Wat d’Säit net kann',
     legende: 'Richteg Opnam · 22. September 2026, 07:25 Auer',
   },
 
   chiffres: {
-    arrets: 'Haltestellen',
+    arrets: 'Bedéngte Statiounen',
     villages: 'Dierfer an der Gemeng',
     langues: 'Sproochen, och Lëtzebuergesch',
     envoi: 'Familljendonnéeën un e Server geschéckt',
     envoiValeur: '0',
     envoiNote:
-      `Zwou Saache ginn awer trotzdem eraus: d'Applikatioun zielt hir Säitenopruff, a wien ` +
-      `d'Notifikatiounen aschalt, hannerleet eng anonym Apparat-Kennung op engem Server, sou ` +
-      `laang wéi den Abonnement leeft. Weder Är Adress, nach d'Virnimm, nach d'Zyklen.`,
+      `Zwou Saache ginn awer eraus: d’Applikatioun zielt hir Säitenopruff, a wien ` +
+      `d’Notifikatiounen aschalt, hannerleet eng anonym Apparat-Kennung op engem Server, sou ` +
+      `laang wéi den Abonnement leeft. Weder Är Adress, nach d’Virnimm, nach d’Zyklen.`,
   },
 
   ecrans: {
@@ -88,18 +88,18 @@ export const lb: Contenu = {
       { titre: 'D’Wochenopstellung', texte: 'Fënnef Deeg, an d’Kaart vum Fousswee.' },
       {
         titre: 'Den offizielle Plang, iwwerdroen',
-        texte: `${CHIFFRES.lignes} Linnen, ${CHIFFRES.arrets} Haltestellen, Tabell fir Tabell.`,
+        texte: `${CHIFFRES.lignes} Linnen, ${CHIFFRES.arrets} Statiounen, Tabell fir Tabell.`,
       },
       {
         titre: 'Siwe Froen, ee Mol',
-        texte: 'D’Adress bestëmmt d’Haltestell, den Zyklus d’Schoul.',
+        texte: 'D’Adress bestëmmt d’Statioun, den Zyklus d’Schoul.',
       },
     ],
   },
 
   fonctions: {
     etiquette: 'Wat dran ass',
-    titre: 'Néng Äntwerten op néng Moiescher déi sech net gläichen.',
+    titre: 'Néng Äntwerten op néng Moiescher, déi sech net gläichen.',
     tuiles: [
       {
         icone: 'semaine',
@@ -159,7 +159,7 @@ export const lb: Contenu = {
         `Säit selwer: Är anzetippen freet kee Kaartendéngscht.`,
     },
     horsLigne: {
-      etiquette: 'Op der Haltestell',
+      etiquette: 'Op der Statioun',
       titre: 'D’Zäit steet scho do, ouni Netz.',
       points: [
         { texte: 'Installéiert sech aus dem Browser, ouni App-Store' },
@@ -170,11 +170,11 @@ export const lb: Contenu = {
   },
 
   limites: {
-    titre: 'Wat dës Säit net ka.',
-    note: `sechs Grenzen, ier mir Iech froen se opzemaachen`,
+    titre: 'Wat dës Säit net kann.',
+    note: `sechs Grenzen, ier mir Iech froen, se opzemaachen`,
     items: [
       {
-        titre: 'D’Fousswee sinn geschat',
+        titre: 'D’Foussweeër sinn geschat',
         texte: `Loftlinn, ëm en Drëttel erhéicht, mat 4,5 km/h. Dat ass keng Route.`,
       },
       {
@@ -191,7 +191,7 @@ export const lb: Contenu = {
       },
       {
         titre: 'D’Adresssich hält bei der Gemengegrenz op',
-        texte: `Anzwousch anescht muss een d’Haltestell selwer uginn, ouni Fousswee.`,
+        texte: `Anzwousch anescht muss een den Arrêt selwer uginn, ouni Fousswee.`,
       },
       {
         titre: 'Zwou Saache ginn awer eraus',
@@ -200,7 +200,7 @@ export const lb: Contenu = {
           `aschalt.`,
       },
     ],
-    lien: 'D’Säit „Grenzen" liesen',
+    lien: 'D’Säit „Grenzen“ liesen',
   },
 
   independance: {
@@ -210,7 +210,7 @@ export const lb: Contenu = {
       `Gemengeverwaltung Biekerech oder mat der Schoul. Si schwätzt nëmme fir sech selwer. Am ` +
       `Zweiwel oder bei Ofwäichunge gëllt dat offiziellt Dokument vun der Gemeng.`,
     lien: 'Den offizielle Plang op kanner.beckerich.lu kucken',
-    retour: `Zréck op d'Startsäit`,
+    retour: `Zréck op d’Startsäit`,
   },
 
   final: {
@@ -223,8 +223,8 @@ export const lb: Contenu = {
     titreApres: ', bis Dir lassmusst.',
     // Keen Imperativ, sou laang wéi d'Applikatioun net erreechbar ass — Begrënnung an `fr.ts`.
     chapeau:
-      `Sou wäert de Moie ausgesinn: eng Zäit, an d’Zäit déi bleift bis ee lassmuss. Näischt ze ` +
-      `sichen, näischt ze vergläichen, u kee Moie drun ze denken.`,
+      `Sou wäert de Moien ausgesinn: eng Zäit, an d’Zäit, déi bleift bis ee lassmuss. Näischt ze ` +
+      `sichen, näischt ze vergläichen, u kee Moien drun ze denken.`,
     action: 'App opmaachen',
     qr: 'Oder scannen, fir se um Telefon opzemaachen',
     bientot:
@@ -255,16 +255,16 @@ export const lb: Contenu = {
 
   mentions: {
     titre: `Impressum`,
-    intro: `Dës Säit seet, wien dëst Ugebot verëffentlecht. Um Rescht ännert si näischt: D'Säit bleift onofhängeg, a maassgeevend ass dat offiziellt Dokument vun der Gemeng.`,
+    intro: `Dës Säit seet, wien dëst Ugebot verëffentlecht. Um Rescht ännert si näischt: D’Säit bleift onofhängeg, a maassgeevend ass dat offiziellt Dokument vun der Gemeng.`,
     editeurTitre: `Erausginn vun`,
-    editeurCorps: `Dës Säit gëtt vum ${NOM_EDITEUR} privat an net kommerziell erausginn. Si ass weder a Optrag ginn, nach vun der Gemengeverwaltung Biekerech, vun der Grondschoul oder vun der Maison Relais gepréift oder guttgeheescht.
+    editeurCorps: `Dës Säit gëtt vum ${NOM_EDITEUR} privat an net kommerziell erausginn. Si ass weder an Optrag ginn, nach vun der Gemengeverwaltung Biekerech, vun der Grondschoul oder vun der Maison Relais gepréift oder guttgeheescht.
 Adress: ${ADRESSE_EDITEUR}`,
     hebergeurTitre: `Hosting`,
-    hebergeurCorps: `D'Säit besteet aus statesche Fichieren, déi vun engem Server ausgeliwwert ginn, deen den Erausginner lount. Do gi keng Besuchsdonnéeën opbewahrt.`,
+    hebergeurCorps: `D’Säit besteet aus statesche Fichieren, déi vun engem Server ausgeliwwert ginn, deen den Erausginner lount. Do gi keng Besuchsdonnéeën opbewahrt.`,
     donneesTitre: `Perséinlech Donnéeën`,
-    donneesCorps: `Dës Säit setzt keng Cookien, mëscht keng Zougrëffsmiessung a rifft kee frieme Service un. Et gi keng perséinlech Donnéeë gesammelt; et gëtt also näischt anzegesinn, ze verbesseren oder ze läschen. D'Applikatioun selwer behält dat, wat Dir do aginn, nëmmen op Ärem Apparat — hir Säit „Grenzen" beschreift dat.`,
+    donneesCorps: `Dës Säit setzt keng Cookien, mëscht keng Zougrëffsmiessung a rifft kee frieme Service un. Et gi keng perséinlech Donnéeë gesammelt; et gëtt also näischt anzegesinn, ze verbesseren oder ze läschen. D’Applikatioun selwer behält dat, wat Dir do aginn, nëmmen op Ärem Apparat — hir Säit „Grenzen“ beschreift dat.`,
     responsabiliteTitre: `Haftung`,
-    responsabiliteCorps: `D'ugewisen Zäite kommen aus dem offizielle Plang vun der Gemeng a sinn suergfälteg iwwerdroen, awer ouni Garantie. Am Zweifel oder bei Ofwäichunge gëllt dat offiziellt Dokument vun der Gemeng.`,
-    retour: `Zréck op d'Startsäit`,
+    responsabiliteCorps: `D’ugewisen Zäite kommen aus dem offizielle Plang vun der Gemeng a sinn suergfälteg iwwerdroen, awer ouni Garantie. Am Zweiwel oder bei Ofwäichunge gëllt dat offiziellt Dokument vun der Gemeng.`,
+    retour: `Zréck op d’Startsäit`,
   },
 }
