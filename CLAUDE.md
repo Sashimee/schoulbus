@@ -7,9 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Vitrine schoulbus.lu — repères pour travailler sur ce dépôt
 
 Page de présentation de l'application **Bus scolaire Beckerich**. Elle explique ce que
-l'application fait et dit dans la même page ce qu'elle ne sait pas faire. Elle **n'y conduit
-pas** pour l'instant : l'application est encore en développement, et `APP_PUBLIEE` vaut
-`false` (voir « Les liens, et l'interrupteur »).
+l'application fait et dit dans la même page ce qu'elle ne sait pas faire, et **elle y
+conduit** : l'application est publiée sur `app.schoulbus.lu`, et `APP_PUBLIEE` vaut `true`
+(voir « Les liens, et l'interrupteur »).
 Réalisée par un parent, à titre privé, **sans lien avec la commune ni avec l'école**.
 
 **Ce dépôt n'est pas l'application.** L'application vit dans `../bus-scolaire-beckerich`,
@@ -225,11 +225,13 @@ concorder. Deux règles pour toute animation ajoutée :
 ### Les liens, et l'interrupteur
 
 Toutes les adresses extérieures sont dans `src/config.ts`, **et nulle part ailleurs**.
-`APP_PUBLIEE` y commande d'un seul geste les boutons, le QR, les entrées de pied de page et
-le `SoftwareApplication` du balisage structuré. Les deux états sont testés
-(`src/tests/rendu.test.ts`) : il n'existe pas d'état intermédiaire où la moitié des liens
-serait revenue. Un test couvre aussi le `<noscript>` d'`index.html`, que l'interrupteur ne
-peut pas atteindre puisque c'est du HTML statique.
+`URL_APP` vaut `https://app.schoulbus.lu` ; en changer déplace le QR (`npm run assets:qr`,
+puis commiter). `APP_PUBLIEE` — aujourd'hui `true` — commande d'un seul geste les boutons,
+le QR, les entrées de pied de page et le `SoftwareApplication` du balisage structuré, et
+la mention « bientôt disponible » qui les remplace quand il est fermé. Les deux états sont
+testés (`src/tests/rendu.test.ts`) : il n'existe pas d'état intermédiaire où la moitié
+des liens serait revenue. Un test couvre aussi le `<noscript>` d'`index.html`, que
+l'interrupteur ne peut pas atteindre puisque c'est du HTML statique.
 
 ### Les ressources engendrées sont commitées
 

@@ -1,7 +1,8 @@
 # Vitrine — Bus scolaire Beckerich
 
-Page de présentation du site [Bus scolaire Beckerich](https://github.com/Sashimee/bus-scolaire-beckerich).
+Page de présentation de l'application [Bus scolaire Beckerich](https://app.schoulbus.lu).
 Elle explique ce que fait l'application, ce qu'elle ne sait pas faire, et mène vers elle.
+Son dépôt est `../bus-scolaire-beckerich`.
 
 **C'est un projet distinct de l'application.** Deux dépôts, deux constructions, deux
 déploiements. La vitrine ne partage avec l'application que sa charte graphique, reprise
@@ -222,36 +223,33 @@ exactement là où cela coûte le plus. Le portugais prend `pt_PT` et l'anglais 
 
 ### Où mènent les liens
 
-`src/config.ts`, et nulle part ailleurs. `URL_APP` pointe aujourd'hui vers GitHub Pages ;
-le jour où l'application prend un domaine propre, cette ligne change, et le QR se
-régénère avec `npm run assets:qr`.
+`src/config.ts`, et nulle part ailleurs. `URL_APP` pointe vers `app.schoulbus.lu` — le
+domaine propre de l'application, qui a remplacé son adresse GitHub Pages sans que rien
+d'autre change ici. Un changement d'adresse déplace le QR : `npm run assets:qr`, puis
+commiter le fichier engendré.
 
-### Pour l'instant, ils n'y mènent pas
+### Et ils y mènent
 
-`APP_PUBLIEE` vaut `false` dans `src/config.ts`. L'application est encore en développement,
-et la vitrine la **décrit** sans y conduire : pas de bouton, pas de QR, pas d'entrée de pied
-de page, pas de `SoftwareApplication` dans le balisage structuré. À leur place, une mention
-« bientôt disponible » dans le héros et dans la section finale, et un renvoi vers le plan
-officiel de la commune.
+`APP_PUBLIEE` vaut `true` dans `src/config.ts`. L'application est publiée : les boutons du
+héros et de la section finale, le QR, les entrées de pied de page et le
+`SoftwareApplication` du balisage structuré désignent tous `URL_APP`. Tant que cette
+constante vaut `false`, la vitrine **décrit** l'application sans y conduire, et une mention
+« bientôt disponible » prend la place des appels à l'action.
 
-L'interrupteur a été ouvert un jour, puis refermé le lendemain. C'est son usage prévu, et la
-démonstration qu'il en est bien un : les deux bascules n'ont demandé qu'une constante et une
-ligne de HTML statique, les deux états restant testés (`src/tests/rendu.test.ts`).
+L'interrupteur a été ouvert un jour, refermé le lendemain, puis rouvert quand l'application
+a été prête. C'est son usage prévu, et la démonstration qu'il en est bien un : chaque
+bascule n'a demandé qu'une constante et une ligne de HTML statique, les deux états restant
+testés (`src/tests/rendu.test.ts`).
 
-Une seule chose n'est pas du code : le `<noscript>` d'`index.html`. Elle n'est plus pour
+Une seule chose n'est pas du code : le `<noscript>` d'`index.html`. Elle n'est pas pour
 autant une affaire de mémoire — un test vérifie que ce bloc nomme l'application **si et
-seulement si** `APP_PUBLIEE` le dit, et il a effectivement réclamé la correction lors de
-cette refermeture.
+seulement si** `APP_PUBLIEE` le dit, et il a effectivement réclamé la correction à chaque
+bascule.
 
-Deux nuances à connaître, parce qu'elles limitent ce que « ne mène pas à l'application »
-veut dire :
-
-- **L'application reste joignable.** Elle est publiée sur GitHub Pages ; qui connaît
-  l'adresse y entre. Retirer les liens d'ici ne la dépublie pas — cela se décide dans son
-  dépôt à elle.
-- **Son adresse reste dans le paquet JavaScript**, comme donnée de configuration :
-  `sansApplication()` en a besoin pour filtrer le pied de page. Elle est lisible par qui
-  ouvre le fichier, et de toute façon présente dans ce dépôt.
+Ce que l'interrupteur ne fait pas, dans un sens comme dans l'autre : il commande les chemins
+depuis cette page, pas l'existence de l'application. Elle est publiée depuis son dépôt à
+elle, et son adresse est de toute façon dans le paquet JavaScript comme donnée de
+configuration — `sansApplication()` en a besoin pour filtrer le pied de page.
 
 ## Réserves ouvertes
 
