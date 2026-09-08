@@ -253,9 +253,15 @@ configuration — `sansApplication()` en a besoin pour filtrer le pied de page.
 
 ## Réserves ouvertes
 
-La refonte en a levé cinq et en a ouvert deux ; deux autres se sont ouvertes puis
-refermées depuis, et sont listées avec les levées. Elles sont classées par ce qu'elles
-coûtent à refermer, la plus chère d'abord.
+Elles sont classées par ce qu'elles coûtent à refermer, la plus chère d'abord.
+
+**Une revue systématique du dépôt a eu lieu le 8 septembre 2026**, en quatre passes —
+les promesses de la page contre l'application, les cinq langues contre les dictionnaires,
+la couche visible mesurée dans Chromium, la chaîne de livraison mesurée sur `dist/` et sur
+le site en ligne. Quatre de ses constats ont été corrigés le jour même et sont passés aux
+réserves levées ; le reste est ci-dessous. La leçon commune à tous, et elle vaut d'être
+écrite en tête : **`npm run verifier` était vert du début à la fin.** Aucun de ces défauts
+n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sait mesurer.
 
 - **Les traductions portugaise et anglaise sont des premières rédactions**, et la
   luxembourgeoise l'est redevenue. Le vocabulaire suit celui de l'application
@@ -275,6 +281,22 @@ coûtent à refermer, la plus chère d'abord.
   reprenait son `nn` ; `Zweifel` est redevenu `Zweiwel` ; les guillemets allemands `„ … "`
   se fermaient sur un pouce ASCII, en allemand comme en luxembourgeois ; les apostrophes
   droites sont passées en apostrophes typographiques dans les cinq langues.
+
+  **La revue du 8 septembre en a trouvé d'autres, et elles ne sont PAS corrigées.** La
+  plus lourde ne tient pas à une langue mais aux cinq : la tuile de la maison relais
+  invente un mot différent du sien dans chacune — `Le périscolaire`, `Die Betreuung`,
+  `O prolongamento`, `After-school care` — alors que l'application dit partout *maison
+  relais*, *Maison Relais*, *casa de acolhimento*, *after-school centre*. Le reste est
+  vérifiable une par une contre `bus-scolaire-beckerich/src/i18n/*.json` : `elle-même` pour
+  `lui-même` dans la langue de référence ; en allemand `Fußwege` là où l'application dit
+  `Gehzeiten` (« les chemins sont estimés », que la phrase suivante dément) ; en
+  luxembourgeois `Zyklus` pour `Cycle`, `Faart` pour `Fahrt`, `Fousswee` — zéro occurrence
+  dans l'application — pour `zu Fouss`, et **cinq occurrences de la règle de l'Eifel**,
+  toutes différentes des quatre déjà corrigées ; en portugais `Apresentação` pour `Tema` et
+  `faz fé` pour `prevalece` ; en anglais `Appearance` pour `Theme` et `routes` pour `lines`.
+  Deux arbitrages restent à poser plutôt qu'à corriger : `comuna` contre `município` en
+  portugais, qui touche quinze chaînes et engage les deux dépôts, et le mot employé pour la
+  fiche de la semaine, qui diverge de `nav.semaine` dans les cinq langues.
 
   Ce qu'elle N'A PAS tranché, faute de compétence native, et qui reste à relire :
   `Moiescher` (le pluriel de `Moien`), `dat ganzt Produit` (genre du mot `Produit`),
@@ -304,6 +326,79 @@ coûtent à refermer, la plus chère d'abord.
   plus que 296 px. Ce qui reste non vu est ce que la réserve dit depuis le début : les
   polices du système, la barre d'adresse, les marges d'un écran à encoche.
 
+- **La vitrine décrit une application plus ancienne que celle qui est en ligne.** Les
+  quarante captures sont prises à la révision inscrite dans `scripts/captures.source.json`
+  (`509b621`, le 10 août 2026), qui a depuis quarante-neuf révisions de retard. Une phrase
+  y a déjà survécu à sa vérité : « Sept questions, une fois » — l'assistant en compte six
+  depuis que `bus`, `périscolaire` et `adresses` ont fusionné en `matin`, `midi`, `soir`.
+  La capture affiche bien « Étape 1 sur 7 », si bien que la page est cohérente **avec
+  elle-même** et fausse contre l'application vivante : c'est l'écart qu'aucun test ne peut
+  voir, puisque les deux sources concordent. La phrase et les captures doivent donc bouger
+  dans le même lot — `captures.source.json`, puis `npm run captures:conteneur`, ce qui
+  demande Docker et le dépôt de l'application à côté.
+
+- **« Réduire les animations » ne réduit pas encore tout.** Le bloc
+  `prefers-reduced-motion` de `vitrine.css` remet les *durées* à 0,01 ms mais jamais les
+  *délais*, et l'entrée du héros est en CSS avec des retards jusqu'à 0,72 s. Mesuré sous la
+  préférence : premier mot du titre à ~128 ms, capture à ~320 ms, légende à ~704 ms. Le
+  commentaire au-dessus de la règle promet exactement le contraire. Deux voisines, vues à
+  la même occasion : `Revele` passe d'une balise nue à une balise `motion` à
+  l'hydratation, ce qui repeint en `opacity: 0` trente et un blocs déjà lus (~50 ms de noir,
+  puis un fondu de 0,55 s) — sur une page dont l'argument est le pré-rendu, c'est le
+  pré-rendu qui se fait défaire ; et le rideau, qui ne s'abstient qu'au niveau `aucun`,
+  couvre du contenu déjà peint pendant 1 472 ms sur tout téléphone, où le niveau vaut
+  `reduit`. Le premier tiers tient en une ligne (`animation-delay`), les deux autres non.
+
+- **Deux cibles tactiles sous 44 px, et la réserve levée qui disait le contraire.** Relevé
+  sur un profil Pixel 7 : le lien « Lire la page "Limites" » fait **168 × 19 px** — sous le
+  minimum de 24 px de WCAG 2.5.8, et c'est le seul lien du corps de page sans hauteur
+  minimale — et la marque de l'en-tête **30 × 44 px** sous 26 rem, où `.marque__nom`
+  disparaît et ne laisse que la vignette. La ligne « le relevé sur Pixel 7 ne trouve
+  **aucune** cible sous 44 px », plus bas dans les réserves levées, était vraie quand elle
+  a été écrite et ne l'est plus.
+
+- **La langue ne va pas jusqu'au bout de la page.** Le `<noscript>` d'`index.html` est
+  recopié tel quel par le pré-rendu : `/de/`, `/lb/`, `/pt/` et `/en/` servent un
+  paragraphe **français** sous leur propre `lang` — c'est-à-dire que le seul lecteur pour
+  qui ce bloc existe est le seul à ne pas être servi dans sa langue. Et changer de langue
+  en cours de page ne met à jour ni `<title>`, ni la description, ni la canonique, ni
+  `og:url` ; le bouton Précédent, lui, change l'adresse sans changer la page, faute d'un
+  écouteur `popstate` en face du `pushState`.
+
+- **Ce que le conteneur produit et que nginx ne sert pas.** Le `Dockerfile` passe
+  `brotli -q 11` sur tout le HTML, le JS, le CSS, le SVG, le XML et le TXT à chaque
+  construction ; le bloc `location` que son commentaire annonce n'existe pas, et une
+  requête `Accept-Encoding: br` reçoit **27 461 octets non compressés** là où `gzip_static`
+  en rend 6 548. Deux voisines : `/index.html.gz` et `/index.html.br` répondent 200 en
+  `application/octet-stream`, et les images de la racine — dont le QR, préchargé sur chaque
+  page — sont servies en `no-cache`. Enfin, le `lastmod` du plan du site est **absent en
+  production** : `.dockerignore` exclut `.git`, et `DATE_CONTENU` n'est pas posé dans les
+  arguments de construction Dokploy, si bien que le raisonnement de `prerendu.mjs`
+  — plutôt aucune balise qu'une date fausse — aboutit en permanence à aucune balise.
+
+- **Cent deux kilo-octets de JavaScript, sans budget.** Premier écran, cache vide, thème
+  clair : ≈ 212 ko, dont **102,6 ko de JS compressé** — la moitié du poids, pour une page
+  entièrement pré-rendue dont l'interactivité se réduit à une liste déroulante, deux
+  boutons de thème et des révélations au défilement. Deux requêtes seulement bloquent le
+  premier rendu (6,4 ko de document, 6,0 ko de style), donc rien ne presse à l'affichage ;
+  ce qui manque est une limite. Les captures en ont une (480 ko par langue, tenue à 352) ;
+  le paquet, non — et c'est le seul poste où il reste une marge d'un ordre de grandeur.
+
+- **Le titre luxembourgeois du héros fait 24 signes sur 24.** `heros.titre[0]` de `lb.ts`
+  est exactement à la limite que la vignette de partage impose et qu'un test vérifie : il
+  passe aujourd'hui, et la première retouche le fera tomber. Ce n'est pas un défaut, c'est
+  un piège posé pour la prochaine personne.
+
+- **Ce que l'application envoie à Google Agenda n'est pas nommé ici.** *(À vérifier avant
+  d'agir.)* `bus-scolaire-beckerich/src/lib/agenda/google.ts` envoie à l'API de Google un
+  titre d'événement construit comme `« prénom — trajet »` et le nom de l'arrêt en
+  `location`. Si l'intégration est active en production — elle dépend de
+  `VITE_ID_CLIENT_GOOGLE`, posée à la construction de l'application —, alors le prénom de
+  l'enfant sort bel et bien de l'appareil, à la demande explicite du parent et vers son
+  propre agenda, et `chiffres.envoiNote` devrait le nommer comme il nomme les deux autres.
+  La page « Limites » de l'application ne le nomme pas non plus : si c'est un manque, il
+  est d'abord là-bas.
+
 - **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` calcule
   ce que le navigateur devrait afficher ; il ne lit pas l'écran. La refonte a rendu ce
   calcul plus fiable — les surfaces sont opaques, il n'y a plus d'empilement de voiles à
@@ -321,23 +416,55 @@ coûtent à refermer, la plus chère d'abord.
   plus au même endroit et le script échouait sur un clic introuvable. Sortir l'application
   à cette révision avant de lancer les captures, comme le fait l'intégration continue.
 
-- **Un contexte WebGL par composante qui bouge.** `useNiveauMouvement` appelle
-  `webglDisponible()`, qui crée une toile et lui demande un contexte `webgl2` — et le
-  crochet est appelé onze fois dans l'arbre, dont une par `Revele`. Sur un poste à souris
-  et large, la page ouvre donc des dizaines de contextes en quelques millisecondes ;
-  Chromium en plafonne seize et se plaint (« Too many active WebGL contexts »), aucun
-  n'est relâché. Rien ne casse à l'écran — la mesure est juste, la page s'affiche — mais
-  c'est du travail pur pour un booléen qui ne change pas d'une composante à l'autre. Vu en
-  photographiant la barre : c'est ce qui faisait tomber le navigateur sans écran. La
-  réponse tient probablement en une ligne (mesurer une fois, partager le résultat), et
-  elle n'a pas été écrite ici parce que ce n'était pas le sujet du jour.
-
 - **Le conteneur n'a pas encore tourné ailleurs qu'ici.** L'image se construit, se lance,
   et ses en-têtes ont été relevés à la main (voir plus bas) — mais sur cette machine, en
   HTTP, sans Traefik devant. Le point à surveiller au premier déploiement est
   `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
 
 ### Réserves levées
+
+- *« Un contexte WebGL par composante qui bouge. »* — Levée le 8 septembre, et la réserve
+  se trompait deux fois. Le crochet n'était pas appelé onze fois mais **trente-neuf**, et
+  ce n'est pas lui qui faisait tomber le navigateur sans écran : l'onglet tombe aussi avec
+  `getContext` neutralisé, c'est l'environnement de cette machine. Mesuré à 1 440 px, avant
+  et après, sur la même sonde : trente-neuf contextes `webgl2` dont aucun n'était relâché
+  → **un** ; 235 objets `matchMedia` → **quatre** ; 117 écouteurs `change` permanents →
+  **trois** ; vingt-trois « Too many active WebGL contexts » → **zéro**. La décision vaut
+  pour la page entière : elle vit dans un magasin de module lu par `useSyncExternalStore`,
+  dont le `getServerSnapshot` garde l'arbre servi à `aucun`. Le test qui prétendait tenir
+  cette règle regardait le rendu client, déjà mesuré, et acceptait donc deux réponses.
+
+- *« Le segment de thème choisi ne se disait pas choisi. »* — `useTheme` lisait
+  `data-theme` **pendant le rendu** : `auto` au pré-rendu, où l'attribut n'existe pas, et
+  `clair` dans le navigateur, où le script en ligne l'a déjà posé. React ne rattrape pas un
+  attribut divergent, et son avertissement est retiré du paquet de production : la page
+  s'affichait dans le bon thème avec `aria-pressed="false"` sur les deux segments, sans
+  aucune erreur en console. **Le défaut ne frappait que les visiteurs ayant choisi** —
+  c'est-à-dire les seuls pour qui le script anti-clignotement existe. L'état part
+  désormais de `auto` des deux côtés, l'attribut se lit dans un effet, et le premier
+  passage de l'effet d'application suit le script au lieu de l'effacer : sans cette garde,
+  le correctif ramenait le clignotement qu'il venait d'éviter.
+
+- *« La vitrine tenait un plan sur une parole que la commune n'avait plus donnée. »* —
+  `chiffres.ts` annonçait une confirmation orale et une validité jusqu'en juillet 2027 ;
+  l'application donnait la confirmation **écrite** depuis la brochure 2026/2027 et arrêtait
+  le plan au 18 décembre 2026, à cause du nouveau campus. La limite disait donc le
+  contraire de la page vers laquelle elle renvoie. Les chiffres sont repris, la limite est
+  réécrite dans les cinq langues autour de la date, un test lie les deux — et
+  l'intégration continue régénère désormais `chiffres.ts` à chaque révision. **C'était le
+  seul fichier engendré-et-commité que rien ne revérifiait**, ce qui est exactement
+  pourquoi c'est celui qui a vieilli. À la différence des captures, la comparaison se fait
+  sur la branche par défaut de l'application : une capture est la photographie d'une
+  version, un chiffre est une affirmation sur le plan d'aujourd'hui. Le prix est assumé —
+  un changement de données là-bas fera rougir la CI d'ici.
+
+- *« L'origine par défaut désignait un hôte qui redirige. »* — `schoulbus.lu` répond 308
+  vers `www.schoulbus.lu`. Le `Dockerfile` portait seul la bonne valeur ; `vite.config.ts`,
+  `scripts/prerendu.mjs`, `src/config.ts`, le test de fumée de la CI et l'exemple de ce
+  README retombaient tous sur l'apex. Une construction lancée hors de Dokploy écrivait donc
+  des canoniques, six `hreflang` et dix `<loc>` vers une redirection, sans que rien ne le
+  dise — le bon hôte en ligne ne tenait qu'à un défaut d'argument que personne ne
+  vérifiait. Deux tests le tiennent désormais.
 
 - *« Le nuage WebGL n'a été vu qu'à l'arrêt. »* — Il n'y a plus de nuage WebGL. `Fond.tsx`,
   `fond.glsl.ts` et le curseur personnalisé ont été retirés avec le dégradé qu'ils
@@ -376,8 +503,10 @@ coûtent à refermer, la plus chère d'abord.
      dispose, et non celle de la fenêtre. **Une capture fixe ne pouvait pas voir ce
      défaut-là** : il ne se produit qu'en défilant.
   Reste, sur pointeur fin uniquement, les sélecteurs de l'en-tête à 34 px : c'est l'exception
-  documentée, et elle tient — sur pointeur grossier ils passent à 44 px, et le relevé sur
-  Pixel 7 ne trouve **aucune** cible sous 44 px.
+  documentée, et elle tient — sur pointeur grossier ils passent à 44 px. La phrase qui
+  suivait ici (« le relevé sur Pixel 7 ne trouve aucune cible sous 44 px ») était vraie de
+  ce relevé-là ; un relevé plus large en a trouvé deux depuis, et c'est une réserve
+  ouverte.
 
 - *« Les pastilles d'icône des tuiles n'ont été vues par aucun navigateur. »* — Elles l'ont
   été. Chromium est installé ici depuis, et la page a été photographiée à 360, 390 et
