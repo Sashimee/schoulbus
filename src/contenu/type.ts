@@ -124,7 +124,14 @@ export type Contenu = {
   }
   heros: {
     etiquette: string
-    /** Découpé en lignes ; chaque mot est révélé séparément. */
+    /**
+     * Découpé en lignes ; chaque mot est révélé séparément.
+     *
+     * Chaque ligne tient dans `SIGNES_MAX_TITRE`. Ce n'est pas une règle de style : c'est
+     * la largeur dessinable de la vignette de partage, et elle est vérifiée aux deux bouts
+     * — par `src/tests/contenu.test.ts` et par `scripts/build-partage.mjs`, qui refuse de
+     * dessiner une ligne qui déborderait.
+     */
     titre: string[]
     /** Le texte alternatif de la capture du héros. Il décrit l'écran, pas la marque. */
     altCapture: string
@@ -271,3 +278,19 @@ export type Contenu = {
     retour: string
   }
 }
+
+/**
+ * Signes au plus par ligne de `heros.titre`.
+ *
+ * `scripts/build-partage.mjs` dessine ces lignes à 76 px sur une vignette de 1200 px dont
+ * 88 px de marge de chaque côté : il en reste 1024, soit vingt-quatre signes à cette
+ * graisse. Au-delà, la ligne sort de l'image — et la vignette est ce qu'un groupe de
+ * parents voit AVANT d'ouvrir le lien.
+ *
+ * LE LUXEMBOURGEOIS EST EXACTEMENT À VINGT-QUATRE. Ce n'est pas un défaut, c'est un piège :
+ * la première retouche de ce titre fera tomber la construction. Le nombre vit donc ici,
+ * en un seul endroit, et les deux gardiens disent quoi faire quand il tombe — plutôt que
+ * de laisser quelqu'un découvrir un « expected 25 to be less than or equal to 24 » sans
+ * savoir d'où sort le 24.
+ */
+export const SIGNES_MAX_TITRE = 24
