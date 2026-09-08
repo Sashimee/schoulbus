@@ -185,9 +185,10 @@ l'application** — interface publique et versionnée — et son adresse est au 
 rue, jamais au numéro : la fiche de la semaine dessine le vrai voisinage sur une carte.
 
 > **Ce sont les captures DU CONTENEUR qui sont commitées.** `npm run captures` sert à
-> itérer ; `npm run captures:conteneur` produit ce qui est versionné. Six des vingt-quatre
-> fichiers diffèrent entre une machine de développement et le conteneur — les six
-> `semaine-*`, c'est-à-dire le seul écran qui porte une carte Leaflet. Commiter la sortie
+> itérer ; `npm run captures:conteneur` produit ce qui est versionné. Six fichiers sur les
+> vingt-quatre d'alors différaient entre une machine de développement et le conteneur — les
+> `semaine-*`, c'est-à-dire le seul écran qui porte une carte Leaflet ; avec quarante
+> fichiers, l'écart attendu passe à dix. Commiter la sortie
 > de `npm run captures` fait échouer l'intégration continue **sans que rien ne soit faux
 > dans les images**, ce qui est la façon la plus déroutante d'échouer.
 
