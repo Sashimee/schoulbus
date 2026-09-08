@@ -361,17 +361,6 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   dans le même lot — `captures.source.json`, puis `npm run captures:conteneur`, ce qui
   demande Docker et le dépôt de l'application à côté.
 
-- **Ce que le conteneur produit et que nginx ne sert pas.** Le `Dockerfile` passe
-  `brotli -q 11` sur tout le HTML, le JS, le CSS, le SVG, le XML et le TXT à chaque
-  construction ; le bloc `location` que son commentaire annonce n'existe pas, et une
-  requête `Accept-Encoding: br` reçoit **27 461 octets non compressés** là où `gzip_static`
-  en rend 6 548. Deux voisines : `/index.html.gz` et `/index.html.br` répondent 200 en
-  `application/octet-stream`, et les images de la racine — dont le QR, préchargé sur chaque
-  page — sont servies en `no-cache`. Enfin, le `lastmod` du plan du site est **absent en
-  production** : `.dockerignore` exclut `.git`, et `DATE_CONTENU` n'est pas posé dans les
-  arguments de construction Dokploy, si bien que le raisonnement de `prerendu.mjs`
-  — plutôt aucune balise qu'une date fausse — aboutit en permanence à aucune balise.
-
 - **Cent deux kilo-octets de JavaScript, sans budget.** Premier écran, cache vide, thème
   clair : ≈ 212 ko, dont **102,6 ko de JS compressé** — la moitié du poids, pour une page
   entièrement pré-rendue dont l'interactivité se réduit à une liste déroulante, deux
@@ -418,6 +407,40 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
 
 ### Réserves levées
+
+- *« Ce que le conteneur produit et que nginx ne sert pas. »* — Levée le 8 septembre, les
+  quatre points. Les trois premiers sont **mesurés**, avant et après, sur la vraie
+  `nginx.conf` du dépôt : nginx a été installé sans root sur cette machine (comme Chromium
+  avant lui) et sert `dist/` sur un port haut, la configuration n'étant réécrite que pour
+  son `listen`, sa racine et le chemin de son inclusion.
+
+  - **Brotli ne sert plus à rien, donc il n'est plus produit.** `nginx:alpine` ne sait pas
+    servir de `.br` et le bloc `location` que le `Dockerfile` annonçait n'a jamais existé :
+    mesuré, `Accept-Encoding: br` recevait **27 472 octets non comprimés** là où
+    `gzip_static` en rend 6 594. On payait la compression la plus lente à chaque
+    construction pour des fichiers que personne ne recevait. Reste `gzip -9`, qui marche.
+  - **`/index.html.gz` répondait 200 en `application/octet-stream`** — une seconde adresse
+    pour chaque page, que rien n'annonce et qu'un moteur peut trouver. `.gz` et `.br` sont
+    en 404 ; `gzip_static`, qui sert le fichier en interne sans passer par un bloc
+    `location`, est vérifié intact sur `/`, `/de/`, `/assets/*.css` et `/sitemap.xml`.
+  - **Les images de la racine sont passées de `no-cache` à une semaine**, comme les
+    captures et pour la même raison — pas d'empreinte, engendrées par script. Le QR est
+    préchargé sur chaque page ; il repartait à chaque visite. L'expression régulière est
+    ancrée sur la racine (`^/[^/]+\.`) : sans cela elle aurait repris à `/assets/` son
+    cache d'un an, un bloc en expression régulière l'emportant sur un bloc en préfixe.
+  - **Le `lastmod` revient**, en supprimant le réglage plutôt qu'en le posant.
+    `.dockerignore` n'exclut plus `.git` et l'étape de construction installe `git` : le
+    script lit la date du dernier commit de contenu, comme sur une machine de
+    développement. `DATE_CONTENU` reste pour une archive sans historique. **Un réglage dont
+    l'oubli est silencieux et permanent n'est pas un réglage, c'est un défaut** — et il
+    l'était depuis la première mise en ligne.
+
+  **Ce qui n'a PAS été vérifié, et c'est la réserve qui reste** : l'image elle-même. Docker
+  n'est pas installé sur cette machine. Le `find`/`gzip` de l'étape de compression a été
+  rejoué à la main sur `dist/`, la configuration nginx passe `nginx -t` et sert
+  correctement — mais `apk add git`, la copie de `.git` dans le contexte et le `lastmod`
+  qui en découle n'ont été vérifiés qu'en raisonnement. **À regarder au premier
+  déploiement**, en même temps que `Strict-Transport-Security` (réserve suivante).
 
 - *« La langue ne va pas jusqu'au bout de la page. »* — Levée le 8 septembre, les trois
   points, et vérifiée dans Chromium sur la page construite.
