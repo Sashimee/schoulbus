@@ -187,8 +187,8 @@ export const pt: Contenu = {
         texte: `Em caso de divergência, vale o documento oficial da comuna.`,
       },
       {
-        titre: 'O plano assenta numa confirmação verbal',
-        texte: `A comuna confirmou por telefone, em agosto de 2026, para ${CHIFFRES.anneesCouvertes[1]}.`,
+        titre: 'O plano termina a 18 de dezembro de 2026',
+        texte: `O novo campus, previsto para janeiro de 2027, vai mudar horários e percursos.`,
       },
       {
         titre: 'Uma notificação não é uma garantia',

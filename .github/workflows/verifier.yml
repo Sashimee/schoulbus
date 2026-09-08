@@ -124,6 +124,48 @@ jobs:
             exit 1
           fi
 
+  # ------------------------------------------------------------------ #
+  # Les chiffres correspondent-ils encore aux données de l'application ?
+  # ------------------------------------------------------------------ #
+  #
+  # `src/contenu/chiffres.ts` est engendré et commité, comme les vignettes et les captures,
+  # et c'était le seul des trois que rien ne revérifiait. Ce qu'il en a coûté : la vitrine a
+  # annoncé pendant un mois un plan « tenu sur une confirmation orale » et valable jusqu'en
+  # juillet 2027, alors que l'application le donnait confirmé par écrit et arrêté au
+  # 18 décembre 2026 — sur la page même vers laquelle la vitrine renvoie. Les quatre-vingts
+  # tests étaient verts pendant tout ce temps.
+  #
+  # À LA DIFFÉRENCE DES CAPTURES, la comparaison se fait ici sur la branche par défaut de
+  # l'application, et non sur la révision épinglée. Ce n'est pas une inattention : une
+  # capture est la photographie d'une version, et se compare donc à cette version-là ; un
+  # chiffre est une affirmation sur le plan de bus d'aujourd'hui, celui que le parent aura
+  # sous les yeux en suivant le lien. Le prix de ce choix est assumé : un changement de
+  # données dans l'autre dépôt fait rougir ce travail sans que rien n'ait bougé ici. C'est
+  # exactement le signal recherché — la vitrine a quelque chose à mettre à jour.
+  chiffres:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # Le script ne lit que des fichiers JSON de `src/data` : ni les dépendances de
+      # l'application, ni son historique ne servent à quoi que ce soit ici.
+      - name: Extraire les données de l'application
+        run: git clone --depth 1 --filter=blob:none https://github.com/Sashimee/bus-scolaire-beckerich.git app
+
+      - name: Les chiffres sont-ils encore ceux des données ?
+        run: |
+          DEPOT_APP="$PWD/app" node scripts/build-chiffres.mjs
+          if ! git diff --quiet -- src/contenu/chiffres.ts; then
+            echo "Les chiffres commités ne correspondent plus aux données de l'application."
+            echo "Lancer « npm run chiffres », RELIRE LES PHRASES QUI EN DÉPENDENT, et commiter."
+            git diff -- src/contenu/chiffres.ts
+            exit 1
+          fi
+
   image:
     runs-on: ubuntu-latest
     steps:

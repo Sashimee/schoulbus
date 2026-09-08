@@ -182,8 +182,8 @@ export const lb: Contenu = {
         texte: `Bei Ofwäichunge gëllt dat offiziellt Dokument vun der Gemeng.`,
       },
       {
-        titre: 'De Plang baséiert op enger mëndlecher Zouso',
-        texte: `D’Gemeng huet am August 2026 telefonesch bestätegt, fir ${CHIFFRES.anneesCouvertes[1]}.`,
+        titre: 'De Plang gëllt bis den 18. Dezember 2026',
+        texte: `Den neie Campus, virgesi fir Januar 2027, ännert Zäiten a Weeër.`,
       },
       {
         titre: 'Eng Notifikatioun ass keng Garantie',
