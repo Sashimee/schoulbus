@@ -48,7 +48,7 @@ export const en: Contenu = {
     sautContenu: 'Skip to content',
     ouvrirApp: 'Open the app',
     fermer: 'Close',
-    theme: 'Appearance',
+    theme: 'Theme',
     themeClair: 'Light',
     themeSombre: 'Dark',
     choixLangue: 'Language',
@@ -95,7 +95,7 @@ export const en: Contenu = {
       { titre: 'The week at a glance', texte: 'Five days, and the map of the walk.' },
       {
         titre: 'The official plan, copied out',
-        texte: `${CHIFFRES.lignes} routes, ${CHIFFRES.arrets} stops, table by table.`,
+        texte: `${CHIFFRES.lignes} lines, ${CHIFFRES.arrets} stops, table by table.`,
       },
       {
         titre: 'Seven questions, once',
@@ -151,7 +151,7 @@ export const en: Contenu = {
       },
       {
         icone: 'horloge',
-        titre: 'After-school care',
+        titre: 'After-school centre',
         texte: 'Dropped off Monday, picked up Thursday.',
       },
     ],

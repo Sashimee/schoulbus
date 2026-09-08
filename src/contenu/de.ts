@@ -145,7 +145,7 @@ export const de: Contenu = {
       },
       {
         icone: 'horloge',
-        titre: 'Die Betreuung',
+        titre: 'Die Maison Relais',
         texte: 'Montags gebracht, donnerstags abgeholt.',
       },
     ],
@@ -175,7 +175,7 @@ export const de: Contenu = {
     note: `sechs Grenzen, bevor wir Sie bitten, sie zu öffnen`,
     items: [
       {
-        titre: 'Die Fußwege sind geschätzt',
+        titre: 'Die Gehzeiten sind geschätzt',
         texte: `Luftlinie, um ein Drittel erhöht, mit 4,5 km/h. Das ist keine Route.`,
       },
       {
