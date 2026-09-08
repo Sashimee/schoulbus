@@ -146,16 +146,29 @@ export type Contenu = {
     arrets: string
     villages: string
     langues: string
-    /** Le zéro est cadré : il porte sur ce que la famille saisit, pas sur tout trafic. */
+    /**
+     * Le zéro est cadré, et son cadrage a changé le 8 septembre.
+     *
+     * Il disait « donnée de famille envoyée à un serveur », et c'était devenu faux :
+     * l'export vers Google Agenda envoie le prénom de l'enfant et le nom de son arrêt à
+     * Google (`bus-scolaire-beckerich/src/lib/agenda/`), et un prénom est une donnée de
+     * famille. Le zéro porte désormais sur ce qui part SANS QU'ON LE DEMANDE — ce qui est
+     * vrai, et reste la chose qu'un parent veut savoir.
+     */
     envoi: string
     envoiValeur: string
     /**
      * Ce qui sort quand même, sous la bande de chiffres.
      *
      * Un « 0 » affiché en grand se relit vite comme « rien ne sort », et ce serait faux :
-     * l'application compte ses pages vues, et une notification suppose un identifiant
-     * d'appareil déposé sur un serveur le temps de l'abonnement. La note n'est pas une
-     * précaution juridique, c'est ce qui rend le chiffre vrai.
+     * l'application compte ses pages vues, une notification suppose un identifiant
+     * d'appareil déposé sur un serveur le temps de l'abonnement, et l'export vers Google
+     * Agenda envoie à Google le prénom de l'enfant et le nom de son arrêt. La note n'est
+     * pas une précaution juridique, c'est ce qui rend le chiffre vrai.
+     *
+     * LA TROISIÈME MANQUAIT jusqu'au 8 septembre, et la note affirmait même le contraire
+     * — « ni les prénoms ». C'était la seule affirmation de la vitrine que l'application
+     * ne tenait pas.
      *
      * LA MAQUETTE NE LA PORTAIT PAS. Elle a été rétablie : afficher « 0 » en grand sans
      * elle, dans la même page qui énumère six limites, aurait été la seule affirmation

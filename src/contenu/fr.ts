@@ -94,12 +94,13 @@ export const fr: Contenu = {
     arrets: 'arrêts desservis',
     villages: 'villages de la commune',
     langues: 'langues, dont le luxembourgeois',
-    envoi: 'donnée de famille envoyée à un serveur',
+    envoi: 'donnée de famille qui part sans que vous le demandiez',
     envoiValeur: '0',
     envoiNote:
-      `Deux choses sortent quand même : l’application compte ses pages vues, et activer ` +
-      `les notifications dépose un identifiant d’appareil anonyme sur un serveur, le temps ` +
-      `de l’abonnement. Ni votre adresse, ni les prénoms, ni les cycles.`,
+      `Trois choses sortent quand même : l’application compte ses pages vues, activer les ` +
+      `notifications dépose un identifiant d’appareil anonyme sur un serveur le temps de ` +
+      `l’abonnement, et écrire les trajets dans Google Agenda envoie à Google le prénom de ` +
+      `l’enfant et le nom de son arrêt. Ni votre adresse, ni les cycles.`,
   },
 
   ecrans: {
@@ -229,10 +230,11 @@ export const fr: Contenu = {
         texte: `Ailleurs, il faut désigner l’arrêt soi-même, sans temps de marche.`,
       },
       {
-        titre: 'Deux choses sortent quand même',
+        titre: 'Trois choses sortent quand même',
         texte:
-          `Les pages vues, et un identifiant d’appareil anonyme si vous activez les ` +
-          `notifications.`,
+          `Les pages vues, un identifiant d’appareil anonyme si vous activez les ` +
+          `notifications, et le prénom de l’enfant si vous écrivez les trajets dans ` +
+          `Google Agenda.`,
       },
     ],
     lien: 'Lire la page « Limites »',

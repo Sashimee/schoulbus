@@ -315,6 +315,12 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   unique. Ce que l'application garde et qui n'est donc pas une faute ici : `Statioun`,
   `Applikatioun`, `sinn`, `gesinn` devant consonne.
 
+  **Le 8 septembre a ajouté des chaînes à relire**, et il faut le dire plutôt que de le
+  laisser se diluer : `meta.sansScript` (le bloc sans JavaScript) est une phrase nouvelle
+  dans chaque langue, et `chiffres.envoi`, `chiffres.envoiNote` ainsi que la limite « trois
+  choses sortent quand même » ont été réécrits dans les cinq. Ce sont, en luxembourgeois,
+  en portugais et en anglais, des premières rédactions de plus.
+
   Deux arbitrages restent à poser plutôt qu'à corriger : `comuna` contre `município` en
   portugais, qui touche quinze chaînes et engage les deux dépôts, et le mot employé pour la
   fiche de la semaine, qui diverge de `nav.semaine` dans les cinq langues. Un troisième s'y
@@ -377,16 +383,6 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   dans une page qu'on lit une fois. C'est le seul poste où il reste une marge d'un ordre de
   grandeur, et la refermer demande une décision d'architecture, pas un réglage.
 
-- **Ce que l'application envoie à Google Agenda n'est pas nommé ici.** *(À vérifier avant
-  d'agir.)* `bus-scolaire-beckerich/src/lib/agenda/google.ts` envoie à l'API de Google un
-  titre d'événement construit comme `« prénom — trajet »` et le nom de l'arrêt en
-  `location`. Si l'intégration est active en production — elle dépend de
-  `VITE_ID_CLIENT_GOOGLE`, posée à la construction de l'application —, alors le prénom de
-  l'enfant sort bel et bien de l'appareil, à la demande explicite du parent et vers son
-  propre agenda, et `chiffres.envoiNote` devrait le nommer comme il nomme les deux autres.
-  La page « Limites » de l'application ne le nomme pas non plus : si c'est un manque, il
-  est d'abord là-bas.
-
 - **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` calcule
   ce que le navigateur devrait afficher ; il ne lit pas l'écran. La refonte a rendu ce
   calcul plus fiable — les surfaces sont opaques, il n'y a plus d'empilement de voiles à
@@ -410,6 +406,38 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
 
 ### Réserves levées
+
+- *« Ce que l'application envoie à Google Agenda n'est pas nommé ici. »* — Vérifié le
+  8 septembre, et **c'était pire que la réserve ne le disait**. Elle parlait d'un manque ;
+  c'était une contradiction. La note écrivait « Ni votre adresse, **ni les prénoms**, ni
+  les cycles » — la seule affirmation de la vitrine que l'application ne tenait pas, celle
+  que le premier principe du projet existe pour empêcher.
+
+  Les trois faits, vérifiés un par un :
+
+  - `bus-scolaire-beckerich/src/lib/agenda/evenements.ts:127` construit le titre de
+    l'événement comme `` `${ctx.enfant.prenom} — ${libelleTrajet}` `` ;
+  - `google.ts:378` l'envoie en `summary` et le nom de l'arrêt en `location`, et
+    `google.ts:439` nomme l'agenda `Bus scolaire — {prénom}` ;
+  - **l'intégration est active en production** : le paquet servi par `app.schoulbus.lu`
+    porte un identifiant client Google réel (`…apps.googleusercontent.com`), et
+    `googleConfigure()` ne demande rien de plus que ce suffixe.
+
+  Ce qui a changé ici, dans les cinq langues : la note nomme **trois** choses au lieu de
+  deux, la limite qui les énumère aussi, et « ni les prénoms » a disparu.
+
+  **Et le cadrage du « 0 » a dû être resserré**, ce qui est la décision de ce lot et mérite
+  d'être discutée. Le libellé disait « donnée de famille envoyée à un serveur » : un prénom
+  est une donnée de famille et Google est un serveur, le zéro était donc devenu faux sous
+  sa propre définition. Il porte désormais sur ce qui part **sans qu'on le demande**, ce
+  qui reste vrai, reste la chose qu'un parent veut savoir, et garde au chiffre sa fonction.
+  Le raisonnement est écrit à ses trois endroits : `src/contenu/type.ts`,
+  `scripts/build-chiffres.mjs` et `CLAUDE.md`.
+
+  **Ce que ce lot NE corrige pas, et qui reste ouvert ailleurs** : la page « Limites » de
+  l'application ne nomme toujours pas ce flux. La vitrine est maintenant plus précise que
+  l'application qu'elle décrit — l'inverse du défaut habituel, mais un écart quand même, et
+  il se répare dans `../bus-scolaire-beckerich`, pas ici.
 
 - *« Le titre luxembourgeois du héros fait 24 signes sur 24. »* — Le piège n'est pas
   désamorcé, il est SIGNALÉ, et c'est la bonne réponse : la limite est réelle (76 px dans

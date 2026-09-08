@@ -69,9 +69,11 @@ poussée seule, sans PR, n'est vue par personne ni par rien.
    personnalisé, il ne sait pas où est le bus. Toute affirmation ajoutée ici doit être
    vérifiable dans `../bus-scolaire-beckerich`. Voir l'en-tête de `src/contenu/type.ts`.
    Cas concret : la bande de chiffres affiche « 0 » en grand, et la note qui le CADRE
-   (`chiffres.envoiNote`) est ce qui le rend vrai — deux choses sortent bel et bien de
-   l'appareil. La supprimer pour alléger la page ferait de ce zéro la seule affirmation
-   du site que l'application ne tient pas.
+   (`chiffres.envoiNote`) est ce qui le rend vrai — TROIS choses sortent bel et bien de
+   l'appareil, dont le prénom de l'enfant quand un parent écrit les trajets dans Google
+   Agenda. La supprimer pour alléger la page ferait de ce zéro la seule affirmation du
+   site que l'application ne tient pas — ce qu'elle a été jusqu'au 8 septembre 2026, la
+   note disant alors « ni les prénoms ».
 2. **La section « Limites » vient AVANT l'appel final.** C'est l'ordre choisi par
    l'application elle-même (`src/App.tsx`), et il ne s'inverse pas pour gagner un clic.
 3. **Le registre est celui de l'application, pas celui d'une page de vente.** Énoncer une

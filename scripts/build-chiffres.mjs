@@ -57,11 +57,13 @@ const chiffres = {
   // brochure 2026/2027, qui republie les mêmes tableaux : la limite de la vitrine porte
   // désormais sur `valideAu`, la date où le plan s'arrête, et non plus sur la parole.
   confirmationOrale: plan.source.confirmationOrale === true,
-  // Ce qui part de l'appareil vers un serveur — DES DONNÉES DE LA FAMILLE, et de celles-là
-  // seulement. Le cadrage n'est pas une précaution de langage : deux choses sortent bel et
-  // bien de l'appareil, et la vitrine les nomme (`chiffres.envoiNote`, et une limite
-  // entière). Élargir ce chiffre à « rien ne sort » serait faux ; le lecteur qui voudrait
-  // le faire trouvera les deux exceptions dans `src/tests/contenu.test.ts`.
+  // Ce qui part de l'appareil SANS QU'ON LE DEMANDE, et parmi les seules données de la
+  // famille. Le cadrage n'est pas une précaution de langage, et il a dû être resserré :
+  // il portait sur « ce qui part vers un serveur », ce qui est devenu faux le jour où
+  // l'export vers Google Agenda a envoyé le prénom de l'enfant et le nom de son arrêt à
+  // Google (`bus-scolaire-beckerich/src/lib/agenda/`). Trois choses sortent bel et bien de
+  // l'appareil, et la vitrine les nomme toutes les trois (`chiffres.envoiNote`, et une
+  // limite entière). Élargir ce chiffre à « rien ne sort » serait faux.
   donneesFamilleEnvoyees: 0,
 }
 
