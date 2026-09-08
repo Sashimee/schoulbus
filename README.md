@@ -361,13 +361,21 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   dans le même lot — `captures.source.json`, puis `npm run captures:conteneur`, ce qui
   demande Docker et le dépôt de l'application à côté.
 
-- **Cent deux kilo-octets de JavaScript, sans budget.** Premier écran, cache vide, thème
-  clair : ≈ 212 ko, dont **102,6 ko de JS compressé** — la moitié du poids, pour une page
-  entièrement pré-rendue dont l'interactivité se réduit à une liste déroulante, deux
-  boutons de thème et des révélations au défilement. Deux requêtes seulement bloquent le
-  premier rendu (6,4 ko de document, 6,0 ko de style), donc rien ne presse à l'affichage ;
-  ce qui manque est une limite. Les captures en ont une (480 ko par langue, tenue à 352) ;
-  le paquet, non — et c'est le seul poste où il reste une marge d'un ordre de grandeur.
+- **Cent trois kilo-octets de JavaScript. Le budget existe, la réserve reste.** Premier
+  écran, cache vide : **103,6 ko de JS comprimé** pour une page entièrement pré-rendue dont
+  l'interactivité se réduit à une liste déroulante, deux boutons de thème et des
+  révélations au défilement. Deux requêtes seulement bloquent le premier rendu (6,4 ko de
+  document, 6,0 ko de style), donc rien ne presse à l'affichage.
+  Ce qui manquait — une limite — a été posé le 8 septembre : `npm run poids`, appelé à la
+  fin de `npm run build`, mesure ce que `dist/index.html` NOMME (les imports dynamiques de
+  `lenis` et de `motion` ne comptent pas, ils ne partent pas avec la page) et refuse au-delà
+  de 110 ko. La marge est de 6 % et non de 45 % comme celle des captures, parce que les cinq
+  fichiers de contenu sont dans le paquet : un budget serré ferait échouer la construction
+  pour une correction de texte.
+  **Le budget enregistre ce poids, il ne l'approuve pas.** Ce qui reste ouvert est la
+  question qu'il ne pose pas : ce que React, `motion` et cinq dictionnaires complets font
+  dans une page qu'on lit une fois. C'est le seul poste où il reste une marge d'un ordre de
+  grandeur, et la refermer demande une décision d'architecture, pas un réglage.
 
 - **Le titre luxembourgeois du héros fait 24 signes sur 24.** `heros.titre[0]` de `lb.ts`
   est exactement à la limite que la vignette de partage impose et qu'un test vérifie : il

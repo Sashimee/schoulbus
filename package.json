@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && npm run build:ssr && node scripts/prerendu.mjs",
+    "build": "tsc -b && vite build && npm run build:ssr && node scripts/prerendu.mjs && npm run poids",
     "build:ssr": "vite build --ssr src/entree-serveur.ts --outDir dist-ssr",
     "preview": "vite preview",
     "test": "vitest run",
@@ -17,6 +17,7 @@
     "jetons:verifier": "node scripts/sync-jetons.mjs --verifier",
     "jetons:reprendre": "node scripts/sync-jetons.mjs",
     "contraste": "node scripts/verifier-contraste.mjs",
+    "poids": "node scripts/verifier-poids.mjs",
     "chiffres": "node scripts/build-chiffres.mjs",
     "assets:qr": "node scripts/build-qr.mjs",
     "assets:partage": "node scripts/build-partage.mjs",
