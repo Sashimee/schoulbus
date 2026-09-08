@@ -130,4 +130,4 @@ jobs:
       - uses: actions/checkout@v4
       # Construction seule, sans publication : c'est un test de fumée du `Dockerfile`,
       # que Dokploy exécutera pour de bon.
-      - run: docker build --build-arg URL_PUBLIQUE=https://schoulbus.lu -t vitrine:essai .
+      - run: docker build --build-arg URL_PUBLIQUE=https://www.schoulbus.lu -t vitrine:essai .

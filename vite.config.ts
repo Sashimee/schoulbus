@@ -10,7 +10,13 @@ const base = process.env.BASE_PATH ?? '/'
 
 // Origine publique. Elle n'entre que dans les métadonnées de partage, qui exigent des
 // URL absolues — un crawler ne résout pas un chemin relatif.
-const origine = (process.env.URL_PUBLIQUE ?? 'https://schoulbus.lu').replace(/\/$/, '')
+//
+// LE DÉFAUT PORTE LE `www`, parce que c'est l'hôte qui répond : `schoulbus.lu` redirige en
+// 308 vers `www.schoulbus.lu`. Le `Dockerfile` posait déjà la bonne valeur, mais lui seul :
+// une construction lancée à la main écrivait des canoniques, des `hreflang` et un plan du
+// site vers un hôte qui redirige, sans que rien ne le signale. `src/config.ts` et
+// `scripts/prerendu.mjs` portent le même défaut, et un test le tient.
+const origine = (process.env.URL_PUBLIQUE ?? 'https://www.schoulbus.lu').replace(/\/$/, '')
 
 /**
  * Politique de sécurité du contenu, posée en balise `<meta>`.
