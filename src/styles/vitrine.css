@@ -504,14 +504,23 @@
    * médical pour qui souffre de troubles vestibulaires. Tout s'arrête, et la page reste
    * entièrement lisible — les composantes qui animent une apparition doivent donc
    * toujours partir d'un état visible, jamais d'`opacity: 0` figé.
+   *
+   * LES RETARDS COMPTENT AUTANT QUE LES DURÉES, et ils manquaient ici. Remettre les
+   * seules durées à 0,01 ms laisse intacts les `animation-delay` de l'entrée du héros,
+   * qui vont jusqu'à 0,72 s : l'animation ne durait plus, mais elle commençait toujours
+   * plus tard. Relevé sous la préférence, avant : l'étiquette à 225 ms, le titre à 341,
+   * la capture à 558, la légende à 941. Une apparition instantanée décalée d'une seconde
+   * reste une apparition, et c'est exactement ce que la préférence demande d'éviter.
    */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      transition-delay: 0s !important;
       scroll-behavior: auto !important;
     }
   }
