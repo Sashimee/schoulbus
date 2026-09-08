@@ -361,18 +361,6 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   dans le même lot — `captures.source.json`, puis `npm run captures:conteneur`, ce qui
   demande Docker et le dépôt de l'application à côté.
 
-- **« Réduire les animations » ne réduit pas encore tout.** Le bloc
-  `prefers-reduced-motion` de `vitrine.css` remet les *durées* à 0,01 ms mais jamais les
-  *délais*, et l'entrée du héros est en CSS avec des retards jusqu'à 0,72 s. Mesuré sous la
-  préférence : premier mot du titre à ~128 ms, capture à ~320 ms, légende à ~704 ms. Le
-  commentaire au-dessus de la règle promet exactement le contraire. Deux voisines, vues à
-  la même occasion : `Revele` passe d'une balise nue à une balise `motion` à
-  l'hydratation, ce qui repeint en `opacity: 0` trente et un blocs déjà lus (~50 ms de noir,
-  puis un fondu de 0,55 s) — sur une page dont l'argument est le pré-rendu, c'est le
-  pré-rendu qui se fait défaire ; et le rideau, qui ne s'abstient qu'au niveau `aucun`,
-  couvre du contenu déjà peint pendant 1 472 ms sur tout téléphone, où le niveau vaut
-  `reduit`. Le premier tiers tient en une ligne (`animation-delay`), les deux autres non.
-
 - **La langue ne va pas jusqu'au bout de la page.** Le `<noscript>` d'`index.html` est
   recopié tel quel par le pré-rendu : `/de/`, `/lb/`, `/pt/` et `/en/` servent un
   paragraphe **français** sous leur propre `lang` — c'est-à-dire que le seul lecteur pour
@@ -438,6 +426,34 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
 
 ### Réserves levées
+
+- *« "Réduire les animations" ne réduit pas encore tout. »* — Levée le 8 septembre, les
+  trois tiers. Tout est mesuré sur la page CONSTRUITE et servie par `npm run preview`,
+  avant et après : le serveur de développement injecte sa CSS en JavaScript, si bien que
+  rien n'y est peint avant l'hydratation et que les trois défauts y sont invisibles. C'est
+  le piège de méthode à retenir de ce lot.
+
+  1. **Les délais.** Le bloc `prefers-reduced-motion` remettait les durées à 0,01 ms et
+     laissait les `animation-delay` de l'entrée du héros, qui vont jusqu'à 0,72 s : sous la
+     préférence, l'étiquette apparaissait à 71 ms, le titre à 183, la capture à 400, la
+     légende à 783 — une apparition instantanée, mais étalée sur près d'une seconde. Les
+     quatre arrivent maintenant ensemble, à 85 ms. Deux lignes (`animation-delay` et
+     `transition-delay`), comme annoncé.
+  2. **`Revele` défaisait le pré-rendu.** Le premier rendu vaut toujours `aucun` — c'est
+     ce que rend `getServerSnapshot`, et donc aussi l'hydratation — puis la mesure
+     remplaçait la balise nue par une balise `motion`, qui reposait son `initial`.
+     Relevé à 1 280 × 1 800 : dix blocs déjà peints (les quatre chiffres, leur note,
+     l'en-tête de bande, les quatre cartes d'écran) repassaient sous l'opacité 1 à 86 ms
+     pour n'en ressortir qu'entre 575 et 742 ms. Un bloc déjà à l'écran quand le mouvement
+     est autorisé garde désormais sa balise nue : il n'a rien à révéler, il est lu. Après :
+     zéro.
+  3. **Le rideau couvrait tous les téléphones.** Il ne s'abstenait qu'au niveau `aucun` ;
+     or un appareil tactile vaut `reduit`. Mesuré à 393 px, pointeur grossier : le rideau
+     couvrait la page de 95 à 1 576 ms. Il ne se monte plus qu'au niveau `complet`, comme
+     le défilement doux et le curseur, qui s'abstiennent déjà à ce niveau-là. Après :
+     jamais sur tactile, inchangé au bureau (82 → 1 556 ms). **Trois tests le tiennent**
+     désormais dans `niveau-mouvement.test.ts` — vérifiés en sens inverse, c'est-à-dire
+     rouges sur l'ancien code.
 
 - *« Deux cibles tactiles sous 44 px. »* — Levée le 8 septembre. Les deux sont relevées à
   320, 360, 393, 430, 768 et 1 280 px, pointeur grossier : plus aucune cible sous 44 px.

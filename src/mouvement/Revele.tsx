@@ -7,16 +7,25 @@
  * apparaît dans l'application doivent être le même mouvement, sinon les deux sites ne
  * se ressemblent que sur l'image fixe.
  *
- * Deux garde-fous :
+ * Trois garde-fous :
  *
  *  - `once: true`. Un élément qui rejoue son entrée à chaque passage transforme un
  *    retour en arrière dans la page en clignotement.
  *  - L'état de départ n'est posé que si le mouvement est autorisé. Sans cela, une page
  *    dont le JavaScript échoue à mi-parcours resterait à `opacity: 0` — invisible et
  *    irrécupérable. Le défaut, ici, est d'être visible.
+ *  - ON NE RÉVÈLE PAS CE QUI EST DÉJÀ PEINT. Le premier rendu vaut toujours `aucun`,
+ *    pré-rendu comme hydratation, et rendait donc une balise nue ; à la mesure, la
+ *    balise devenait une balise `motion` qui reposait son `initial`, c'est-à-dire
+ *    `opacity: 0`. Relevé à 1 280 × 900 : zéro élément caché jusqu'à 122 ms, puis six
+ *    blocs déjà à l'écran repassaient sous l'opacité 1 à 171 ms pour n'en ressortir
+ *    qu'après. Sur une page dont tout l'argument est d'être pré-rendue, c'est le
+ *    pré-rendu qui se faisait défaire. Un bloc déjà à l'écran quand le mouvement est
+ *    autorisé garde donc sa balise nue : il n'a rien à révéler, il est lu.
  */
 import { m } from 'motion/react'
 import type { ReactNode } from 'react'
+import { useCallback, useRef } from 'react'
 import { useNiveauMouvement } from './useNiveauMouvement.ts'
 
 type Props = {
@@ -41,9 +50,27 @@ const CRANS_MAX = 3
 export function Revele({ children, rang = 0, geste = 'monte', className, as = 'div' }: Props) {
   const niveau = useNiveauMouvement()
   const Balise = m[as]
+  const Simple = as
+  const dejaPeint = useRef(false)
+
+  /*
+   * La mesure est prise au commit du rendu nu : une référence est rattachée avant que
+   * les effets ne tournent, donc avant que le magasin ne rende la main au niveau mesuré
+   * et ne déclenche le second rendu qui la lit.
+   */
+  const mesurer = useCallback((element: HTMLElement | null) => {
+    if (element) dejaPeint.current = element.getBoundingClientRect().top < window.innerHeight
+  }, [])
 
   if (niveau === 'aucun') {
-    const Simple = as
+    return (
+      <Simple ref={mesurer} className={className}>
+        {children}
+      </Simple>
+    )
+  }
+
+  if (dejaPeint.current) {
     return <Simple className={className}>{children}</Simple>
   }
 
