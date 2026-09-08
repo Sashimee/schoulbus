@@ -53,9 +53,9 @@ const chiffres = {
   // « 2025/2026 » seul reviendrait à annoncer périmé un plan qui ne l'est pas.
   anneesCouvertes: plan.anneesCouvertes,
   valideAu: plan.valideAu,
-  // La commune a confirmé par téléphone que le plan ne changeait pas pour 2026/2027.
-  // Une confirmation orale n'est pas un document : la vitrine le dit dans ses limites,
-  // et ce booléen est ce qui l'y oblige.
+  // Vrai tant que le plan ne tient que sur une parole donnée. Il est passé à faux avec la
+  // brochure 2026/2027, qui republie les mêmes tableaux : la limite de la vitrine porte
+  // désormais sur `valideAu`, la date où le plan s'arrête, et non plus sur la parole.
   confirmationOrale: plan.source.confirmationOrale === true,
   // Ce qui part de l'appareil vers un serveur — DES DONNÉES DE LA FAMILLE, et de celles-là
   // seulement. Le cadrage n'est pas une précaution de langage : deux choses sortent bel et

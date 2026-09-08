@@ -189,8 +189,8 @@ export const en: Contenu = {
         texte: `Where they differ, the municipality’s official document prevails.`,
       },
       {
-        titre: 'The plan rests on a spoken confirmation',
-        texte: `The municipality confirmed by telephone, in August 2026, for ${CHIFFRES.anneesCouvertes[1]}.`,
+        titre: 'The plan stops on 18 December 2026',
+        texte: `The new campus, due in January 2027, will change times and routes.`,
       },
       {
         titre: 'A notification is not a guarantee',

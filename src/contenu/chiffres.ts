@@ -21,8 +21,8 @@ export const CHIFFRES = {
     "2025/2026",
     "2026/2027"
   ],
-  "valideAu": "2027-07-15",
-  "confirmationOrale": true,
+  "valideAu": "2026-12-18",
+  "confirmationOrale": false,
   "donneesFamilleEnvoyees": 0
 } as const
 
