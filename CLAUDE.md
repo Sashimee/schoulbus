@@ -106,13 +106,15 @@ poussée seule, sans PR, n'est vue par personne ni par rien.
 
 ```bash
 npm run dev                 # serveur de développement
-npm run build               # client + SSR + pré-rendu des cinq langues dans dist/
+npm run build               # client + SSR + pré-rendu des cinq langues dans dist/, et le budget de poids
 npm run preview             # sert dist/ tel qu'il sera publié
 npm run verifier            # typecheck + lint + tests + contrastes + dérive des jetons
 ```
 
 `npm run verifier` est la porte : c'est ce que lance le `Dockerfile` avant de construire,
-et ce que rejoue l'intégration continue.
+et ce que rejoue l'intégration continue. La SECONDE porte est `npm run build`, qui finit
+par `npm run poids` : un budget se mesure sur ce qui est construit, pas sur les sources.
+Même partage que le budget des captures, tenu par `npm run captures`.
 
 ```bash
 npm test                                   # tous les tests
@@ -121,6 +123,7 @@ npx vitest run -t "les icônes des tuiles"  # un seul test, par son nom
 npm run test:watch                         # en continu
 
 npm run contraste           # chaque couple encre/fond sur la composition réelle
+npm run poids               # ce que le premier écran pèse, contre son budget (demande dist/)
 npm run jetons:verifier     # les jetons ont-ils divergé de l'application ?
 npm run chiffres            # régénérer src/contenu/chiffres.ts depuis les données de l'app
 npm run assets:partage      # vignettes de partage + icônes matricielles
