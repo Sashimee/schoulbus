@@ -18,65 +18,117 @@
  *              réglage de confort : c'est un besoin médical, et la page doit rester
  *              entièrement lisible et utilisable sans une seule animation.
  *
- * Le niveau est calculé APRÈS le montage, jamais pendant le rendu : au pré-rendu, il
- * n'existe ni `matchMedia` ni WebGL, et deviner produirait une hydratation divergente.
- * Le premier rendu est donc toujours 'aucun' — l'état où tout est visible et immobile.
- * Une page qui s'affiche puis s'anime est correcte ; une page qui reste blanche parce
- * que le JavaScript n'est jamais arrivé ne l'est pas.
+ * Le niveau est mesuré UNE FOIS pour la page, dans un magasin partagé, et l'arbre servi
+ * par le pré-rendu vaut toujours 'aucun' : au pré-rendu, il n'existe ni `matchMedia` ni
+ * WebGL, et deviner produirait une hydratation divergente. C'est ce que rend
+ * `getServerSnapshot`, que React emploie aussi pendant l'hydratation ; la mesure ne
+ * reprend la main qu'ensuite. 'aucun' est l'état où tout est visible et immobile : une
+ * page qui s'affiche puis s'anime est correcte ; une page qui reste blanche parce que le
+ * JavaScript n'est jamais arrivé ne l'est pas.
  */
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 
 export type NiveauMouvement = 'complet' | 'reduit' | 'aucun'
 
+/*
+ * UNE SEULE MESURE POUR TOUTE LA PAGE, et c'est le sujet de ce magasin.
+ *
+ * Le crochet est appelé trente-neuf fois dans l'arbre — une fois par `Revele`, une par
+ * `Bouton`, plus le rideau, le défilement doux et la bande de chiffres. Tant que chaque
+ * appel mesurait pour son compte, l'ouverture de la page demandait trente-neuf contextes
+ * WebGL2 qu'aucun ne relâchait — Chromium en plafonne seize et perd les plus anciens en
+ * s'en plaignant — et créait deux cent trente-cinq objets `matchMedia`, dont cent
+ * dix-sept écouteurs permanents ; le moindre changement de média rejouait ensuite les
+ * trente-neuf mesures. Rien de tout cela ne se voyait à l'écran : le résultat était juste,
+ * et identique d'un appel à l'autre, puisque c'est UNE décision pour toute la page.
+ */
+
+let webgl: boolean | undefined
+
 /** WebGL2 est-il réellement obtenable ? Un contexte perdu se voit ici, pas plus tard. */
 function webglDisponible(): boolean {
-  try {
-    const toile = document.createElement('canvas')
-    return Boolean(toile.getContext('webgl2'))
-  } catch {
-    return false
+  // La réponse ne change pas d'une composante à l'autre, ni d'une seconde à l'autre : la
+  // toile n'est fabriquée qu'au premier appel.
+  if (webgl === undefined) {
+    try {
+      const toile = document.createElement('canvas')
+      webgl = Boolean(toile.getContext('webgl2'))
+    } catch {
+      webgl = false
+    }
   }
+  return webgl
+}
+
+let requetes: MediaQueryList[] | undefined
+
+/*
+ * Les trois conditions peuvent changer sans rechargement : on branche un clavier et une
+ * souris sur une tablette, on redimensionne une fenêtre, on active « réduire les
+ * animations » dans les réglages système pendant que la page est ouverte. Ce dernier cas
+ * est le plus important : quelqu'un qui coupe les animations en pleine crise vestibulaire
+ * ne doit pas avoir à recharger.
+ */
+function surveillees(): MediaQueryList[] {
+  requetes ??= [
+    window.matchMedia('(prefers-reduced-motion: reduce)'),
+    window.matchMedia('(pointer: fine)'),
+    window.matchMedia('(min-width: 62rem)'),
+  ]
+  return requetes
 }
 
 function mesurer(): NiveauMouvement {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 'aucun'
+  const [reduire, pointeurFin, assezLarge] = surveillees()
+  if (reduire.matches) return 'aucun'
 
-  const pointeurFin = window.matchMedia('(pointer: fine)').matches
-  const assezLarge = window.matchMedia('(min-width: 62rem)').matches
   // `hardwareConcurrency` est absent sur quelques navigateurs ; son absence ne doit pas
   // dégrader une machine capable, d'où le repli optimiste à 4.
   const coeurs = navigator.hardwareConcurrency ?? 4
 
-  if (pointeurFin && assezLarge && coeurs >= 4 && webglDisponible()) return 'complet'
+  if (pointeurFin.matches && assezLarge.matches && coeurs >= 4 && webglDisponible()) {
+    return 'complet'
+  }
   return 'reduit'
 }
 
+let cache: NiveauMouvement | undefined
+const abonnes = new Set<() => void>()
+
+function relire(): void {
+  cache = mesurer()
+  for (const prevenir of abonnes) prevenir()
+}
+
+function sabonner(prevenir: () => void): () => void {
+  // Les trois écouteurs sont posés pour la page entière, pas pour chaque abonné.
+  if (abonnes.size === 0) for (const r of surveillees()) r.addEventListener('change', relire)
+  abonnes.add(prevenir)
+  return () => {
+    abonnes.delete(prevenir)
+    if (abonnes.size === 0) for (const r of surveillees()) r.removeEventListener('change', relire)
+  }
+}
+
+/** Le niveau mesuré. React l'appelle à chaque rendu : il doit rendre la même valeur. */
+function lire(): NiveauMouvement {
+  cache ??= mesurer()
+  return cache
+}
+
+/*
+ * Au pré-rendu, il n'existe ni `matchMedia` ni WebGL, et deviner produirait une
+ * hydratation divergente. React rend donc l'arbre servi avec cette valeur-ci, puis
+ * repasse à la mesure une fois la page vivante. `aucun` est aussi l'état où tout est
+ * visible et immobile : une page qui s'affiche puis s'anime est correcte ; une page
+ * restée blanche parce que le JavaScript n'est jamais arrivé ne l'est pas.
+ */
+function auPreRendu(): NiveauMouvement {
+  return 'aucun'
+}
+
 export function useNiveauMouvement(): NiveauMouvement {
-  const [niveau, setNiveau] = useState<NiveauMouvement>('aucun')
-
-  useEffect(() => {
-    const relire = () => setNiveau(mesurer())
-    relire()
-
-    /*
-     * Les trois conditions peuvent changer sans rechargement : on branche un clavier et
-     * une souris sur une tablette, on redimensionne une fenêtre, on active « réduire les
-     * animations » dans les réglages système pendant que la page est ouverte. Ce dernier
-     * cas est le plus important : quelqu'un qui coupe les animations en pleine crise
-     * vestibulaire ne doit pas avoir à recharger.
-     */
-    const requetes = [
-      window.matchMedia('(prefers-reduced-motion: reduce)'),
-      window.matchMedia('(pointer: fine)'),
-      window.matchMedia('(min-width: 62rem)'),
-    ]
-    for (const r of requetes) r.addEventListener('change', relire)
-    return () => {
-      for (const r of requetes) r.removeEventListener('change', relire)
-    }
-  }, [])
-
-  return niveau
+  return useSyncExternalStore(sabonner, lire, auPreRendu)
 }
 
 /** Raccourci lisible : y a-t-il le droit de bouger, tout court ? */
