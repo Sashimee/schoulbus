@@ -18,6 +18,7 @@ import { rendre } from '../entree-serveur.ts'
 import { CONTENUS, LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
 import {
   APP_PUBLIEE,
+  ORIGINE,
   URL_APP,
   URL_SOURCE_OFFICIELLE,
   imagePartage,
@@ -45,6 +46,50 @@ const CAPTURES = new Set(
     (c) => c.split('/').pop() as string,
   ),
 )
+
+/*
+ * Les trois fichiers qui posent l'origine par défaut, lus tels quels. `?raw` plutôt que
+ * `node:fs` pour la raison dite plus haut : ce fichier ne dispose que des types du
+ * navigateur.
+ */
+const SOURCES = import.meta.glob(['../../vite.config.ts', '../../scripts/prerendu.mjs'], {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>
+
+describe('origine publique', () => {
+  it('est l’hôte qui répond, et le même dans les trois fichiers qui la posent', () => {
+    /*
+     * `schoulbus.lu` redirige en 308 vers `www.schoulbus.lu` : une canonique, un
+     * `hreflang` ou un `<loc>` vers l'apex désigne comme officielle une adresse qui ne
+     * l'est pas. Le `Dockerfile` portait seul la bonne valeur ; `vite.config.ts`,
+     * `scripts/prerendu.mjs` et `src/config.ts` retombaient tous sur l'apex, si bien
+     * qu'une construction lancée à la main produisait un site qui se canonicalisait vers
+     * une redirection — sans que rien ne le dise.
+     *
+     * Changer de domaine reste possible : ce test demande seulement que ce soit un
+     * geste délibéré, fait dans les trois fichiers à la fois.
+     */
+    const attendue = 'https://www.schoulbus.lu'
+
+    expect(ORIGINE).toBe(attendue)
+    expect(Object.keys(SOURCES)).toHaveLength(2)
+    for (const [chemin, source] of Object.entries(SOURCES)) {
+      expect(source, chemin).toContain(`process.env.URL_PUBLIQUE ?? '${attendue}'`)
+    }
+  })
+
+  it.each(LANGUES)('%s : canonique, alternatives et og:url partent de l’origine', (langue) => {
+    const { tete } = rendre(langue)
+    const adresses = [...tete.matchAll(/(?:canonical|hreflang="[^"]*")[^>]*href="([^"]+)"/g)]
+      .map((m) => m[1])
+      .concat([...tete.matchAll(/property="og:url" content="([^"]+)"/g)].map((m) => m[1]))
+
+    expect(adresses.length).toBeGreaterThan(0)
+    for (const a of adresses) expect(a.startsWith(`${ORIGINE}/`), a).toBe(true)
+  })
+})
 
 describe('pré-rendu', () => {
   it.each(LANGUES)('%s : aucune adresse relative au dossier courant', (langue) => {

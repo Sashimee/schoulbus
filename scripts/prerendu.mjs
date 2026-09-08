@@ -116,7 +116,9 @@ function dateDuContenu() {
  * Le plan du site. Trois adresses, aucune priorité déclarée : elles valent la même
  * chose, et un moteur qui reçoit des priorités inventées les ignore de toute façon.
  */
-const origine = (process.env.URL_PUBLIQUE ?? 'https://schoulbus.lu').replace(/\/$/, '')
+// Le `www` est l'hôte qui répond ; l'apex redirige. Même défaut dans `vite.config.ts` et
+// `src/config.ts`, et un test refuse qu'ils divergent.
+const origine = (process.env.URL_PUBLIQUE ?? 'https://www.schoulbus.lu').replace(/\/$/, '')
 const modifie = dateDuContenu()
 /** L'adresse publique d'une page, dans une langue. Même règle que `dossier`. */
 const adresse = (langue, page) => {
