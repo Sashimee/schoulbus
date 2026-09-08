@@ -39,6 +39,9 @@ export const pt: Contenu = {
       `O plano do autocarro escolar da comuna de Beckerich, preparado para cada criança: ` +
       `a sua paragem, a sua hora, a sua escola. Offline, sem conta. ` +
       `Site independente, sem ligação à comuna nem à escola.`,
+    sansScript:
+      `Esta página lê-se sem JavaScript. Só as animações e a mudança de idioma ` +
+      `precisam dele.`,
   },
 
   general: {

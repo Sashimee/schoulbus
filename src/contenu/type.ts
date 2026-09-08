@@ -97,6 +97,15 @@ export type Contenu = {
   meta: {
     titre: string
     description: string
+    /**
+     * Le paragraphe servi à qui n'a pas de JavaScript. Il était écrit en dur dans
+     * `index.html`, donc en français — recopié tel quel par le pré-rendu, il servait un
+     * texte français sous `/de/`, `/lb/`, `/pt/` et `/en/`, c'est-à-dire que le seul
+     * lecteur pour qui ce bloc existe était le seul à ne pas être servi dans sa langue.
+     * Les deux liens qui l'accompagnent réemploient `general.ouvrirApp` et
+     * `independance.lien` : ils sont déjà relus dans les cinq langues.
+     */
+    sansScript: string
   }
   general: {
     marque: string

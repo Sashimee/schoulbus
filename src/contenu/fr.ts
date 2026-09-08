@@ -53,6 +53,9 @@ export const fr: Contenu = {
       `Le plan du bus scolaire de la commune de Beckerich, personnalisé pour chaque enfant : ` +
       `son arrêt, son heure, son école. Hors ligne, sans compte. ` +
       `Site indépendant, sans lien avec la commune ni avec l’école.`,
+    sansScript:
+      `Cette page se lit sans JavaScript. Seuls les animations et le changement de ` +
+      `langue en demandent.`,
   },
 
   general: {

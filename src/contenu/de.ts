@@ -35,6 +35,9 @@ export const de: Contenu = {
       `Der Schulbusplan der Gemeinde Beckerich, für jedes Kind persönlich aufbereitet: ` +
       `seine Haltestelle, seine Uhrzeit, seine Schule. Offline, ohne Konto. ` +
       `Unabhängige Seite, ohne Verbindung zur Gemeinde oder zur Schule.`,
+    sansScript:
+      `Diese Seite lässt sich ohne JavaScript lesen. Nur die Animationen und der ` +
+      `Sprachwechsel brauchen es.`,
   },
 
   general: {

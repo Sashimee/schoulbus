@@ -36,7 +36,9 @@ for (const [quoi, chemin] of [
   }
 }
 
-const { rendre, metadonnees, LANGUES, PAGES } = await import(pathToFileURL(SERVEUR).href)
+const { rendre, metadonnees, blocNoscript, LANGUES, PAGES } = await import(
+  pathToFileURL(SERVEUR).href,
+)
 const gabarit = readFileSync(GABARIT, 'utf8')
 
 /** Le dossier d'une page dans une langue, relatif à `dist/`. '' pour l'accueil français. */
@@ -62,6 +64,12 @@ for (const langue of LANGUES) {
         `<meta name="description" content="${description}" />`,
       )
       .replace('<!--metas-partage-->', tete.trimStart())
+      /*
+       * Le bloc sans JavaScript, dans la langue de la page. Le gabarit ne porte qu'un
+       * repère vide : recopier un paragraphe français dans les cinq langues était
+       * exactement le défaut que ce remplacement corrige.
+       */
+      .replace('<!--noscript-->', `\n${blocNoscript(langue)}\n    `)
       .replace('<!--contenu-vitrine-->', html)
 
     /*
