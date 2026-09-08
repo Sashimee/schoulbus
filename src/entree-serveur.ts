@@ -22,32 +22,12 @@ import { FournisseurI18n } from './i18n/Fournisseur.tsx'
 import { Independance } from './pages/Independance.tsx'
 import { Mentions } from './pages/Mentions.tsx'
 import { CONTENUS, LANGUES, PAGES, cheminPage, type Page } from './i18n/contexte.ts'
-import { APP_PUBLIEE, ORIGINE, URL_APP, imagePartage } from './config.ts'
+import { LOCALES_OG, textesDePage, urlDePage } from './i18n/metadonnees.ts'
+import { APP_PUBLIEE, ORIGINE, URL_APP, URL_SOURCE_OFFICIELLE, imagePartage } from './config.ts'
 import { THEMES, fichierCapture } from './contenu/captures.ts'
 import type { Langue } from './contenu/type.ts'
 
 export { LANGUES, PAGES }
-
-/*
- * La locale Open Graph, qui n'est PAS le code de langue suivi du pays.
- *
- * `fr_LU`, `de_LU` et `lb_LU` existent : ce sont les trois langues officielles du
- * Luxembourg, et un lecteur de ces pages-là est très probablement au Luxembourg. Le
- * portugais et l'anglais n'ont pas cette propriété — `pt_LU` et `en_LU` ne sont pas des
- * locales déclarées, et Facebook comme LinkedIn les ignorent en silence, ce qui fait
- * retomber le partage sur la langue par défaut. On donne donc à ces deux-là leur locale
- * standard, quitte à ce qu'elle nomme un autre pays que celui du lecteur : mieux vaut
- * une locale reconnue qu'une locale exacte que personne ne lit.
- */
-const LOCALES_OG: Record<Langue, string> = {
-  fr: 'fr_LU',
-  de: 'de_LU',
-  lb: 'lb_LU',
-  pt: 'pt_PT',
-  en: 'en_GB',
-}
-
-
 
 /**
  * Échappe ce qui entre dans un attribut HTML. Les textes viennent de nous, mais un
@@ -126,29 +106,36 @@ function donneesStructurees(langue: Langue, url: string, vignette: string): stri
 }
 
 /**
- * Le titre et la description propres à une page.
+ * Les mêmes textes que le navigateur, échappés pour un attribut HTML.
  *
- * Chaque sous-page a les siens : servie avec le titre de l'accueil, elle se disputerait le
- * même résultat de recherche, et un moteur déclasserait l'une des deux comme copie.
- *
- * Une fonction plutôt qu'un ternaire recopié : il y avait deux endroits à tenir d'accord
- * quand il n'existait qu'une sous-page, et il y en aurait eu quatre à la deuxième.
+ * Le calcul lui-même est dans `i18n/metadonnees.ts`, parce qu'il sert des deux côtés : ce
+ * fichier écrit l'en-tête servi, et le changement de langue le réécrit sans recharger.
+ * Deux calculs séparés, c'est une page allemande sous un titre français.
  */
-function textesDePage(langue: Langue, page: Page) {
+function textesEchappes(langue: Langue, page: Page) {
+  const { titre, description } = textesDePage(langue, page)
+  return { titre: echapper(titre), description: echapper(description) }
+}
+
+/**
+ * Le bloc servi à qui n'a pas de JavaScript, dans la langue de la page.
+ *
+ * Il était écrit en dur dans `index.html` et recopié tel quel par le pré-rendu : les cinq
+ * langues recevaient le paragraphe français. Les deux liens réemploient des libellés déjà
+ * relus (`general.ouvrirApp`, `independance.lien`) plutôt que d'en inventer cinq de plus,
+ * et celui de l'application ne paraît que si elle est publique — ce bloc n'échappe donc
+ * plus à l'interrupteur.
+ */
+export function blocNoscript(langue: Langue): string {
   const c = CONTENUS[langue]
-  if (page === 'mentions') {
-    return {
-      titre: echapper(`${c.mentions.titre} — ${c.general.marque}`),
-      description: echapper(c.mentions.intro),
-    }
+  const lignes = [`      <p>${echapper(c.meta.sansScript)}</p>`]
+  if (APP_PUBLIEE) {
+    lignes.push(`      <p><a href="${URL_APP}">${echapper(c.general.ouvrirApp)}</a></p>`)
   }
-  if (page === 'independance') {
-    return {
-      titre: echapper(`${c.independance.titre} — ${c.general.marque}`),
-      description: echapper(c.independance.texte),
-    }
-  }
-  return { titre: echapper(c.meta.titre), description: echapper(c.meta.description) }
+  lignes.push(
+    `      <p><a href="${URL_SOURCE_OFFICIELLE}">${echapper(c.independance.lien)}</a></p>`,
+  )
+  return lignes.join('\n')
 }
 
 export function rendre(
@@ -165,8 +152,8 @@ export function rendre(
     ),
   )
 
-  const url = `${ORIGINE}${cheminPage(langue, page)}`
-  const { titre, description } = textesDePage(langue, page)
+  const url = urlDePage(langue, page)
+  const { titre, description } = textesEchappes(langue, page)
 
   /*
    * Les alternatives de langue. `hreflang` dit à un moteur que ces cinq adresses sont
@@ -257,5 +244,5 @@ export function rendre(
 
 /** Titre et description, pour remplacer ceux du gabarit dans chaque page engendrée. */
 export function metadonnees(langue: Langue, page: Page = 'accueil') {
-  return textesDePage(langue, page)
+  return textesEchappes(langue, page)
 }

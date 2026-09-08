@@ -361,14 +361,6 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   dans le même lot — `captures.source.json`, puis `npm run captures:conteneur`, ce qui
   demande Docker et le dépôt de l'application à côté.
 
-- **La langue ne va pas jusqu'au bout de la page.** Le `<noscript>` d'`index.html` est
-  recopié tel quel par le pré-rendu : `/de/`, `/lb/`, `/pt/` et `/en/` servent un
-  paragraphe **français** sous leur propre `lang` — c'est-à-dire que le seul lecteur pour
-  qui ce bloc existe est le seul à ne pas être servi dans sa langue. Et changer de langue
-  en cours de page ne met à jour ni `<title>`, ni la description, ni la canonique, ni
-  `og:url` ; le bouton Précédent, lui, change l'adresse sans changer la page, faute d'un
-  écouteur `popstate` en face du `pushState`.
-
 - **Ce que le conteneur produit et que nginx ne sert pas.** Le `Dockerfile` passe
   `brotli -q 11` sur tout le HTML, le JS, le CSS, le SVG, le XML et le TXT à chaque
   construction ; le bloc `location` que son commentaire annonce n'existe pas, et une
@@ -426,6 +418,33 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
 
 ### Réserves levées
+
+- *« La langue ne va pas jusqu'au bout de la page. »* — Levée le 8 septembre, les trois
+  points, et vérifiée dans Chromium sur la page construite.
+
+  Le `<noscript>` est **engendré par langue** (`blocNoscript`), et `index.html` n'en porte
+  plus qu'un repère vide que le pré-rendu remplit. Il ne demande qu'**une** chaîne nouvelle
+  par langue : ses deux liens réemploient `general.ouvrirApp` et `independance.lien`, déjà
+  relus. Conséquence non prévue mais bienvenue : ce bloc n'est plus « le seul endroit que
+  l'interrupteur ne couvre pas » — `APP_PUBLIEE` y décide comme ailleurs, et le test qui
+  tenait l'invariant à la main le vérifie maintenant dans les cinq langues.
+
+  Le changement de langue **emmène tout l'en-tête** : `<title>`, description, canonique,
+  `og:url`, `og:title`, `og:description`, `og:locale` et les vignettes. Le calcul est
+  descendu dans `src/i18n/metadonnees.ts`, d'où le pré-rendu et le navigateur le lisent
+  tous les deux — deux calculs séparés, c'est une page allemande sous un titre français,
+  et c'est précisément ce qui arrivait. Le premier appel, à l'hydratation, repose ce que le
+  pré-rendu avait écrit : si les deux divergeaient un jour, cela se verrait ici plutôt que
+  dans un résultat de recherche.
+
+  Le **bouton Précédent** ramène la page avec l'adresse : un écouteur `popstate` fait face
+  au `pushState`. Relevé dans Chromium : `/` → `/de/` (titre, canonique et `og:locale`
+  allemands) → Précédent → `/` et tout revient en français, `<h1>` compris.
+
+  Quatre tests le tiennent (`src/tests/langue.test.ts`), vérifiés rouges sur l'ancien code.
+  **La contrepartie est une réserve, pas une victoire** : les cinq chaînes `meta.sansScript`
+  sont des premières rédactions de plus en luxembourgeois, en portugais et en anglais —
+  elles rejoignent la réserve de relecture native, en tête de cette liste.
 
 - *« "Réduire les animations" ne réduit pas encore tout. »* — Levée le 8 septembre, les
   trois tiers. Tout est mesuré sur la page CONSTRUITE et servie par `npm run preview`,

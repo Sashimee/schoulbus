@@ -231,8 +231,9 @@ puis commiter). `APP_PUBLIEE` — aujourd'hui `true` — commande d'un seul gest
 le QR, les entrées de pied de page et le `SoftwareApplication` du balisage structuré, et
 la mention « bientôt disponible » qui les remplace quand il est fermé. Les deux états sont
 testés (`src/tests/rendu.test.ts`) : il n'existe pas d'état intermédiaire où la moitié
-des liens serait revenue. Un test couvre aussi le `<noscript>` d'`index.html`, que
-l'interrupteur ne peut pas atteindre puisque c'est du HTML statique.
+des liens serait revenue. Le `<noscript>` en fait partie depuis qu'il est engendré par
+langue (`blocNoscript` dans `src/entree-serveur.ts`, posé par le pré-rendu) : `index.html`
+n'en porte plus qu'un repère vide, et un test vérifie les cinq langues.
 
 ### Les ressources engendrées sont commitées
 

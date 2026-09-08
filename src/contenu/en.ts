@@ -41,6 +41,9 @@ export const en: Contenu = {
       `The Beckerich municipal school bus plan, worked out for each child: their stop, ` +
       `their time, their school. Offline, no account. ` +
       `An independent site, with no link to the municipality or the school.`,
+    sansScript:
+      `This page reads without JavaScript. Only the animations and the language ` +
+      `switch need it.`,
   },
 
   general: {

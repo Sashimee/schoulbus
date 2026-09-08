@@ -14,7 +14,7 @@
  * qu'aucune adresse ne dépend du dossier depuis lequel la page est servie.
  */
 import { describe, expect, it } from 'vitest'
-import { rendre } from '../entree-serveur.ts'
+import { blocNoscript, rendre } from '../entree-serveur.ts'
 import { CONTENUS, LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
 import {
   APP_PUBLIEE,
@@ -350,19 +350,40 @@ describe('pré-rendu', () => {
   })
 
   /*
-   * Le `<noscript>` d'`index.html`.
+   * Le `<noscript>`.
    *
-   * Le README le désigne comme la seule chose que l'interrupteur ne couvre pas : c'est du
-   * HTML statique, hors de portée d'une constante TypeScript, et il fallait donc penser à
-   * le corriger à la main le jour de la publication. « Penser à » n'est pas une garantie ;
-   * un test en est une.
+   * Il était écrit en dur dans `index.html`, donc en français, et le pré-rendu le
+   * recopiait tel quel : les quatre autres langues servaient un paragraphe français sous
+   * leur propre `lang`. Le seul lecteur pour qui ce bloc existe était le seul à ne pas
+   * être servi dans sa langue — et aucun test ne pouvait le voir, puisqu'ils lisaient tous
+   * le gabarit, où il n'y a qu'une langue.
+   *
+   * Il est engendré depuis le contenu, donc dans les cinq langues, et l'interrupteur y
+   * arrive maintenant comme partout ailleurs.
    */
-  it('le noscript nomme l’application si et seulement si elle est publique', () => {
+  it('le gabarit ne porte plus de texte figé dans le noscript', () => {
     const gabarits = import.meta.glob('../../index.html', { query: '?raw', eager: true })
     const source = Object.values(gabarits)[0] as unknown as { default: string }
     const noscript = source.default.match(/<noscript>([\s\S]*?)<\/noscript>/)
     expect(noscript).not.toBeNull()
-    expect(noscript?.[1].includes(URL_APP)).toBe(APP_PUBLIEE)
+    // Un repère, et rien d'autre : le texte vient du pré-rendu, langue par langue.
+    expect(noscript?.[1].trim()).toBe('<!--noscript-->')
+  })
+
+  it.each(LANGUES)('%s : le noscript est servi dans sa langue', (langue) => {
+    const bloc = blocNoscript(langue)
+    expect(bloc).toContain(CONTENUS[langue].meta.sansScript)
+    // Le lien vers le plan officiel réemploie un libellé déjà relu, et il est toujours là.
+    expect(bloc).toContain(CONTENUS[langue].independance.lien)
+    expect(bloc).toContain(URL_SOURCE_OFFICIELLE)
+    // Et aucun mot d'une autre langue : c'était exactement le défaut.
+    for (const autre of LANGUES.filter((l) => l !== langue)) {
+      expect(bloc).not.toContain(CONTENUS[autre].meta.sansScript)
+    }
+  })
+
+  it.each(LANGUES)('%s : le noscript nomme l’application si et seulement si elle est publique', (langue) => {
+    expect(blocNoscript(langue).includes(URL_APP)).toBe(APP_PUBLIEE)
   })
 
   it('les appels à l’action reviennent avec l’application', () => {

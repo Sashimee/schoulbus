@@ -34,6 +34,9 @@ export const lb: Contenu = {
       `De Schoulbusplang vun der Gemeng Biekerech, fir all Kand perséinlech opbereet: seng ` +
       `Statioun, seng Zäit, seng Schoul. Offline, ouni Kont. ` +
       `Onofhängeg Säit, ouni Verbindung mat der Gemeng oder der Schoul.`,
+    sansScript:
+      `Dës Säit léisst sech ouni JavaScript liesen. Nëmmen d’Animatiounen an de ` +
+      `Sproochwiessel brauchen et.`,
   },
 
   general: {
