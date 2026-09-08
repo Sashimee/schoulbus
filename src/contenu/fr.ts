@@ -160,7 +160,7 @@ export const fr: Contenu = {
       },
       {
         icone: 'horloge',
-        titre: 'Le périscolaire',
+        titre: 'La maison relais',
         texte: 'Déposé le lundi, repris le jeudi.',
       },
     ],
@@ -239,7 +239,7 @@ export const fr: Contenu = {
     titre: 'Ce site est indépendant.',
     texte:
       `Il est réalisé par un parent, à titre privé, et n’a aucun lien avec l’administration ` +
-      `communale de Beckerich ni avec l’école. Il n’engage qu’elle-même. En cas de doute ou de ` +
+      `communale de Beckerich ni avec l’école. Il n’engage que lui-même. En cas de doute ou de ` +
       `divergence, c’est le document officiel de la commune qui fait foi.`,
     lien: 'Voir le plan officiel sur kanner.beckerich.lu',
     retour: `Retour à la page d’accueil`,

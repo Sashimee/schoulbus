@@ -57,7 +57,7 @@ export const lb: Contenu = {
       { valeur: '07:45', texte: 'd’Zäit vun hirem Bus, op hirer Statioun' },
       {
         valeur: '16 Min.',
-        texte: 'bis Dir lassmusst, déi 4 Minutte Fousswee scho ofgezunn',
+        texte: 'bis Dir lassmusst, déi 4 Minutten zu Fouss scho ofgezunn',
         compte: true,
       },
       { valeur: 'Kneppchen', texte: 'déi nooste Statioun bei Ärer Adress' },
@@ -85,14 +85,14 @@ export const lb: Contenu = {
     note: `Richteg Opname vun der Applikatioun, Dënschdeg den 22. September 2026 um 07:25.`,
     cartes: [
       { titre: 'De Bildschierm vum Moien', texte: 'Eng Zäit pro Kand, a soss näischt.' },
-      { titre: 'D’Wochenopstellung', texte: 'Fënnef Deeg, an d’Kaart vum Fousswee.' },
+      { titre: 'D’Wochenopstellung', texte: 'Fënnef Deeg, an d’Kaart vum Wee zu Fouss.' },
       {
         titre: 'Den offizielle Plang, iwwerdroen',
         texte: `${CHIFFRES.lignes} Linnen, ${CHIFFRES.arrets} Statiounen, Tabell fir Tabell.`,
       },
       {
         titre: 'Siwe Froen, ee Mol',
-        texte: 'D’Adress bestëmmt d’Statioun, den Zyklus d’Schoul.',
+        texte: 'D’Adress bestëmmt d’Statioun, de Cycle d’Schoul.',
       },
     ],
   },
@@ -120,7 +120,7 @@ export const lb: Contenu = {
         icone: 'alerte',
         ton: 'alerte',
         titre: 'D’Stéierungen',
-        texte: 'Déi ausgefallen Faart verschwënnt vum Bildschierm.',
+        texte: 'Déi ausgefalle Fahrt verschwënnt vum Bildschierm.',
       },
       {
         icone: 'imprimer',
@@ -130,7 +130,7 @@ export const lb: Contenu = {
       {
         icone: 'partage',
         titre: 'Deelen, QR an Iwwerhuelen',
-        texte: 'D’Grousselteren gesinn dee selwechte Bildschierm.',
+        texte: 'D’Grousseltere gesinn dee selwechte Bildschierm.',
       },
       {
         icone: 'repas',
@@ -144,7 +144,7 @@ export const lb: Contenu = {
       },
       {
         icone: 'horloge',
-        titre: 'D’Maison relais',
+        titre: 'D’Maison Relais',
         texte: 'Méindes bruecht, donneschdes ofgeholl.',
       },
     ],
@@ -152,11 +152,11 @@ export const lb: Contenu = {
 
   principes: {
     donnees: {
-      etiquette: 'De éischte Prinzip',
+      etiquette: 'Den éischte Prinzip',
       titre: 'Keng Donnéeë vun Ärer Famill verloossen den Apparat.',
       texte:
         `Kee Kont, kee Passwuert. Déi ${CHIFFRES.rues} Stroosse vun der Gemeng stiechen an der ` +
-        `Säit selwer: Är anzetippen freet kee Kaartendéngscht.`,
+        `Säit selwer: Är anzetippe freet kee Kaartendéngscht.`,
     },
     horsLigne: {
       etiquette: 'Op der Statioun',
@@ -164,7 +164,7 @@ export const lb: Contenu = {
       points: [
         { texte: 'Installéiert sech aus dem Browser, ouni App-Store' },
         { texte: 'Schrëften, Zäiten an Adresse sinn scho do' },
-        { texte: 'Nëmmen d’Kaart vum Fousswee brauch nach d’Netz', ton: 'nuance' },
+        { texte: 'Nëmmen d’Kaart vum Wee zu Fouss brauch nach d’Netz', ton: 'nuance' },
       ],
     },
   },
@@ -174,7 +174,7 @@ export const lb: Contenu = {
     note: `sechs Grenzen, ier mir Iech froen, se opzemaachen`,
     items: [
       {
-        titre: 'D’Foussweeër sinn geschat',
+        titre: 'D’Zäiten zu Fouss sinn geschat',
         texte: `Loftlinn, ëm en Drëttel erhéicht, mat 4,5 km/h. Dat ass keng Route.`,
       },
       {
@@ -191,7 +191,7 @@ export const lb: Contenu = {
       },
       {
         titre: 'D’Adresssich hält bei der Gemengegrenz op',
-        texte: `Anzwousch anescht muss een den Arrêt selwer uginn, ouni Fousswee.`,
+        texte: `Anzwousch anescht muss een den Arrêt selwer uginn, ouni Zäit zu Fouss.`,
       },
       {
         titre: 'Zwou Saache ginn awer eraus',
@@ -218,7 +218,7 @@ export const lb: Contenu = {
     surtitre: 'Et ass 07:25 Auer.',
     heure: '07:45',
     legendeHeure: 'Offaart · Kneppchen',
-    titreAvant: 'Et bleiwen ',
+    titreAvant: 'Et bleiwe ',
     titreAccent: 'sechzéng Minutten',
     titreApres: ', bis Dir lassmusst.',
     // Keen Imperativ, sou laang wéi d'Applikatioun net erreechbar ass — Begrënnung an `fr.ts`.
@@ -256,7 +256,7 @@ export const lb: Contenu = {
   mentions: {
     titre: `Impressum`,
     intro: `Dës Säit seet, wien dëst Ugebot verëffentlecht. Um Rescht ännert si näischt: D’Säit bleift onofhängeg, a maassgeevend ass dat offiziellt Dokument vun der Gemeng.`,
-    editeurTitre: `Erausginn vun`,
+    editeurTitre: `Erausgi vun`,
     editeurCorps: `Dës Säit gëtt vum ${NOM_EDITEUR} privat an net kommerziell erausginn. Si ass weder an Optrag ginn, nach vun der Gemengeverwaltung Biekerech, vun der Grondschoul oder vun der Maison Relais gepréift oder guttgeheescht.
 Adress: ${ADRESSE_EDITEUR}`,
     hebergeurTitre: `Hosting`,
