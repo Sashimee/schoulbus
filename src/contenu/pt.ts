@@ -46,7 +46,7 @@ export const pt: Contenu = {
     sautContenu: 'Ir para o conteúdo',
     ouvrirApp: 'Abrir a aplicação',
     fermer: 'Fechar',
-    theme: 'Apresentação',
+    theme: 'Tema',
     themeClair: 'Claro',
     themeSombre: 'Escuro',
     choixLangue: 'Idioma',
@@ -149,7 +149,7 @@ export const pt: Contenu = {
       },
       {
         icone: 'horloge',
-        titre: 'O prolongamento',
+        titre: 'A casa de acolhimento',
         texte: 'Deixado à segunda, buscado à quinta.',
       },
     ],
@@ -260,7 +260,7 @@ export const pt: Contenu = {
 
   mentions: {
     titre: `Menções legais`,
-    intro: `Esta página identifica quem publica o site. Não altera nada do resto: o site continua independente, e o documento oficial da comuna faz fé.`,
+    intro: `Esta página identifica quem publica o site. Não altera nada do resto: o site continua independente, e prevalece o documento oficial da comuna.`,
     editeurTitre: `Editor`,
     editeurCorps: `Este site é publicado por ${NOM_EDITEUR}, a título privado e não comercial. Não foi encomendado, validado nem revisto pela administração comunal de Beckerich, pela escola fundamental ou pela maison relais.
 Morada: ${ADRESSE_EDITEUR}`,

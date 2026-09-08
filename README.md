@@ -282,21 +282,45 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   se fermaient sur un pouce ASCII, en allemand comme en luxembourgeois ; les apostrophes
   droites sont passées en apostrophes typographiques dans les cinq langues.
 
-  **La revue du 8 septembre en a trouvé d'autres, et elles ne sont PAS corrigées.** La
-  plus lourde ne tient pas à une langue mais aux cinq : la tuile de la maison relais
-  invente un mot différent du sien dans chacune — `Le périscolaire`, `Die Betreuung`,
-  `O prolongamento`, `After-school care` — alors que l'application dit partout *maison
-  relais*, *Maison Relais*, *casa de acolhimento*, *after-school centre*. Le reste est
-  vérifiable une par une contre `bus-scolaire-beckerich/src/i18n/*.json` : `elle-même` pour
-  `lui-même` dans la langue de référence ; en allemand `Fußwege` là où l'application dit
-  `Gehzeiten` (« les chemins sont estimés », que la phrase suivante dément) ; en
-  luxembourgeois `Zyklus` pour `Cycle`, `Faart` pour `Fahrt`, `Fousswee` — zéro occurrence
-  dans l'application — pour `zu Fouss`, et **cinq occurrences de la règle de l'Eifel**,
-  toutes différentes des quatre déjà corrigées ; en portugais `Apresentação` pour `Tema` et
-  `faz fé` pour `prevalece` ; en anglais `Appearance` pour `Theme` et `routes` pour `lines`.
+  **Les écarts que la revue du 8 septembre avait trouvés sont corrigés.** Le plus lourd ne
+  tenait pas à une langue mais aux cinq : la tuile de la maison relais inventait un mot
+  différent du sien dans chacune — `Le périscolaire`, `Die Betreuung`, `O prolongamento`,
+  `After-school care` — alors que l'application dit partout *maison relais*, *Maison
+  Relais*, *casa de acolhimento*, *after-school centre* ; les cinq tuiles reprennent
+  maintenant le mot de l'application. Le reste, vérifié une par une contre
+  `bus-scolaire-beckerich/src/i18n/*.json` : `elle-même` est devenu `lui-même` dans la
+  langue de référence ; en allemand `Fußwege` a laissé la place à `Gehzeiten` dans le titre
+  de la limite, et là seulement — les autres emplois désignent le chemin et sa carte, que
+  l'application nomme bien `Fußweg` ; en luxembourgeois `Zyklus` → `Cycle`, `Faart` →
+  `Fahrt`, et `Fousswee` — zéro occurrence dans l'application — → `zu Fouss`, cinq fois ;
+  en portugais `Apresentação` → `Tema` et `faz fé` → `prevalece` ; en anglais `Appearance`
+  → `Theme` et `routes` → `lines`.
+
+  La règle de l'Eifel comptait **six** occurrences fautives et non cinq. La sixième,
+  `Et bleiwen sechzéng`, échappe à toute lecture chaîne par chaîne : elle n'existe qu'une
+  fois `final.titreAvant` et `final.titreAccent` mis bout à bout par la composante. Les
+  six : `De éischte Prinzip` → `Den`, `ausgefallen Faart` → `ausgefalle Fahrt`,
+  `D'Grousselteren gesinn` → `Grousseltere`, `anzetippen freet` → `anzetippe`,
+  `Erausginn vun` → `Erausgi`, `Et bleiwen sechzéng` → `bleiwe`.
+
+  Deux avertissements pour la passe suivante, parce qu'ils changent la méthode.
+  **L'application n'est pas un corpus propre pour cette règle** : un relevé mécanique y
+  trouve trente-huit suites `-n` + consonne, dont beaucoup sont fautives
+  (`Ären Kanner`, `den Startbildschierm`, `Opmaachen souwisou`) et d'autres légitimes
+  (`Hüttingen`, `Elwen` sont des noms propres). Sa limite `marcheTitre` écrit elle-même
+  `D'Zäite zu Fouss`, alors que le `z` de `zu` retient le `n` : la vitrine écrit
+  `D'Zäiten zu Fouss` et diverge donc sciemment. **Et l'application hésite entre ses
+  propres termes** — `Cycle` treize fois contre `Zyklus` trois, `Fahrt` douze contre
+  `Faart` deux : les corrections ci-dessus suivent le terme majoritaire, pas une source
+  unique. Ce que l'application garde et qui n'est donc pas une faute ici : `Statioun`,
+  `Applikatioun`, `sinn`, `gesinn` devant consonne.
+
   Deux arbitrages restent à poser plutôt qu'à corriger : `comuna` contre `município` en
   portugais, qui touche quinze chaînes et engage les deux dépôts, et le mot employé pour la
-  fiche de la semaine, qui diverge de `nav.semaine` dans les cinq langues.
+  fiche de la semaine, qui diverge de `nav.semaine` dans les cinq langues. Un troisième s'y
+  ajoute, que la revue n'avait pas relevé : le portugais dit `vale o documento oficial`
+  trois fois pour ce que l'application appelle `prevalece`. Seul `faz fé` a été corrigé —
+  aligner `vale` aussi est un choix de registre, pas une correction.
 
   Ce qu'elle N'A PAS tranché, faute de compétence native, et qui reste à relire :
   `Moiescher` (le pluriel de `Moien`), `dat ganzt Produit` (genre du mot `Produit`),
