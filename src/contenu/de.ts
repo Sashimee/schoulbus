@@ -183,8 +183,8 @@ export const de: Contenu = {
         texte: `Bei Abweichungen gilt das offizielle Dokument der Gemeinde.`,
       },
       {
-        titre: 'Der Plan beruht auf einer mündlichen Zusage',
-        texte: `Die Gemeinde hat im August 2026 telefonisch bestätigt, für ${CHIFFRES.anneesCouvertes[1]}.`,
+        titre: 'Der Plan endet am 18. Dezember 2026',
+        texte: `Der neue Campus, geplant für Januar 2027, ändert Zeiten und Strecken.`,
       },
       {
         titre: 'Eine Benachrichtigung ist keine Garantie',

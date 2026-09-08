@@ -208,6 +208,22 @@ describe('chiffres', () => {
     }
   })
 
+  it('les cinq langues nomment la date où le plan s’arrête', () => {
+    /*
+     * La limite qui portait sur « une confirmation orale » est devenue fausse le jour où la
+     * commune a confirmé par écrit — et personne ne l'a vu, parce que rien ne reliait cette
+     * phrase à une donnée. Elle porte désormais sur `valideAu`, qui est compté : ce test
+     * refuse qu'une des cinq langues garde l'ancienne date après un `npm run chiffres`.
+     */
+    const [annee, , jour] = CHIFFRES.valideAu.split('-')
+    for (const l of LANGUES) {
+      const nomme = CONTENUS[l].limites.items.filter(
+        (item) => item.titre.includes(jour) && item.titre.includes(annee),
+      )
+      expect(nomme, l).toHaveLength(1)
+    }
+  })
+
   it('ne compte pas plus de villages que d’arrêts', () => {
     expect(CHIFFRES.villages).toBeLessThanOrEqual(CHIFFRES.arrets)
   })

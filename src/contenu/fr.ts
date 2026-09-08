@@ -193,11 +193,16 @@ export const fr: Contenu = {
      * Trois ou six remplissent leurs rangées ; quatre ou cinq laissent un trou qui se lit
      * comme un oubli.
      *
-     * Deux limites d'autrefois ont disparu d'ici parce qu'elles ont cessé d'être vraies :
-     * les arrêts « situés à peu près » sont aujourd'hui tous vérifiés dans `arrets.json`,
-     * et les « zones grises » du plan ont été levées par la commune (`incertitudes: []`).
-     * Une limite qu'on garde après sa disparition n'est pas de la prudence, c'est une
-     * autre inexactitude.
+     * Une limite d'autrefois a disparu d'ici parce qu'elle a cessé d'être vraie : les arrêts
+     * « situés à peu près » sont aujourd'hui tous vérifiés dans `arrets.json`. Une limite
+     * qu'on garde après sa disparition n'est pas de la prudence, c'est une autre
+     * inexactitude.
+     *
+     * La troisième a suivi le chemin inverse : la confirmation du plan est devenue ÉCRITE
+     * avec la brochure 2026/2027, et deux incertitudes se sont rouvertes le même jour
+     * (`nouveau-campus-janvier-2027`, `depart-midi-vendredi-hall-sportif`). Elle ne porte
+     * donc plus sur la parole donnée, mais sur la date où le plan s'arrête — celle que
+     * `CHIFFRES.valideAu` compte, et qu'un test des cinq langues tient.
      */
     items: [
       {
@@ -209,8 +214,8 @@ export const fr: Contenu = {
         texte: `En cas d’écart, c’est le document officiel de la commune qui fait foi.`,
       },
       {
-        titre: 'Le plan tient sur une confirmation orale',
-        texte: `La commune a confirmé par téléphone, en août 2026, pour ${CHIFFRES.anneesCouvertes[1]}.`,
+        titre: 'Le plan s’arrête au 18 décembre 2026',
+        texte: `Le nouveau campus, prévu en janvier 2027, changera horaires et itinéraires.`,
       },
       {
         titre: 'Une notification n’est pas une garantie',

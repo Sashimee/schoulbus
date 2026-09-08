@@ -58,7 +58,7 @@ export const URL_INSTALLER = `${URL_APP}/installer`
  * Sert aux métadonnées de partage, qui exigent des URL absolues.
  */
 declare const __ORIGINE__: string
-export const ORIGINE = typeof __ORIGINE__ === 'string' ? __ORIGINE__ : 'https://schoulbus.lu'
+export const ORIGINE = typeof __ORIGINE__ === 'string' ? __ORIGINE__ : 'https://www.schoulbus.lu'
 
 /**
  * Le nom de la vignette de partage d'une langue. Le français est à la racine, comme sa

@@ -417,13 +417,16 @@ site est statique.
 
 ```bash
 docker build -t vitrine \
-  --build-arg URL_PUBLIQUE=https://schoulbus.lu \
+  --build-arg URL_PUBLIQUE=https://www.schoulbus.lu \
   --build-arg DATE_CONTENU=$(git log -1 --format=%cs -- src index.html public) .
 docker run --rm -p 8080:80 vitrine
 ```
 
 `URL_PUBLIQUE` entre dans les métadonnées de partage, qui exigent des adresses absolues :
-elle est donc connue à la construction, pas au démarrage. `DATE_CONTENU` sert au `lastmod`
+elle est donc connue à la construction, pas au démarrage. **Elle porte le `www`** : c'est
+l'hôte qui répond, `schoulbus.lu` redirigeant vers lui en 308. Une canonique vers un hôte
+qui redirige n'est pas une erreur visible — c'est une page qui désigne comme officielle une
+adresse qu'elle n'est pas. `DATE_CONTENU` sert au `lastmod`
 du plan du site ; le dépôt Git n'étant pas copié dans l'image, sans elle la balise est
 omise — jamais remplacée par la date de construction, qui ne dirait rien de vrai.
 
