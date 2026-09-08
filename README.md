@@ -377,11 +377,6 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   dans une page qu'on lit une fois. C'est le seul poste où il reste une marge d'un ordre de
   grandeur, et la refermer demande une décision d'architecture, pas un réglage.
 
-- **Le titre luxembourgeois du héros fait 24 signes sur 24.** `heros.titre[0]` de `lb.ts`
-  est exactement à la limite que la vignette de partage impose et qu'un test vérifie : il
-  passe aujourd'hui, et la première retouche le fera tomber. Ce n'est pas un défaut, c'est
-  un piège posé pour la prochaine personne.
-
 - **Ce que l'application envoie à Google Agenda n'est pas nommé ici.** *(À vérifier avant
   d'agir.)* `bus-scolaire-beckerich/src/lib/agenda/google.ts` envoie à l'API de Google un
   titre d'événement construit comme `« prénom — trajet »` et le nom de l'arrêt en
@@ -415,6 +410,24 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
 
 ### Réserves levées
+
+- *« Le titre luxembourgeois du héros fait 24 signes sur 24. »* — Le piège n'est pas
+  désamorcé, il est SIGNALÉ, et c'est la bonne réponse : la limite est réelle (76 px dans
+  1 024 px utiles), et raccourcir le titre luxembourgeois demanderait précisément la
+  relecture native qui manque. Ce qui a changé le 8 septembre :
+
+  - le nombre a un nom et un seul endroit, `SIGNES_MAX_TITRE` dans `src/contenu/type.ts`,
+    avec le calcul dont il sort ;
+  - le test relève **toutes** les lignes fautives des cinq langues, avec leur longueur et
+    leur texte, et dit quoi faire — au lieu d'un « expected 25 to be less than or equal to
+    24 » dont rien ne disait d'où venait le 24 ;
+  - `npm run assets:partage` **refuse de dessiner** une ligne trop longue. Les deux
+    gardiens ne couvrent pas le même moment : le test attrape la retouche, le script
+    attrape la régénération lancée sans avoir relancé les tests.
+
+  Vérifié en abaissant la limite à 20 : le script s'arrête sur l'allemand, le test relève
+  l'allemand, le luxembourgeois et l'anglais. Les cinq vignettes régénérées sont
+  identiques octet pour octet.
 
 - *« Ce que le conteneur produit et que nginx ne sert pas. »* — Levée le 8 septembre, les
   quatre points. Les trois premiers sont **mesurés**, avant et après, sur la vraie

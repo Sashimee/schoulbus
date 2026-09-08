@@ -11,6 +11,7 @@ import { describe, expect, it } from 'vitest'
 import { CONTENUS, LANGUES, cheminLangue, langueDuChemin } from '../i18n/contexte.ts'
 import { ECRANS } from '../contenu/captures.ts'
 import { CHIFFRES } from '../contenu/chiffres.ts'
+import { SIGNES_MAX_TITRE } from '../contenu/type.ts'
 
 /** Parcourt récursivement un objet et rend les chaînes qu'il contient, avec leur chemin. */
 function chaines(valeur: unknown, chemin = ''): [string, string][] {
@@ -114,17 +115,28 @@ describe('contenu', () => {
   it('le titre du héros tient dans la vignette de partage', () => {
     /*
      * `heros.titre` est dessiné à 76 px sur 1200 px de large par
-     * `scripts/build-partage.mjs`. Au-delà de 24 signes, la ligne déborde de la vignette
-     * — et la vignette est ce qu'un groupe de parents voit AVANT d'ouvrir le lien.
+     * `scripts/build-partage.mjs`. Au-delà de `SIGNES_MAX_TITRE`, la ligne déborde de la
+     * vignette — et la vignette est ce qu'un groupe de parents voit AVANT d'ouvrir le lien.
      *
      * Le test ne peut pas vérifier que `npm run assets:partage` a été relancé ; il
-     * vérifie seulement que le texte reste dessinable.
+     * vérifie seulement que le texte reste dessinable. Le script, lui, refuse de dessiner.
+     *
+     * TOUTES les lignes sont relevées, et non la première qui dépasse : le luxembourgeois
+     * est exactement à la limite, et voir « lb ligne 1 : 25/24 » seul ferait croire à un
+     * cas isolé alors que la retouche peut en avoir déplacé trois.
      */
-    for (const l of LANGUES) {
-      for (const ligne of CONTENUS[l].heros.titre) {
-        expect(ligne.length).toBeLessThanOrEqual(24)
-      }
-    }
+    const trop = LANGUES.flatMap((l) =>
+      CONTENUS[l].heros.titre
+        .map((ligne, i) => ({ l, i, ligne }))
+        .filter(({ ligne }) => ligne.length > SIGNES_MAX_TITRE)
+        .map(({ l, i, ligne }) => `${l} ligne ${i + 1} : ${ligne.length}/${SIGNES_MAX_TITRE} — « ${ligne} »`),
+    )
+
+    expect(
+      trop,
+      `Ces lignes sortiraient de la vignette de partage :\n  ${trop.join('\n  ')}\n` +
+        `Raccourcir, ou couper le titre en une ligne de plus. Puis npm run assets:partage.`,
+    ).toEqual([])
   })
 
   it('chaque langue annonce son propre code', () => {
