@@ -114,6 +114,26 @@
       display: none;
     }
     /*
+     * Le lien perd alors sa largeur en même temps que son nom : il ne reste que la
+     * vignette, 30 px, sous le minimum de 44 que le projet s'impose et qu'il tient déjà
+     * en hauteur. Les 14 px qui manquent ne peuvent PAS être pris sur la rangée : à
+     * 393 px la barre en dispose de 369 et la marque plus les actions en demandent
+     * exactement 369 — une largeur de plus, et l'en-tête repasse à deux rangées. La cible
+     * est donc posée PAR-DESSUS, hors du calcul de la rangée : la zone sous le doigt
+     * grandit, la vignette et la barre ne bougent ni l'une ni l'autre.
+     */
+    .entete .marque {
+      position: relative;
+    }
+    .entete .marque::after {
+      content: '';
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 50%;
+      inline-size: var(--cible);
+      transform: translateX(-50%);
+    }
+    /*
      * Et la barre reprend ses deux gouttières. Mesuré sur un téléphone de 360 px : la
      * rangée d'actions demande 331 px, la barre lui en laissait 320. Huit pixels de blanc
      * de chaque côté font la différence entre une rangée et deux — et à cette largeur, le
@@ -748,14 +768,27 @@
   }
 
   .limites__lien {
-    margin-block-start: var(--espace-6);
+    margin-block-start: var(--espace-5);
     font-size: var(--texte-m);
     font-weight: 600;
   }
+  /*
+   * Un lien de lecture, mais quand même une cible de 44 px : c'est le seul lien du corps
+   * de page qui appelle un geste, et il ne faisait que la hauteur de sa ligne — 19 px.
+   * La marge au-dessus se resserre d'autant que la boîte a grandi, pour que le texte
+   * reste où la maquette le pose.
+   */
+  .limites__lien a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espace-1);
+    min-block-size: var(--cible);
+  }
   /* La flèche est posée en CSS : elle est décorative, et un lecteur d'écran n'a pas à
-     entendre « flèche vers la droite » à la fin du libellé. */
+     entendre « flèche vers la droite » à la fin du libellé. L'espace qui l'en sépare est
+     le `gap` ci-dessus : dans une boîte flexible, celui du texte serait avalé. */
   .limites__lien a::after {
-    content: ' \2192';
+    content: '\2192';
   }
 
   /* ------------------------------------------------------------------ *
