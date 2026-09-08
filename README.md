@@ -373,14 +373,6 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   couvre du contenu déjà peint pendant 1 472 ms sur tout téléphone, où le niveau vaut
   `reduit`. Le premier tiers tient en une ligne (`animation-delay`), les deux autres non.
 
-- **Deux cibles tactiles sous 44 px, et la réserve levée qui disait le contraire.** Relevé
-  sur un profil Pixel 7 : le lien « Lire la page "Limites" » fait **168 × 19 px** — sous le
-  minimum de 24 px de WCAG 2.5.8, et c'est le seul lien du corps de page sans hauteur
-  minimale — et la marque de l'en-tête **30 × 44 px** sous 26 rem, où `.marque__nom`
-  disparaît et ne laisse que la vignette. La ligne « le relevé sur Pixel 7 ne trouve
-  **aucune** cible sous 44 px », plus bas dans les réserves levées, était vraie quand elle
-  a été écrite et ne l'est plus.
-
 - **La langue ne va pas jusqu'au bout de la page.** Le `<noscript>` d'`index.html` est
   recopié tel quel par le pré-rendu : `/de/`, `/lb/`, `/pt/` et `/en/` servent un
   paragraphe **français** sous leur propre `lang` — c'est-à-dire que le seul lecteur pour
@@ -446,6 +438,27 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
 
 ### Réserves levées
+
+- *« Deux cibles tactiles sous 44 px. »* — Levée le 8 septembre. Les deux sont relevées à
+  320, 360, 393, 430, 768 et 1 280 px, pointeur grossier : plus aucune cible sous 44 px.
+  Chacune a demandé un geste différent, et c'est la seconde qui vaut d'être retenue.
+
+  Le lien « Lire la page "Limites" » n'avait que la hauteur de sa ligne — **174 × 19 px**
+  mesurés ici. Il prend la boîte des boutons (`min-block-size: var(--cible)`), et sa marge
+  au-dessus se resserre d'un cran pour que le texte reste où la maquette le pose. La flèche
+  décorative passe d'une espace dans `content` à un `gap` : dans une boîte flexible, l'espace
+  de tête aurait été avalée.
+
+  La marque de l'en-tête, elle, ne pouvait PAS s'élargir. Sous 26 rem, `.marque__nom`
+  disparaît et il ne reste que la vignette, 30 px. Lui donner `min-inline-size: var(--cible)`
+  refermait bien la réserve — et faisait passer l'en-tête de une rangée à deux à 393 px,
+  la largeur de téléphone la plus répandue : la barre y dispose de 369 px et la marque plus
+  les actions en demandent **exactement 369**. Quatorze pixels de plus, et la barre se
+  replie. La cible est donc posée par-dessus, en `::after` absolu, hors du calcul de la
+  rangée : zone cliquable mesurée à 44 × 44, boîte de mise en page inchangée à 30, en-tête
+  à une rangée comme avant. **Le premier correctif était vert à `npm run verifier` et
+  cassait la mise en page** — la porte ne mesure pas les rangées, seul un relevé avant/après
+  pouvait le voir.
 
 - *« Un contexte WebGL par composante qui bouge. »* — Levée le 8 septembre, et la réserve
   se trompait deux fois. Le crochet n'était pas appelé onze fois mais **trente-neuf**, et
@@ -529,8 +542,8 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   Reste, sur pointeur fin uniquement, les sélecteurs de l'en-tête à 34 px : c'est l'exception
   documentée, et elle tient — sur pointeur grossier ils passent à 44 px. La phrase qui
   suivait ici (« le relevé sur Pixel 7 ne trouve aucune cible sous 44 px ») était vraie de
-  ce relevé-là ; un relevé plus large en a trouvé deux depuis, et c'est une réserve
-  ouverte.
+  ce relevé-là ; un relevé plus large en a trouvé deux depuis, corrigées à leur tour
+  (réserve levée ci-dessus).
 
 - *« Les pastilles d'icône des tuiles n'ont été vues par aucun navigateur. »* — Elles l'ont
   été. Chromium est installé ici depuis, et la page a été photographiée à 360, 390 et
