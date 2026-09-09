@@ -18,7 +18,16 @@ import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ici = dirname(fileURLToPath(import.meta.url))
-const SOURCE = resolve(ici, '../../bus-scolaire-beckerich/src/index.css')
+/*
+ * Même variable, même raison que dans `build-chiffres.mjs` et `captures.mjs` : le chemin
+ * du dépôt frère se surcharge. Ce script était le seul des trois à ne pas le permettre, et
+ * cela s'est vu le jour où le dépôt de l'application était sorti sur une branche de
+ * travail : la vérification échouait sur une dérive qui n'existait pas dans ce qui est
+ * publié, et il n'y avait aucun moyen de le montrer sans déplacer le dépôt de quelqu'un
+ * d'autre. Un clone jetable et `DEPOT_APP` suffisent maintenant.
+ */
+const DEPOT_APP = process.env.DEPOT_APP ?? resolve(ici, '../../bus-scolaire-beckerich')
+const SOURCE = resolve(DEPOT_APP, 'src/index.css')
 const CIBLE = resolve(ici, '../src/styles/jetons.css')
 
 const ENTETE = `/*
