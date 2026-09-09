@@ -34,6 +34,9 @@ export const lb: Contenu = {
       `De Schoulbusplang vun der Gemeng Biekerech, fir all Kand perséinlech opbereet: seng ` +
       `Statioun, seng Zäit, seng Schoul. Offline, ouni Kont. ` +
       `Onofhängeg Säit, ouni Verbindung mat der Gemeng oder der Schoul.`,
+    sansScript:
+      `Dës Säit léisst sech ouni JavaScript liesen. Nëmmen d’Animatiounen an de ` +
+      `Sproochwiessel brauchen et.`,
   },
 
   general: {
@@ -72,12 +75,14 @@ export const lb: Contenu = {
     arrets: 'Bedéngte Statiounen',
     villages: 'Dierfer an der Gemeng',
     langues: 'Sproochen, och Lëtzebuergesch',
-    envoi: 'Familljendonnéeën un e Server geschéckt',
+    envoi: 'Familljendonnéeën, déi ouni Är Ufro erausginn',
     envoiValeur: '0',
     envoiNote:
-      `Zwou Saache ginn awer eraus: d’Applikatioun zielt hir Säitenopruff, a wien ` +
+      `Dräi Saache ginn awer eraus: d’Applikatioun zielt hir Säitenopruff, wien ` +
       `d’Notifikatiounen aschalt, hannerleet eng anonym Apparat-Kennung op engem Server, sou ` +
-      `laang wéi den Abonnement leeft. Weder Är Adress, nach d’Virnimm, nach d’Zyklen.`,
+      `laang wéi den Abonnement leeft, a wien d’Weeër an de Google Kalenner schreift, schéckt ` +
+      `de Virnumm vum Kand an den Numm vu senger Statioun bei Google. Weder Är Adress, nach ` +
+      `d’Zyklen.`,
   },
 
   ecrans: {
@@ -91,7 +96,7 @@ export const lb: Contenu = {
         texte: `${CHIFFRES.lignes} Linnen, ${CHIFFRES.arrets} Statiounen, Tabell fir Tabell.`,
       },
       {
-        titre: 'Siwe Froen, ee Mol',
+        titre: 'Sechs Froen, ee Mol',
         texte: 'D’Adress bestëmmt d’Statioun, de Cycle d’Schoul.',
       },
     ],
@@ -194,10 +199,10 @@ export const lb: Contenu = {
         texte: `Anzwousch anescht muss een den Arrêt selwer uginn, ouni Zäit zu Fouss.`,
       },
       {
-        titre: 'Zwou Saache ginn awer eraus',
+        titre: 'Dräi Saache ginn awer eraus',
         texte:
-          `D’Säitenopruff, an eng anonym Apparat-Kennung, wann Dir d’Notifikatiounen ` +
-          `aschalt.`,
+          `D’Säitenopruff, eng anonym Apparat-Kennung, wann Dir d’Notifikatiounen aschalt, ` +
+          `an de Virnumm vum Kand, wann Dir d’Weeër an de Google Kalenner schreift.`,
       },
     ],
     lien: 'D’Säit „Grenzen“ liesen',

@@ -315,6 +315,12 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   unique. Ce que l'application garde et qui n'est donc pas une faute ici : `Statioun`,
   `Applikatioun`, `sinn`, `gesinn` devant consonne.
 
+  **Le 8 septembre a ajouté des chaînes à relire**, et il faut le dire plutôt que de le
+  laisser se diluer : `meta.sansScript` (le bloc sans JavaScript) est une phrase nouvelle
+  dans chaque langue, et `chiffres.envoi`, `chiffres.envoiNote` ainsi que la limite « trois
+  choses sortent quand même » ont été réécrits dans les cinq. Ce sont, en luxembourgeois,
+  en portugais et en anglais, des premières rédactions de plus.
+
   Deux arbitrages restent à poser plutôt qu'à corriger : `comuna` contre `município` en
   portugais, qui touche quinze chaînes et engage les deux dépôts, et le mot employé pour la
   fiche de la semaine, qui diverge de `nav.semaine` dans les cinq langues. Un troisième s'y
@@ -350,78 +356,21 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   plus que 296 px. Ce qui reste non vu est ce que la réserve dit depuis le début : les
   polices du système, la barre d'adresse, les marges d'un écran à encoche.
 
-- **La vitrine décrit une application plus ancienne que celle qui est en ligne.** Les
-  quarante captures sont prises à la révision inscrite dans `scripts/captures.source.json`
-  (`509b621`, le 10 août 2026), qui a depuis quarante-neuf révisions de retard. Une phrase
-  y a déjà survécu à sa vérité : « Sept questions, une fois » — l'assistant en compte six
-  depuis que `bus`, `périscolaire` et `adresses` ont fusionné en `matin`, `midi`, `soir`.
-  La capture affiche bien « Étape 1 sur 7 », si bien que la page est cohérente **avec
-  elle-même** et fausse contre l'application vivante : c'est l'écart qu'aucun test ne peut
-  voir, puisque les deux sources concordent. La phrase et les captures doivent donc bouger
-  dans le même lot — `captures.source.json`, puis `npm run captures:conteneur`, ce qui
-  demande Docker et le dépôt de l'application à côté.
-
-- **« Réduire les animations » ne réduit pas encore tout.** Le bloc
-  `prefers-reduced-motion` de `vitrine.css` remet les *durées* à 0,01 ms mais jamais les
-  *délais*, et l'entrée du héros est en CSS avec des retards jusqu'à 0,72 s. Mesuré sous la
-  préférence : premier mot du titre à ~128 ms, capture à ~320 ms, légende à ~704 ms. Le
-  commentaire au-dessus de la règle promet exactement le contraire. Deux voisines, vues à
-  la même occasion : `Revele` passe d'une balise nue à une balise `motion` à
-  l'hydratation, ce qui repeint en `opacity: 0` trente et un blocs déjà lus (~50 ms de noir,
-  puis un fondu de 0,55 s) — sur une page dont l'argument est le pré-rendu, c'est le
-  pré-rendu qui se fait défaire ; et le rideau, qui ne s'abstient qu'au niveau `aucun`,
-  couvre du contenu déjà peint pendant 1 472 ms sur tout téléphone, où le niveau vaut
-  `reduit`. Le premier tiers tient en une ligne (`animation-delay`), les deux autres non.
-
-- **Deux cibles tactiles sous 44 px, et la réserve levée qui disait le contraire.** Relevé
-  sur un profil Pixel 7 : le lien « Lire la page "Limites" » fait **168 × 19 px** — sous le
-  minimum de 24 px de WCAG 2.5.8, et c'est le seul lien du corps de page sans hauteur
-  minimale — et la marque de l'en-tête **30 × 44 px** sous 26 rem, où `.marque__nom`
-  disparaît et ne laisse que la vignette. La ligne « le relevé sur Pixel 7 ne trouve
-  **aucune** cible sous 44 px », plus bas dans les réserves levées, était vraie quand elle
-  a été écrite et ne l'est plus.
-
-- **La langue ne va pas jusqu'au bout de la page.** Le `<noscript>` d'`index.html` est
-  recopié tel quel par le pré-rendu : `/de/`, `/lb/`, `/pt/` et `/en/` servent un
-  paragraphe **français** sous leur propre `lang` — c'est-à-dire que le seul lecteur pour
-  qui ce bloc existe est le seul à ne pas être servi dans sa langue. Et changer de langue
-  en cours de page ne met à jour ni `<title>`, ni la description, ni la canonique, ni
-  `og:url` ; le bouton Précédent, lui, change l'adresse sans changer la page, faute d'un
-  écouteur `popstate` en face du `pushState`.
-
-- **Ce que le conteneur produit et que nginx ne sert pas.** Le `Dockerfile` passe
-  `brotli -q 11` sur tout le HTML, le JS, le CSS, le SVG, le XML et le TXT à chaque
-  construction ; le bloc `location` que son commentaire annonce n'existe pas, et une
-  requête `Accept-Encoding: br` reçoit **27 461 octets non compressés** là où `gzip_static`
-  en rend 6 548. Deux voisines : `/index.html.gz` et `/index.html.br` répondent 200 en
-  `application/octet-stream`, et les images de la racine — dont le QR, préchargé sur chaque
-  page — sont servies en `no-cache`. Enfin, le `lastmod` du plan du site est **absent en
-  production** : `.dockerignore` exclut `.git`, et `DATE_CONTENU` n'est pas posé dans les
-  arguments de construction Dokploy, si bien que le raisonnement de `prerendu.mjs`
-  — plutôt aucune balise qu'une date fausse — aboutit en permanence à aucune balise.
-
-- **Cent deux kilo-octets de JavaScript, sans budget.** Premier écran, cache vide, thème
-  clair : ≈ 212 ko, dont **102,6 ko de JS compressé** — la moitié du poids, pour une page
-  entièrement pré-rendue dont l'interactivité se réduit à une liste déroulante, deux
-  boutons de thème et des révélations au défilement. Deux requêtes seulement bloquent le
-  premier rendu (6,4 ko de document, 6,0 ko de style), donc rien ne presse à l'affichage ;
-  ce qui manque est une limite. Les captures en ont une (480 ko par langue, tenue à 352) ;
-  le paquet, non — et c'est le seul poste où il reste une marge d'un ordre de grandeur.
-
-- **Le titre luxembourgeois du héros fait 24 signes sur 24.** `heros.titre[0]` de `lb.ts`
-  est exactement à la limite que la vignette de partage impose et qu'un test vérifie : il
-  passe aujourd'hui, et la première retouche le fera tomber. Ce n'est pas un défaut, c'est
-  un piège posé pour la prochaine personne.
-
-- **Ce que l'application envoie à Google Agenda n'est pas nommé ici.** *(À vérifier avant
-  d'agir.)* `bus-scolaire-beckerich/src/lib/agenda/google.ts` envoie à l'API de Google un
-  titre d'événement construit comme `« prénom — trajet »` et le nom de l'arrêt en
-  `location`. Si l'intégration est active en production — elle dépend de
-  `VITE_ID_CLIENT_GOOGLE`, posée à la construction de l'application —, alors le prénom de
-  l'enfant sort bel et bien de l'appareil, à la demande explicite du parent et vers son
-  propre agenda, et `chiffres.envoiNote` devrait le nommer comme il nomme les deux autres.
-  La page « Limites » de l'application ne le nomme pas non plus : si c'est un manque, il
-  est d'abord là-bas.
+- **Cent trois kilo-octets de JavaScript. Le budget existe, la réserve reste.** Premier
+  écran, cache vide : **103,6 ko de JS comprimé** pour une page entièrement pré-rendue dont
+  l'interactivité se réduit à une liste déroulante, deux boutons de thème et des
+  révélations au défilement. Deux requêtes seulement bloquent le premier rendu (6,4 ko de
+  document, 6,0 ko de style), donc rien ne presse à l'affichage.
+  Ce qui manquait — une limite — a été posé le 8 septembre : `npm run poids`, appelé à la
+  fin de `npm run build`, mesure ce que `dist/index.html` NOMME (les imports dynamiques de
+  `lenis` et de `motion` ne comptent pas, ils ne partent pas avec la page) et refuse au-delà
+  de 110 ko. La marge est de 6 % et non de 45 % comme celle des captures, parce que les cinq
+  fichiers de contenu sont dans le paquet : un budget serré ferait échouer la construction
+  pour une correction de texte.
+  **Le budget enregistre ce poids, il ne l'approuve pas.** Ce qui reste ouvert est la
+  question qu'il ne pose pas : ce que React, `motion` et cinq dictionnaires complets font
+  dans une page qu'on lit une fois. C'est le seul poste où il reste une marge d'un ordre de
+  grandeur, et la refermer demande une décision d'architecture, pas un réglage.
 
 - **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` calcule
   ce que le navigateur devrait afficher ; il ne lit pas l'écran. La refonte a rendu ce
@@ -434,11 +383,11 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `npm run captures:conteneur`, et la règle qu'on ne commite que sa sortie. Avec quarante
   fichiers, l'écart attendu passe mécaniquement à dix. Ce qui reste inconnu : le
   comportement le jour où l'étiquette du conteneur changera.
-  *Note pratique apprise en refaisant les captures :* le script photographie l'application
-  **à la révision inscrite dans `scripts/captures.source.json`** (aujourd'hui `509b621`),
-  pas à son `HEAD`. Sur un `HEAD` plus récent, l'avertissement d'indépendance ne s'ouvrait
-  plus au même endroit et le script échouait sur un clic introuvable. Sortir l'application
-  à cette révision avant de lancer les captures, comme le fait l'intégration continue.
+  *Note pratique, reprise le 9 septembre :* le script photographie l'application telle
+  qu'elle est dans `DEPOT_APP` et INSCRIT la révision trouvée ; c'est l'intégration continue
+  qui, ensuite, extrait cette révision pour comparer. Régénérer ne demande donc pas de
+  déplacer le dépôt frère — **et il ne faut pas le faire**, il peut être sur une branche de
+  travail. Un clone jetable et `DEPOT_APP` suffisent (recette dans `CLAUDE.md`).
 
 - **Le conteneur n'a pas encore tourné ailleurs qu'ici.** L'image se construit, se lance,
   et ses en-têtes ont été relevés à la main (voir plus bas) — mais sur cette machine, en
@@ -446,6 +395,221 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
 
 ### Réserves levées
+
+- *Note du 9 septembre, qui n'était pas une réserve mais qui a coûté du temps :*
+  `npm run jetons:verifier` a été rouge toute une session sans qu'aucun jeton n'ait bougé
+  ici. Le dépôt frère était sorti sur une branche de travail, et la vérification comparait
+  donc la vitrine à des jetons non publiés. `sync-jetons.mjs` honore désormais `DEPOT_APP`,
+  comme `build-chiffres.mjs` et `captures.mjs` le faisaient déjà — il était le seul des
+  trois à ne pas le permettre, et c'est précisément celui dont on avait besoin pour montrer
+  que la dérive n'existait pas. Vérifié contre le `main` de l'application : identiques.
+  **La leçon générale, et elle vaut pour les chiffres autant que pour les jetons : ce qui
+  est à côté sur le disque n'est pas ce qui est en ligne.**
+
+- *« La vitrine décrit une application plus ancienne que celle qui est en ligne. »* — Levée
+  le 9 septembre. Les quarante captures sont reprises à `185ebe1`, le `main` de
+  l'application, et « Sept questions » est devenu « **Six** questions » dans les cinq
+  langues : l'assistant compte six étapes (`enfant`, `adresse`, `matin`, `midi`, `soir`,
+  `recapitulatif`), et la capture affiche maintenant « Étape 1 sur 6 » à côté de la phrase.
+  Les deux ont bougé dans le même lot, comme la réserve le demandait.
+
+  **Le script a dû apprendre un écran de plus.** Il échouait sur un clic introuvable, et le
+  diagnostic écrit dans l'ancienne réserve — « l'écran d'avertissement a bougé » — était
+  faux : le libellé « J'ai compris » n'avait pas changé d'un caractère. Ce qui avait changé,
+  c'est qu'un écran le PRÉCÈDE désormais, `ChoixLangueInitial`, ajouté par l'application
+  pour une raison qu'on ne peut qu'approuver — « un parent lusophone à qui on sert
+  l'avertissement en français ne l'a pas lu, il l'a cliqué ». `captures.mjs` franchit donc
+  trois portes au lieu de deux, et clique la langue par son attribut `lang` : les noms de
+  langues sont écrits chacun dans le leur et ne vivent pas dans les dictionnaires JSON.
+
+  **Ce qui a été revérifié contre `main` à cette occasion**, puisque quarante-neuf révisions
+  avaient passé :
+
+  - les nombres du héros et de l'appel final — 07:25, 07:45, 16 min, Kneppchen, Léa · Noah —
+    sont ceux de la nouvelle capture, inchangés ;
+  - `npm run chiffres` relancé sur `main` ne change **rien** : 7 lignes, 17 arrêts,
+    1 162 adresses, plan valide au 18 décembre 2026 ;
+  - la limite « à 4,5 km/h » tient (`VITESSE_MARCHE_KMH = 4.5`) ;
+  - les quarante fichiers pèsent 1 700 ko, soit 340 ko par langue, sous le budget de 480.
+
+  Deux observations faites en passant, qui ne sont pas des défauts mais qu'il vaut mieux
+  écrire :
+
+  - **« majorés d'un tiers » est un arrondi.** Le facteur de détour de l'application est
+    `FACTEUR_DETOUR = 1.35`, soit 35 % et non 33 %. Sur une phrase qui annonce une
+    estimation, l'écart est sans conséquence — mais c'est une approximation, pas une
+    citation.
+  - **L'application a désormais des comptes** (`Espace agents`, `/connexion`, `/comptes`).
+    Ils sont « réservés aux personnes autorisées par la commune » : la promesse « hors
+    ligne, sans compte » que la vitrine fait AUX PARENTS reste vraie. Elle cesserait de
+    l'être le jour où un parent aurait un compte, et c'est une phrase qui figure dans les
+    cinq `meta.description`.
+
+- *« Ce que l'application envoie à Google Agenda n'est pas nommé ici. »* — Vérifié le
+  8 septembre, et **c'était pire que la réserve ne le disait**. Elle parlait d'un manque ;
+  c'était une contradiction. La note écrivait « Ni votre adresse, **ni les prénoms**, ni
+  les cycles » — la seule affirmation de la vitrine que l'application ne tenait pas, celle
+  que le premier principe du projet existe pour empêcher.
+
+  Les trois faits, vérifiés un par un :
+
+  - `bus-scolaire-beckerich/src/lib/agenda/evenements.ts:127` construit le titre de
+    l'événement comme `` `${ctx.enfant.prenom} — ${libelleTrajet}` `` ;
+  - `google.ts:378` l'envoie en `summary` et le nom de l'arrêt en `location`, et
+    `google.ts:439` nomme l'agenda `Bus scolaire — {prénom}` ;
+  - **l'intégration est active en production** : le paquet servi par `app.schoulbus.lu`
+    porte un identifiant client Google réel (`…apps.googleusercontent.com`), et
+    `googleConfigure()` ne demande rien de plus que ce suffixe.
+
+  Ce qui a changé ici, dans les cinq langues : la note nomme **trois** choses au lieu de
+  deux, la limite qui les énumère aussi, et « ni les prénoms » a disparu.
+
+  **Et le cadrage du « 0 » a dû être resserré**, ce qui est la décision de ce lot et mérite
+  d'être discutée. Le libellé disait « donnée de famille envoyée à un serveur » : un prénom
+  est une donnée de famille et Google est un serveur, le zéro était donc devenu faux sous
+  sa propre définition. Il porte désormais sur ce qui part **sans qu'on le demande**, ce
+  qui reste vrai, reste la chose qu'un parent veut savoir, et garde au chiffre sa fonction.
+  Le raisonnement est écrit à ses trois endroits : `src/contenu/type.ts`,
+  `scripts/build-chiffres.mjs` et `CLAUDE.md`.
+
+  **Ce que ce lot NE corrige pas, et qui reste ouvert ailleurs** : la page « Limites » de
+  l'application ne nomme toujours pas ce flux. La vitrine est maintenant plus précise que
+  l'application qu'elle décrit — l'inverse du défaut habituel, mais un écart quand même, et
+  il se répare dans `../bus-scolaire-beckerich`, pas ici.
+
+- *« Le titre luxembourgeois du héros fait 24 signes sur 24. »* — Le piège n'est pas
+  désamorcé, il est SIGNALÉ, et c'est la bonne réponse : la limite est réelle (76 px dans
+  1 024 px utiles), et raccourcir le titre luxembourgeois demanderait précisément la
+  relecture native qui manque. Ce qui a changé le 8 septembre :
+
+  - le nombre a un nom et un seul endroit, `SIGNES_MAX_TITRE` dans `src/contenu/type.ts`,
+    avec le calcul dont il sort ;
+  - le test relève **toutes** les lignes fautives des cinq langues, avec leur longueur et
+    leur texte, et dit quoi faire — au lieu d'un « expected 25 to be less than or equal to
+    24 » dont rien ne disait d'où venait le 24 ;
+  - `npm run assets:partage` **refuse de dessiner** une ligne trop longue. Les deux
+    gardiens ne couvrent pas le même moment : le test attrape la retouche, le script
+    attrape la régénération lancée sans avoir relancé les tests.
+
+  Vérifié en abaissant la limite à 20 : le script s'arrête sur l'allemand, le test relève
+  l'allemand, le luxembourgeois et l'anglais. Les cinq vignettes régénérées sont
+  identiques octet pour octet.
+
+- *« Ce que le conteneur produit et que nginx ne sert pas. »* — Levée le 8 septembre, les
+  quatre points. Les trois premiers sont **mesurés**, avant et après, sur la vraie
+  `nginx.conf` du dépôt : nginx a été installé sans root sur cette machine (comme Chromium
+  avant lui) et sert `dist/` sur un port haut, la configuration n'étant réécrite que pour
+  son `listen`, sa racine et le chemin de son inclusion.
+
+  - **Brotli ne sert plus à rien, donc il n'est plus produit.** `nginx:alpine` ne sait pas
+    servir de `.br` et le bloc `location` que le `Dockerfile` annonçait n'a jamais existé :
+    mesuré, `Accept-Encoding: br` recevait **27 472 octets non comprimés** là où
+    `gzip_static` en rend 6 594. On payait la compression la plus lente à chaque
+    construction pour des fichiers que personne ne recevait. Reste `gzip -9`, qui marche.
+  - **`/index.html.gz` répondait 200 en `application/octet-stream`** — une seconde adresse
+    pour chaque page, que rien n'annonce et qu'un moteur peut trouver. `.gz` et `.br` sont
+    en 404 ; `gzip_static`, qui sert le fichier en interne sans passer par un bloc
+    `location`, est vérifié intact sur `/`, `/de/`, `/assets/*.css` et `/sitemap.xml`.
+  - **Les images de la racine sont passées de `no-cache` à une semaine**, comme les
+    captures et pour la même raison — pas d'empreinte, engendrées par script. Le QR est
+    préchargé sur chaque page ; il repartait à chaque visite. L'expression régulière est
+    ancrée sur la racine (`^/[^/]+\.`) : sans cela elle aurait repris à `/assets/` son
+    cache d'un an, un bloc en expression régulière l'emportant sur un bloc en préfixe.
+  - **Le `lastmod` revient**, en supprimant le réglage plutôt qu'en le posant.
+    `.dockerignore` n'exclut plus `.git` et l'étape de construction installe `git` : le
+    script lit la date du dernier commit de contenu, comme sur une machine de
+    développement. `DATE_CONTENU` reste pour une archive sans historique. **Un réglage dont
+    l'oubli est silencieux et permanent n'est pas un réglage, c'est un défaut** — et il
+    l'était depuis la première mise en ligne.
+
+  **L'image a depuis été construite et interrogée**, Docker ayant été installé le
+  9 septembre. Tout ce qui n'était que raisonné est mesuré : `apk add git` s'installe,
+  `.git` arrive bien dans le contexte, et `/sitemap.xml` porte enfin un
+  `<lastmod>2026-09-09</lastmod>` — la balise que la production n'avait jamais eue.
+  `gzip_static` sert 6 641 octets là où l'identité en rend 27 648 ; `/index.html.gz` et
+  `/index.html.br` répondent 404 ; le QR et les vignettes portent une semaine de cache, les
+  captures la leur, `/de` renvoie 301 ; l'image ne contient plus **aucun** fichier `.br`
+  (dix-huit `.gz`) ; les six en-têtes de sécurité sont présents sur la page comme sur une
+  image, une adresse inventée tombe en 404, et la sonde de santé passe au vert.
+
+  Ce qui reste inconnu est ce que dit la réserve suivante, et elle seule : le conteneur n'a
+  jamais tourné derrière Traefik.
+
+- *« La langue ne va pas jusqu'au bout de la page. »* — Levée le 8 septembre, les trois
+  points, et vérifiée dans Chromium sur la page construite.
+
+  Le `<noscript>` est **engendré par langue** (`blocNoscript`), et `index.html` n'en porte
+  plus qu'un repère vide que le pré-rendu remplit. Il ne demande qu'**une** chaîne nouvelle
+  par langue : ses deux liens réemploient `general.ouvrirApp` et `independance.lien`, déjà
+  relus. Conséquence non prévue mais bienvenue : ce bloc n'est plus « le seul endroit que
+  l'interrupteur ne couvre pas » — `APP_PUBLIEE` y décide comme ailleurs, et le test qui
+  tenait l'invariant à la main le vérifie maintenant dans les cinq langues.
+
+  Le changement de langue **emmène tout l'en-tête** : `<title>`, description, canonique,
+  `og:url`, `og:title`, `og:description`, `og:locale` et les vignettes. Le calcul est
+  descendu dans `src/i18n/metadonnees.ts`, d'où le pré-rendu et le navigateur le lisent
+  tous les deux — deux calculs séparés, c'est une page allemande sous un titre français,
+  et c'est précisément ce qui arrivait. Le premier appel, à l'hydratation, repose ce que le
+  pré-rendu avait écrit : si les deux divergeaient un jour, cela se verrait ici plutôt que
+  dans un résultat de recherche.
+
+  Le **bouton Précédent** ramène la page avec l'adresse : un écouteur `popstate` fait face
+  au `pushState`. Relevé dans Chromium : `/` → `/de/` (titre, canonique et `og:locale`
+  allemands) → Précédent → `/` et tout revient en français, `<h1>` compris.
+
+  Quatre tests le tiennent (`src/tests/langue.test.ts`), vérifiés rouges sur l'ancien code.
+  **La contrepartie est une réserve, pas une victoire** : les cinq chaînes `meta.sansScript`
+  sont des premières rédactions de plus en luxembourgeois, en portugais et en anglais —
+  elles rejoignent la réserve de relecture native, en tête de cette liste.
+
+- *« "Réduire les animations" ne réduit pas encore tout. »* — Levée le 8 septembre, les
+  trois tiers. Tout est mesuré sur la page CONSTRUITE et servie par `npm run preview`,
+  avant et après : le serveur de développement injecte sa CSS en JavaScript, si bien que
+  rien n'y est peint avant l'hydratation et que les trois défauts y sont invisibles. C'est
+  le piège de méthode à retenir de ce lot.
+
+  1. **Les délais.** Le bloc `prefers-reduced-motion` remettait les durées à 0,01 ms et
+     laissait les `animation-delay` de l'entrée du héros, qui vont jusqu'à 0,72 s : sous la
+     préférence, l'étiquette apparaissait à 71 ms, le titre à 183, la capture à 400, la
+     légende à 783 — une apparition instantanée, mais étalée sur près d'une seconde. Les
+     quatre arrivent maintenant ensemble, à 85 ms. Deux lignes (`animation-delay` et
+     `transition-delay`), comme annoncé.
+  2. **`Revele` défaisait le pré-rendu.** Le premier rendu vaut toujours `aucun` — c'est
+     ce que rend `getServerSnapshot`, et donc aussi l'hydratation — puis la mesure
+     remplaçait la balise nue par une balise `motion`, qui reposait son `initial`.
+     Relevé à 1 280 × 1 800 : dix blocs déjà peints (les quatre chiffres, leur note,
+     l'en-tête de bande, les quatre cartes d'écran) repassaient sous l'opacité 1 à 86 ms
+     pour n'en ressortir qu'entre 575 et 742 ms. Un bloc déjà à l'écran quand le mouvement
+     est autorisé garde désormais sa balise nue : il n'a rien à révéler, il est lu. Après :
+     zéro.
+  3. **Le rideau couvrait tous les téléphones.** Il ne s'abstenait qu'au niveau `aucun` ;
+     or un appareil tactile vaut `reduit`. Mesuré à 393 px, pointeur grossier : le rideau
+     couvrait la page de 95 à 1 576 ms. Il ne se monte plus qu'au niveau `complet`, comme
+     le défilement doux et le curseur, qui s'abstiennent déjà à ce niveau-là. Après :
+     jamais sur tactile, inchangé au bureau (82 → 1 556 ms). **Trois tests le tiennent**
+     désormais dans `niveau-mouvement.test.ts` — vérifiés en sens inverse, c'est-à-dire
+     rouges sur l'ancien code.
+
+- *« Deux cibles tactiles sous 44 px. »* — Levée le 8 septembre. Les deux sont relevées à
+  320, 360, 393, 430, 768 et 1 280 px, pointeur grossier : plus aucune cible sous 44 px.
+  Chacune a demandé un geste différent, et c'est la seconde qui vaut d'être retenue.
+
+  Le lien « Lire la page "Limites" » n'avait que la hauteur de sa ligne — **174 × 19 px**
+  mesurés ici. Il prend la boîte des boutons (`min-block-size: var(--cible)`), et sa marge
+  au-dessus se resserre d'un cran pour que le texte reste où la maquette le pose. La flèche
+  décorative passe d'une espace dans `content` à un `gap` : dans une boîte flexible, l'espace
+  de tête aurait été avalée.
+
+  La marque de l'en-tête, elle, ne pouvait PAS s'élargir. Sous 26 rem, `.marque__nom`
+  disparaît et il ne reste que la vignette, 30 px. Lui donner `min-inline-size: var(--cible)`
+  refermait bien la réserve — et faisait passer l'en-tête de une rangée à deux à 393 px,
+  la largeur de téléphone la plus répandue : la barre y dispose de 369 px et la marque plus
+  les actions en demandent **exactement 369**. Quatorze pixels de plus, et la barre se
+  replie. La cible est donc posée par-dessus, en `::after` absolu, hors du calcul de la
+  rangée : zone cliquable mesurée à 44 × 44, boîte de mise en page inchangée à 30, en-tête
+  à une rangée comme avant. **Le premier correctif était vert à `npm run verifier` et
+  cassait la mise en page** — la porte ne mesure pas les rangées, seul un relevé avant/après
+  pouvait le voir.
 
 - *« Un contexte WebGL par composante qui bouge. »* — Levée le 8 septembre, et la réserve
   se trompait deux fois. Le crochet n'était pas appelé onze fois mais **trente-neuf**, et
@@ -529,8 +693,8 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   Reste, sur pointeur fin uniquement, les sélecteurs de l'en-tête à 34 px : c'est l'exception
   documentée, et elle tient — sur pointeur grossier ils passent à 44 px. La phrase qui
   suivait ici (« le relevé sur Pixel 7 ne trouve aucune cible sous 44 px ») était vraie de
-  ce relevé-là ; un relevé plus large en a trouvé deux depuis, et c'est une réserve
-  ouverte.
+  ce relevé-là ; un relevé plus large en a trouvé deux depuis, corrigées à leur tour
+  (réserve levée ci-dessus).
 
 - *« Les pastilles d'icône des tuiles n'ont été vues par aucun navigateur. »* — Elles l'ont
   été. Chromium est installé ici depuis, et la page a été photographiée à 360, 390 et

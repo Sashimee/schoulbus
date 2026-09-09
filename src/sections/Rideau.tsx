@@ -8,6 +8,13 @@
  * Il ne retarde rien non plus. Le contenu est déjà rendu dessous — pré-rendu, même : le
  * rideau se lève sur une page complète. S'il échouait à se lever (JavaScript coupé en
  * plein vol), il ne serait jamais monté, puisqu'il n'existe que côté navigateur.
+ *
+ * IL NE SE MONTRE QU'AU NIVEAU `complet`, et non « partout sauf quand on demande de
+ * réduire ». Il couvrait auparavant 1,48 s de contenu déjà peint sur TOUT téléphone,
+ * puisqu'un appareil tactile vaut `reduit` : le pré-rendu servait une page lisible, et le
+ * navigateur la cachait aussitôt derrière un logo. C'est la même règle que le défilement
+ * doux et le curseur, qui s'abstiennent déjà à ce niveau-là — une décoration d'ouverture
+ * appartient à la machine qui peut se l'offrir.
  */
 import { AnimatePresence, m } from 'motion/react'
 import { useEffect, useState } from 'react'
@@ -23,7 +30,7 @@ export function Rideau() {
   const [ouvert, setOuvert] = useState(false)
 
   useEffect(() => {
-    if (niveau === 'aucun') return
+    if (niveau !== 'complet') return
     try {
       if (sessionStorage.getItem(CLE_SESSION)) return
       sessionStorage.setItem(CLE_SESSION, '1')

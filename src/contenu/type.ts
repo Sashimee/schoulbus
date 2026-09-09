@@ -97,6 +97,15 @@ export type Contenu = {
   meta: {
     titre: string
     description: string
+    /**
+     * Le paragraphe servi à qui n'a pas de JavaScript. Il était écrit en dur dans
+     * `index.html`, donc en français — recopié tel quel par le pré-rendu, il servait un
+     * texte français sous `/de/`, `/lb/`, `/pt/` et `/en/`, c'est-à-dire que le seul
+     * lecteur pour qui ce bloc existe était le seul à ne pas être servi dans sa langue.
+     * Les deux liens qui l'accompagnent réemploient `general.ouvrirApp` et
+     * `independance.lien` : ils sont déjà relus dans les cinq langues.
+     */
+    sansScript: string
   }
   general: {
     marque: string
@@ -115,7 +124,14 @@ export type Contenu = {
   }
   heros: {
     etiquette: string
-    /** Découpé en lignes ; chaque mot est révélé séparément. */
+    /**
+     * Découpé en lignes ; chaque mot est révélé séparément.
+     *
+     * Chaque ligne tient dans `SIGNES_MAX_TITRE`. Ce n'est pas une règle de style : c'est
+     * la largeur dessinable de la vignette de partage, et elle est vérifiée aux deux bouts
+     * — par `src/tests/contenu.test.ts` et par `scripts/build-partage.mjs`, qui refuse de
+     * dessiner une ligne qui déborderait.
+     */
     titre: string[]
     /** Le texte alternatif de la capture du héros. Il décrit l'écran, pas la marque. */
     altCapture: string
@@ -130,16 +146,29 @@ export type Contenu = {
     arrets: string
     villages: string
     langues: string
-    /** Le zéro est cadré : il porte sur ce que la famille saisit, pas sur tout trafic. */
+    /**
+     * Le zéro est cadré, et son cadrage a changé le 8 septembre.
+     *
+     * Il disait « donnée de famille envoyée à un serveur », et c'était devenu faux :
+     * l'export vers Google Agenda envoie le prénom de l'enfant et le nom de son arrêt à
+     * Google (`bus-scolaire-beckerich/src/lib/agenda/`), et un prénom est une donnée de
+     * famille. Le zéro porte désormais sur ce qui part SANS QU'ON LE DEMANDE — ce qui est
+     * vrai, et reste la chose qu'un parent veut savoir.
+     */
     envoi: string
     envoiValeur: string
     /**
      * Ce qui sort quand même, sous la bande de chiffres.
      *
      * Un « 0 » affiché en grand se relit vite comme « rien ne sort », et ce serait faux :
-     * l'application compte ses pages vues, et une notification suppose un identifiant
-     * d'appareil déposé sur un serveur le temps de l'abonnement. La note n'est pas une
-     * précaution juridique, c'est ce qui rend le chiffre vrai.
+     * l'application compte ses pages vues, une notification suppose un identifiant
+     * d'appareil déposé sur un serveur le temps de l'abonnement, et l'export vers Google
+     * Agenda envoie à Google le prénom de l'enfant et le nom de son arrêt. La note n'est
+     * pas une précaution juridique, c'est ce qui rend le chiffre vrai.
+     *
+     * LA TROISIÈME MANQUAIT jusqu'au 8 septembre, et la note affirmait même le contraire
+     * — « ni les prénoms ». C'était la seule affirmation de la vitrine que l'application
+     * ne tenait pas.
      *
      * LA MAQUETTE NE LA PORTAIT PAS. Elle a été rétablie : afficher « 0 » en grand sans
      * elle, dans la même page qui énumère six limites, aurait été la seule affirmation
@@ -262,3 +291,19 @@ export type Contenu = {
     retour: string
   }
 }
+
+/**
+ * Signes au plus par ligne de `heros.titre`.
+ *
+ * `scripts/build-partage.mjs` dessine ces lignes à 76 px sur une vignette de 1200 px dont
+ * 88 px de marge de chaque côté : il en reste 1024, soit vingt-quatre signes à cette
+ * graisse. Au-delà, la ligne sort de l'image — et la vignette est ce qu'un groupe de
+ * parents voit AVANT d'ouvrir le lien.
+ *
+ * LE LUXEMBOURGEOIS EST EXACTEMENT À VINGT-QUATRE. Ce n'est pas un défaut, c'est un piège :
+ * la première retouche de ce titre fera tomber la construction. Le nombre vit donc ici,
+ * en un seul endroit, et les deux gardiens disent quoi faire quand il tombe — plutôt que
+ * de laisser quelqu'un découvrir un « expected 25 to be less than or equal to 24 » sans
+ * savoir d'où sort le 24.
+ */
+export const SIGNES_MAX_TITRE = 24

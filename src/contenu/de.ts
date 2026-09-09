@@ -35,6 +35,9 @@ export const de: Contenu = {
       `Der Schulbusplan der Gemeinde Beckerich, für jedes Kind persönlich aufbereitet: ` +
       `seine Haltestelle, seine Uhrzeit, seine Schule. Offline, ohne Konto. ` +
       `Unabhängige Seite, ohne Verbindung zur Gemeinde oder zur Schule.`,
+    sansScript:
+      `Diese Seite lässt sich ohne JavaScript lesen. Nur die Animationen und der ` +
+      `Sprachwechsel brauchen es.`,
   },
 
   general: {
@@ -73,12 +76,14 @@ export const de: Contenu = {
     arrets: 'bediente Haltestellen',
     villages: 'Ortschaften der Gemeinde',
     langues: 'Sprachen, darunter Luxemburgisch',
-    envoi: 'an einen Server gesendete Familiendaten',
+    envoi: 'Familiendaten, die ohne Ihr Zutun hinausgehen',
     envoiValeur: '0',
     envoiNote:
-      `Zwei Dinge verlassen das Gerät dennoch: Die Anwendung zählt ihre Seitenaufrufe, und ` +
-      `wer Benachrichtigungen einschaltet, hinterlegt für die Dauer des Abonnements eine ` +
-      `anonyme Gerätekennung auf einem Server. Weder Ihre Adresse noch die Vornamen noch die Zyklen.`,
+      `Drei Dinge verlassen das Gerät dennoch: Die Anwendung zählt ihre Seitenaufrufe, wer ` +
+      `Benachrichtigungen einschaltet, hinterlegt für die Dauer des Abonnements eine anonyme ` +
+      `Gerätekennung auf einem Server, und wer die Fahrten in Google Kalender schreibt, sendet ` +
+      `den Vornamen des Kindes und den Namen seiner Haltestelle an Google. Weder Ihre Adresse ` +
+      `noch die Zyklen.`,
   },
 
   ecrans: {
@@ -92,7 +97,7 @@ export const de: Contenu = {
         texte: `${CHIFFRES.lignes} Linien, ${CHIFFRES.arrets} Haltestellen, Tabelle für Tabelle.`,
       },
       {
-        titre: 'Sieben Fragen, ein einziges Mal',
+        titre: 'Sechs Fragen, ein einziges Mal',
         texte: 'Die Adresse bestimmt die Haltestelle, der Zyklus die Schule.',
       },
     ],
@@ -195,10 +200,11 @@ export const de: Contenu = {
         texte: `Anderswo muss man die Haltestelle selbst nennen, ohne Fußweg.`,
       },
       {
-        titre: 'Zwei Dinge gehen dennoch hinaus',
+        titre: 'Drei Dinge gehen dennoch hinaus',
         texte:
-          `Die Seitenaufrufe, und eine anonyme Gerätekennung, wenn Sie Benachrichtigungen ` +
-          `einschalten.`,
+          `Die Seitenaufrufe, eine anonyme Gerätekennung, wenn Sie Benachrichtigungen ` +
+          `einschalten, und der Vorname des Kindes, wenn Sie die Fahrten in Google ` +
+          `Kalender schreiben.`,
       },
     ],
     lien: 'Die Seite „Grenzen“ lesen',

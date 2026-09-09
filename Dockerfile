@@ -23,13 +23,24 @@ RUN npm ci
 
 COPY . .
 
+# `git` pour la seule date du dernier changement de contenu (voir `DATE_CONTENU` plus bas).
+# Il ne sert qu'à cette étape et ne part pas dans l'image publiée.
+RUN apk add --no-cache git
+
 # L'origine publique entre dans les métadonnées de partage, qui exigent des URL absolues ;
 # elle doit donc être connue à la construction et non au démarrage.
 ARG URL_PUBLIQUE=https://www.schoulbus.lu
 ARG BASE_PATH=/
-# La date du dernier changement de contenu, pour `lastmod` du plan du site. Le dépôt Git
-# n'est pas copié ici — sans cette valeur, `prerendu.mjs` omet la balise plutôt que
-# d'inscrire la date de construction, qui ne voudrait rien dire (voir son commentaire).
+# La date du dernier changement de contenu, pour `lastmod` du plan du site.
+#
+# C'était une valeur À PENSER À POSER, et personne ne la posait : `.dockerignore` excluait
+# `.git`, Dokploy ne passait pas l'argument, et `prerendu.mjs` — qui préfère aucune balise
+# à une date fausse — n'écrivait donc jamais de `lastmod` en production. Un réglage dont
+# l'oubli est silencieux et permanent n'est pas un réglage, c'est un défaut.
+#
+# Le dépôt est maintenant dans le contexte de construction et le script lit la date du
+# dernier commit qui a touché le contenu, comme sur une machine de développement. Cet
+# argument reste, pour construire depuis une archive sans historique.
 ARG DATE_CONTENU
 
 ENV URL_PUBLIQUE=$URL_PUBLIQUE \
@@ -42,17 +53,22 @@ RUN npm run verifier && npm run build
 
 # Précompression. Le contenu est statique et ne changera plus : le comprimer une fois ici
 # donne un meilleur taux que ce que nginx obtiendrait à la volée, et ne coûte rien à
-# chaque visite. Niveau 9 pour gzip, 11 pour brotli — on a tout le temps.
-RUN apk add --no-cache brotli && \
-    find dist -type f \( -name '*.html' -o -name '*.js' -o -name '*.css' -o -name '*.svg' -o -name '*.xml' -o -name '*.txt' \) \
-      -exec gzip -9 -k {} \; -exec brotli -q 11 -k {} \;
+# chaque visite. Niveau 9 — on a tout le temps.
+#
+# GZIP SEUL. Cette étape passait aussi `brotli -q 11` sur les mêmes fichiers, pour un bloc
+# `location` qui n'a jamais existé : `nginx:alpine` ne sait pas servir de `.br`, et une
+# requête `Accept-Encoding: br` recevait donc 27 472 octets non comprimés là où
+# `gzip_static` en rend 6 594. On payait la compression la plus lente à chaque
+# construction pour des fichiers que personne ne recevait. Le jour où l'image de base
+# saura les servir, c'est une ligne ici et une ligne dans `nginx.conf` — dans cet ordre.
+RUN find dist -type f \( -name '*.html' -o -name '*.js' -o -name '*.css' -o -name '*.svg' -o -name '*.xml' -o -name '*.txt' \) \
+      -exec gzip -9 -k {} \;
 
 # ---------------------------------------------------------------------------
 # 2. Service
 # ---------------------------------------------------------------------------
-# `nginx:alpine` porte déjà `ngx_http_gzip_static_module`. Brotli n'y est pas : les
-# fichiers `.br` sont produits quand même, et servis par le bloc `location` prévu à cet
-# effet dès que l'image de base en disposera. Ils ne gênent pas en attendant.
+# `nginx:alpine` porte déjà `ngx_http_gzip_static_module`, et c'est tout ce dont ce site a
+# besoin. Brotli n'y est pas — voir l'étape de précompression ci-dessus.
 FROM nginx:alpine AS service
 
 COPY --from=construction /vitrine/dist /usr/share/nginx/html

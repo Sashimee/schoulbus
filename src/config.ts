@@ -30,9 +30,10 @@ export const URL_APP = 'https://app.schoulbus.lu'
  * sont testés (`src/tests/`) : il n'existe pas d'état intermédiaire où la moitié des liens
  * serait revenue.
  *
- * Ce que cet interrupteur ne couvre pas lui-même, faute d'être du code : le `<noscript>`
- * d'`index.html`, qui est du HTML statique. Un test tient l'invariant à sa place
- * (`rendu.test.ts`), de sorte que les deux ne peuvent plus se contredire.
+ * Le `<noscript>` était la seule chose que cet interrupteur ne couvrait pas, faute d'être
+ * du code : un test tenait l'invariant à sa place. Il est engendré depuis le contenu
+ * depuis qu'il a fallu le servir dans les cinq langues (`blocNoscript`), donc
+ * `APP_PUBLIEE` y décide comme partout ailleurs — et le test vérifie les cinq.
  *
  * Ouverte : l'application est publiée sur `app.schoulbus.lu`. Elle avait déjà été ouverte
  * un jour puis refermée le lendemain, l'application n'étant pas prête — c'est exactement

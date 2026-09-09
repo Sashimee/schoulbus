@@ -39,6 +39,9 @@ export const pt: Contenu = {
       `O plano do autocarro escolar da comuna de Beckerich, preparado para cada criança: ` +
       `a sua paragem, a sua hora, a sua escola. Offline, sem conta. ` +
       `Site independente, sem ligação à comuna nem à escola.`,
+    sansScript:
+      `Esta página lê-se sem JavaScript. Só as animações e a mudança de idioma ` +
+      `precisam dele.`,
   },
 
   general: {
@@ -77,12 +80,13 @@ export const pt: Contenu = {
     arrets: 'paragens servidas',
     villages: 'aldeias da comuna',
     langues: 'línguas, incluindo o luxemburguês',
-    envoi: 'dados da família enviados a um servidor',
+    envoi: 'dados da família que saem sem os ter pedido',
     envoiValeur: '0',
     envoiNote:
-      `Duas coisas saem mesmo assim: a aplicação conta as suas páginas vistas, e ativar as ` +
+      `Três coisas saem mesmo assim: a aplicação conta as suas páginas vistas, ativar as ` +
       `notificações guarda um identificador anónimo do aparelho num servidor enquanto durar ` +
-      `a subscrição. Nem a sua morada, nem os nomes, nem os ciclos.`,
+      `a subscrição, e escrever os trajetos no Google Agenda envia à Google o nome próprio ` +
+      `da criança e o nome da sua paragem. Nem a sua morada, nem os ciclos.`,
   },
 
   ecrans: {
@@ -96,7 +100,7 @@ export const pt: Contenu = {
         texte: `${CHIFFRES.lignes} linhas, ${CHIFFRES.arrets} paragens, tabela a tabela.`,
       },
       {
-        titre: 'Sete perguntas, uma só vez',
+        titre: 'Seis perguntas, uma só vez',
         texte: 'A morada decide a paragem, o ciclo decide a escola.',
       },
     ],
@@ -199,10 +203,11 @@ export const pt: Contenu = {
         texte: `Fora dela, é preciso indicar a paragem, sem tempo a pé.`,
       },
       {
-        titre: 'Duas coisas saem mesmo assim',
+        titre: 'Três coisas saem mesmo assim',
         texte:
-          `As páginas vistas, e um identificador anónimo do aparelho se ativar as ` +
-          `notificações.`,
+          `As páginas vistas, um identificador anónimo do aparelho se ativar as ` +
+          `notificações, e o nome próprio da criança se escrever os trajetos no ` +
+          `Google Agenda.`,
       },
     ],
     lien: 'Ler a página «Limites»',

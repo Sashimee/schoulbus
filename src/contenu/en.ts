@@ -41,6 +41,9 @@ export const en: Contenu = {
       `The Beckerich municipal school bus plan, worked out for each child: their stop, ` +
       `their time, their school. Offline, no account. ` +
       `An independent site, with no link to the municipality or the school.`,
+    sansScript:
+      `This page reads without JavaScript. Only the animations and the language ` +
+      `switch need it.`,
   },
 
   general: {
@@ -79,12 +82,13 @@ export const en: Contenu = {
     arrets: 'stops served',
     villages: 'villages in the municipality',
     langues: 'languages, Luxembourgish among them',
-    envoi: 'items of family data sent to a server',
+    envoi: 'items of family data that leave unasked',
     envoiValeur: '0',
     envoiNote:
-      `Two things do leave all the same: the app counts its page views, and turning on ` +
+      `Three things do leave all the same: the app counts its page views, turning on ` +
       `notifications stores an anonymous device identifier on a server for as long as the ` +
-      `subscription lasts. Not your address, not the names, not the cycles.`,
+      `subscription lasts, and writing the journeys into Google Calendar sends the child’s ` +
+      `first name and the name of their stop to Google. Not your address, not the cycles.`,
   },
 
   ecrans: {
@@ -98,7 +102,7 @@ export const en: Contenu = {
         texte: `${CHIFFRES.lignes} lines, ${CHIFFRES.arrets} stops, table by table.`,
       },
       {
-        titre: 'Seven questions, once',
+        titre: 'Six questions, once',
         texte: 'The address settles the stop, the cycle settles the school.',
       },
     ],
@@ -201,8 +205,10 @@ export const en: Contenu = {
         texte: `Elsewhere you must name the stop yourself, with no walking time.`,
       },
       {
-        titre: 'Two things do leave all the same',
-        texte: `Page views, and an anonymous device identifier if you turn on notifications.`,
+        titre: 'Three things do leave all the same',
+        texte:
+          `Page views, an anonymous device identifier if you turn on notifications, and the ` +
+          `child’s first name if you write the journeys into Google Calendar.`,
       },
     ],
     lien: 'Read the “Limits” page',

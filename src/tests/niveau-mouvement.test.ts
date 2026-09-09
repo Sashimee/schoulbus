@@ -4,7 +4,8 @@
  * ou un nuage WebGL et un curseur qui traîne. Une régression y est invisible à la
  * relecture et grave à l'usage — d'où ces tests.
  */
-import { renderHook, waitFor } from '@testing-library/react'
+import { render, renderHook, waitFor } from '@testing-library/react'
+import { createElement } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 /*
@@ -146,5 +147,55 @@ describe('useNiveauMouvement', () => {
     expect(HTMLCanvasElement.prototype.getContext).toHaveBeenCalledTimes(1)
     // Trois requêtes de média pour la page, pas trois par appel.
     expect(window.matchMedia).toHaveBeenCalledTimes(3)
+  })
+})
+
+/*
+ * Le rideau d'ouverture, qui est la seule décoration capable de CACHER la page.
+ *
+ * Il s'abstenait au seul niveau `aucun`, donc il se montrait sur tout téléphone : relevé
+ * sur la page construite, à 393 px et pointeur grossier, il couvrait du contenu déjà
+ * peint de 95 à 1 576 ms. Le pré-rendu servait une page lisible et le navigateur la
+ * cachait aussitôt derrière un logo, précisément là où l'appareil est le plus lent.
+ */
+describe('Le rideau', () => {
+  async function monter() {
+    // Le rideau ne se montre qu'une fois par session : sans ce nettoyage, le premier test
+    // qui en monte un rendrait muets tous les suivants.
+    sessionStorage.clear()
+    const { Rideau } = await import('../sections/Rideau.tsx')
+    const { FournisseurI18n } = await import('../i18n/Fournisseur.tsx')
+    return render(
+      createElement(FournisseurI18n, { langueInitiale: 'fr' }, createElement(Rideau)),
+    )
+  }
+
+  it('ne couvre pas un appareil tactile', async () => {
+    poserMedia(['min-width'])
+    poserWebgl(true)
+    poserCoeurs(8)
+
+    const { container } = await monter()
+    await waitFor(() => expect(window.matchMedia).toHaveBeenCalled())
+    expect(container.querySelector('.rideau')).toBeNull()
+  })
+
+  it('ne couvre pas non plus qui demande de réduire les animations', async () => {
+    poserMedia(['prefers-reduced-motion: reduce', 'pointer: fine', 'min-width'])
+    poserWebgl(true)
+    poserCoeurs(16)
+
+    const { container } = await monter()
+    await waitFor(() => expect(window.matchMedia).toHaveBeenCalled())
+    expect(container.querySelector('.rideau')).toBeNull()
+  })
+
+  it('se montre sur un poste capable', async () => {
+    poserMedia(['pointer: fine', 'min-width'])
+    poserWebgl(true)
+    poserCoeurs(8)
+
+    const { container } = await monter()
+    await waitFor(() => expect(container.querySelector('.rideau')).not.toBeNull())
   })
 })

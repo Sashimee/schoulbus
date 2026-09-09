@@ -69,9 +69,11 @@ poussée seule, sans PR, n'est vue par personne ni par rien.
    personnalisé, il ne sait pas où est le bus. Toute affirmation ajoutée ici doit être
    vérifiable dans `../bus-scolaire-beckerich`. Voir l'en-tête de `src/contenu/type.ts`.
    Cas concret : la bande de chiffres affiche « 0 » en grand, et la note qui le CADRE
-   (`chiffres.envoiNote`) est ce qui le rend vrai — deux choses sortent bel et bien de
-   l'appareil. La supprimer pour alléger la page ferait de ce zéro la seule affirmation
-   du site que l'application ne tient pas.
+   (`chiffres.envoiNote`) est ce qui le rend vrai — TROIS choses sortent bel et bien de
+   l'appareil, dont le prénom de l'enfant quand un parent écrit les trajets dans Google
+   Agenda. La supprimer pour alléger la page ferait de ce zéro la seule affirmation du
+   site que l'application ne tient pas — ce qu'elle a été jusqu'au 8 septembre 2026, la
+   note disant alors « ni les prénoms ».
 2. **La section « Limites » vient AVANT l'appel final.** C'est l'ordre choisi par
    l'application elle-même (`src/App.tsx`), et il ne s'inverse pas pour gagner un clic.
 3. **Le registre est celui de l'application, pas celui d'une page de vente.** Énoncer une
@@ -91,6 +93,10 @@ poussée seule, sans PR, n'est vue par personne ni par rien.
 - **`src/styles/jetons.css` n'est pas écrit ici.** C'est une copie conforme de la couche
   `tokens` de `../bus-scolaire-beckerich/src/index.css`. Le modifier à la main fait échouer
   `npm run jetons:verifier`. Pour le mettre à jour : `npm run jetons:reprendre`.
+  Chemin surchargeable par `DEPOT_APP`, comme pour les chiffres et les captures — et il
+  faut s'en servir plutôt que de croire une dérive sur parole : le dépôt frère peut être
+  sorti sur une branche de travail, et ce sont alors des jetons non publiés que la
+  vérification compare. `DEPOT_APP=/tmp/app-main npm run jetons:verifier` tranche.
 - **MAIS LES COULEURS NE VIENNENT PLUS DE LÀ.** La vitrine a sa propre palette — crème,
   sarcelle, corail — déclarée dans la couche `vitrine` de `src/styles/vitrine.css`, qui
   redéfinit les rôles (`--encre`, `--surface`, `--accent`…) APRÈS la couche `tokens`. Tout
@@ -106,13 +112,15 @@ poussée seule, sans PR, n'est vue par personne ni par rien.
 
 ```bash
 npm run dev                 # serveur de développement
-npm run build               # client + SSR + pré-rendu des cinq langues dans dist/
+npm run build               # client + SSR + pré-rendu des cinq langues dans dist/, et le budget de poids
 npm run preview             # sert dist/ tel qu'il sera publié
 npm run verifier            # typecheck + lint + tests + contrastes + dérive des jetons
 ```
 
 `npm run verifier` est la porte : c'est ce que lance le `Dockerfile` avant de construire,
-et ce que rejoue l'intégration continue.
+et ce que rejoue l'intégration continue. La SECONDE porte est `npm run build`, qui finit
+par `npm run poids` : un budget se mesure sur ce qui est construit, pas sur les sources.
+Même partage que le budget des captures, tenu par `npm run captures`.
 
 ```bash
 npm test                                   # tous les tests
@@ -121,6 +129,7 @@ npx vitest run -t "les icônes des tuiles"  # un seul test, par son nom
 npm run test:watch                         # en continu
 
 npm run contraste           # chaque couple encre/fond sur la composition réelle
+npm run poids               # ce que le premier écran pèse, contre son budget (demande dist/)
 npm run jetons:verifier     # les jetons ont-ils divergé de l'application ?
 npm run chiffres            # régénérer src/contenu/chiffres.ts depuis les données de l'app
 npm run assets:partage      # vignettes de partage + icônes matricielles
@@ -231,8 +240,9 @@ puis commiter). `APP_PUBLIEE` — aujourd'hui `true` — commande d'un seul gest
 le QR, les entrées de pied de page et le `SoftwareApplication` du balisage structuré, et
 la mention « bientôt disponible » qui les remplace quand il est fermé. Les deux états sont
 testés (`src/tests/rendu.test.ts`) : il n'existe pas d'état intermédiaire où la moitié
-des liens serait revenue. Un test couvre aussi le `<noscript>` d'`index.html`, que
-l'interrupteur ne peut pas atteindre puisque c'est du HTML statique.
+des liens serait revenue. Le `<noscript>` en fait partie depuis qu'il est engendré par
+langue (`blocNoscript` dans `src/entree-serveur.ts`, posé par le pré-rendu) : `index.html`
+n'en porte plus qu'un repère vide, et un test vérifie les cinq langues.
 
 ### Les ressources engendrées sont commitées
 
@@ -287,14 +297,28 @@ README.
 
 ## Un piège connu : régénérer les captures
 
-`scripts/captures.mjs` photographie l'application **à la révision inscrite dans
-`scripts/captures.source.json`**, et non à son `HEAD` — c'est ce que fait l'intégration
-continue. Sur un `HEAD` plus récent, le script échoue sur un clic introuvable
-(« J'ai compris ») parce que l'écran d'avertissement a bougé. Sortir l'application à cette
-révision d'abord :
+`scripts/captures.mjs` photographie l'application **telle qu'elle est dans `DEPOT_APP`**, et
+inscrit la révision trouvée dans `scripts/captures.source.json` ; l'intégration continue
+extrait ensuite l'application à cette révision et compare. Reproduire les captures
+existantes demande donc de sortir l'application à la révision inscrite ; en produire de
+nouvelles demande de la sortir là où l'on veut aller.
+
+**Ne pas déplacer le dépôt frère sous quelqu'un d'autre.** Il peut être sur une branche de
+travail, avec des changements non commités. Un clone jetable coûte une minute et ne touche
+à rien :
 
 ```bash
-git -C ../bus-scolaire-beckerich checkout 509b621   # la révision de captures.source.json
-npm run captures:conteneur
-git -C ../bus-scolaire-beckerich checkout main
+git clone --no-hardlinks --branch main ../bus-scolaire-beckerich /tmp/app-main
+cp -a ../bus-scolaire-beckerich/node_modules /tmp/app-main/node_modules
+docker run --rm -u $(id -u):$(id -g) -v "$PWD":/vitrine -v /tmp/app-main:/app \
+  -w /vitrine -e DEPOT_APP=/app -e HOME=/tmp \
+  mcr.microsoft.com/playwright:v1.62.1-noble npm run captures
 ```
+
+Le piège proprement dit : **le script franchit trois portes avant de photographier** — le
+choix de la langue, l'avertissement d'indépendance, la reprise de la configuration reçue
+par lien. Quand l'application en ajoute une, le script attend trente secondes un bouton qui
+n'est pas encore à l'écran et échoue sur un clic introuvable, sans dire lequel des trois
+écrans manque. C'est arrivé avec `ChoixLangueInitial`. Le remède est toujours le même :
+regarder ce que l'application affiche vraiment (un `page.screenshot()` suffit) et
+corriger le script, jamais le contourner.

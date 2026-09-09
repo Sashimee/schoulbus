@@ -27,6 +27,7 @@ import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import satori from 'satori'
 import { Resvg } from '@resvg/resvg-js'
+import { SIGNES_MAX_TITRE } from '../src/contenu/type.ts'
 
 const ici = dirname(fileURLToPath(import.meta.url))
 const racine = resolve(ici, '..')
@@ -101,6 +102,32 @@ const e = (type, props, ...enfants) => ({
   type,
   props: { ...props, children: enfants.length === 0 ? undefined : enfants.length === 1 ? enfants[0] : enfants },
 })
+
+/*
+ * Le titre est dessiné à 76 px dans 1024 px utiles — 1200 moins deux marges de 88. Au-delà
+ * de `SIGNES_MAX_TITRE` signes, la ligne sort de l'image, et rien ne le dirait : `satori`
+ * dessine ce qu'on lui donne, `resvg` en fait un PNG, et le fichier commité serait
+ * simplement coupé. C'est la vignette que voit un groupe de parents avant d'ouvrir le
+ * lien ; il vaut mieux ne pas la produire du tout.
+ *
+ * Un test dit la même chose sur le contenu (`src/tests/contenu.test.ts`). Les deux, parce
+ * que ce ne sont pas les mêmes moments : le test attrape la retouche, ce garde-fou-ci
+ * attrape la régénération lancée sans avoir relancé les tests.
+ */
+function refuserUnTitreTropLong(langue, contenu) {
+  const trop = contenu.heros.titre
+    .map((ligne, i) => ({ i, ligne }))
+    .filter(({ ligne }) => ligne.length > SIGNES_MAX_TITRE)
+  if (trop.length === 0) return
+
+  const lignes = trop
+    .map(({ i, ligne }) => `  ligne ${i + 1} : ${ligne.length}/${SIGNES_MAX_TITRE} — « ${ligne} »`)
+    .join('\n')
+  throw new Error(
+    `Le titre du héros en « ${langue} » sortirait de la vignette :\n${lignes}\n` +
+      `Raccourcir, ou couper le titre en une ligne de plus — le dessin en accepte trois.`,
+  )
+}
 
 function vignette(contenu) {
   return e(
@@ -199,6 +226,7 @@ const { imagePartage } = await import('../src/config.ts')
  */
 for (const langue of ['fr', 'de', 'lb', 'pt', 'en']) {
   const module = await import(`../src/contenu/${langue}.ts`)
+  refuserUnTitreTropLong(langue, module[langue])
   const nom = imagePartage(langue)
   const png = await enPng(vignette(module[langue]), 1200, 630)
   writeFileSync(resolve(PUBLIC, nom), png)

@@ -43,26 +43,20 @@
   <body>
     <div id="racine"><!--contenu-vitrine--></div>
     <!--
-      Ce bloc ne nomme pas l'application : elle est encore en développement, et rien sur
-      cette page ne doit y conduire (voir `APP_PUBLIEE` dans `src/config.ts`). C'est le seul
-      endroit que l'interrupteur ne couvre pas — du HTML statique, écrit avant que le moindre
-      script ne tourne.
+      Ce bloc était écrit ici, en français, et le pré-rendu le recopiait tel quel : `/de/`,
+      `/lb/`, `/pt/` et `/en/` servaient un paragraphe français sous leur propre `lang`,
+      c'est-à-dire que le seul lecteur pour qui ce bloc existe était le seul à ne pas être
+      servi dans sa langue. Il est désormais engendré par langue (`blocNoscript` dans
+      `src/entree-serveur.ts`) et posé ici par `scripts/prerendu.mjs`.
 
-      Il n'est plus nécessaire d'y penser : `rendu.test.ts` vérifie que ce bloc nomme
-      l'application si et seulement si `APP_PUBLIEE` le dit. Le jour de la publication, c'est
-      le test qui réclamera la correction, et non la mémoire de qui bascule la constante.
-      Ce commentaire-ci, en revanche, n'est tenu par rien : il avait déjà menti une fois, en
-      affirmant que le bloc ne nommait pas l'application alors qu'il la nommait.
+      Conséquence heureuse : ce n'est plus « le seul endroit que l'interrupteur ne couvre
+      pas ». `APP_PUBLIEE` décide maintenant du lien vers l'application ici comme partout
+      ailleurs, et un test le vérifie dans les cinq langues.
+
+      Vide en développement, donc — où le gabarit est servi tel quel et où JavaScript
+      tourne par définition.
     -->
-    <noscript>
-      <p>
-        Cette page se lit sans JavaScript, mais les animations et le changement de langue en
-        demandent. L'application est sur
-        <a href="https://app.schoulbus.lu">app.schoulbus.lu</a>, et le plan officiel de la
-        commune sur
-        <a href="https://kanner.beckerich.lu/infos/horaires-de-bus">kanner.beckerich.lu</a>.
-      </p>
-    </noscript>
+    <noscript><!--noscript--></noscript>
     <script type="module" src="/src/entree.tsx"></script>
   </body>
 </html>
