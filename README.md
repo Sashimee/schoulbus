@@ -389,12 +389,18 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   déplacer le dépôt frère — **et il ne faut pas le faire**, il peut être sur une branche de
   travail. Un clone jetable et `DEPOT_APP` suffisent (recette dans `CLAUDE.md`).
 
-- **Le conteneur n'a pas encore tourné ailleurs qu'ici.** L'image se construit, se lance,
-  et ses en-têtes ont été relevés à la main (voir plus bas) — mais sur cette machine, en
-  HTTP, sans Traefik devant. Le point à surveiller au premier déploiement est
-  `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
-
 ### Réserves levées
+
+- *« Le conteneur n'a pas encore tourné ailleurs qu'ici. »* — Levée le 9 septembre, sur la
+  production. Le point qu'elle demandait de surveiller est vérifié : **`Strict-Transport-Security`
+  n'est posé qu'une fois** — Traefik ne le repose pas, `Cache-Control` non plus. Les six
+  en-têtes de sécurité arrivent intacts, `/index.html.gz` et `/index.html.br` répondent 404,
+  le QR et les vignettes portent leur semaine de cache, `/de` renvoie 301, l'apex redirige
+  vers `www`, et `/sitemap.xml` porte le `lastmod` que la production n'avait jamais eu.
+
+  Relevé dans un navigateur sur le site publié, tant qu'à faire : le changement de langue
+  emmène `lang`, le `<title>` et la canonique, le bouton Précédent ramène la page, et la
+  console ne dit rien.
 
 - *Note du 9 septembre, qui n'était pas une réserve mais qui a coûté du temps :*
   `npm run jetons:verifier` a été rouge toute une session sans qu'aucun jeton n'ait bougé
