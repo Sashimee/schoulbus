@@ -93,6 +93,10 @@ poussée seule, sans PR, n'est vue par personne ni par rien.
 - **`src/styles/jetons.css` n'est pas écrit ici.** C'est une copie conforme de la couche
   `tokens` de `../bus-scolaire-beckerich/src/index.css`. Le modifier à la main fait échouer
   `npm run jetons:verifier`. Pour le mettre à jour : `npm run jetons:reprendre`.
+  Chemin surchargeable par `DEPOT_APP`, comme pour les chiffres et les captures — et il
+  faut s'en servir plutôt que de croire une dérive sur parole : le dépôt frère peut être
+  sorti sur une branche de travail, et ce sont alors des jetons non publiés que la
+  vérification compare. `DEPOT_APP=/tmp/app-main npm run jetons:verifier` tranche.
 - **MAIS LES COULEURS NE VIENNENT PLUS DE LÀ.** La vitrine a sa propre palette — crème,
   sarcelle, corail — déclarée dans la couche `vitrine` de `src/styles/vitrine.css`, qui
   redéfinit les rôles (`--encre`, `--surface`, `--accent`…) APRÈS la couche `tokens`. Tout

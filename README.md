@@ -396,6 +396,16 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
 
 ### Réserves levées
 
+- *Note du 9 septembre, qui n'était pas une réserve mais qui a coûté du temps :*
+  `npm run jetons:verifier` a été rouge toute une session sans qu'aucun jeton n'ait bougé
+  ici. Le dépôt frère était sorti sur une branche de travail, et la vérification comparait
+  donc la vitrine à des jetons non publiés. `sync-jetons.mjs` honore désormais `DEPOT_APP`,
+  comme `build-chiffres.mjs` et `captures.mjs` le faisaient déjà — il était le seul des
+  trois à ne pas le permettre, et c'est précisément celui dont on avait besoin pour montrer
+  que la dérive n'existait pas. Vérifié contre le `main` de l'application : identiques.
+  **La leçon générale, et elle vaut pour les chiffres autant que pour les jetons : ce qui
+  est à côté sur le disque n'est pas ce qui est en ligne.**
+
 - *« La vitrine décrit une application plus ancienne que celle qui est en ligne. »* — Levée
   le 9 septembre. Les quarante captures sont reprises à `185ebe1`, le `main` de
   l'application, et « Sept questions » est devenu « **Six** questions » dans les cinq
