@@ -100,7 +100,7 @@ export const pt: Contenu = {
         texte: `${CHIFFRES.lignes} linhas, ${CHIFFRES.arrets} paragens, tabela a tabela.`,
       },
       {
-        titre: 'Sete perguntas, uma só vez',
+        titre: 'Seis perguntas, uma só vez',
         texte: 'A morada decide a paragem, o ciclo decide a escola.',
       },
     ],

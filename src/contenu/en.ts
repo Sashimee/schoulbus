@@ -102,7 +102,7 @@ export const en: Contenu = {
         texte: `${CHIFFRES.lignes} lines, ${CHIFFRES.arrets} stops, table by table.`,
       },
       {
-        titre: 'Seven questions, once',
+        titre: 'Six questions, once',
         texte: 'The address settles the stop, the cycle settles the school.',
       },
     ],

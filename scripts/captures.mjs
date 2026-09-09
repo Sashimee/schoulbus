@@ -175,11 +175,23 @@ const CODE_PARTAGE = Buffer.from(JSON.stringify(compact), 'utf8')
  * ------------------------------------------------------------------ */
 
 /*
- * Deux portes à franchir avant de voir quoi que ce soit : l'avertissement d'indépendance,
- * que l'application impose au premier lancement, et l'offre de reprendre la configuration
- * reçue par lien. On clique les vrais boutons, dans la vraie langue — d'où la lecture des
+ * TROIS portes à franchir avant de voir quoi que ce soit, et non deux : le choix de la
+ * langue, l'avertissement d'indépendance, puis l'offre de reprendre la configuration reçue
+ * par lien. On clique les vrais boutons, dans la vraie langue — d'où la lecture des
  * dictionnaires de l'application plutôt qu'une liste de chaînes recopiées ici, qui aurait
  * vieilli à la première reformulation.
+ *
+ * LA PREMIÈRE EST NOUVELLE, et c'est elle qui a fait échouer ce script sur un `HEAD` plus
+ * récent : le clic sur « J'ai compris » attendait trente secondes un bouton qui n'était pas
+ * encore à l'écran. `ChoixLangueInitial` a été placé AVANT l'avertissement dans
+ * l'application, pour la raison que sa propre en-tête donne — « un parent lusophone à qui
+ * on le sert en français ne l'a pas lu, il l'a cliqué ». La vitrine n'a rien à redire à
+ * cela : elle a un écran de plus à franchir.
+ *
+ * Ce bouton-là se désigne par son attribut `lang` et non par son libellé. Les noms de
+ * langues sont écrits chacun dans leur propre langue et ne vivent pas dans les
+ * dictionnaires JSON mais dans un module TypeScript ; `lang` est le seul point d'accroche
+ * qui ne dépende ni d'une graphie ni d'un ordre d'affichage.
  */
 function libelles(langue) {
   const chemin = resolve(DEPOT_APP, `src/i18n/${langue}.json`)
@@ -435,6 +447,7 @@ async function prendre(navigateur, langue, theme, base, revision) {
   const { accepterAvertissement, accepterPartage } = libelles(langue)
 
   await page.goto(`${base}/#partage=${CODE_PARTAGE}`, { waitUntil: 'domcontentloaded' })
+  await page.locator(`button[lang="${langue}"]`).click()
   await page.getByRole('button', { name: accepterAvertissement }).click()
   await page.getByRole('button', { name: accepterPartage }).click()
 

@@ -293,14 +293,28 @@ README.
 
 ## Un piège connu : régénérer les captures
 
-`scripts/captures.mjs` photographie l'application **à la révision inscrite dans
-`scripts/captures.source.json`**, et non à son `HEAD` — c'est ce que fait l'intégration
-continue. Sur un `HEAD` plus récent, le script échoue sur un clic introuvable
-(« J'ai compris ») parce que l'écran d'avertissement a bougé. Sortir l'application à cette
-révision d'abord :
+`scripts/captures.mjs` photographie l'application **telle qu'elle est dans `DEPOT_APP`**, et
+inscrit la révision trouvée dans `scripts/captures.source.json` ; l'intégration continue
+extrait ensuite l'application à cette révision et compare. Reproduire les captures
+existantes demande donc de sortir l'application à la révision inscrite ; en produire de
+nouvelles demande de la sortir là où l'on veut aller.
+
+**Ne pas déplacer le dépôt frère sous quelqu'un d'autre.** Il peut être sur une branche de
+travail, avec des changements non commités. Un clone jetable coûte une minute et ne touche
+à rien :
 
 ```bash
-git -C ../bus-scolaire-beckerich checkout 509b621   # la révision de captures.source.json
-npm run captures:conteneur
-git -C ../bus-scolaire-beckerich checkout main
+git clone --no-hardlinks --branch main ../bus-scolaire-beckerich /tmp/app-main
+cp -a ../bus-scolaire-beckerich/node_modules /tmp/app-main/node_modules
+docker run --rm -u $(id -u):$(id -g) -v "$PWD":/vitrine -v /tmp/app-main:/app \
+  -w /vitrine -e DEPOT_APP=/app -e HOME=/tmp \
+  mcr.microsoft.com/playwright:v1.62.1-noble npm run captures
 ```
+
+Le piège proprement dit : **le script franchit trois portes avant de photographier** — le
+choix de la langue, l'avertissement d'indépendance, la reprise de la configuration reçue
+par lien. Quand l'application en ajoute une, le script attend trente secondes un bouton qui
+n'est pas encore à l'écran et échoue sur un clic introuvable, sans dire lequel des trois
+écrans manque. C'est arrivé avec `ChoixLangueInitial`. Le remède est toujours le même :
+regarder ce que l'application affiche vraiment (un `page.screenshot()` suffit) et
+corriger le script, jamais le contourner.

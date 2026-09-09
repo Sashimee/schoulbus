@@ -113,7 +113,7 @@ export const fr: Contenu = {
         titre: 'Le plan officiel, recopié',
         texte: `${CHIFFRES.lignes} lignes, ${CHIFFRES.arrets} arrêts, tableau par tableau.`,
       },
-      { titre: 'Sept questions, une fois', texte: 'L’adresse décide de l’arrêt, le cycle de l’école.' },
+      { titre: 'Six questions, une fois', texte: 'L’adresse décide de l’arrêt, le cycle de l’école.' },
     ],
   },
 
