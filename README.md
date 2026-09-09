@@ -356,17 +356,6 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   plus que 296 px. Ce qui reste non vu est ce que la réserve dit depuis le début : les
   polices du système, la barre d'adresse, les marges d'un écran à encoche.
 
-- **La vitrine décrit une application plus ancienne que celle qui est en ligne.** Les
-  quarante captures sont prises à la révision inscrite dans `scripts/captures.source.json`
-  (`509b621`, le 10 août 2026), qui a depuis quarante-neuf révisions de retard. Une phrase
-  y a déjà survécu à sa vérité : « Sept questions, une fois » — l'assistant en compte six
-  depuis que `bus`, `périscolaire` et `adresses` ont fusionné en `matin`, `midi`, `soir`.
-  La capture affiche bien « Étape 1 sur 7 », si bien que la page est cohérente **avec
-  elle-même** et fausse contre l'application vivante : c'est l'écart qu'aucun test ne peut
-  voir, puisque les deux sources concordent. La phrase et les captures doivent donc bouger
-  dans le même lot — `captures.source.json`, puis `npm run captures:conteneur`, ce qui
-  demande Docker et le dépôt de l'application à côté.
-
 - **Cent trois kilo-octets de JavaScript. Le budget existe, la réserve reste.** Premier
   écran, cache vide : **103,6 ko de JS comprimé** pour une page entièrement pré-rendue dont
   l'interactivité se réduit à une liste déroulante, deux boutons de thème et des
@@ -394,11 +383,11 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `npm run captures:conteneur`, et la règle qu'on ne commite que sa sortie. Avec quarante
   fichiers, l'écart attendu passe mécaniquement à dix. Ce qui reste inconnu : le
   comportement le jour où l'étiquette du conteneur changera.
-  *Note pratique apprise en refaisant les captures :* le script photographie l'application
-  **à la révision inscrite dans `scripts/captures.source.json`** (aujourd'hui `509b621`),
-  pas à son `HEAD`. Sur un `HEAD` plus récent, l'avertissement d'indépendance ne s'ouvrait
-  plus au même endroit et le script échouait sur un clic introuvable. Sortir l'application
-  à cette révision avant de lancer les captures, comme le fait l'intégration continue.
+  *Note pratique, reprise le 9 septembre :* le script photographie l'application telle
+  qu'elle est dans `DEPOT_APP` et INSCRIT la révision trouvée ; c'est l'intégration continue
+  qui, ensuite, extrait cette révision pour comparer. Régénérer ne demande donc pas de
+  déplacer le dépôt frère — **et il ne faut pas le faire**, il peut être sur une branche de
+  travail. Un clone jetable et `DEPOT_APP` suffisent (recette dans `CLAUDE.md`).
 
 - **Le conteneur n'a pas encore tourné ailleurs qu'ici.** L'image se construit, se lance,
   et ses en-têtes ont été relevés à la main (voir plus bas) — mais sur cette machine, en
@@ -406,6 +395,45 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `Strict-Transport-Security` : il part de nginx, et Dokploy ne doit pas le reposer.
 
 ### Réserves levées
+
+- *« La vitrine décrit une application plus ancienne que celle qui est en ligne. »* — Levée
+  le 9 septembre. Les quarante captures sont reprises à `185ebe1`, le `main` de
+  l'application, et « Sept questions » est devenu « **Six** questions » dans les cinq
+  langues : l'assistant compte six étapes (`enfant`, `adresse`, `matin`, `midi`, `soir`,
+  `recapitulatif`), et la capture affiche maintenant « Étape 1 sur 6 » à côté de la phrase.
+  Les deux ont bougé dans le même lot, comme la réserve le demandait.
+
+  **Le script a dû apprendre un écran de plus.** Il échouait sur un clic introuvable, et le
+  diagnostic écrit dans l'ancienne réserve — « l'écran d'avertissement a bougé » — était
+  faux : le libellé « J'ai compris » n'avait pas changé d'un caractère. Ce qui avait changé,
+  c'est qu'un écran le PRÉCÈDE désormais, `ChoixLangueInitial`, ajouté par l'application
+  pour une raison qu'on ne peut qu'approuver — « un parent lusophone à qui on sert
+  l'avertissement en français ne l'a pas lu, il l'a cliqué ». `captures.mjs` franchit donc
+  trois portes au lieu de deux, et clique la langue par son attribut `lang` : les noms de
+  langues sont écrits chacun dans le leur et ne vivent pas dans les dictionnaires JSON.
+
+  **Ce qui a été revérifié contre `main` à cette occasion**, puisque quarante-neuf révisions
+  avaient passé :
+
+  - les nombres du héros et de l'appel final — 07:25, 07:45, 16 min, Kneppchen, Léa · Noah —
+    sont ceux de la nouvelle capture, inchangés ;
+  - `npm run chiffres` relancé sur `main` ne change **rien** : 7 lignes, 17 arrêts,
+    1 162 adresses, plan valide au 18 décembre 2026 ;
+  - la limite « à 4,5 km/h » tient (`VITESSE_MARCHE_KMH = 4.5`) ;
+  - les quarante fichiers pèsent 1 700 ko, soit 340 ko par langue, sous le budget de 480.
+
+  Deux observations faites en passant, qui ne sont pas des défauts mais qu'il vaut mieux
+  écrire :
+
+  - **« majorés d'un tiers » est un arrondi.** Le facteur de détour de l'application est
+    `FACTEUR_DETOUR = 1.35`, soit 35 % et non 33 %. Sur une phrase qui annonce une
+    estimation, l'écart est sans conséquence — mais c'est une approximation, pas une
+    citation.
+  - **L'application a désormais des comptes** (`Espace agents`, `/connexion`, `/comptes`).
+    Ils sont « réservés aux personnes autorisées par la commune » : la promesse « hors
+    ligne, sans compte » que la vitrine fait AUX PARENTS reste vraie. Elle cesserait de
+    l'être le jour où un parent aurait un compte, et c'est une phrase qui figure dans les
+    cinq `meta.description`.
 
 - *« Ce que l'application envoie à Google Agenda n'est pas nommé ici. »* — Vérifié le
   8 septembre, et **c'était pire que la réserve ne le disait**. Elle parlait d'un manque ;

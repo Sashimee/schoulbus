@@ -97,7 +97,7 @@ export const de: Contenu = {
         texte: `${CHIFFRES.lignes} Linien, ${CHIFFRES.arrets} Haltestellen, Tabelle für Tabelle.`,
       },
       {
-        titre: 'Sieben Fragen, ein einziges Mal',
+        titre: 'Sechs Fragen, ein einziges Mal',
         texte: 'Die Adresse bestimmt die Haltestelle, der Zyklus die Schule.',
       },
     ],

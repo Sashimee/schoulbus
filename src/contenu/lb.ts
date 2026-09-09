@@ -96,7 +96,7 @@ export const lb: Contenu = {
         texte: `${CHIFFRES.lignes} Linnen, ${CHIFFRES.arrets} Statiounen, Tabell fir Tabell.`,
       },
       {
-        titre: 'Siwe Froen, ee Mol',
+        titre: 'Sechs Froen, ee Mol',
         texte: 'D’Adress bestëmmt d’Statioun, de Cycle d’Schoul.',
       },
     ],
