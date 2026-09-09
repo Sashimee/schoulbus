@@ -532,26 +532,53 @@ async function prendre(navigateur, langue, theme, base, revision) {
 
     // Une police de repli attrapée au vol donnerait une capture aux mauvaises chasses.
     await page.evaluate(() => document.fonts.ready)
+
+    /*
+     * LE CADRAGE SE PREND SUR UN DOCUMENT QUI NE BOUGE PLUS, ET SE REPREND JUSQU'À CE
+     * QU'IL NE BOUGE PLUS.
+     *
+     * Il se prenait avant toute attente de stabilité, et c'est un défaut qui ne se voit
+     * que sur une autre machine : ici, trois exécutions de suite — dont une en `root`,
+     * comme l'intégration continue — rendaient des fichiers identiques à l'octet. Sur le
+     * runner, plus lent, trois `plan-*-sombre` sur cinq sortaient différents. La cause
+     * n'est pas l'environnement de rendu mais l'ORDRE : on calculait la position du
+     * tableau pendant que la page finissait de se poser, et le défilement retombait
+     * quelques pixels ailleurs. Le seul écran cadré est aussi le seul qui variait.
+     *
+     * D'où la boucle : on cadre, on laisse le document se taire, et on recommence tant que
+     * la position calculée change. Deux tours suffisent en pratique ; la quatrième
+     * itération est une limite, pas une attente.
+     */
     if (ecran.cadrer) {
-      await page.evaluate((selecteur) => {
-        const cible = document.querySelector(selecteur)
-        if (!cible) throw new Error(`Rien à cadrer pour « ${selecteur} »`)
+      await attendreDomStable(page)
+      let precedente = null
+      for (let essai = 0; essai < 4; essai += 1) {
+        const position = await page.evaluate((selecteur) => {
+          const cible = document.querySelector(selecteur)
+          if (!cible) throw new Error(`Rien à cadrer pour « ${selecteur} »`)
 
-        // L'application garde son en-tête collé en haut. Cadrer sans en tenir compte
-        // glisserait la première ligne du tableau dessous — celle qui porte justement les
-        // jours desservis. On mesure l'en-tête au lieu de deviner un décalage : sa hauteur
-        // n'est pas la même selon la langue ni selon la largeur.
-        const entete = document.querySelector('header')
-        const collee =
-          entete && ['sticky', 'fixed'].includes(getComputedStyle(entete).position)
-            ? entete.getBoundingClientRect().height
-            : 0
+          // L'application garde son en-tête collé en haut. Cadrer sans en tenir compte
+          // glisserait la première ligne du tableau dessous — celle qui porte justement les
+          // jours desservis. On mesure l'en-tête au lieu de deviner un décalage : sa hauteur
+          // n'est pas la même selon la langue ni selon la largeur.
+          const entete = document.querySelector('header')
+          const collee =
+            entete && ['sticky', 'fixed'].includes(getComputedStyle(entete).position)
+              ? entete.getBoundingClientRect().height
+              : 0
 
-        // `scrollTo` sur la position absolue, et non `scrollIntoView` : ce dernier a un
-        // comportement doux qui, horloge figée, ne s'achèverait jamais — le même piège
-        // que le fondu de Leaflet, quelques lignes plus haut.
-        window.scrollTo(0, cible.getBoundingClientRect().top + window.scrollY - collee - 12)
-      }, ecran.cadrer)
+          // `scrollTo` sur la position absolue, et non `scrollIntoView` : ce dernier a un
+          // comportement doux qui, horloge figée, ne s'achèverait jamais — le même piège
+          // que le fondu de Leaflet, quelques lignes plus haut.
+          const y = Math.round(cible.getBoundingClientRect().top + window.scrollY - collee - 12)
+          window.scrollTo(0, y)
+          return y
+        }, ecran.cadrer)
+
+        await attendreDomStable(page)
+        if (position === precedente) break
+        precedente = position
+      }
     }
 
     /*

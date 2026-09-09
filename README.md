@@ -406,6 +406,25 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   **La leçon générale, et elle vaut pour les chiffres autant que pour les jetons : ce qui
   est à côté sur le disque n'est pas ce qui est en ligne.**
 
+- *« Les captures dépendent de l'environnement qui les produit. »* — **Une part de cette
+  réserve n'était pas de l'environnement, c'était un défaut.** Le cadrage de l'écran `plan`
+  — le seul des quatre qui se prenne en défilant jusqu'au premier tableau — se calculait
+  AVANT toute attente de stabilité du document, et l'attente venait après. Sur cette
+  machine, trois exécutions de suite, dont une en `root` comme l'intégration continue,
+  rendaient des fichiers identiques à l'octet ; sur le runner, plus lent, trois
+  `plan-*-sombre` sur cinq sortaient différents. C'est l'intégration continue qui cadrait
+  juste, et la machine de développement qui cadrait trop tôt.
+
+  Le cadrage se prend désormais sur un document qui s'est tu, et se reprend tant que la
+  position calculée change. Les dix fichiers `plan-*` sont régénérés — ils convergent vers
+  les tailles exactes que la CI avait calculées, ce qui est la confirmation du diagnostic —
+  et deux exécutions consécutives rendent maintenant les mêmes octets.
+
+  **Ce qui reste de la réserve** est ce qu'elle disait d'abord : les `semaine-*` portent une
+  carte Leaflet, et rien ne garantit qu'ils traversent un changement d'étiquette du
+  conteneur. Mais la leçon du jour est plus utile que la réserve : *un fichier qui se
+  reproduit trois fois de suite sur une machine n'est pas pour autant déterministe.*
+
 - *« La vitrine décrit une application plus ancienne que celle qui est en ligne. »* — Levée
   le 9 septembre. Les quarante captures sont reprises à `185ebe1`, le `main` de
   l'application, et « Sept questions » est devenu « **Six** questions » dans les cinq
