@@ -512,12 +512,18 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
     l'oubli est silencieux et permanent n'est pas un réglage, c'est un défaut** — et il
     l'était depuis la première mise en ligne.
 
-  **Ce qui n'a PAS été vérifié, et c'est la réserve qui reste** : l'image elle-même. Docker
-  n'est pas installé sur cette machine. Le `find`/`gzip` de l'étape de compression a été
-  rejoué à la main sur `dist/`, la configuration nginx passe `nginx -t` et sert
-  correctement — mais `apk add git`, la copie de `.git` dans le contexte et le `lastmod`
-  qui en découle n'ont été vérifiés qu'en raisonnement. **À regarder au premier
-  déploiement**, en même temps que `Strict-Transport-Security` (réserve suivante).
+  **L'image a depuis été construite et interrogée**, Docker ayant été installé le
+  9 septembre. Tout ce qui n'était que raisonné est mesuré : `apk add git` s'installe,
+  `.git` arrive bien dans le contexte, et `/sitemap.xml` porte enfin un
+  `<lastmod>2026-09-09</lastmod>` — la balise que la production n'avait jamais eue.
+  `gzip_static` sert 6 641 octets là où l'identité en rend 27 648 ; `/index.html.gz` et
+  `/index.html.br` répondent 404 ; le QR et les vignettes portent une semaine de cache, les
+  captures la leur, `/de` renvoie 301 ; l'image ne contient plus **aucun** fichier `.br`
+  (dix-huit `.gz`) ; les six en-têtes de sécurité sont présents sur la page comme sur une
+  image, une adresse inventée tombe en 404, et la sonde de santé passe au vert.
+
+  Ce qui reste inconnu est ce que dit la réserve suivante, et elle seule : le conteneur n'a
+  jamais tourné derrière Traefik.
 
 - *« La langue ne va pas jusqu'au bout de la page. »* — Levée le 8 septembre, les trois
   points, et vérifiée dans Chromium sur la page construite.
