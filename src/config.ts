@@ -55,6 +55,18 @@ export const URL_CREDITS = `${URL_APP}/credits`
 export const URL_INSTALLER = `${URL_APP}/installer`
 
 /**
+ * L'adresse à laquelle on écrit à l'éditeur.
+ *
+ * Elle est PUBLIÉE EN CLAIR sur la page de contact, et c'est délibéré : c'est ce qui fait
+ * que la page sert sans JavaScript, sans formulaire, et le jour où le relais d'envoi tombe.
+ * Une adresse masquée par un script est une adresse qu'un lecteur d'écran annonce mal et
+ * qu'un parent ne peut pas recopier à la main.
+ *
+ * Le domaine est celui du site : elle ne peut pas être prise pour une adresse communale.
+ */
+export const ADRESSE_CONTACT = 'admin@schoulbus.lu'
+
+/**
  * Origine publique de la vitrine, posée à la construction (voir `vite.config.ts`).
  * Sert aux métadonnées de partage, qui exigent des URL absolues.
  */

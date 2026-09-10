@@ -46,6 +46,7 @@ export function PiedDePage() {
    */
   const pagesInternes = [
     { page: 'independance' as const, texte: contenu.independance.titre },
+    { page: 'contact' as const, texte: contenu.pied.lienContact },
     { page: 'mentions' as const, texte: contenu.pied.lienMentions },
   ].filter((p) => PAGES.includes(p.page))
 

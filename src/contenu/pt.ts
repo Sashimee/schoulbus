@@ -260,6 +260,7 @@ export const pt: Contenu = {
     mention: 'Feito por um pai, em Beckerich.',
     source: `Dados: plano oficial da comuna, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Menções legais',
+    lienContact: 'Escrever',
     viePrivee: 'Esta página não põe cookies, não mede nada e não chama nenhum servidor.',
   },
 
@@ -275,6 +276,22 @@ Morada: ${ADRESSE_EDITEUR}`,
     donneesCorps: `Esta página não põe cookies, não mede a audiência e não faz qualquer pedido a serviços terceiros. Não é recolhido nenhum dado pessoal, pelo que não há nada a consultar, a corrigir ou a apagar. A aplicação, essa, guarda o que aí introduzir apenas no seu aparelho; a página «Limites» dela explica-o em detalhe.`,
     responsabiliteTitre: `Responsabilidade`,
     responsabiliteCorps: `Os horários apresentados são retomados do plano oficial da comuna e transcritos com cuidado, sem garantia de exatidão. Em caso de dúvida ou de divergência, vale o documento oficial da comuna.`,
+    retour: `Voltar à página inicial`,
+  },
+
+  contact: {
+    titre: `Escrever`,
+    intro: `Um endereço, para assinalar um horário que não corresponde, uma apresentação que se desmancha, ou algo que falta. Por detrás está um pai, não um serviço.`,
+    adresseTitre: `O endereço`,
+    adresseIntro: `As mensagens chegam aqui:`,
+    adresseNote: `Esta página não envia nada por si mesma: o endereço está escrito em claro, e é o seu programa de correio que trata do resto. Uma mensagem recebida fica numa caixa de correio comum enquanto servir; não é registada nem copiada para outro lado. Uma resposta pode demorar alguns dias.`,
+    utileTitre: `O que ajuda`,
+    utileCorps: `Para um horário que não corresponde: a linha, a paragem, o dia, e a hora que esperava.
+Para uma apresentação que se desmancha: o aparelho, o navegador, e o que mostra o ecrã.
+Escreva na língua que lhe vier.`,
+    limitesTitre: `O que este endereço não pode fazer`,
+    limitesCorps: `Não leva à comuna, nem à escola, nem à maison relais. Uma ausência a comunicar, uma inscrição, um pedido de mudança de paragem: isso dirige-se diretamente a eles, e uma mensagem enviada para aqui não lá chegará.
+Vale o plano oficial da comuna. Se este site o mostrar de outra maneira, é este site que está errado — e é exatamente isso que vale a pena assinalar.`,
     retour: `Voltar à página inicial`,
   },
 }

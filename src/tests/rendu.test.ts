@@ -17,6 +17,7 @@ import { describe, expect, it } from 'vitest'
 import { blocNoscript, rendre } from '../entree-serveur.ts'
 import { CONTENUS, LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
 import {
+  ADRESSE_CONTACT,
   APP_PUBLIEE,
   ORIGINE,
   URL_APP,
@@ -241,6 +242,46 @@ describe('pré-rendu', () => {
     expect(tete).toContain(`${cheminPage(langue, 'independance')}" />`)
     // Le balisage structuré décrit le site, pas une page annexe.
     expect(tete).not.toContain('application/ld+json')
+  })
+
+  /*
+   * La page de contact, et la seule chose qu'elle DOIT porter : l'adresse, en clair.
+   *
+   * En clair veut dire hors du `href` : une adresse qui n'existe que dans un `mailto:` ne
+   * se recopie pas à la main, ne s'annonce pas correctement, et disparaît de la page pour
+   * qui n'a pas de logiciel de courrier configuré. C'est ce qui rend la page utile avant
+   * qu'un formulaire existe, et ce qui la garde utile le jour où le formulaire tombera.
+   */
+  it.each(LANGUES)('%s : la page de contact porte l’adresse en clair', (langue) => {
+    expect(PAGES).toContain('contact')
+    const { html, tete } = rendre(langue, 'contact')
+
+    expect(html).toContain(CONTENUS[langue].contact.titre)
+    // Écrite comme texte, et pas seulement dans l'attribut du lien.
+    expect(html).toContain(`>${ADRESSE_CONTACT}<`)
+    expect(html).toContain(`mailto:${ADRESSE_CONTACT}`)
+    // Sans canonique propre, elle se disputerait le résultat de recherche de l'accueil.
+    expect(tete).toContain(`${cheminPage(langue, 'contact')}" />`)
+    // Le balisage structuré décrit le site, pas une page annexe.
+    expect(tete).not.toContain('application/ld+json')
+  })
+
+  /*
+   * Ce que la page de contact dit de ses propres limites.
+   *
+   * C'est le premier principe du projet à l'endroit où il coûte le plus cher : un parent
+   * qui écrit ici pour signaler une absence s'adresse à la mauvaise personne, et il doit le
+   * lire AVANT d'écrire. Une page de contact qui perdrait ce paragraphe continuerait de
+   * s'afficher parfaitement.
+   */
+  it.each(LANGUES)('%s : la page de contact dit ce qu’elle ne peut pas faire', (langue) => {
+    const { html } = rendre(langue, 'contact')
+    expect(html).toContain(CONTENUS[langue].contact.limitesTitre)
+  })
+
+  it('le pied de page mène au contact', () => {
+    const { html } = rendre('fr')
+    expect(html).toContain(cheminPage('fr', 'contact'))
   })
 
   /*

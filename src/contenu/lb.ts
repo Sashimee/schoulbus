@@ -255,6 +255,7 @@ export const lb: Contenu = {
     mention: 'Vun engem Elterendeel, zu Biekerech.',
     source: `Donnéeën: offizielle Plang vun der Gemeng, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Impressum',
+    lienContact: 'Schreiwen',
     viePrivee: 'Dës Säit setzt keng Cookien, mëscht keng Miessung, a rifft kee Server un.',
   },
 
@@ -270,6 +271,22 @@ Adress: ${ADRESSE_EDITEUR}`,
     donneesCorps: `Dës Säit setzt keng Cookien, mëscht keng Zougrëffsmiessung a rifft kee frieme Service un. Et gi keng perséinlech Donnéeë gesammelt; et gëtt also näischt anzegesinn, ze verbesseren oder ze läschen. D’Applikatioun selwer behält dat, wat Dir do aginn, nëmmen op Ärem Apparat — hir Säit „Grenzen“ beschreift dat.`,
     responsabiliteTitre: `Haftung`,
     responsabiliteCorps: `D’ugewisen Zäite kommen aus dem offizielle Plang vun der Gemeng a sinn suergfälteg iwwerdroen, awer ouni Garantie. Am Zweiwel oder bei Ofwäichunge gëllt dat offiziellt Dokument vun der Gemeng.`,
+    retour: `Zréck op d’Startsäit`,
+  },
+
+  contact: {
+    titre: `Schreiwen`,
+    intro: `Eng Adress, fir eng Zäit ze mellen, déi net stëmmt, eng Affichage, déi verrutscht, oder eppes, wat feelt. Dohannert steet en Elterendeel, kee Service.`,
+    adresseTitre: `D’Adress`,
+    adresseIntro: `Noriichte kommen hei un:`,
+    adresseNote: `Dës Säit schéckt selwer näischt: d’Adress steet am Kloertext, an Äre Mailprogramm mécht de Rescht. Eng Noriicht, déi ukomm ass, bleift an enger gewéinlecher Boîte, sou laang wéi se déngt; si gëtt weder erfaasst nach soss anzwuersch kopéiert. Eng Äntwert ka puer Deeg daueren.`,
+    utileTitre: `Wat hëlleft`,
+    utileCorps: `Bei enger Zäit, déi net stëmmt: d’Linn, d’Statioun, den Dag, an d’Zäit, déi Dir erwaart hutt.
+Bei enger Affichage, déi verrutscht: den Apparat, de Browser, a wat den Ecran weist.
+Schreift an der Sprooch, déi Iech kënnt.`,
+    limitesTitre: `Wat dës Adress net ka maachen`,
+    limitesCorps: `Si féiert weder op d’Gemeng, nach op d’Schoul, nach op d’Maison Relais. Eng Absence ze mellen, eng Umeldung, de Wonsch no enger anerer Statioun: dat gehéiert direkt bei si, an eng Noriicht op dës Adress kënnt do net un.
+Et gëllt dat offiziellt Dokument vun der Gemeng. Weist dës Säit eppes anescht, dann ass dës Säit falsch — a genau dat ass eng Meldung wäert.`,
     retour: `Zréck op d’Startsäit`,
   },
 }

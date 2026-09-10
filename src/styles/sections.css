@@ -920,6 +920,26 @@
   .pied__liens a:hover {
     color: var(--encre);
   }
+  /*
+   * L'adresse de contact, écrite en clair.
+   *
+   * Elle est la raison d'être de sa page, donc elle se lit d'un coup d'œil : chasse fixe
+   * pour qu'aucun caractère ne s'ambiguïse à la recopie, et hauteur de cible pleine parce
+   * que c'est un lien qu'on touche au doigt. Pas de capitales — une adresse de courrier se
+   * recopie telle qu'elle est écrite.
+   */
+  .contact__adresse {
+    font-family: var(--police-chiffres);
+    font-size: var(--texte-xl);
+    word-break: break-word;
+  }
+  .contact__adresse a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--cible);
+    color: var(--accent);
+  }
+
   .pied__bas {
     display: flex;
     flex-wrap: wrap;

@@ -296,6 +296,7 @@ export const fr: Contenu = {
     mention: 'Fait par un parent, à Beckerich.',
     source: `Données : plan officiel de la commune, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Mentions légales',
+    lienContact: 'Écrire',
     viePrivee: 'Cette page ne pose aucun cookie, ne mesure rien, et n’appelle aucun serveur.',
   },
 
@@ -311,6 +312,22 @@ Adresse : ${ADRESSE_EDITEUR}`,
     donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l’audience et n’adresse aucune requête à un service tiers. Aucune donnée personnelle n’est collectée, et il n’y a donc rien à consulter, à corriger ni à effacer. L’application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
     responsabiliteTitre: `Responsabilité`,
     responsabiliteCorps: `Les horaires affichés sont repris du plan officiel de la commune et retranscrits avec soin, sans garantie d’exactitude. En cas de doute ou de divergence, c’est le document officiel de la commune qui fait foi.`,
+    retour: `Retour à la page d’accueil`,
+  },
+
+  contact: {
+    titre: `Écrire`,
+    intro: `Une adresse, pour signaler un horaire qui ne correspond pas, un affichage qui se tient mal, ou quelque chose qui manque. Derrière, il y a un parent, pas un service.`,
+    adresseTitre: `L’adresse`,
+    adresseIntro: `Les messages arrivent ici :`,
+    adresseNote: `Cette page n’envoie rien elle-même : l’adresse est écrite en clair, et c’est votre logiciel de courrier qui s’en charge. Un message reçu reste dans une boîte ordinaire le temps qu’il serve ; il n’est ni classé, ni recopié ailleurs. Une réponse peut tarder de quelques jours.`,
+    utileTitre: `Ce qui aide`,
+    utileCorps: `Pour un horaire qui ne correspond pas : la ligne, l’arrêt, le jour, et l’heure que vous attendiez.
+Pour un affichage qui se tient mal : l’appareil, le navigateur, et ce que montre l’écran.
+Écrivez dans la langue qui vous vient.`,
+    limitesTitre: `Ce que cette adresse ne peut pas faire`,
+    limitesCorps: `Elle ne mène ni à la commune, ni à l’école, ni à la maison relais. Une absence à signaler, une inscription, une demande de changement d’arrêt : cela s’adresse à eux directement, et un message envoyé ici n’y arrivera pas.
+Le plan officiel de la commune fait foi. Si ce site l’affiche autrement, c’est ce site qui a tort — et c’est exactement ce qui vaut la peine d’être signalé.`,
     retour: `Retour à la page d’accueil`,
   },
 }

@@ -19,6 +19,7 @@ import { createElement } from 'react'
 import { renderToString } from 'react-dom/server'
 import { App } from './App.tsx'
 import { FournisseurI18n } from './i18n/Fournisseur.tsx'
+import { Contact } from './pages/Contact.tsx'
 import { Independance } from './pages/Independance.tsx'
 import { Mentions } from './pages/Mentions.tsx'
 import { CONTENUS, LANGUES, PAGES, cheminPage, type Page } from './i18n/contexte.ts'
@@ -148,7 +149,15 @@ export function rendre(
     createElement(
       FournisseurI18n,
       { langueInitiale: langue, pageInitiale: page },
-      createElement(page === 'mentions' ? Mentions : page === 'independance' ? Independance : App),
+      createElement(
+        page === 'mentions'
+          ? Mentions
+          : page === 'independance'
+            ? Independance
+            : page === 'contact'
+              ? Contact
+              : App,
+      ),
     ),
   )
 

@@ -20,6 +20,7 @@ import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { App } from './App.tsx'
 import { Independance } from './pages/Independance.tsx'
+import { Contact } from './pages/Contact.tsx'
 import { Mentions } from './pages/Mentions.tsx'
 import { FournisseurI18n } from './i18n/Fournisseur.tsx'
 import { langueDuChemin, pageDuChemin } from './i18n/contexte.ts'
@@ -38,7 +39,15 @@ if (racine) {
         langueInitiale={langueDuChemin(window.location.pathname)}
         pageInitiale={page}
       >
-        {page === 'mentions' ? <Mentions /> : page === 'independance' ? <Independance /> : <App />}
+        {page === 'mentions' ? (
+          <Mentions />
+        ) : page === 'independance' ? (
+          <Independance />
+        ) : page === 'contact' ? (
+          <Contact />
+        ) : (
+          <App />
+        )}
       </FournisseurI18n>
     </StrictMode>
   )
