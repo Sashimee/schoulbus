@@ -321,14 +321,36 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   choses sortent quand même » ont été réécrits dans les cinq. Ce sont, en luxembourgeois,
   en portugais et en anglais, des premières rédactions de plus.
 
-  Deux arbitrages restent à poser plutôt qu'à corriger : `comuna` contre `município` en
-  portugais, qui touche quinze chaînes et engage les deux dépôts, et le mot employé pour la
-  fiche de la semaine, qui diverge de `nav.semaine` dans les cinq langues. Un troisième s'y
-  ajoute, que la revue n'avait pas relevé : le portugais dit `vale o documento oficial`
-  trois fois pour ce que l'application appelle `prevalece`. Seul `faz fé` a été corrigé —
-  aligner `vale` aussi est un choix de registre, pas une correction.
+  **Les trois arbitrages sont tranchés — le 11 septembre 2026, sources en main.** Ils ne
+  demandaient pas une compétence native mais une décision écrite, et ils l'ont.
 
-  Ce qu'elle N'A PAS tranché, faute de compétence native, et qui reste à relire :
+  1. **`município`, et non `comuna`** — dix-neuf chaînes du portugais. L'application hésite
+     entre les deux, seize contre neuf, mais **pas au hasard** : elle dit `município` chaque
+     fois qu'elle parle de l'INSTITUTION (l'indépendance, le plan officiel, qui peut le
+     changer, qui autorise les accès) et `comuna` pour le territoire et pour l'espace
+     réservé aux agents. La vitrine ne parle que de l'institution. Ce qui a été vérifié en
+     ligne au passage, et qui explique pourquoi c'est une décision et non une correction :
+     le site officiel du gouvernement en portugais emploie **les deux** — `comuna` dans le
+     corps de sa foire aux questions, `município` dans ses titres et sur sa page voisine —
+     et la presse lusophone du Luxembourg écrit même `câmara`. Aucune source n'impose un
+     terme. **Et l'hypothèse du ticket tombe : le dépôt frère n'est pas engagé**, puisque
+     c'est SON terme majoritaire que la vitrine adopte.
+  2. **Le nom de l'écran de la semaine, repris de l'application.** Les cinq langues avaient
+     inventé cinq choses différentes — `La fiche de la semaine`, `Die Wochenübersicht`,
+     `D'Wochenopstellung`, `A folha da semana`, `The week at a glance` — pour un écran que
+     l'application nomme d'un mot : `La semaine`, `Die Woche`, `D'Woch`, `A semana`,
+     `The week`. C'est le défaut de la maison relais, à l'identique, et il se répare pareil.
+     Deux emplacements par langue : la bande des captures et la tuile.
+  3. **`prevalece`, et non `vale`** — trois chaînes du portugais. C'est le mot de
+     l'application dans les phrases équivalentes ; elle ne garde `vale` que pour
+     « vale o ciclo indicado na caderneta », qui dit autre chose — laquelle des deux
+     informations employer, et non lequel des deux documents l'emporte.
+
+  Le raisonnement des deux décisions portugaises est écrit **dans l'en-tête de
+  `src/contenu/pt.ts`**, et non ici seulement : c'est le fichier qu'on ouvre pour les
+  rouvrir.
+
+  Ce qui N'EST toujours PAS tranché, faute de compétence native, et qui reste à relire :
   `Moiescher` (le pluriel de `Moien`), `dat ganzt Produit` (genre du mot `Produit`),
   `stiechen an der Säit` (le verbe, calqué de l'allemand `stecken in`). En portugais,
   `por um pai` traduit `un parent` par « un père » — l'application dit la même chose, donc

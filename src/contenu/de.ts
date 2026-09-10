@@ -91,7 +91,7 @@ export const de: Contenu = {
     note: `Echte Aufnahmen der Anwendung, Dienstag, 22. September 2026 um 07:25 Uhr.`,
     cartes: [
       { titre: 'Der Morgenbildschirm', texte: 'Eine Uhrzeit je Kind, und sonst nichts.' },
-      { titre: 'Die Wochenübersicht', texte: 'Fünf Tage, und die Karte des Fußwegs.' },
+      { titre: 'Die Woche', texte: 'Fünf Tage, und die Karte des Fußwegs.' },
       {
         titre: 'Der offizielle Plan, übertragen',
         texte: `${CHIFFRES.lignes} Linien, ${CHIFFRES.arrets} Haltestellen, Tabelle für Tabelle.`,
@@ -109,7 +109,7 @@ export const de: Contenu = {
     tuiles: [
       {
         icone: 'semaine',
-        titre: 'Die Wochenübersicht',
+        titre: 'Die Woche',
         texte: 'Die fünf Tage eines Kindes auf einem Bildschirm.',
       },
       {

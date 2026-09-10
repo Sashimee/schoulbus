@@ -108,7 +108,7 @@ export const fr: Contenu = {
     note: `De vraies captures de l’application, mardi 22 septembre 2026 à 07:25.`,
     cartes: [
       { titre: 'L’écran du matin', texte: 'Une heure par enfant, et rien d’autre.' },
-      { titre: 'La fiche de la semaine', texte: 'Cinq jours, et la carte du trajet à pied.' },
+      { titre: 'La semaine', texte: 'Cinq jours, et la carte du trajet à pied.' },
       {
         titre: 'Le plan officiel, recopié',
         texte: `${CHIFFRES.lignes} lignes, ${CHIFFRES.arrets} arrêts, tableau par tableau.`,
@@ -123,7 +123,7 @@ export const fr: Contenu = {
     tuiles: [
       {
         icone: 'semaine',
-        titre: 'La fiche de la semaine',
+        titre: 'La semaine',
         texte: 'Les cinq jours d’un enfant sur un écran.',
       },
       {
