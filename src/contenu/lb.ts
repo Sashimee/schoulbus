@@ -90,7 +90,7 @@ export const lb: Contenu = {
     note: `Richteg Opname vun der Applikatioun, Dënschdeg den 22. September 2026 um 07:25.`,
     cartes: [
       { titre: 'De Bildschierm vum Moien', texte: 'Eng Zäit pro Kand, a soss näischt.' },
-      { titre: 'D’Wochenopstellung', texte: 'Fënnef Deeg, an d’Kaart vum Wee zu Fouss.' },
+      { titre: 'D’Woch', texte: 'Fënnef Deeg, an d’Kaart vum Wee zu Fouss.' },
       {
         titre: 'Den offizielle Plang, iwwerdroen',
         texte: `${CHIFFRES.lignes} Linnen, ${CHIFFRES.arrets} Statiounen, Tabell fir Tabell.`,
@@ -108,7 +108,7 @@ export const lb: Contenu = {
     tuiles: [
       {
         icone: 'semaine',
-        titre: 'D’Wochenopstellung',
+        titre: 'D’Woch',
         texte: 'Déi fënnef Deeg vun engem Kand op engem Bildschierm.',
       },
       {

@@ -96,7 +96,7 @@ export const en: Contenu = {
     note: `Real screenshots of the app, Tuesday 22 September 2026 at 07:25.`,
     cartes: [
       { titre: 'The morning screen', texte: 'One time per child, and nothing else.' },
-      { titre: 'The week at a glance', texte: 'Five days, and the map of the walk.' },
+      { titre: 'The week', texte: 'Five days, and the map of the walk.' },
       {
         titre: 'The official plan, copied out',
         texte: `${CHIFFRES.lignes} lines, ${CHIFFRES.arrets} stops, table by table.`,
@@ -114,7 +114,7 @@ export const en: Contenu = {
     tuiles: [
       {
         icone: 'semaine',
-        titre: 'The week at a glance',
+        titre: 'The week',
         texte: 'One child’s five days on a single screen.',
       },
       {
