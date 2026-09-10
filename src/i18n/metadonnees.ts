@@ -46,6 +46,9 @@ export function textesDePage(langue: Langue, page: Page): { titre: string; descr
   if (page === 'mentions') {
     return { titre: `${c.mentions.titre} — ${c.general.marque}`, description: c.mentions.intro }
   }
+  if (page === 'contact') {
+    return { titre: `${c.contact.titre} — ${c.general.marque}`, description: c.contact.intro }
+  }
   if (page === 'independance') {
     return {
       titre: `${c.independance.titre} — ${c.general.marque}`,

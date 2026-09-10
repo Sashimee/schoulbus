@@ -261,6 +261,7 @@ export const en: Contenu = {
     mention: 'Made by a parent, in Beckerich.',
     source: `Data: the municipality’s official plan, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Legal notice',
+    lienContact: 'Write',
     viePrivee: 'This page sets no cookies, measures nothing, and calls no server.',
   },
 
@@ -276,6 +277,22 @@ Address: ${ADRESSE_EDITEUR}`,
     donneesCorps: `This page sets no cookies, does not measure audience and makes no request to any third-party service. No personal data is collected, so there is nothing to consult, correct or erase. The app itself keeps what you enter on your device alone; its “Limits” page sets that out in detail.`,
     responsabiliteTitre: `Liability`,
     responsabiliteCorps: `The times shown are taken from the municipality’s official plan and transcribed with care, without any guarantee of accuracy. In case of doubt or disagreement, the municipality’s official document prevails.`,
+    retour: `Back to the home page`,
+  },
+
+  contact: {
+    titre: `Write`,
+    intro: `An address, to report a time that does not match, a layout that breaks, or something that is missing. Behind it is a parent, not a service.`,
+    adresseTitre: `The address`,
+    adresseIntro: `Messages arrive here:`,
+    adresseNote: `This page sends nothing itself: the address is written in plain text, and your mail program does the rest. A message that arrives stays in an ordinary mailbox for as long as it is useful; it is neither filed nor copied anywhere else. A reply may take a few days.`,
+    utileTitre: `What helps`,
+    utileCorps: `For a time that does not match: the line, the stop, the day, and the time you expected.
+For a layout that breaks: the device, the browser, and what the screen shows.
+Write in whichever language comes to you.`,
+    limitesTitre: `What this address cannot do`,
+    limitesCorps: `It leads neither to the municipality, nor to the school, nor to the maison relais. An absence to report, an enrolment, a request to change stop: that goes to them directly, and a message sent here will not reach them.
+The municipality’s official plan prevails. If this site shows something else, it is this site that is wrong — and that is exactly what is worth reporting.`,
     retour: `Back to the home page`,
   },
 }

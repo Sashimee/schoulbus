@@ -56,9 +56,13 @@ export function cheminLangue(langue: Langue): string {
  * sa vignette de partage, et cette page-ci porte la phrase qui n'existe nulle part ailleurs
  * — celle qui dit lequel, du document communal ou de ce site, fait foi.
  *
+ * `contact` porte l'adresse à laquelle on écrit. Elle ne dépend d'aucune constante, à la
+ * différence des mentions : une adresse de courrier suffit à la rendre utile, et elle l'est
+ * même sans le formulaire qui viendra s'y ajouter.
+ *
  * Chacune est pré-rendue dans les cinq langues.
  */
-export type Page = 'accueil' | 'mentions' | 'independance'
+export type Page = 'accueil' | 'mentions' | 'independance' | 'contact'
 
 /*
  * Les mentions n'entrent dans la liste que si elles sont complètes. Tout ce qui parcourt
@@ -66,8 +70,8 @@ export type Page = 'accueil' | 'mentions' | 'independance'
  * seul geste, et il n'existe aucun état où la page serait publiée à moitié.
  */
 export const PAGES: Page[] = mentionsPretes()
-  ? ['accueil', 'independance', 'mentions']
-  : ['accueil', 'independance']
+  ? ['accueil', 'independance', 'contact', 'mentions']
+  : ['accueil', 'independance', 'contact']
 
 /**
  * L'adresse d'une page dans une langue : `/`, `/de/`, `/independance/`, `/de/mentions/`…
@@ -85,7 +89,9 @@ export function cheminPage(langue: Langue, page: Page): string {
 /** Déduit la page d'un chemin. Tout ce qui n'est pas reconnu retombe sur l'accueil. */
 export function pageDuChemin(chemin: string): Page {
   const segment = chemin.replace(/\/+$/, '').split('/').pop() ?? ''
-  return segment === 'mentions' || segment === 'independance' ? segment : 'accueil'
+  return segment === 'mentions' || segment === 'independance' || segment === 'contact'
+    ? segment
+    : 'accueil'
 }
 
 /**

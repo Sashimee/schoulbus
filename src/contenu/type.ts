@@ -268,6 +268,8 @@ export type Contenu = {
     viePrivee: string
     /** Le lien vers la page des mentions légales, dans la colonne « Le projet ». */
     lienMentions: string
+    /** Le lien vers la page de contact, à côté du précédent. */
+    lienContact: string
   }
 
   /*
@@ -288,6 +290,39 @@ export type Contenu = {
     donneesCorps: string
     responsabiliteTitre: string
     responsabiliteCorps: string
+    retour: string
+  }
+
+  /*
+   * La page de contact.
+   *
+   * Le site décrivait une application sans offrir le moindre moyen d'écrire à qui la fait.
+   * Ce que cette page doit tenir, et qui explique la forme de ces clés :
+   *
+   * - L'ADRESSE EST EN CLAIR, et avant tout le reste. C'est ce qui rend la page utile sans
+   *   JavaScript, et ce qui la garde utile si un formulaire vient s'y ajouter et tombe.
+   * - Elle dit ce qu'elle NE PEUT PAS FAIRE. C'est le premier principe du projet, et c'est
+   *   ici qu'il coûte le plus cher à tenir : un parent qui écrit pour signaler une absence
+   *   ou demander un changement d'arrêt s'adresse à la commune, pas à ce site, et il faut
+   *   qu'il le lise AVANT d'écrire — pas dans une réponse trois jours plus tard.
+   * - Elle ne promet aucun délai. Une boîte relevée par une personne entre deux journées
+   *   de travail n'est pas un service, et l'écrire vaut mieux que de le laisser deviner.
+   */
+  contact: {
+    titre: string
+    /** Ce que cette page est. Sert aussi de description aux moteurs. */
+    intro: string
+    adresseTitre: string
+    /** La phrase qui précède l'adresse. L'adresse elle-même vient de `ADRESSE_CONTACT`. */
+    adresseIntro: string
+    /** Ce qu'il advient d'un message reçu, et ce que la page ne fait pas en l'affichant. */
+    adresseNote: string
+    utileTitre: string
+    /** Un paragraphe par ligne : ce qui aide à traiter un signalement. */
+    utileCorps: string
+    limitesTitre: string
+    /** Ce que cette adresse ne peut pas faire, et à qui s'adresser à sa place. */
+    limitesCorps: string
     retour: string
   }
 }

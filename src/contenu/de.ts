@@ -257,6 +257,7 @@ export const de: Contenu = {
     mention: 'Von einem Elternteil, in Beckerich.',
     source: `Daten: offizieller Plan der Gemeinde, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Impressum',
+    lienContact: 'Schreiben',
     viePrivee: 'Diese Seite setzt keine Cookies, misst nichts und ruft keinen Server auf.',
   },
 
@@ -272,6 +273,22 @@ Anschrift: ${ADRESSE_EDITEUR}`,
     donneesCorps: `Diese Seite setzt keine Cookies, misst keine Zugriffe und ruft keinen Dienst Dritter auf. Es werden keine personenbezogenen Daten erhoben; es gibt daher nichts einzusehen, zu berichtigen oder zu löschen. Die Anwendung selbst behält, was Sie dort eingeben, ausschließlich auf Ihrem Gerät — ihre Seite „Grenzen“ führt das aus.`,
     responsabiliteTitre: `Haftung`,
     responsabiliteCorps: `Die angezeigten Zeiten stammen aus dem offiziellen Plan der Gemeinde und sind sorgfältig übertragen, jedoch ohne Gewähr. Im Zweifel oder bei Abweichungen gilt das offizielle Dokument der Gemeinde.`,
+    retour: `Zurück zur Startseite`,
+  },
+
+  contact: {
+    titre: `Schreiben`,
+    intro: `Eine Adresse, um eine Zeit zu melden, die nicht stimmt, eine Anzeige, die verrutscht, oder etwas, das fehlt. Dahinter steht ein Elternteil, kein Dienst.`,
+    adresseTitre: `Die Adresse`,
+    adresseIntro: `Nachrichten kommen hier an:`,
+    adresseNote: `Diese Seite verschickt selbst nichts: die Adresse steht im Klartext, und Ihr E-Mail-Programm übernimmt den Rest. Eine eingegangene Nachricht bleibt in einem gewöhnlichen Postfach, solange sie gebraucht wird; sie wird weder erfasst noch anderswohin kopiert. Eine Antwort kann einige Tage dauern.`,
+    utileTitre: `Was hilft`,
+    utileCorps: `Bei einer Zeit, die nicht stimmt: die Linie, die Haltestelle, der Tag, und die Zeit, die Sie erwartet haben.
+Bei einer Anzeige, die verrutscht: das Gerät, der Browser, und was der Bildschirm zeigt.
+Schreiben Sie in der Sprache, die Ihnen kommt.`,
+    limitesTitre: `Was diese Adresse nicht kann`,
+    limitesCorps: `Sie führt weder zur Gemeinde noch zur Schule noch zur Maison Relais. Eine Abwesenheit, eine Anmeldung, der Wunsch nach einer anderen Haltestelle: das gehört direkt an sie, und eine Nachricht an diese Adresse kommt dort nicht an.
+Es gilt der offizielle Plan der Gemeinde. Zeigt diese Seite etwas anderes, dann irrt diese Seite — und genau das ist eine Meldung wert.`,
     retour: `Zurück zur Startseite`,
   },
 }
