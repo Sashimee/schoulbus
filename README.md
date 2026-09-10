@@ -381,8 +381,14 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   fond : six fichiers sur vingt-quatre différaient entre le conteneur et une machine de
   développement — les `semaine-*`, seul écran qui porte une carte Leaflet. D'où
   `npm run captures:conteneur`, et la règle qu'on ne commite que sa sortie. Avec quarante
-  fichiers, l'écart attendu passe mécaniquement à dix. Ce qui reste inconnu : le
-  comportement le jour où l'étiquette du conteneur changera.
+  fichiers, l'écart attendu passe mécaniquement à dix.
+  **Ce qui était inconnu — le jour où l'étiquette du conteneur changerait — est désormais
+  épinglé** : l'image est référencée par son empreinte
+  (`imagePlaywright` dans `scripts/captures.source.json`, écrite là et nulle part ailleurs),
+  et non plus par `v1.62.1-noble`, que Microsoft republie. Monter d'image devient une
+  décision datée, avec sa procédure dans `CLAUDE.md`. Ce que cela NE fait pas : rendre les
+  captures reproductibles partout — la carte Leaflet reste sensible au rendu. La réserve se
+  reformule donc, elle ne se referme pas.
   *Note pratique, reprise le 9 septembre :* le script photographie l'application telle
   qu'elle est dans `DEPOT_APP` et INSCRIT la révision trouvée ; c'est l'intégration continue
   qui, ensuite, extrait cette révision pour comparer. Régénérer ne demande donc pas de

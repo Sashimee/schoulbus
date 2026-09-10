@@ -1,5 +1,6 @@
 {
-  "$commentaire": "Provenance des captures. L'intégration continue extrait l'application à ce révision avant de régénérer et de comparer.",
+  "$commentaire": "Provenance des captures. Les deux moitiés du déterminisme : le code photographié (revisionApplication) et l'appareil qui photographie (imagePlaywright, une empreinte et non une étiquette). L'intégration continue extrait l'application à cette révision, tourne dans cette image, et compare.",
+  "imagePlaywright": "mcr.microsoft.com/playwright@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e",
   "revisionApplication": "185ebe1",
   "instantSimule": "2026-09-22T05:25:00.000Z",
   "largeur": 370,
