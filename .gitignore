@@ -6,3 +6,7 @@ dist-ssr
 
 # Dossier de travail des captures : il ne survit jamais à une exécution réussie.
 public/.captures-en-cours
+
+# État de travail d’une session, jamais versionné (voir la section « Resume state »
+# des règles globales) : il décrit une machine et un instant, pas le projet.
+RESUME.md
