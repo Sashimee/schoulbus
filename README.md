@@ -255,6 +255,12 @@ configuration — `sansApplication()` en a besoin pour filtrer le pied de page.
 
 Elles sont classées par ce qu'elles coûtent à refermer, la plus chère d'abord.
 
+**Cinq d'entre elles ont reçu une décision de l'éditeur le 10 septembre 2026**, et c'est
+ce qui a changé cette section : le thème sombre et le vrai téléphone sont passés aux
+réserves levées, les contrastes et le poids du premier écran restent écrits mais
+n'attendent plus d'action, et le cadrage du « 0 » est ratifié. Une réserve dite et non
+écrite est une réserve perdue — elle réapparaît en panne trois mois plus tard.
+
 **Une revue systématique du dépôt a eu lieu le 8 septembre 2026**, en quatre passes —
 les promesses de la page contre l'application, les cinq langues contre les dictionnaires,
 la couche visible mesurée dans Chromium, la chaîne de livraison mesurée sur `dist/` et sur
@@ -335,31 +341,10 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   la corriger ici seul les ferait diverger. Une relecture native reste nécessaire :
   ce qu'une machine sait vérifier est ce qui a une règle, et le naturel n'en a pas.
 
-- **Le thème sombre est une DÉRIVATION, pas une maquette.** La maquette approuvée ne
-  définit que le thème clair. Les valeurs sombres — crème inversé en vert-noir, sarcelle et
-  corail éclaircis — ont été construites ici, en tenant les rôles et la sémantique des deux
-  accents. Elles ont depuis été calculées (pire couple à 6,12:1, plus confortable qu'en
-  clair) **et regardées** : la page entière a été capturée dans les deux thèmes, et les
-  captures de l'application y basculent bien avec elle. Ce qui reste non validé est le
-  GOÛT : personne d'autre que la machine n'a encore donné son avis sur ce vert-noir.
-
-- **La page n'a toujours pas été ouverte sur un vrai téléphone.** Un émulateur ne rend ni
-  les polices du système, ni la barre d'adresse qui mange la hauteur, ni les marges de
-  sécurité d'un écran à encoche — ces dernières sont posées dans la feuille de style,
-  jamais vues à l'œuvre.
-  **La barre, elle, a été regardée** — la réserve ne la couvre plus. C'est un signalement
-  depuis un téléphone qui a montré les cinq segments de langue repliés en deux rangées ;
-  la liste déroulante qui les remplace a été mesurée et photographiée dans Chromium, au
-  doigt, à 320, 360, 393, 430, 768 et 1280 px, dans les deux thèmes. La rangée d'actions
-  demande 331 px : une rangée jusqu'à 360 px de large (deux avec la marque au-dessus),
-  une seule à partir de 393 px, et deux rangées d'actions seulement à 320 px, où elle n'a
-  plus que 296 px. Ce qui reste non vu est ce que la réserve dit depuis le début : les
-  polices du système, la barre d'adresse, les marges d'un écran à encoche.
-
-- **Cent trois kilo-octets de JavaScript. Le budget existe, la réserve reste.** Premier
-  écran, cache vide : **103,6 ko de JS comprimé** pour une page entièrement pré-rendue dont
-  l'interactivité se réduit à une liste déroulante, deux boutons de thème et des
-  révélations au défilement. Deux requêtes seulement bloquent le premier rendu (6,4 ko de
+- **Cent trois kilo-octets de JavaScript. Le poids est approuvé, la question d'architecture
+  reste.** Premier écran, cache vide : **103,6 ko de JS comprimé** pour une page
+  entièrement pré-rendue dont l'interactivité se réduit à une liste déroulante, deux
+  boutons de thème et des révélations au défilement. Deux requêtes seulement bloquent le premier rendu (6,4 ko de
   document, 6,0 ko de style), donc rien ne presse à l'affichage.
   Ce qui manquait — une limite — a été posé le 8 septembre : `npm run poids`, appelé à la
   fin de `npm run build`, mesure ce que `dist/index.html` NOMME (les imports dynamiques de
@@ -367,15 +352,25 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   de 110 ko. La marge est de 6 % et non de 45 % comme celle des captures, parce que les cinq
   fichiers de contenu sont dans le paquet : un budget serré ferait échouer la construction
   pour une correction de texte.
-  **Le budget enregistre ce poids, il ne l'approuve pas.** Ce qui reste ouvert est la
-  question qu'il ne pose pas : ce que React, `motion` et cinq dictionnaires complets font
+  **L'éditeur a approuvé ces 103,6 ko le 10 septembre 2026** : le budget ne fait plus
+  qu'enregistrer un poids que personne n'avait jugé. Ce qui reste ouvert est la question
+  qu'aucun des deux ne pose : ce que React, `motion` et cinq dictionnaires complets font
   dans une page qu'on lit une fois. C'est le seul poste où il reste une marge d'un ordre de
-  grandeur, et la refermer demande une décision d'architecture, pas un réglage.
+  grandeur, et la refermer demande une décision d'architecture, pas un réglage. Le seul
+  gain mesurable sans cette décision — servir un dictionnaire de langue au lieu de cinq —
+  est isolé dans le ticket #13, qui peut d'ailleurs être abandonné : 14 ko ne valent pas un
+  scintillement de texte si le morceau de langue ne peut pas être déclaré par le document
+  pré-rendu.
 
-- **Les contrastes sont calculés, pas mesurés à la pipette.** `npm run contraste` calcule
-  ce que le navigateur devrait afficher ; il ne lit pas l'écran. La refonte a rendu ce
-  calcul plus fiable — les surfaces sont opaques, il n'y a plus d'empilement de voiles à
-  simuler — mais pas différent de nature.
+- **Les contrastes sont calculés, pas mesurés à la pipette — réserve ACCEPTÉE.**
+  `npm run contraste` calcule ce que le navigateur devrait afficher ; il ne lit pas
+  l'écran. La refonte a rendu ce calcul plus fiable — les surfaces sont opaques, il n'y a
+  plus d'empilement de voiles à simuler — mais pas différent de nature.
+  **L'éditeur a regardé le résultat le 10 septembre 2026 et le juge bon.** La réserve ne se
+  referme donc pas et n'attend plus rien non plus : elle est de nature, pas d'état. La
+  refermer demanderait un colorimètre posé sur un écran, ce qu'aucune commande de ce dépôt
+  ne remplacera ; elle reste écrite pour que personne ne prenne le vert de
+  `npm run contraste` pour une mesure.
 
 - **Les captures dépendent de l'environnement qui les produit.** Réserve inchangée sur le
   fond : six fichiers sur vingt-quatre différaient entre le conteneur et une machine de
@@ -390,6 +385,28 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   travail. Un clone jetable et `DEPOT_APP` suffisent (recette dans `CLAUDE.md`).
 
 ### Réserves levées
+
+- *« Le thème sombre est une dérivation, pas une maquette. »* — Levée le 10 septembre 2026.
+  Ce qu'elle demandait était un avis humain sur le GOÛT du vert-noir : le calcul était fait
+  (pire couple à 6,12:1, plus confortable qu'en clair), la page entière avait été capturée
+  dans les deux thèmes, et personne d'autre que la machine n'avait donné son avis.
+  L'éditeur a regardé et approuvé. Ce qu'elle couvrait reste vrai et doit rester su : les
+  valeurs sombres — crème inversé en vert-noir, sarcelle et corail éclaircis — ont été
+  construites ici en tenant les rôles et la sémantique des deux accents, et **la maquette
+  approuvée ne définit que le thème clair.** Une reprise de la palette sombre repart donc
+  d'une dérivation, pas d'une source.
+
+- *« La page n'a toujours pas été ouverte sur un vrai téléphone. »* — Levée le
+  10 septembre 2026 : l'éditeur l'a ouverte. Ce qu'un émulateur ne rend pas, et que la
+  réserve nommait depuis le début, a été vu — les polices du système, la barre d'adresse
+  qui mange la hauteur, les marges de sécurité d'un écran à encoche, posées dans la feuille
+  de style et jamais vues à l'œuvre.
+  La barre de commandes était déjà sortie de la réserve avant cela, et par le même chemin :
+  c'est un signalement depuis un téléphone qui avait montré les cinq segments de langue
+  repliés en deux rangées. La liste déroulante qui les remplace a été mesurée et
+  photographiée dans Chromium, au doigt, à 320, 360, 393, 430, 768 et 1 280 px, dans les
+  deux thèmes — la rangée d'actions demande 331 px, tient sur une rangée à partir de
+  393 px, et n'en demande deux qu'à 320 px, où il ne lui reste que 296 px.
 
 - *« Le conteneur n'a pas encore tourné ailleurs qu'ici. »* — Levée le 9 septembre, sur la
   production. Le point qu'elle demandait de surveiller est vérifié : **`Strict-Transport-Security`
@@ -496,6 +513,16 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   qui reste vrai, reste la chose qu'un parent veut savoir, et garde au chiffre sa fonction.
   Le raisonnement est écrit à ses trois endroits : `src/contenu/type.ts`,
   `scripts/build-chiffres.mjs` et `CLAUDE.md`.
+
+  **Ratifié le 10 septembre 2026, on garde la formulation resserrée.** La décision avait
+  été prise sur délégation explicite de l'éditeur ; il l'a confirmée. Le motif, pour qui la
+  rouvrirait : `chiffres.envoi` dit « donnée de famille qui part sans que vous le
+  demandiez » et non « envoyée à un serveur », la seconde formulation étant fausse sous sa
+  propre définition dès qu'un parent exporte vers Google Agenda. La première est vraie et
+  laisse au chiffre sa fonction, la nuance étant portée par `chiffres.envoiNote`, qui nomme
+  les trois choses qui sortent. **C'est le couple qui rend le zéro honnête : ne pas rouvrir
+  l'un sans rouvrir l'autre** — et c'est le libellé le plus lu de la page. Les trois
+  endroits ont été revérifiés d'accord à cette date.
 
   **Ce que ce lot NE corrige pas, et qui reste ouvert ailleurs** : la page « Limites » de
   l'application ne nomme toujours pas ce flux. La vitrine est maintenant plus précise que
