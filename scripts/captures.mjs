@@ -719,13 +719,35 @@ try {
     )
   }
 
+  /*
+   * L'empreinte de l'image est REPRISE du fichier, jamais recalculée.
+   *
+   * Un conteneur ne peut pas lire l'empreinte de sa propre image : `/etc/hostname` donne
+   * l'identifiant du conteneur, pas celui de l'image. L'épinglage est donc une déclaration,
+   * et ce script la reconduit — sans quoi il l'effacerait à chaque exécution, puisqu'il
+   * réécrit ce fichier en entier. Elle manque : on s'arrête, parce qu'une provenance qui
+   * n'enregistre que la moitié de ce qui décide du rendu ne sert à rien.
+   */
+  const imagePlaywright = JSON.parse(readFileSync(PROVENANCE, 'utf8')).imagePlaywright
+  if (!imagePlaywright) {
+    throw new Error(
+      `Aucune empreinte d'image dans ${PROVENANCE}. Relever « docker image inspect ` +
+        `mcr.microsoft.com/playwright:vX.Y.Z-noble --format '{{json .RepoDigests}}' » et ` +
+        `l'inscrire dans « imagePlaywright » : c'est l'appareil qui photographie, et il ` +
+        `décide du rendu autant que le code photographié.`,
+    )
+  }
+
   writeFileSync(
     PROVENANCE,
     `${JSON.stringify(
       {
         $commentaire:
-          "Provenance des captures. L'intégration continue extrait l'application à ce " +
-          'révision avant de régénérer et de comparer.',
+          'Provenance des captures. Les deux moitiés du déterminisme : le code ' +
+          "photographié (revisionApplication) et l'appareil qui photographie " +
+          "(imagePlaywright, une empreinte et non une étiquette). L'intégration continue " +
+          'extrait l\'application à cette révision, tourne dans cette image, et compare.',
+        imagePlaywright,
         revisionApplication: revision,
         instantSimule: INSTANT_DEMO,
         largeur: LARGEUR,

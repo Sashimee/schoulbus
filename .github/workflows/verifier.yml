@@ -53,6 +53,33 @@ jobs:
             exit 1
           fi
 
+  # L'empreinte de l'image, lue là où elle est déclarée.
+  #
+  # `container:` est résolu AVANT que le moindre pas ne tourne : on ne peut donc pas y lire
+  # un fichier du dépôt sans un travail préalable, et c'est tout ce que celui-ci fait. Le
+  # prix est une dizaine de secondes de runner ; ce qu'il achète est qu'il n'existe qu'UN
+  # endroit où l'empreinte est écrite. Recopiée ici, elle aurait été le troisième — et une
+  # empreinte présente à trois endroits est une empreinte qu'on corrige à deux.
+  empreinte:
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.lire.outputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: lire
+        run: |
+          image=$(node -p "require('./scripts/captures.source.json').imagePlaywright")
+          case "$image" in
+            *@sha256:*) ;;
+            *)
+              echo "« $image » est une étiquette, pas une empreinte."
+              echo "Une étiquette est republiée par son éditeur : les captures bougeraient"
+              echo "sous elle, et rien ici ne dirait que la cause est l'image."
+              exit 1
+              ;;
+          esac
+          echo "image=$image" >> "$GITHUB_OUTPUT"
+
   # ------------------------------------------------------------------ #
   # Les captures correspondent-elles encore à l'application ?
   # ------------------------------------------------------------------ #
@@ -67,8 +94,10 @@ jobs:
   #   1. Le CONTENEUR ÉPINGLÉ de Playwright, le même qu'en local. La pile de polices et la
   #      version de Chromium décident du rendu au pixel près ; sans conteneur commun, la
   #      comparaison échouerait à chaque poussée et quelqu'un supprimerait ce travail au
-  #      bout d'un mois. Son étiquette doit suivre la version de `playwright` dans le
-  #      lockfile — l'étape « concordance » ci-dessous refuse qu'elles divergent.
+  #      bout d'un mois. Il est épinglé PAR EMPREINTE et non par étiquette : une étiquette
+  #      est republiée par son éditeur, et le jour où `v1.62.1-noble` bouge, dix fichiers
+  #      deviennent différents sans qu'aucun ne soit faux. La version de `playwright` du
+  #      lockfile doit suivre — l'étape « concordance » ci-dessous refuse qu'elles divergent.
   #      Ce n'est pas une précaution théorique : six des vingt-quatre fichiers engendrés
   #      sur une machine de développement différaient de ceux du conteneur. Les captures
   #      commitées sont donc CELLES DU CONTENEUR, produites par `npm run captures:conteneur`.
@@ -82,7 +111,8 @@ jobs:
   # délibéré — `npm run captures`, puis commiter — et non un effet de bord d'un autre.
   captures:
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.62.1-noble
+    needs: empreinte
+    container: ${{ needs.empreinte.outputs.image }}
     steps:
       - uses: actions/checkout@v4
 
@@ -94,14 +124,19 @@ jobs:
       - name: Autoriser git à lire le dossier de travail
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - name: L'étiquette du conteneur suit-elle le lockfile ?
+      # La version attendue vient elle aussi de `captures.source.json`, et non d'un nombre
+      # écrit ici : l'empreinte de l'image et la version de Playwright qu'elle contient sont
+      # deux faces du même épinglage, et les séparer ferait qu'on en corrigerait une seule.
+      - name: Le conteneur suit-il le lockfile ?
         run: |
           attendue=$(node -p "require('./node_modules/playwright/package.json').version" 2>/dev/null \
             || node -p "require('./package-lock.json').packages['node_modules/playwright'].version")
-          if [ "$attendue" != "1.62.1" ]; then
-            echo "playwright vaut $attendue, mais ce travail tourne dans le conteneur v1.62.1."
+          epinglee=$(node -p "require('./scripts/captures.source.json').playwright")
+          if [ "$attendue" != "$epinglee" ]; then
+            echo "playwright vaut $attendue, mais les captures ont été prises avec $epinglee."
             echo "Les captures commitées ont été faites avec une autre version de Chromium :"
-            echo "alignez l'étiquette du conteneur, régénérez les captures, et commitez."
+            echo "suivre la procédure de remontée volontaire (voir CLAUDE.md), régénérer les"
+            echo "captures dans la nouvelle image, et commiter les deux ensemble."
             exit 1
           fi
 
