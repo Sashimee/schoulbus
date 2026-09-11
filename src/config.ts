@@ -101,10 +101,43 @@ export function imagePartage(langue: string): string {
  * l'a pas relue. Le jour où cette ligne est remplie, les cinq adresses apparaissent — une
  * par langue.
  */
-export const ADRESSE_EDITEUR = 'ADRESSE-À-COMPLÉTER'
+export const ADRESSE_EDITEUR = '23, Biekerecherwee, L-8543 Levelange'
 
-/** Le nom de l'éditeur. Repris des crédits de l'application. */
-export const NOM_EDITEUR = 'Alex Baskewitsch'
+/**
+ * Le nom de l'éditeur, à l'état civil complet.
+ *
+ * Les crédits de l'application disent `Alex` ; une mention légale est le seul endroit du
+ * site où la forme longue compte, parce que c'est elle qui identifie une personne devant
+ * un tiers. Les deux dépôts divergent donc sciemment sur ce point.
+ */
+export const NOM_EDITEUR = 'Alexandre Baskewitsch'
+
+/**
+ * Le téléphone de l'éditeur.
+ *
+ * Le droit luxembourgeois demande un moyen de contact DIRECT, et une adresse postale n'en
+ * est pas un : elle identifie, elle ne joint pas. Écrit en format international, parce
+ * qu'une mention légale est lue depuis l'étranger aussi souvent que depuis la commune.
+ */
+export const TELEPHONE_EDITEUR = '+352 621 198 449'
+
+/** La même chose pour un `href`, qui n'admet pas d'espaces. */
+export function telephoneAppelable(): string {
+  return TELEPHONE_EDITEUR.replace(/\s/g, '')
+}
+
+/**
+ * L'hébergeur, nommé.
+ *
+ * `mentions.hebergeurCorps` disait « un serveur loué par l'éditeur » sans dire par qui il
+ * est loué — c'est-à-dire qu'elle omettait précisément ce que la rubrique existe pour
+ * porter. Le site tourne sur un serveur privé virtuel chez OVH ; c'est l'identité et le
+ * pays de cette société-là que la mention doit nommer.
+ *
+ * Une adresse postale ne se traduit pas : elle est interpolée telle quelle dans les cinq
+ * langues, comme `ADRESSE_EDITEUR`.
+ */
+export const HEBERGEUR = 'OVH SAS, 2 rue Kellermann, 59100 Roubaix, France'
 
 /** Les mentions légales sont-elles complètes, et donc publiables ? */
 export function mentionsPretes(): boolean {

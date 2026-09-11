@@ -11,6 +11,12 @@
  */
 import { LogoBus } from '../composants/LogoBus.tsx'
 import { ChoixLangue, ChoixTheme } from '../composants/Selecteurs.tsx'
+import {
+  ADRESSE_CONTACT,
+  ADRESSE_EDITEUR,
+  TELEPHONE_EDITEUR,
+  telephoneAppelable,
+} from '../config.ts'
 import { useContenu, useLangue, cheminLangue } from '../i18n/contexte.ts'
 
 /** Un paragraphe par ligne : les corps de texte portent des retours à la ligne signifiants. */
@@ -32,10 +38,35 @@ export function Mentions() {
   const accueil = cheminLangue(langue)
 
   const blocs = [
-    { titre: contenu.mentions.editeurTitre, corps: contenu.mentions.editeurCorps },
     { titre: contenu.mentions.hebergeurTitre, corps: contenu.mentions.hebergeurCorps },
     { titre: contenu.mentions.donneesTitre, corps: contenu.mentions.donneesCorps },
     { titre: contenu.mentions.responsabiliteTitre, corps: contenu.mentions.responsabiliteCorps },
+  ]
+
+  /*
+   * Les coordonnées, en clair ET joignables.
+   *
+   * En clair, pour la même raison que sur la page de contact : une valeur qui n'existe que
+   * dans un `href` ne se recopie pas à la main et s'annonce mal. Joignables, parce que le
+   * droit luxembourgeois demande un moyen de contact direct — sur un téléphone, un numéro
+   * qu'il faut retaper n'en est pas tout à fait un.
+   *
+   * L'adresse postale n'a pas de lien : il n'existe pas de protocole pour ouvrir une porte,
+   * et un lien vers une carte enverrait le lecteur chez un tiers que ce site n'appelle nulle
+   * part ailleurs.
+   */
+  const coordonnees = [
+    { etiquette: contenu.mentions.editeurAdresseEtiquette, valeur: ADRESSE_EDITEUR, lien: null },
+    {
+      etiquette: contenu.mentions.editeurTelephoneEtiquette,
+      valeur: TELEPHONE_EDITEUR,
+      lien: `tel:${telephoneAppelable()}`,
+    },
+    {
+      etiquette: contenu.mentions.editeurCourrielEtiquette,
+      valeur: ADRESSE_CONTACT,
+      lien: `mailto:${ADRESSE_CONTACT}`,
+    },
   ]
 
   return (
@@ -57,6 +88,21 @@ export function Mentions() {
             <h1>{contenu.mentions.titre}</h1>
             <p className="chapeau">{contenu.mentions.intro}</p>
           </div>
+
+          <section className="pile pile--2">
+            <h2>{contenu.mentions.editeurTitre}</h2>
+            <Corps texte={contenu.mentions.editeurCorps} />
+            <dl className="coordonnees">
+              {coordonnees.map((c) => (
+                <div className="coordonnees__ligne" key={c.etiquette}>
+                  <dt className="coordonnees__etiquette">{c.etiquette}</dt>
+                  <dd className="coordonnees__valeur">
+                    {c.lien ? <a href={c.lien}>{c.valeur}</a> : c.valeur}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </section>
 
           {blocs.map((b) => (
             <section key={b.titre} className="pile pile--2">

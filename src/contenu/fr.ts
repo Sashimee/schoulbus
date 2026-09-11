@@ -34,7 +34,7 @@
  */
 import type { Contenu } from './type.ts'
 import {
-  ADRESSE_EDITEUR,
+  HEBERGEUR,
   NOM_EDITEUR,
   URL_APP,
   URL_CREDITS,
@@ -304,10 +304,12 @@ export const fr: Contenu = {
     titre: `Mentions légales`,
     intro: `Cette page identifie qui publie ce site. Elle ne change rien à ce qu’il dit par ailleurs : le site reste indépendant, et le document officiel de la commune fait foi.`,
     editeurTitre: `Éditeur`,
-    editeurCorps: `Ce site est publié par ${NOM_EDITEUR}, à titre privé et non commercial. Il n’est ni commandé, ni validé, ni relu par l’administration communale de Beckerich, par l’école fondamentale ou par la maison relais.
-Adresse : ${ADRESSE_EDITEUR}`,
+    editeurCorps: `Ce site est publié par ${NOM_EDITEUR}, à titre privé et non commercial. Il n’est ni commandé, ni validé, ni relu par l’administration communale de Beckerich, par l’école fondamentale ou par la maison relais.`,
+    editeurAdresseEtiquette: `Adresse`,
+    editeurTelephoneEtiquette: `Téléphone`,
+    editeurCourrielEtiquette: `Courriel`,
     hebergeurTitre: `Hébergement`,
-    hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur loué par l’éditeur. Aucune donnée de visite n’y est conservée.`,
+    hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur privé virtuel que l’éditeur loue auprès d’${HEBERGEUR}. Aucune donnée de visite n’y est conservée.`,
     donneesTitre: `Données personnelles`,
     donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l’audience et n’adresse aucune requête à un service tiers. Aucune donnée personnelle n’est collectée, et il n’y a donc rien à consulter, à corriger ni à effacer. L’application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
     responsabiliteTitre: `Responsabilité`,
