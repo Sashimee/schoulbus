@@ -15,7 +15,7 @@
  */
 import type { Contenu } from './type.ts'
 import {
-  ADRESSE_EDITEUR,
+  HEBERGEUR,
   NOM_EDITEUR,
   URL_APP,
   URL_CREDITS,
@@ -263,10 +263,12 @@ export const lb: Contenu = {
     titre: `Impressum`,
     intro: `Dës Säit seet, wien dëst Ugebot verëffentlecht. Um Rescht ännert si näischt: D’Säit bleift onofhängeg, a maassgeevend ass dat offiziellt Dokument vun der Gemeng.`,
     editeurTitre: `Erausgi vun`,
-    editeurCorps: `Dës Säit gëtt vum ${NOM_EDITEUR} privat an net kommerziell erausginn. Si ass weder an Optrag ginn, nach vun der Gemengeverwaltung Biekerech, vun der Grondschoul oder vun der Maison Relais gepréift oder guttgeheescht.
-Adress: ${ADRESSE_EDITEUR}`,
+    editeurCorps: `Dës Säit gëtt vum ${NOM_EDITEUR} privat an net kommerziell erausginn. Si ass weder an Optrag ginn, nach vun der Gemengeverwaltung Biekerech, vun der Grondschoul oder vun der Maison Relais gepréift oder guttgeheescht.`,
+    editeurAdresseEtiquette: `Adress`,
+    editeurTelephoneEtiquette: `Telefon`,
+    editeurCourrielEtiquette: `E-Mail`,
     hebergeurTitre: `Hosting`,
-    hebergeurCorps: `D’Säit besteet aus statesche Fichieren, déi vun engem Server ausgeliwwert ginn, deen den Erausginner lount. Do gi keng Besuchsdonnéeën opbewahrt.`,
+    hebergeurCorps: `D’Säit besteet aus statesche Fichieren, déi vun engem virtuelle private Server ausgeliwwert ginn, deen den Erausginner bei ${HEBERGEUR} lount. Do gi keng Besuchsdonnéeën opbewahrt.`,
     donneesTitre: `Perséinlech Donnéeën`,
     donneesCorps: `Dës Säit setzt keng Cookien, mëscht keng Zougrëffsmiessung a rifft kee frieme Service un. Et gi keng perséinlech Donnéeë gesammelt; et gëtt also näischt anzegesinn, ze verbesseren oder ze läschen. D’Applikatioun selwer behält dat, wat Dir do aginn, nëmmen op Ärem Apparat — hir Säit „Grenzen“ beschreift dat.`,
     responsabiliteTitre: `Haftung`,

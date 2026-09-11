@@ -16,7 +16,7 @@
  */
 import type { Contenu } from './type.ts'
 import {
-  ADRESSE_EDITEUR,
+  HEBERGEUR,
   NOM_EDITEUR,
   URL_APP,
   URL_CREDITS,
@@ -265,10 +265,12 @@ export const de: Contenu = {
     titre: `Impressum`,
     intro: `Diese Seite nennt, wer dieses Angebot veröffentlicht. Am Übrigen ändert sie nichts: Die Seite bleibt unabhängig, und maßgeblich ist das offizielle Dokument der Gemeinde.`,
     editeurTitre: `Herausgeber`,
-    editeurCorps: `Diese Seite wird von ${NOM_EDITEUR} privat und nicht gewerblich veröffentlicht. Sie ist weder beauftragt noch geprüft oder freigegeben durch die Gemeindeverwaltung Beckerich, die Grundschule oder die Maison Relais.
-Anschrift: ${ADRESSE_EDITEUR}`,
+    editeurCorps: `Diese Seite wird von ${NOM_EDITEUR} privat und nicht gewerblich veröffentlicht. Sie ist weder beauftragt noch geprüft oder freigegeben durch die Gemeindeverwaltung Beckerich, die Grundschule oder die Maison Relais.`,
+    editeurAdresseEtiquette: `Anschrift`,
+    editeurTelephoneEtiquette: `Telefon`,
+    editeurCourrielEtiquette: `E-Mail`,
     hebergeurTitre: `Hosting`,
-    hebergeurCorps: `Die Seite besteht aus statischen Dateien, die von einem durch den Herausgeber gemieteten Server ausgeliefert werden. Besuchsdaten werden dort nicht aufbewahrt.`,
+    hebergeurCorps: `Die Seite besteht aus statischen Dateien, die von einem virtuellen privaten Server ausgeliefert werden, den der Herausgeber bei ${HEBERGEUR} mietet. Besuchsdaten werden dort nicht aufbewahrt.`,
     donneesTitre: `Personenbezogene Daten`,
     donneesCorps: `Diese Seite setzt keine Cookies, misst keine Zugriffe und ruft keinen Dienst Dritter auf. Es werden keine personenbezogenen Daten erhoben; es gibt daher nichts einzusehen, zu berichtigen oder zu löschen. Die Anwendung selbst behält, was Sie dort eingeben, ausschließlich auf Ihrem Gerät — ihre Seite „Grenzen“ führt das aus.`,
     responsabiliteTitre: `Haftung`,

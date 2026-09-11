@@ -22,7 +22,7 @@
  */
 import type { Contenu } from './type.ts'
 import {
-  ADRESSE_EDITEUR,
+  HEBERGEUR,
   NOM_EDITEUR,
   URL_APP,
   URL_CREDITS,
@@ -269,10 +269,12 @@ export const en: Contenu = {
     titre: `Legal notice`,
     intro: `This page states who publishes the site. It changes nothing else about it: the site remains independent, and the municipality’s official document prevails.`,
     editeurTitre: `Publisher`,
-    editeurCorps: `This site is published by ${NOM_EDITEUR}, privately and non-commercially. It is neither commissioned, nor approved, nor reviewed by the Beckerich municipal administration, the primary school or the maison relais.
-Address: ${ADRESSE_EDITEUR}`,
+    editeurCorps: `This site is published by ${NOM_EDITEUR}, privately and non-commercially. It is neither commissioned, nor approved, nor reviewed by the Beckerich municipal administration, the primary school or the maison relais.`,
+    editeurAdresseEtiquette: `Address`,
+    editeurTelephoneEtiquette: `Phone`,
+    editeurCourrielEtiquette: `Email`,
     hebergeurTitre: `Hosting`,
-    hebergeurCorps: `The site consists of static files, served from a server rented by the publisher. No visit data is kept there.`,
+    hebergeurCorps: `The site consists of static files, served from a virtual private server that the publisher rents from ${HEBERGEUR}. No visit data is kept there.`,
     donneesTitre: `Personal data`,
     donneesCorps: `This page sets no cookies, does not measure audience and makes no request to any third-party service. No personal data is collected, so there is nothing to consult, correct or erase. The app itself keeps what you enter on your device alone; its “Limits” page sets that out in detail.`,
     responsabiliteTitre: `Liability`,

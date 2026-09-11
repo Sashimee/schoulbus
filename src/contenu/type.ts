@@ -282,9 +282,25 @@ export type Contenu = {
     /** Ce que cette page est, et ce qu'elle ne change pas. */
     intro: string
     editeurTitre: string
-    /** Qui publie. `ADRESSE_EDITEUR` s'y insère. */
+    /** Qui publie, en prose. Les coordonnées sont dans les trois étiquettes ci-dessous. */
     editeurCorps: string
+    /*
+     * Les trois étiquettes du bloc de coordonnées.
+     *
+     * Elles sont séparées de `editeurCorps` parce que les VALEURS ne se traduisent pas —
+     * une adresse postale, un numéro et un courriel s'écrivent pareil dans les cinq
+     * langues — alors que ce qui les nomme, si. Les fondre dans la prose remettrait
+     * `ADRESSE_EDITEUR` et les deux autres constantes dans cinq chaînes au lieu d'un
+     * endroit, et ferait d'une correction de coquille une modification en cinq exemplaires.
+     *
+     * Le téléphone et le courriel ne sont pas un ornement : le droit luxembourgeois demande
+     * un moyen de contact direct, et une adresse postale n'en est pas un.
+     */
+    editeurAdresseEtiquette: string
+    editeurTelephoneEtiquette: string
+    editeurCourrielEtiquette: string
     hebergeurTitre: string
+    /** Qui héberge. `HEBERGEUR` s'y insère : l'identité et le pays sont ce qui compte. */
     hebergeurCorps: string
     donneesTitre: string
     donneesCorps: string

@@ -32,7 +32,7 @@
  */
 import type { Contenu } from './type.ts'
 import {
-  ADRESSE_EDITEUR,
+  HEBERGEUR,
   NOM_EDITEUR,
   URL_APP,
   URL_CREDITS,
@@ -280,10 +280,12 @@ export const pt: Contenu = {
     titre: `Menções legais`,
     intro: `Esta página identifica quem publica o site. Não altera nada do resto: o site continua independente, e prevalece o documento oficial do município.`,
     editeurTitre: `Editor`,
-    editeurCorps: `Este site é publicado por ${NOM_EDITEUR}, a título privado e não comercial. Não foi encomendado, validado nem revisto pela administração comunal de Beckerich, pela escola fundamental ou pela maison relais.
-Morada: ${ADRESSE_EDITEUR}`,
+    editeurCorps: `Este site é publicado por ${NOM_EDITEUR}, a título privado e não comercial. Não foi encomendado, validado nem revisto pela administração comunal de Beckerich, pela escola fundamental ou pela maison relais.`,
+    editeurAdresseEtiquette: `Morada`,
+    editeurTelephoneEtiquette: `Telefone`,
+    editeurCourrielEtiquette: `Correio eletrónico`,
     hebergeurTitre: `Alojamento`,
-    hebergeurCorps: `O site é composto por ficheiros estáticos, servidos a partir de um servidor alugado pelo editor. Nenhum dado de visita é aí conservado.`,
+    hebergeurCorps: `O site é composto por ficheiros estáticos, servidos a partir de um servidor privado virtual que o editor aluga à ${HEBERGEUR}. Nenhum dado de visita é aí conservado.`,
     donneesTitre: `Dados pessoais`,
     donneesCorps: `Esta página não põe cookies, não mede a audiência e não faz qualquer pedido a serviços terceiros. Não é recolhido nenhum dado pessoal, pelo que não há nada a consultar, a corrigir ou a apagar. A aplicação, essa, guarda o que aí introduzir apenas no seu aparelho; a página «Limites» dela explica-o em detalhe.`,
     responsabiliteTitre: `Responsabilidade`,
