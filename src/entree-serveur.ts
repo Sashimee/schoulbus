@@ -22,13 +22,23 @@ import { FournisseurI18n } from './i18n/Fournisseur.tsx'
 import { Contact } from './pages/Contact.tsx'
 import { Independance } from './pages/Independance.tsx'
 import { Mentions } from './pages/Mentions.tsx'
-import { CONTENUS, LANGUES, PAGES, cheminPage, type Page } from './i18n/contexte.ts'
+import { LANGUES, PAGES, cheminPage, type Page } from './i18n/contexte.ts'
+import { CONTENUS } from './contenu/tous.ts'
+import { enregistrerContenu } from './i18n/registre.ts'
 import { LOCALES_OG, textesDePage, urlDePage } from './i18n/metadonnees.ts'
 import { APP_PUBLIEE, ORIGINE, URL_APP, URL_SOURCE_OFFICIELLE, imagePartage } from './config.ts'
 import { THEMES, fichierCapture } from './contenu/captures.ts'
 import type { Langue } from './contenu/type.ts'
 
 export { LANGUES, PAGES }
+
+/*
+ * Le pré-rendu rend les cinq langues d'affilée : il les veut toutes, et tout de suite.
+ * Il les pose donc dans le registre plutôt que de les y faire chercher une par une — ce
+ * paquet-ci n'est jamais expédié au navigateur, il n'a rien à économiser. C'est ce qui
+ * permet à `contenuCharge` de rester une lecture synchrone pendant `renderToString`.
+ */
+for (const langue of LANGUES) enregistrerContenu(langue, CONTENUS[langue])
 
 /**
  * Échappe ce qui entre dans un attribut HTML. Les textes viennent de nous, mais un

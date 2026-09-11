@@ -8,8 +8,18 @@
  * Par défaut, `matchMedia` répond « non » à tout — ce qui place la page au niveau
  * 'reduit'. Un test qui veut vérifier le niveau 'complet' ou 'aucun' surcharge la
  * fonction lui-même : voir `useNiveauMouvement.test.ts`.
+ *
+ * Les cinq dictionnaires sont posés dans le registre, comme le fait le pré-rendu et pour
+ * la même raison : un test rend de façon synchrone et compare les langues entre elles. Le
+ * navigateur, lui, n'en charge qu'un (`src/i18n/registre.ts`) — c'est tout l'objet du
+ * découpage, et c'est `src/entree.tsx` qui l'attend.
  */
 import '@testing-library/jest-dom/vitest'
+import { CONTENUS } from '../contenu/tous.ts'
+import { LANGUES } from '../i18n/contexte.ts'
+import { enregistrerContenu } from '../i18n/registre.ts'
+
+for (const langue of LANGUES) enregistrerContenu(langue, CONTENUS[langue])
 
 if (!window.matchMedia) {
   window.matchMedia = ((requete: string) => ({

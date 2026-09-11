@@ -16,7 +16,7 @@
  *
  * S'exécute après `vite build` et `vite build --ssr` (voir le script `build`).
  */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -40,6 +40,40 @@ const { rendre, metadonnees, blocNoscript, LANGUES, PAGES } = await import(
   pathToFileURL(SERVEUR).href,
 )
 const gabarit = readFileSync(GABARIT, 'utf8')
+
+/*
+ * Le morceau de la langue, annoncé dans le document.
+ *
+ * Les cinq dictionnaires étaient dans le paquet : un lecteur francophone téléchargeait
+ * quatre langues qu'il ne lirait jamais, environ 14 ko comprimés. Chacun est maintenant un
+ * morceau séparé que `src/i18n/registre.ts` va chercher — et un import dynamique n'est
+ * découvert qu'une fois le paquet exécuté, soit un aller-retour de plus avant que la page
+ * devienne interactive. Le `modulepreload` le fait partir AVEC la page.
+ *
+ * Le nom porte une empreinte : il se lit dans le manifeste de Vite, il ne s'écrit pas.
+ */
+const MANIFESTE = resolve(DIST, '.vite/manifest.json')
+if (!existsSync(MANIFESTE)) {
+  console.error(
+    `Le manifeste est absent (${MANIFESTE}). Il faut « build.manifest: true » dans ` +
+      'vite.config.ts : sans lui, le morceau de langue ne peut pas être nommé.',
+  )
+  process.exit(1)
+}
+const manifeste = JSON.parse(readFileSync(MANIFESTE, 'utf8'))
+const base = process.env.BASE_PATH ?? '/'
+
+function preloadDeLangue(langue) {
+  const entree = manifeste[`src/contenu/${langue}.ts`]
+  if (!entree?.file) {
+    console.error(
+      `Le manifeste ne connaît pas « src/contenu/${langue}.ts ». Le dictionnaire n'est ` +
+        'donc plus un morceau séparé — vérifier les imports dynamiques de src/i18n/registre.ts.',
+    )
+    process.exit(1)
+  }
+  return `    <link rel="modulepreload" href="${base}${entree.file}" />`
+}
 
 /** Le dossier d'une page dans une langue, relatif à `dist/`. '' pour l'accueil français. */
 function dossier(langue, page) {
@@ -71,6 +105,7 @@ for (const langue of LANGUES) {
        */
       .replace('<!--noscript-->', `\n${blocNoscript(langue)}\n    `)
       .replace('<!--contenu-vitrine-->', html)
+      .replace('</head>', `${preloadDeLangue(langue)}\n  </head>`)
 
     /*
      * Les chemins des ressources. Vite les a écrits en absolu depuis la racine du site
@@ -160,3 +195,6 @@ writeFileSync(
 )
 
 console.log('  sitemap.xml, robots.txt')
+
+// Le manifeste a servi, il ne se publie pas : il décrit le graphe des modules du site.
+rmSync(resolve(DIST, '.vite'), { recursive: true, force: true })

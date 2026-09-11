@@ -221,6 +221,30 @@ Contrainte qui gouverne `entree-serveur.ts` : **ce qui est rendu là doit être 
 que le navigateur rendra à l'hydratation.** D'où le niveau de mouvement qui démarre à
 `aucun` des deux côtés, et aucune lecture de `window` pendant le rendu.
 
+### Une seule langue descend
+
+Les cinq dictionnaires étaient dans le paquet : un lecteur francophone téléchargeait
+l'allemand, le luxembourgeois, le portugais et l'anglais, soit ≈ 14 ko comprimés pour rien.
+Chacun est maintenant un morceau séparé, tenu par `src/i18n/registre.ts`, et le pré-rendu
+annonce celui de SA langue en `modulepreload` — nom lu dans le manifeste de Vite, jamais
+écrit à la main.
+
+Trois choses à savoir avant d'y toucher :
+
+1. **`useContenu()` reste une lecture SYNCHRONE**, parce qu'elle est appelée au milieu d'un
+   rendu. C'est `src/entree.tsx` qui attend (`await chargerContenu`) **avant** `hydrateRoot`.
+   Rien ne clignote : le document est déjà pré-rendu, et React ne touche au DOM qu'au moment
+   où elle s'y accroche. Mesuré à 400 ko/s — 603 relevés du titre du héros, aucun vide.
+2. **Trois lecteurs alimentent le registre, et il n'en existe pas de quatrième** : le
+   navigateur par `chargerContenu`, le pré-rendu et les tests par `enregistrerContenu`
+   (depuis `src/contenu/tous.ts`, la forme réunie — **à ne jamais importer d'une
+   composante**, elle ramènerait les cinq langues).
+3. **Un test qui appelle `vi.resetModules()` repart d'un registre vide** et doit recharger
+   sa langue lui-même, comme le fait `entree.tsx`. Voir `src/tests/niveau-mouvement.test.ts`.
+
+Le budget de `npm run poids` est ce qui tient l'acquis : il lit ce que le document NOMME,
+donc le morceau de langue y entre et les quatre autres n'y entrent pas.
+
 ### Le mouvement est étagé, pas interrupté
 
 `src/mouvement/useNiveauMouvement.ts` rend `complet` / `reduit` / `aucun`. **Le premier

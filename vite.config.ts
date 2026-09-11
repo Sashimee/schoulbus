@@ -125,9 +125,20 @@ export default defineConfig({
   },
   plugins: [react(), pluginCsp()],
   build: {
-    // La vitrine n'a qu'une page : un seul fichier JS se télécharge plus vite que trois.
-    // Seul le shader est séparé, parce qu'il n'est chargé que sur les appareils qui le
-    // font tourner (voir `mouvement/Fond.tsx`).
+    /*
+     * Le manifeste, pour le pré-rendu et pour lui seul.
+     *
+     * Chaque langue est un morceau séparé depuis qu'on ne les expédie plus toutes les
+     * cinq (voir `src/i18n/registre.ts`). Le nom du morceau porte une empreinte, donc
+     * `scripts/prerendu.mjs` ne peut pas l'écrire à la main : il le lit ici pour poser le
+     * `modulepreload` de la langue de la page, sans quoi le dictionnaire ne serait
+     * découvert qu'après l'exécution du paquet — un aller-retour de plus avant que la
+     * page devienne interactive.
+     *
+     * Le pré-rendu efface `dist/.vite/` une fois qu'il a lu : c'est un fichier de
+     * construction, il n'a rien à faire dans ce qui est publié.
+     */
+    manifest: true,
     target: 'es2022',
     cssTarget: 'safari16',
   },
