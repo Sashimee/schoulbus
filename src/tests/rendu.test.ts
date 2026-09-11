@@ -15,7 +15,8 @@
  */
 import { describe, expect, it } from 'vitest'
 import { blocNoscript, rendre } from '../entree-serveur.ts'
-import { CONTENUS, LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
+import { LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
+import { CONTENUS } from '../contenu/tous.ts'
 import {
   ADRESSE_CONTACT,
   APP_PUBLIEE,

@@ -165,6 +165,13 @@ describe('Le rideau', () => {
     sessionStorage.clear()
     const { Rideau } = await import('../sections/Rideau.tsx')
     const { FournisseurI18n } = await import('../i18n/Fournisseur.tsx')
+    /*
+     * Le dictionnaire, avant de rendre — comme `src/entree.tsx` avant d'hydrater. Le
+     * `resetModules` ci-dessus rend un registre neuf et vide à chaque test : celui que
+     * `preparation.ts` avait rempli n'est plus celui que lit ce `FournisseurI18n`.
+     */
+    const { chargerContenu } = await import('../i18n/registre.ts')
+    await chargerContenu('fr')
     return render(
       createElement(FournisseurI18n, { langueInitiale: 'fr' }, createElement(Rideau)),
     )

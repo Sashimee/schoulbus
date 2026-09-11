@@ -363,26 +363,49 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   la corriger ici seul les ferait diverger. Une relecture native reste nécessaire :
   ce qu'une machine sait vérifier est ce qui a une règle, et le naturel n'en a pas.
 
-- **Cent trois kilo-octets de JavaScript. Le poids est approuvé, la question d'architecture
-  reste.** Premier écran, cache vide : **103,6 ko de JS comprimé** pour une page
-  entièrement pré-rendue dont l'interactivité se réduit à une liste déroulante, deux
-  boutons de thème et des révélations au défilement. Deux requêtes seulement bloquent le premier rendu (6,4 ko de
-  document, 6,0 ko de style), donc rien ne presse à l'affichage.
+- **Quatre-vingt-seize kilo-octets de JavaScript. Le poids est approuvé, la question
+  d'architecture reste.** Premier écran, cache vide : **96,7 ko de JS comprimé** pour une
+  page entièrement pré-rendue dont l'interactivité se réduit à une liste déroulante, deux
+  boutons de thème et des révélations au défilement. Deux requêtes seulement bloquent le
+  premier rendu (6,4 ko de document, 6,0 ko de style), donc rien ne presse à l'affichage.
   Ce qui manquait — une limite — a été posé le 8 septembre : `npm run poids`, appelé à la
   fin de `npm run build`, mesure ce que `dist/index.html` NOMME (les imports dynamiques de
-  `lenis` et de `motion` ne comptent pas, ils ne partent pas avec la page) et refuse au-delà
-  de 110 ko. La marge est de 6 % et non de 45 % comme celle des captures, parce que les cinq
-  fichiers de contenu sont dans le paquet : un budget serré ferait échouer la construction
-  pour une correction de texte.
-  **L'éditeur a approuvé ces 103,6 ko le 10 septembre 2026** : le budget ne fait plus
-  qu'enregistrer un poids que personne n'avait jugé. Ce qui reste ouvert est la question
-  qu'aucun des deux ne pose : ce que React, `motion` et cinq dictionnaires complets font
-  dans une page qu'on lit une fois. C'est le seul poste où il reste une marge d'un ordre de
-  grandeur, et la refermer demande une décision d'architecture, pas un réglage. Le seul
-  gain mesurable sans cette décision — servir un dictionnaire de langue au lieu de cinq —
-  est isolé dans le ticket #13, qui peut d'ailleurs être abandonné : 14 ko ne valent pas un
-  scintillement de texte si le morceau de langue ne peut pas être déclaré par le document
-  pré-rendu.
+  `lenis` et de `motion` ne comptent pas, ils ne partent pas avec la page).
+  **L'éditeur avait approuvé 103,6 ko le 10 septembre 2026**, et le chiffre a baissé
+  depuis : le budget ne fait plus qu'enregistrer un poids que personne n'avait jugé.
+
+  **Les budgets ont bougé le 11 septembre 2026, et dans les deux sens** — c'est le ticket
+  #13, et le marché mérite d'être écrit plutôt que constaté six mois plus tard. Les cinq
+  dictionnaires ne sont plus dans le paquet : chacun est un morceau que la page va chercher
+  (`src/i18n/registre.ts`), et le pré-rendu annonce celui de SA langue en `modulepreload`.
+
+  | | avant | après | budget |
+  | --- | --- | --- | --- |
+  | premier écran | 106,4 ko | **96,7 ko** | 110 → **102 ko** |
+  | tout le site | 115,7 ko | **120,8 ko** | 120 → **128 ko** |
+
+  Le premier écran perd 9,7 ko parce qu'un lecteur francophone ne télécharge plus les
+  quatre langues qu'il ne lira jamais. Le total en gagne 5, parce que gzip partageait la
+  structure des cinq dictionnaires tant qu'ils tenaient dans un seul fichier : comprimés
+  séparément, ils passent de ≈ 13,9 à ≈ 18,5 ko. **On paie cinq kilo-octets qu'aucune
+  visite ne télécharge pour en économiser dix que toute visite téléchargeait.** Le second
+  budget est donc devenu un plafond théorique — il faudrait traverser les cinq langues
+  d'affilée pour l'atteindre — et le premier est le seul qui décrive une visite réelle :
+  c'est lui qu'on resserre, de 3 % de marge à 5 %, assez pour rattraper une régression qui
+  remettrait les dictionnaires dans le paquet.
+
+  Ce que le ticket craignait n'est pas arrivé, et cela a été MESURÉ et non raisonné :
+  Chromium, `dist/` servi tel quel, réseau ramené à 400 ko/s et 150 ms de latence, le titre
+  du héros relevé à chaque image du chargement jusqu'après l'hydratation — **603 relevés,
+  aucun vide.** Le document est déjà pré-rendu : attendre le dictionnaire avant
+  `hydrateRoot` ne vide rien, puisque React ne touche au DOM qu'au moment où elle s'y
+  accroche. Ce qui arrive quelques millisecondes plus tard n'est pas la page, c'est son
+  interactivité — le marché déjà passé pour `lenis` et pour `motion`.
+
+  Ce qui reste ouvert est la question qu'aucun des deux budgets ne pose : ce que React et
+  `motion` font dans une page qu'on lit une fois. C'est le seul poste où il reste une marge
+  d'un ordre de grandeur, et la refermer demande une décision d'architecture, pas un
+  réglage.
 
 - **Les contrastes sont calculés, pas mesurés à la pipette — réserve ACCEPTÉE.**
   `npm run contraste` calcule ce que le navigateur devrait afficher ; il ne lit pas

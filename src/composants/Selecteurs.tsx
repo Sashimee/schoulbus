@@ -40,7 +40,7 @@ export function ChoixLangue() {
         className="liste-langue__champ"
         aria-label={contenu.general.choixLangue}
         value={langue}
-        onChange={(evenement) => changerLangue(evenement.target.value as Langue)}
+        onChange={(evenement) => void changerLangue(evenement.target.value as Langue)}
       >
         {LANGUES.map((l) => (
           <option key={l} value={l}>

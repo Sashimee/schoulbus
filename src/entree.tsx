@@ -15,6 +15,13 @@
  *
  * La langue est déduite de l'adresse, exactement comme au pré-rendu : les deux doivent
  * donner le même arbre, sinon React jette l'HTML reçu et refait tout.
+ *
+ * ON ATTEND LE DICTIONNAIRE AVANT D'HYDRATER. Les cinq langues étaient dans le paquet ;
+ * chacune est maintenant un morceau qu'on va chercher, et `import()` n'est pas synchrone.
+ * Attendre ne fait pourtant rien clignoter : le document est déjà pré-rendu, complet et
+ * dans la bonne langue, et React ne touche au DOM qu'au moment où elle s'y accroche. Ce
+ * qui arrive quelques millisecondes plus tard n'est pas la page, c'est son interactivité —
+ * exactement le marché déjà passé pour `lenis` et pour `motion`.
  */
 import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
@@ -24,6 +31,7 @@ import { Contact } from './pages/Contact.tsx'
 import { Mentions } from './pages/Mentions.tsx'
 import { FournisseurI18n } from './i18n/Fournisseur.tsx'
 import { langueDuChemin, pageDuChemin } from './i18n/contexte.ts'
+import { chargerContenu } from './i18n/registre.ts'
 import './styles/vitrine.css'
 
 const racine = document.getElementById('racine')
@@ -32,13 +40,14 @@ if (racine) {
   // La page se déduit de l'adresse, comme la langue, et pour la même raison : le
   // pré-rendu a fait le même calcul, et les deux arbres doivent coïncider.
   const page = pageDuChemin(window.location.pathname)
+  const langue = langueDuChemin(window.location.pathname)
+
+  // Le seul point du démarrage qui attend. Le document reste à l'écran pendant ce temps.
+  await chargerContenu(langue)
 
   const arbre = (
     <StrictMode>
-      <FournisseurI18n
-        langueInitiale={langueDuChemin(window.location.pathname)}
-        pageInitiale={page}
-      >
+      <FournisseurI18n langueInitiale={langue} pageInitiale={page}>
         {page === 'mentions' ? (
           <Mentions />
         ) : page === 'independance' ? (
