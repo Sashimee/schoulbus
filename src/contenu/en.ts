@@ -181,7 +181,7 @@ export const en: Contenu = {
   },
 
   limites: {
-    titre: 'What this site does not know.',
+    titre: 'What this site cannot do.',
     note: `six limits, before we ask you to open it`,
     items: [
       {
@@ -237,7 +237,7 @@ export const en: Contenu = {
       `This will be the morning screen: one time, and how long is left before you go. ` +
       `Nothing to look up, nothing to compare, no morning spent thinking about it.`,
     action: 'Open the app',
-    qr: 'Or scan to open it on the phone',
+    qr: 'Or scan the code to open it on your phone',
     bientot:
       `The app is still in development. This page describes what it does; it does not lead ` +
       `there yet. In the meantime, the municipality’s official plan remains the source to ` +
@@ -269,7 +269,7 @@ export const en: Contenu = {
     titre: `Legal notice`,
     intro: `This page states who publishes the site. It changes nothing else about it: the site remains independent, and the municipality’s official document prevails.`,
     editeurTitre: `Publisher`,
-    editeurCorps: `This site is published by ${NOM_EDITEUR}, privately and non-commercially. It is neither commissioned, nor approved, nor reviewed by the Beckerich municipal administration, the primary school or the maison relais.`,
+    editeurCorps: `This site is published by ${NOM_EDITEUR}, privately and non-commercially. It is neither commissioned, nor approved, nor reviewed by the Beckerich municipal administration, the fundamental school or the maison relais.`,
     editeurAdresseEtiquette: `Address`,
     editeurTelephoneEtiquette: `Phone`,
     editeurCourrielEtiquette: `Email`,

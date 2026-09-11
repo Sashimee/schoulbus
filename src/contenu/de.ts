@@ -9,8 +9,8 @@
  *
  *  1. Die Zahlen im Kopf der Seite und im Schluss sind DIE DER BILDSCHIRMAUFNAHME. Der
  *     Leser sieht den Bildschirm neben dem Satz; weichen sie ab, hält er den Satz für
- *     falsch. Auf `public/captures/aujourdhui-de-*.webp` steht „in 16 Min." — deshalb
- *     „16 Min." und nicht „16 min".
+ *     falsch. Auf `public/captures/aujourdhui-de-*.webp` steht „in 16 Min.“ — deshalb
+ *     „16 Min.“ und nicht „16 min“.
  *  2. `heros.titre` wird in den Teilen-Vorschaubildern mit 76 px auf 1200 px Breite
  *     gezeichnet: HÖCHSTENS 24 ZEICHEN PRO ZEILE, danach `npm run assets:partage`.
  */
@@ -265,7 +265,7 @@ export const de: Contenu = {
     titre: `Impressum`,
     intro: `Diese Seite nennt, wer dieses Angebot veröffentlicht. Am Übrigen ändert sie nichts: Die Seite bleibt unabhängig, und maßgeblich ist das offizielle Dokument der Gemeinde.`,
     editeurTitre: `Herausgeber`,
-    editeurCorps: `Diese Seite wird von ${NOM_EDITEUR} privat und nicht gewerblich veröffentlicht. Sie ist weder beauftragt noch geprüft oder freigegeben durch die Gemeindeverwaltung Beckerich, die Grundschule oder die Maison Relais.`,
+    editeurCorps: `Diese Seite wird von ${NOM_EDITEUR} privat und nicht gewerblich veröffentlicht. Sie ist weder beauftragt noch geprüft noch freigegeben durch die Gemeindeverwaltung Beckerich, die Grundschule oder die Maison Relais.`,
     editeurAdresseEtiquette: `Anschrift`,
     editeurTelephoneEtiquette: `Telefon`,
     editeurCourrielEtiquette: `E-Mail`,
