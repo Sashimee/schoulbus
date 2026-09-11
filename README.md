@@ -318,8 +318,42 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `D'Zäiten zu Fouss` et diverge donc sciemment. **Et l'application hésite entre ses
   propres termes** — `Cycle` treize fois contre `Zyklus` trois, `Fahrt` douze contre
   `Faart` deux : les corrections ci-dessus suivent le terme majoritaire, pas une source
-  unique. Ce que l'application garde et qui n'est donc pas une faute ici : `Statioun`,
-  `Applikatioun`, `sinn`, `gesinn` devant consonne.
+  unique.
+
+  **CET AVERTISSEMENT ÉTAIT À MOITIÉ FAUX, et il a été corrigé le 11 septembre 2026.** Il
+  disait : « ce que l'application garde et qui n'est donc pas une faute ici : `Statioun`,
+  `Applikatioun`, `sinn`, `gesinn` devant consonne ». Les données linguistiques du LOD,
+  publiées en accès libre par le ZLS, tranchent mécaniquement : chaque lemme y porte un
+  attribut `nRuleForm`, c'est-à-dire la forme imposée par la règle de l'Eifel.
+
+  | lemme | `nRuleForm` au LOD | conséquence |
+  | --- | --- | --- |
+  | `Statioun` | *aucun* | le `-n` ne tombe jamais — l'avertissement était juste |
+  | `Applikatioun` | *aucun* | idem |
+  | `sinn` | **`si`** | le `-n` tombe — **trois occurrences étaient fautives** |
+  | `gesinn` | **`gesi`** | le `-n` tombe |
+
+  La raison est dans la règle elle-même : le `-n` se maintient dans les substantifs et les
+  adjectifs quel que soit le son qui suit, SAUF ceux qui finissent en `-en`, `-een` ou
+  `-äin` — d'où `an eng Reunioun goen`, et d'où les substantifs en `-ioun`. Les VERBES,
+  eux, suivent la règle générale. La formule du README confondait les deux et aurait fait
+  commettre la faute à la passe suivante ; `sinn scho do`, `sinn geschat` et
+  `a sinn suergfälteg` sont devenus `si`.
+
+  **Et `Fahrt` est redevenu `Faart` — ce qui renverse une décision du 8 septembre.** Elle
+  avait suivi le terme majoritaire de l'application (`Fahrt` douze contre `Faart` deux), au
+  titre de la règle « le mot de l'application l'emporte ». Le LOD montre que la règle ne
+  s'appliquait pas : `Faart` est le lemme luxembourgeois (féminin, pluriel `Faarten`), et
+  `Fahrt` n'y existe pas comme entrée — il n'y figure que comme TRADUCTION allemande de
+  `Faart`. Vérifié à la source : `lod.lu/artikel/FAART1` répond, `lod.lu/artikel/FAHRT1`
+  rend un 404.
+
+  La règle du dépôt dit que le mot de l'application l'emporte **quand les deux sont
+  acceptables**. Ici l'un n'est pas du luxembourgeois, donc elle ne s'applique pas, et
+  c'est le terme minoritaire qui était correct : suivre la majorité l'aurait manqué. La
+  vitrine se contredisait d'ailleurs déjà toute seule, avec `Offaart` à deux endroits et
+  `Fahrt` à un troisième. **L'application, elle, n'a pas été touchée** — c'est un ticket,
+  pas un geste unilatéral dans un dépôt qu'on ne relit pas ici.
 
   **Le 8 septembre a ajouté des chaînes à relire**, et il faut le dire plutôt que de le
   laisser se diluer : `meta.sansScript` (le bloc sans JavaScript) est une phrase nouvelle
@@ -356,12 +390,32 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `src/contenu/pt.ts`**, et non ici seulement : c'est le fichier qu'on ouvre pour les
   rouvrir.
 
-  Ce qui N'EST toujours PAS tranché, faute de compétence native, et qui reste à relire :
-  `Moiescher` (le pluriel de `Moien`), `dat ganzt Produit` (genre du mot `Produit`),
-  `stiechen an der Säit` (le verbe, calqué de l'allemand `stecken in`). En portugais,
-  `por um pai` traduit `un parent` par « un père » — l'application dit la même chose, donc
-  la corriger ici seul les ferait diverger. Une relecture native reste nécessaire :
-  ce qu'une machine sait vérifier est ce qui a une règle, et le naturel n'en a pas.
+  **Les trois formes laissées ouvertes le 11 septembre sont tranchées — par le
+  dictionnaire, pas par un avis.** Deux étaient des fautes, la troisième ne l'était pas :
+
+  - `Moiescher` → **`Moienter`**. Le LOD donne `Moienter` comme forme de pluriel
+    (`Méindegmoienter`, « déi lescht Moienter hunn ech am Gaart geschafft ») ; `Moiescher`
+    n'y a aucune occurrence, et `-escher` n'est pas un patron de pluriel luxembourgeois.
+  - `dat ganzt Produit` → **`de ganze Produit`**. `PRODUIT1` est masculin au LOD.
+  - `stiechen an der Säit` — **CORRECT, à garder.** `STIECHEN2` porte bien le sens locatif
+    (« looss de Schlëssel net am Schlass stiechen ! », « wie stécht hanner dëser Affär ? »),
+    indépendamment de l'allemand `stecken in`. Ce n'était pas un calque. Registre concret
+    plutôt qu'abstrait : un choix, et non une faute.
+
+  **Ce qui reste ouvert, et ne se referme pas ici.** En portugais, `por um pai` traduit
+  `un parent` par « un père » — le LOD traduit lui-même `Elterendeel` par « um dos pais »,
+  mais l'application dit la même chose trois fois, donc corriger la vitrine seule les ferait
+  diverger : c'est une proposition pour les deux dépôts ou pour aucun. Même situation pour
+  `casa de acolhimento`, qui est en droit portugais un terme de placement d'enfant en
+  danger (Portaria n.º 450/2023) là où le registre d'ici garde `maison relais`.
+
+  Et surtout : **ce que le dictionnaire tranche est ce qui a une règle.** Le LOD dit que
+  `stiechen` a le sens locatif ; il ne dit pas qu'un parent de Biekerech écrirait
+  `déi 108 Stroosse stiechen an der Säit` plutôt que quatre autres tournures. Il dit que
+  `Affichage` est masculin ; il ne dit pas quel mot mettre à la place. **La réserve
+  rétrécit, elle ne se referme pas** — et pour le portugais, aucun corpus institutionnel
+  publié au Luxembourg n'est assez large pour arbitrer : ni guichet.public.lu ni
+  mobiliteit.lu ne publient dans cette langue.
 
 - **Cent trois kilo-octets de JavaScript. Le poids est approuvé, la question d'architecture
   reste.** Premier écran, cache vide : **103,6 ko de JS comprimé** pour une page
