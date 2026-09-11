@@ -309,7 +309,7 @@ export const fr: Contenu = {
     editeurTelephoneEtiquette: `Téléphone`,
     editeurCourrielEtiquette: `Courriel`,
     hebergeurTitre: `Hébergement`,
-    hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur privé virtuel que l’éditeur loue auprès de ${HEBERGEUR}. Aucune donnée de visite n’y est conservée.`,
+    hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur privé virtuel que l’éditeur loue auprès d’${HEBERGEUR}. Aucune donnée de visite n’y est conservée.`,
     donneesTitre: `Données personnelles`,
     donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l’audience et n’adresse aucune requête à un service tiers. Aucune donnée personnelle n’est collectée, et il n’y a donc rien à consulter, à corriger ni à effacer. L’application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
     responsabiliteTitre: `Responsabilité`,

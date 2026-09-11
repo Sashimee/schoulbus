@@ -270,7 +270,7 @@ export const de: Contenu = {
     editeurTelephoneEtiquette: `Telefon`,
     editeurCourrielEtiquette: `E-Mail`,
     hebergeurTitre: `Hosting`,
-    hebergeurCorps: `Die Seite besteht aus statischen Dateien, die von einem virtuellen privaten Server ausgeliefert werden, den der Herausgeber bei ${HEBERGEUR} mietet. Besuchsdaten werden dort nicht aufbewahrt.`,
+    hebergeurCorps: `Die Seite besteht aus statischen Dateien, die von einem virtuellen privaten Server ausgeliefert werden. Der Herausgeber mietet ihn bei ${HEBERGEUR}. Besuchsdaten werden dort nicht aufbewahrt.`,
     donneesTitre: `Personenbezogene Daten`,
     donneesCorps: `Diese Seite setzt keine Cookies, misst keine Zugriffe und ruft keinen Dienst Dritter auf. Es werden keine personenbezogenen Daten erhoben; es gibt daher nichts einzusehen, zu berichtigen oder zu löschen. Die Anwendung selbst behält, was Sie dort eingeben, ausschließlich auf Ihrem Gerät — ihre Seite „Grenzen“ führt das aus.`,
     responsabiliteTitre: `Haftung`,
