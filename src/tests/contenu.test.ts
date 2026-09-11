@@ -180,6 +180,41 @@ describe('chiffres', () => {
     expect(CHIFFRES.langues).toBe(5)
   })
 
+  /*
+   * La typographie française : l'insécable avant la ponctuation haute, et dans les
+   * guillemets.
+   *
+   * Elle manquait partout — treize emplacements, pas une seule U+00A0 dans le fichier. Ce
+   * n'est pas une coquetterie : sans elle, un « : » ou un « ; » se retrouve seul en début
+   * de ligne dès que la largeur s'y prête, et la page a des colonnes qui se replient
+   * d'elles-mêmes à toutes les largeurs. La passe typographique du 8 septembre avait
+   * corrigé les guillemets et les apostrophes ; les insécables lui avaient échappé, et
+   * rien ne les tenait.
+   *
+   * UNE SEULE ESPÈCE D'INSÉCABLE, U+00A0, y compris devant `;`. La fine U+202F serait plus
+   * juste typographiquement, mais deux caractères invisibles et indiscernables dans un
+   * diff sont deux caractères qu'on interchange sans le voir. Le gain est le même : la
+   * ponctuation ne passe pas à la ligne.
+   *
+   * Le français seul. L'allemand, le portugais et l'anglais ne mettent pas d'espace devant
+   * une ponctuation haute, et le luxembourgeois suit l'allemand.
+   */
+  it('le français ne laisse aucune ponctuation haute passer à la ligne', () => {
+    const fautifs: string[] = []
+    const visiter = (valeur: unknown, chemin: string) => {
+      if (typeof valeur === 'string') {
+        if (/ [:;»]|« /.test(valeur)) fautifs.push(`${chemin} — « ${valeur} »`)
+        return
+      }
+      if (Array.isArray(valeur)) return valeur.forEach((v, i) => visiter(v, `${chemin}[${i}]`))
+      if (valeur && typeof valeur === 'object') {
+        for (const [cle, v] of Object.entries(valeur)) visiter(v, `${chemin}.${cle}`)
+      }
+    }
+    visiter(CONTENUS.fr, 'fr')
+    expect(fautifs).toEqual([])
+  })
+
   it('la vitrine parle autant de langues qu’elle en annonce', () => {
     /*
      * La bande de chiffres affiche « 5 langues, dont le luxembourgeois ». Tant que la

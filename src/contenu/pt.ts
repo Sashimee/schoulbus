@@ -95,7 +95,7 @@ export const pt: Contenu = {
     envoi: 'dados da família que saem sem os ter pedido',
     envoiValeur: '0',
     envoiNote:
-      `Três coisas saem mesmo assim: a aplicação conta as suas páginas vistas, ativar as ` +
+      `Três coisas saem mesmo assim: a aplicação conta as suas visualizações de página, ativar as ` +
       `notificações guarda um identificador anónimo do aparelho num servidor enquanto durar ` +
       `a subscrição, e escrever os trajetos no Google Agenda envia à Google o nome próprio ` +
       `da criança e o nome da sua paragem. Nem a sua morada, nem os ciclos.`,
@@ -192,7 +192,7 @@ export const pt: Contenu = {
 
   limites: {
     titre: 'O que este site não sabe.',
-    note: `seis limites, antes de lhe pedirmos que o abra`,
+    note: `seis limites, antes de lhe pedirmos que a abra`,
     items: [
       {
         titre: 'Os tempos a pé são estimados',
@@ -217,7 +217,7 @@ export const pt: Contenu = {
       {
         titre: 'Três coisas saem mesmo assim',
         texte:
-          `As páginas vistas, um identificador anónimo do aparelho se ativar as ` +
+          `As visualizações de página, um identificador anónimo do aparelho se ativar as ` +
           `notificações, e o nome próprio da criança se escrever os trajetos no ` +
           `Google Agenda.`,
       },
@@ -271,23 +271,23 @@ export const pt: Contenu = {
     },
     mention: 'Feito por um pai, em Beckerich.',
     source: `Dados: plano oficial do município, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
-    lienMentions: 'Menções legais',
+    lienMentions: 'Aviso legal',
     lienContact: 'Escrever',
-    viePrivee: 'Esta página não põe cookies, não mede nada e não chama nenhum servidor.',
+    viePrivee: 'Esta página não instala cookies, não mede nada e não chama nenhum servidor.',
   },
 
   mentions: {
-    titre: `Menções legais`,
+    titre: `Aviso legal`,
     intro: `Esta página identifica quem publica o site. Não altera nada do resto: o site continua independente, e prevalece o documento oficial do município.`,
     editeurTitre: `Editor`,
     editeurCorps: `Este site é publicado por ${NOM_EDITEUR}, a título privado e não comercial. Não foi encomendado, validado nem revisto pela administração comunal de Beckerich, pela escola fundamental ou pela maison relais.`,
     editeurAdresseEtiquette: `Morada`,
     editeurTelephoneEtiquette: `Telefone`,
-    editeurCourrielEtiquette: `Correio eletrónico`,
+    editeurCourrielEtiquette: `E-mail`,
     hebergeurTitre: `Alojamento`,
     hebergeurCorps: `O site é composto por ficheiros estáticos, servidos a partir de um servidor privado virtual que o editor aluga à ${HEBERGEUR}. Nenhum dado de visita é aí conservado.`,
     donneesTitre: `Dados pessoais`,
-    donneesCorps: `Esta página não põe cookies, não mede a audiência e não faz qualquer pedido a serviços terceiros. Não é recolhido nenhum dado pessoal, pelo que não há nada a consultar, a corrigir ou a apagar. A aplicação, essa, guarda o que aí introduzir apenas no seu aparelho; a página «Limites» dela explica-o em detalhe.`,
+    donneesCorps: `Esta página não instala cookies, não mede a audiência e não faz qualquer pedido a serviços terceiros. Não é recolhido nenhum dado pessoal, pelo que não há nada a consultar, a corrigir ou a apagar. A aplicação, essa, guarda o que aí introduzir apenas no seu aparelho; a página «Limites» dela explica-o em detalhe.`,
     responsabiliteTitre: `Responsabilidade`,
     responsabiliteCorps: `Os horários apresentados são retomados do plano oficial do município e transcritos com cuidado, sem garantia de exatidão. Em caso de dúvida ou de divergência, prevalece o documento oficial do município.`,
     retour: `Voltar à página inicial`,
@@ -298,14 +298,14 @@ export const pt: Contenu = {
     intro: `Um endereço, para assinalar um horário que não corresponde, uma apresentação que se desmancha, ou algo que falta. Por detrás está um pai, não um serviço.`,
     adresseTitre: `O endereço`,
     adresseIntro: `As mensagens chegam aqui:`,
-    adresseNote: `Esta página não envia nada por si mesma: o endereço está escrito em claro, e é o seu programa de correio que trata do resto. Uma mensagem recebida fica numa caixa de correio comum enquanto servir; não é registada nem copiada para outro lado. Uma resposta pode demorar alguns dias.`,
+    adresseNote: `Esta página não envia nada por si mesma: o endereço está escrito por extenso, e é o seu programa de correio que trata do resto. Uma mensagem recebida fica numa caixa de correio comum enquanto servir; não é registada nem copiada para outro lado. Uma resposta pode demorar alguns dias.`,
     utileTitre: `O que ajuda`,
     utileCorps: `Para um horário que não corresponde: a linha, a paragem, o dia, e a hora que esperava.
 Para uma apresentação que se desmancha: o aparelho, o navegador, e o que mostra o ecrã.
 Escreva na língua que lhe vier.`,
     limitesTitre: `O que este endereço não pode fazer`,
-    limitesCorps: `Não leva à comuna, nem à escola, nem à maison relais. Uma ausência a comunicar, uma inscrição, um pedido de mudança de paragem: isso dirige-se diretamente a eles, e uma mensagem enviada para aqui não lá chegará.
-Vale o plano oficial da comuna. Se este site o mostrar de outra maneira, é este site que está errado — e é exatamente isso que vale a pena assinalar.`,
+    limitesCorps: `Não leva ao município, nem à escola, nem à maison relais. Uma ausência a comunicar, uma inscrição, um pedido de mudança de paragem: isso dirige-se diretamente a eles, e uma mensagem enviada para aqui não lá chegará.
+Prevalece o plano oficial do município. Se este site o mostrar de outra maneira, é este site que está errado — e é exatamente isso que vale a pena assinalar.`,
     retour: `Voltar à página inicial`,
   },
 }

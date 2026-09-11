@@ -72,21 +72,21 @@ export const lb: Contenu = {
   },
 
   chiffres: {
-    arrets: 'Bedéngte Statiounen',
+    arrets: 'bedéngte Statiounen',
     villages: 'Dierfer an der Gemeng',
     langues: 'Sproochen, och Lëtzebuergesch',
     envoi: 'Familljendonnéeën, déi ouni Är Ufro erausginn',
     envoiValeur: '0',
     envoiNote:
-      `Dräi Saache ginn awer eraus: d’Applikatioun zielt hir Säitenopruff, wien ` +
+      `Dräi Saache ginn awer eraus: d’Applikatioun zielt hir Säitenopruffer, wien ` +
       `d’Notifikatiounen aschalt, hannerleet eng anonym Apparat-Kennung op engem Server, sou ` +
       `laang wéi den Abonnement leeft, a wien d’Weeër an de Google Kalenner schreift, schéckt ` +
       `de Virnumm vum Kand an den Numm vu senger Statioun bei Google. Weder Är Adress, nach ` +
-      `d’Zyklen.`,
+      `d’Cyclen.`,
   },
 
   ecrans: {
-    titre: 'Véier Bildschiermer, an dat ass dat ganzt Produit.',
+    titre: 'Véier Bildschiermer, an dat ass de ganze Produit.',
     note: `Richteg Opname vun der Applikatioun, Dënschdeg den 22. September 2026 um 07:25.`,
     cartes: [
       { titre: 'De Bildschierm vum Moien', texte: 'Eng Zäit pro Kand, a soss näischt.' },
@@ -104,7 +104,7 @@ export const lb: Contenu = {
 
   fonctions: {
     etiquette: 'Wat dran ass',
-    titre: 'Néng Äntwerten op néng Moiescher, déi sech net gläichen.',
+    titre: 'Néng Äntwerten op néng Moienter, déi sech net gläichen.',
     tuiles: [
       {
         icone: 'semaine',
@@ -125,7 +125,7 @@ export const lb: Contenu = {
         icone: 'alerte',
         ton: 'alerte',
         titre: 'D’Stéierungen',
-        texte: 'Déi ausgefalle Fahrt verschwënnt vum Bildschierm.',
+        texte: 'Déi ausgefalle Faart verschwënnt vum Bildschierm.',
       },
       {
         icone: 'imprimer',
@@ -168,7 +168,7 @@ export const lb: Contenu = {
       titre: 'D’Zäit steet scho do, ouni Netz.',
       points: [
         { texte: 'Installéiert sech aus dem Browser, ouni App-Store' },
-        { texte: 'Schrëften, Zäiten an Adresse sinn scho do' },
+        { texte: 'Schrëften, Zäiten an Adresse si scho do' },
         { texte: 'Nëmmen d’Kaart vum Wee zu Fouss brauch nach d’Netz', ton: 'nuance' },
       ],
     },
@@ -179,7 +179,7 @@ export const lb: Contenu = {
     note: `sechs Grenzen, ier mir Iech froen, se opzemaachen`,
     items: [
       {
-        titre: 'D’Zäiten zu Fouss sinn geschat',
+        titre: 'D’Zäiten zu Fouss si geschat',
         texte: `Loftlinn, ëm en Drëttel erhéicht, mat 4,5 km/h. Dat ass keng Route.`,
       },
       {
@@ -201,7 +201,7 @@ export const lb: Contenu = {
       {
         titre: 'Dräi Saache ginn awer eraus',
         texte:
-          `D’Säitenopruff, eng anonym Apparat-Kennung, wann Dir d’Notifikatiounen aschalt, ` +
+          `D’Säitenopruffer, eng anonym Apparat-Kennung, wann Dir d’Notifikatiounen aschalt, ` +
           `an de Virnumm vum Kand, wann Dir d’Weeër an de Google Kalenner schreift.`,
       },
     ],
@@ -234,7 +234,7 @@ export const lb: Contenu = {
     qr: 'Oder scannen, fir se um Telefon opzemaachen',
     bientot:
       `D’Applikatioun ass nach an der Entwécklung. Dës Säit beschreift, wat se mécht; si féiert ` +
-      `nach net dohinner. Bis dohinner bleift den offizielle Plang vun der Gemeng d’Quell déi ` +
+      `nach net dohinner. Bis dohinner bleift den offizielle Plang vun der Gemeng d’Quell, déi ` +
       `ee liese soll.`,
   },
 
@@ -256,38 +256,38 @@ export const lb: Contenu = {
     source: `Donnéeën: offizielle Plang vun der Gemeng, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Impressum',
     lienContact: 'Schreiwen',
-    viePrivee: 'Dës Säit setzt keng Cookien, mëscht keng Miessung, a rifft kee Server un.',
+    viePrivee: 'Dës Säit setzt keng Cookien, mëscht keng Miessung, a kontaktéiert kee Server.',
   },
 
   mentions: {
     titre: `Impressum`,
     intro: `Dës Säit seet, wien dëst Ugebot verëffentlecht. Um Rescht ännert si näischt: D’Säit bleift onofhängeg, a maassgeevend ass dat offiziellt Dokument vun der Gemeng.`,
-    editeurTitre: `Erausgi vun`,
+    editeurTitre: `Editeur`,
     editeurCorps: `Dës Säit gëtt vum ${NOM_EDITEUR} privat an net kommerziell erausginn. Si ass weder an Optrag ginn, nach vun der Gemengeverwaltung Biekerech, vun der Grondschoul oder vun der Maison Relais gepréift oder guttgeheescht.`,
     editeurAdresseEtiquette: `Adress`,
     editeurTelephoneEtiquette: `Telefon`,
     editeurCourrielEtiquette: `E-Mail`,
     hebergeurTitre: `Hosting`,
-    hebergeurCorps: `D’Säit besteet aus statesche Fichieren, déi vun engem virtuelle private Server ausgeliwwert ginn, deen den Erausginner bei ${HEBERGEUR} lount. Do gi keng Besuchsdonnéeën opbewahrt.`,
+    hebergeurCorps: `D’Säit besteet aus statesche Fichieren, déi vun engem virtuelle private Server ausgeliwwert ginn, deen den Editeur bei ${HEBERGEUR} lount. Do gi keng Besuchsdonnéeë gespäichert.`,
     donneesTitre: `Perséinlech Donnéeën`,
-    donneesCorps: `Dës Säit setzt keng Cookien, mëscht keng Zougrëffsmiessung a rifft kee frieme Service un. Et gi keng perséinlech Donnéeë gesammelt; et gëtt also näischt anzegesinn, ze verbesseren oder ze läschen. D’Applikatioun selwer behält dat, wat Dir do aginn, nëmmen op Ärem Apparat — hir Säit „Grenzen“ beschreift dat.`,
+    donneesCorps: `Dës Säit setzt keng Cookien, mëscht keng Zougrëffsmiessung a kontaktéiert kee friemen Déngscht. Et gi keng perséinlech Donnéeë gesammelt; et gëtt also näischt ze kucken, ze verbesseren oder ze läschen. D’Applikatioun selwer behält dat, wat Dir do aginn, nëmmen op Ärem Apparat — hir Säit „Grenzen“ beschreift dat.`,
     responsabiliteTitre: `Haftung`,
-    responsabiliteCorps: `D’ugewisen Zäite kommen aus dem offizielle Plang vun der Gemeng a sinn suergfälteg iwwerdroen, awer ouni Garantie. Am Zweiwel oder bei Ofwäichunge gëllt dat offiziellt Dokument vun der Gemeng.`,
+    responsabiliteCorps: `D’ugewisen Zäite kommen aus dem offizielle Plang vun der Gemeng a si suergfälteg iwwerdroen, awer ouni Garantie. Am Zweiwel oder bei Ofwäichunge gëllt dat offiziellt Dokument vun der Gemeng.`,
     retour: `Zréck op d’Startsäit`,
   },
 
   contact: {
     titre: `Schreiwen`,
-    intro: `Eng Adress, fir eng Zäit ze mellen, déi net stëmmt, eng Affichage, déi verrutscht, oder eppes, wat feelt. Dohannert steet en Elterendeel, kee Service.`,
+    intro: `Eng Adress, fir eng Zäit ze mellen, déi net stëmmt, eppes, wat falsch ugewise gëtt, oder eppes, wat feelt. Dohannert steet en Elterendeel, kee Service.`,
     adresseTitre: `D’Adress`,
     adresseIntro: `Noriichte kommen hei un:`,
-    adresseNote: `Dës Säit schéckt selwer näischt: d’Adress steet am Kloertext, an Äre Mailprogramm mécht de Rescht. Eng Noriicht, déi ukomm ass, bleift an enger gewéinlecher Boîte, sou laang wéi se déngt; si gëtt weder erfaasst nach soss anzwuersch kopéiert. Eng Äntwert ka puer Deeg daueren.`,
+    adresseNote: `Dës Säit schéckt selwer näischt: d’Adress steet am Kloertext, an Äre Mailprogramm mécht de Rescht. Eng Noriicht, déi ukomm ass, bleift an enger gewéinlecher Boîte, sou laang wéi se déngt; si gëtt weder erfaasst nach soss anzwuersch kopéiert. Eng Äntwert ka e puer Deeg daueren.`,
     utileTitre: `Wat hëlleft`,
     utileCorps: `Bei enger Zäit, déi net stëmmt: d’Linn, d’Statioun, den Dag, an d’Zäit, déi Dir erwaart hutt.
-Bei enger Affichage, déi verrutscht: den Apparat, de Browser, a wat den Ecran weist.
+Bei eppes, wat falsch ugewise gëtt: den Apparat, de Browser, a wat de Bildschierm weist.
 Schreift an der Sprooch, déi Iech kënnt.`,
     limitesTitre: `Wat dës Adress net ka maachen`,
-    limitesCorps: `Si féiert weder op d’Gemeng, nach op d’Schoul, nach op d’Maison Relais. Eng Absence ze mellen, eng Umeldung, de Wonsch no enger anerer Statioun: dat gehéiert direkt bei si, an eng Noriicht op dës Adress kënnt do net un.
+    limitesCorps: `Si féiert weder op d’Gemeng, nach op d’Schoul, nach op d’Maison Relais. Eng Absence ze mellen, eng Umeldung, de Wonsch no enger anerer Statioun: dat gehéiert direkt bei hinnen, an eng Noriicht op dës Adress kënnt do net un.
 Et gëllt dat offiziellt Dokument vun der Gemeng. Weist dës Säit eppes anescht, dann ass dës Säit falsch — a genau dat ass eng Meldung wäert.`,
     retour: `Zréck op d’Startsäit`,
   },
