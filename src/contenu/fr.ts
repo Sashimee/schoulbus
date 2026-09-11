@@ -50,7 +50,7 @@ export const fr: Contenu = {
   meta: {
     titre: 'Bus scolaire Beckerich — les horaires de vos enfants, sans y réfléchir',
     description:
-      `Le plan du bus scolaire de la commune de Beckerich, personnalisé pour chaque enfant : ` +
+      `Le plan du bus scolaire de la commune de Beckerich, personnalisé pour chaque enfant : ` +
       `son arrêt, son heure, son école. Hors ligne, sans compte. ` +
       `Site indépendant, sans lien avec la commune ni avec l’école.`,
     sansScript:
@@ -74,7 +74,7 @@ export const fr: Contenu = {
     etiquette: `Site indépendant · ${CHIFFRES.anneesCouvertes.join(' · ')}`,
     // 17 et 18 signes : sous la limite de 24 de la vignette de partage.
     titre: ['Ce que vous voyez', 'à 07:25, un mardi.'],
-    altCapture: `Écran d’accueil de l’application : la carte de Léa, bus à 07:45 au Kneppchen.`,
+    altCapture: `Écran d’accueil de l’application : la carte de Léa, bus à 07:45 au Kneppchen.`,
     lignes: [
       { valeur: '07:45', texte: 'l’heure de son bus, à son arrêt' },
       {
@@ -97,7 +97,7 @@ export const fr: Contenu = {
     envoi: 'donnée de famille qui part sans que vous le demandiez',
     envoiValeur: '0',
     envoiNote:
-      `Trois choses sortent quand même : l’application compte ses pages vues, activer les ` +
+      `Trois choses sortent quand même : l’application compte ses pages vues, activer les ` +
       `notifications dépose un identifiant d’appareil anonyme sur un serveur le temps de ` +
       `l’abonnement, et écrire les trajets dans Google Agenda envoie à Google le prénom de ` +
       `l’enfant et le nom de son arrêt. Ni votre adresse, ni les cycles.`,
@@ -176,7 +176,7 @@ export const fr: Contenu = {
       titre: 'Aucune donnée de votre famille ne quitte l’appareil.',
       texte:
         `Pas de compte, pas de mot de passe. Les ${CHIFFRES.rues} rues de la commune sont ` +
-        `embarquées dans le site : taper la vôtre n’interroge aucun service de cartographie.`,
+        `embarquées dans le site : taper la vôtre n’interroge aucun service de cartographie.`,
     },
     horsLigne: {
       etiquette: 'À l’arrêt',
@@ -237,7 +237,7 @@ export const fr: Contenu = {
           `Google Agenda.`,
       },
     ],
-    lien: 'Lire la page « Limites »',
+    lien: 'Lire la page « Limites »',
   },
 
   independance: {
@@ -259,12 +259,21 @@ export const fr: Contenu = {
     titreAvant: 'Il reste ',
     titreAccent: 'seize minutes',
     titreApres: ' avant de sortir.',
-    // Pas d'impératif tant que l'application n'est pas joignable : cette phrase est affichée
-    // juste au-dessus du bloc qui annonce qu'il n'y a rien à ouvrir. Demander un geste, puis
-    // dire dans le paragraphe suivant qu'il est impossible, use la confiance du lecteur plus
-    // vite que n'importe quelle maladresse de style.
+    /*
+     * Le futur, et ce n'est plus la même raison qu'avant.
+     *
+     * Ce commentaire disait « pas d'impératif tant que l'application n'est pas joignable »,
+     * et c'était juste tant que `APP_PUBLIEE` valait `false`. Ce ne l'est plus : cette
+     * phrase est la branche `APP_PUBLIEE === true` de `AppelFinal.tsx`, donc celle qui
+     * surplombe le bouton VIVANT. La contrainte est tombée avec l'interrupteur.
+     *
+     * Le futur reste, par choix de registre et non par obligation : il décrit les matins du
+     * lecteur, qui sont à venir, et non l'état de l'application, qui est publiée. Un
+     * impératif irait aussi — c'est la seule chose qui se décide ici, et il fallait que la
+     * raison écrite cesse d'en désigner une autre.
+     */
     chapeau:
-      `Ce sera l’écran du matin : une heure, et le temps qu’il reste avant de sortir. Rien à ` +
+      `Ce sera l’écran du matin : une heure, et le temps qu’il reste avant de sortir. Rien à ` +
       `chercher, rien à comparer, aucun matin à y repenser.`,
     action: 'Ouvrir l’application',
     qr: 'Ou scannez pour l’ouvrir sur le téléphone',
@@ -274,7 +283,7 @@ export const fr: Contenu = {
     // tourne. La page CHOISIT de ne pas y mener — ce n'est pas la même chose que prétendre
     // qu'on ne le peut pas.
     bientot:
-      `L’application est encore en développement. Cette page décrit ce qu’elle fait ; elle ` +
+      `L’application est encore en développement. Cette page décrit ce qu’elle fait ; elle ` +
       `n’y conduit pas encore. En attendant, le plan officiel de la commune reste la source ` +
       `à consulter.`,
   },
@@ -294,7 +303,7 @@ export const fr: Contenu = {
       projet: [{ texte: 'Crédits et remerciements', url: URL_CREDITS }],
     },
     mention: 'Fait par un parent, à Beckerich.',
-    source: `Données : plan officiel de la commune, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
+    source: `Données : plan officiel de la commune, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Mentions légales',
     lienContact: 'Écrire',
     viePrivee: 'Cette page ne pose aucun cookie, ne mesure rien, et n’appelle aucun serveur.',
@@ -302,7 +311,7 @@ export const fr: Contenu = {
 
   mentions: {
     titre: `Mentions légales`,
-    intro: `Cette page identifie qui publie ce site. Elle ne change rien à ce qu’il dit par ailleurs : le site reste indépendant, et le document officiel de la commune fait foi.`,
+    intro: `Cette page identifie qui publie ce site. Elle ne change rien à ce qu’il dit par ailleurs : le site reste indépendant, et le document officiel de la commune fait foi.`,
     editeurTitre: `Éditeur`,
     editeurCorps: `Ce site est publié par ${NOM_EDITEUR}, à titre privé et non commercial. Il n’est ni commandé, ni validé, ni relu par l’administration communale de Beckerich, par l’école fondamentale ou par la maison relais.`,
     editeurAdresseEtiquette: `Adresse`,
@@ -311,7 +320,7 @@ export const fr: Contenu = {
     hebergeurTitre: `Hébergement`,
     hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur privé virtuel que l’éditeur loue auprès d’${HEBERGEUR}. Aucune donnée de visite n’y est conservée.`,
     donneesTitre: `Données personnelles`,
-    donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l’audience et n’adresse aucune requête à un service tiers. Aucune donnée personnelle n’est collectée, et il n’y a donc rien à consulter, à corriger ni à effacer. L’application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
+    donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l’audience et n’adresse aucune requête à un service tiers. Aucune donnée personnelle n’est collectée, et il n’y a donc rien à consulter, à corriger ni à effacer. L’application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
     responsabiliteTitre: `Responsabilité`,
     responsabiliteCorps: `Les horaires affichés sont repris du plan officiel de la commune et retranscrits avec soin, sans garantie d’exactitude. En cas de doute ou de divergence, c’est le document officiel de la commune qui fait foi.`,
     retour: `Retour à la page d’accueil`,
@@ -321,14 +330,14 @@ export const fr: Contenu = {
     titre: `Écrire`,
     intro: `Une adresse, pour signaler un horaire qui ne correspond pas, un affichage qui se tient mal, ou quelque chose qui manque. Derrière, il y a un parent, pas un service.`,
     adresseTitre: `L’adresse`,
-    adresseIntro: `Les messages arrivent ici :`,
-    adresseNote: `Cette page n’envoie rien elle-même : l’adresse est écrite en clair, et c’est votre logiciel de courrier qui s’en charge. Un message reçu reste dans une boîte ordinaire le temps qu’il serve ; il n’est ni classé, ni recopié ailleurs. Une réponse peut tarder de quelques jours.`,
+    adresseIntro: `Les messages arrivent ici :`,
+    adresseNote: `Cette page n’envoie rien elle-même : l’adresse est écrite en clair, et c’est votre logiciel de courrier qui s’en charge. Un message reçu reste dans une boîte ordinaire le temps qu’il serve ; il n’est ni classé, ni recopié ailleurs. Une réponse peut tarder de quelques jours.`,
     utileTitre: `Ce qui aide`,
-    utileCorps: `Pour un horaire qui ne correspond pas : la ligne, l’arrêt, le jour, et l’heure que vous attendiez.
-Pour un affichage qui se tient mal : l’appareil, le navigateur, et ce que montre l’écran.
+    utileCorps: `Pour un horaire qui ne correspond pas : la ligne, l’arrêt, le jour, et l’heure que vous attendiez.
+Pour un affichage qui se tient mal : l’appareil, le navigateur, et ce que montre l’écran.
 Écrivez dans la langue qui vous vient.`,
     limitesTitre: `Ce que cette adresse ne peut pas faire`,
-    limitesCorps: `Elle ne mène ni à la commune, ni à l’école, ni à la maison relais. Une absence à signaler, une inscription, une demande de changement d’arrêt : cela s’adresse à eux directement, et un message envoyé ici n’y arrivera pas.
+    limitesCorps: `Elle ne mène ni à la commune, ni à l’école, ni à la maison relais. Une absence à signaler, une inscription, une demande de changement d’arrêt : cela s’adresse à eux directement, et un message envoyé ici n’y arrivera pas.
 Le plan officiel de la commune fait foi. Si ce site l’affiche autrement, c’est ce site qui a tort — et c’est exactement ce qui vaut la peine d’être signalé.`,
     retour: `Retour à la page d’accueil`,
   },
