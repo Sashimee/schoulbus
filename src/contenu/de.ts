@@ -16,7 +16,7 @@
  */
 import type { Contenu } from './type.ts'
 import {
-  ADRESSE_EDITEUR,
+  HEBERGEUR,
   NOM_EDITEUR,
   URL_APP,
   URL_CREDITS,
@@ -91,7 +91,7 @@ export const de: Contenu = {
     note: `Echte Aufnahmen der Anwendung, Dienstag, 22. September 2026 um 07:25 Uhr.`,
     cartes: [
       { titre: 'Der Morgenbildschirm', texte: 'Eine Uhrzeit je Kind, und sonst nichts.' },
-      { titre: 'Die Wochenübersicht', texte: 'Fünf Tage, und die Karte des Fußwegs.' },
+      { titre: 'Die Woche', texte: 'Fünf Tage, und die Karte des Fußwegs.' },
       {
         titre: 'Der offizielle Plan, übertragen',
         texte: `${CHIFFRES.lignes} Linien, ${CHIFFRES.arrets} Haltestellen, Tabelle für Tabelle.`,
@@ -109,7 +109,7 @@ export const de: Contenu = {
     tuiles: [
       {
         icone: 'semaine',
-        titre: 'Die Wochenübersicht',
+        titre: 'Die Woche',
         texte: 'Die fünf Tage eines Kindes auf einem Bildschirm.',
       },
       {
@@ -257,6 +257,7 @@ export const de: Contenu = {
     mention: 'Von einem Elternteil, in Beckerich.',
     source: `Daten: offizieller Plan der Gemeinde, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Impressum',
+    lienContact: 'Schreiben',
     viePrivee: 'Diese Seite setzt keine Cookies, misst nichts und ruft keinen Server auf.',
   },
 
@@ -264,14 +265,32 @@ export const de: Contenu = {
     titre: `Impressum`,
     intro: `Diese Seite nennt, wer dieses Angebot veröffentlicht. Am Übrigen ändert sie nichts: Die Seite bleibt unabhängig, und maßgeblich ist das offizielle Dokument der Gemeinde.`,
     editeurTitre: `Herausgeber`,
-    editeurCorps: `Diese Seite wird von ${NOM_EDITEUR} privat und nicht gewerblich veröffentlicht. Sie ist weder beauftragt noch geprüft oder freigegeben durch die Gemeindeverwaltung Beckerich, die Grundschule oder die Maison Relais.
-Anschrift: ${ADRESSE_EDITEUR}`,
+    editeurCorps: `Diese Seite wird von ${NOM_EDITEUR} privat und nicht gewerblich veröffentlicht. Sie ist weder beauftragt noch geprüft oder freigegeben durch die Gemeindeverwaltung Beckerich, die Grundschule oder die Maison Relais.`,
+    editeurAdresseEtiquette: `Anschrift`,
+    editeurTelephoneEtiquette: `Telefon`,
+    editeurCourrielEtiquette: `E-Mail`,
     hebergeurTitre: `Hosting`,
-    hebergeurCorps: `Die Seite besteht aus statischen Dateien, die von einem durch den Herausgeber gemieteten Server ausgeliefert werden. Besuchsdaten werden dort nicht aufbewahrt.`,
+    hebergeurCorps: `Die Seite besteht aus statischen Dateien, die von einem virtuellen privaten Server ausgeliefert werden. Der Herausgeber mietet ihn bei ${HEBERGEUR}. Besuchsdaten werden dort nicht aufbewahrt.`,
     donneesTitre: `Personenbezogene Daten`,
     donneesCorps: `Diese Seite setzt keine Cookies, misst keine Zugriffe und ruft keinen Dienst Dritter auf. Es werden keine personenbezogenen Daten erhoben; es gibt daher nichts einzusehen, zu berichtigen oder zu löschen. Die Anwendung selbst behält, was Sie dort eingeben, ausschließlich auf Ihrem Gerät — ihre Seite „Grenzen“ führt das aus.`,
     responsabiliteTitre: `Haftung`,
     responsabiliteCorps: `Die angezeigten Zeiten stammen aus dem offiziellen Plan der Gemeinde und sind sorgfältig übertragen, jedoch ohne Gewähr. Im Zweifel oder bei Abweichungen gilt das offizielle Dokument der Gemeinde.`,
+    retour: `Zurück zur Startseite`,
+  },
+
+  contact: {
+    titre: `Schreiben`,
+    intro: `Eine Adresse, um eine Zeit zu melden, die nicht stimmt, eine Anzeige, die verrutscht, oder etwas, das fehlt. Dahinter steht ein Elternteil, kein Dienst.`,
+    adresseTitre: `Die Adresse`,
+    adresseIntro: `Nachrichten kommen hier an:`,
+    adresseNote: `Diese Seite verschickt selbst nichts: die Adresse steht im Klartext, und Ihr E-Mail-Programm übernimmt den Rest. Eine eingegangene Nachricht bleibt in einem gewöhnlichen Postfach, solange sie gebraucht wird; sie wird weder erfasst noch anderswohin kopiert. Eine Antwort kann einige Tage dauern.`,
+    utileTitre: `Was hilft`,
+    utileCorps: `Bei einer Zeit, die nicht stimmt: die Linie, die Haltestelle, der Tag, und die Zeit, die Sie erwartet haben.
+Bei einer Anzeige, die verrutscht: das Gerät, der Browser, und was der Bildschirm zeigt.
+Schreiben Sie in der Sprache, die Ihnen kommt.`,
+    limitesTitre: `Was diese Adresse nicht kann`,
+    limitesCorps: `Sie führt weder zur Gemeinde noch zur Schule noch zur Maison Relais. Eine Abwesenheit, eine Anmeldung, der Wunsch nach einer anderen Haltestelle: das gehört direkt an sie, und eine Nachricht an diese Adresse kommt dort nicht an.
+Es gilt der offizielle Plan der Gemeinde. Zeigt diese Seite etwas anderes, dann irrt diese Seite — und genau das ist eine Meldung wert.`,
     retour: `Zurück zur Startseite`,
   },
 }

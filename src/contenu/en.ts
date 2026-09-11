@@ -22,7 +22,7 @@
  */
 import type { Contenu } from './type.ts'
 import {
-  ADRESSE_EDITEUR,
+  HEBERGEUR,
   NOM_EDITEUR,
   URL_APP,
   URL_CREDITS,
@@ -96,7 +96,7 @@ export const en: Contenu = {
     note: `Real screenshots of the app, Tuesday 22 September 2026 at 07:25.`,
     cartes: [
       { titre: 'The morning screen', texte: 'One time per child, and nothing else.' },
-      { titre: 'The week at a glance', texte: 'Five days, and the map of the walk.' },
+      { titre: 'The week', texte: 'Five days, and the map of the walk.' },
       {
         titre: 'The official plan, copied out',
         texte: `${CHIFFRES.lignes} lines, ${CHIFFRES.arrets} stops, table by table.`,
@@ -114,7 +114,7 @@ export const en: Contenu = {
     tuiles: [
       {
         icone: 'semaine',
-        titre: 'The week at a glance',
+        titre: 'The week',
         texte: 'One child’s five days on a single screen.',
       },
       {
@@ -261,6 +261,7 @@ export const en: Contenu = {
     mention: 'Made by a parent, in Beckerich.',
     source: `Data: the municipality’s official plan, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Legal notice',
+    lienContact: 'Write',
     viePrivee: 'This page sets no cookies, measures nothing, and calls no server.',
   },
 
@@ -268,14 +269,32 @@ export const en: Contenu = {
     titre: `Legal notice`,
     intro: `This page states who publishes the site. It changes nothing else about it: the site remains independent, and the municipality’s official document prevails.`,
     editeurTitre: `Publisher`,
-    editeurCorps: `This site is published by ${NOM_EDITEUR}, privately and non-commercially. It is neither commissioned, nor approved, nor reviewed by the Beckerich municipal administration, the primary school or the maison relais.
-Address: ${ADRESSE_EDITEUR}`,
+    editeurCorps: `This site is published by ${NOM_EDITEUR}, privately and non-commercially. It is neither commissioned, nor approved, nor reviewed by the Beckerich municipal administration, the primary school or the maison relais.`,
+    editeurAdresseEtiquette: `Address`,
+    editeurTelephoneEtiquette: `Phone`,
+    editeurCourrielEtiquette: `Email`,
     hebergeurTitre: `Hosting`,
-    hebergeurCorps: `The site consists of static files, served from a server rented by the publisher. No visit data is kept there.`,
+    hebergeurCorps: `The site consists of static files, served from a virtual private server that the publisher rents from ${HEBERGEUR}. No visit data is kept there.`,
     donneesTitre: `Personal data`,
     donneesCorps: `This page sets no cookies, does not measure audience and makes no request to any third-party service. No personal data is collected, so there is nothing to consult, correct or erase. The app itself keeps what you enter on your device alone; its “Limits” page sets that out in detail.`,
     responsabiliteTitre: `Liability`,
     responsabiliteCorps: `The times shown are taken from the municipality’s official plan and transcribed with care, without any guarantee of accuracy. In case of doubt or disagreement, the municipality’s official document prevails.`,
+    retour: `Back to the home page`,
+  },
+
+  contact: {
+    titre: `Write`,
+    intro: `An address, to report a time that does not match, a layout that breaks, or something that is missing. Behind it is a parent, not a service.`,
+    adresseTitre: `The address`,
+    adresseIntro: `Messages arrive here:`,
+    adresseNote: `This page sends nothing itself: the address is written in plain text, and your mail program does the rest. A message that arrives stays in an ordinary mailbox for as long as it is useful; it is neither filed nor copied anywhere else. A reply may take a few days.`,
+    utileTitre: `What helps`,
+    utileCorps: `For a time that does not match: the line, the stop, the day, and the time you expected.
+For a layout that breaks: the device, the browser, and what the screen shows.
+Write in whichever language comes to you.`,
+    limitesTitre: `What this address cannot do`,
+    limitesCorps: `It leads neither to the municipality, nor to the school, nor to the maison relais. An absence to report, an enrolment, a request to change stop: that goes to them directly, and a message sent here will not reach them.
+The municipality’s official plan prevails. If this site shows something else, it is this site that is wrong — and that is exactly what is worth reporting.`,
     retour: `Back to the home page`,
   },
 }

@@ -12,7 +12,8 @@
  * le navigateur, lui, les pose par `textContent` et `setAttribute`, qui échappent
  * d'eux-mêmes.
  */
-import { CONTENUS, cheminPage, type Page } from './contexte.ts'
+import { cheminPage, type Page } from './contexte.ts'
+import { contenuCharge } from './registre.ts'
 import { ORIGINE, imagePartage } from '../config.ts'
 import type { Langue } from '../contenu/type.ts'
 
@@ -42,9 +43,12 @@ export const LOCALES_OG: Record<Langue, string> = {
  * même résultat de recherche, et un moteur déclasserait l'une des deux comme copie.
  */
 export function textesDePage(langue: Langue, page: Page): { titre: string; description: string } {
-  const c = CONTENUS[langue]
+  const c = contenuCharge(langue)
   if (page === 'mentions') {
     return { titre: `${c.mentions.titre} — ${c.general.marque}`, description: c.mentions.intro }
+  }
+  if (page === 'contact') {
+    return { titre: `${c.contact.titre} — ${c.general.marque}`, description: c.contact.intro }
   }
   if (page === 'independance') {
     return {
@@ -73,7 +77,7 @@ function poser(selecteur: string, attribut: string, valeur: string): void {
  * qu'on le verrait plutôt que dans un résultat de recherche.
  */
 export function appliquerMetadonnees(langue: Langue, page: Page): void {
-  const contenu = CONTENUS[langue]
+  const contenu = contenuCharge(langue)
   const { titre, description } = textesDePage(langue, page)
   const url = urlDePage(langue, page)
 

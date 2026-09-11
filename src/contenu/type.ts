@@ -268,6 +268,8 @@ export type Contenu = {
     viePrivee: string
     /** Le lien vers la page des mentions légales, dans la colonne « Le projet ». */
     lienMentions: string
+    /** Le lien vers la page de contact, à côté du précédent. */
+    lienContact: string
   }
 
   /*
@@ -280,14 +282,63 @@ export type Contenu = {
     /** Ce que cette page est, et ce qu'elle ne change pas. */
     intro: string
     editeurTitre: string
-    /** Qui publie. `ADRESSE_EDITEUR` s'y insère. */
+    /** Qui publie, en prose. Les coordonnées sont dans les trois étiquettes ci-dessous. */
     editeurCorps: string
+    /*
+     * Les trois étiquettes du bloc de coordonnées.
+     *
+     * Elles sont séparées de `editeurCorps` parce que les VALEURS ne se traduisent pas —
+     * une adresse postale, un numéro et un courriel s'écrivent pareil dans les cinq
+     * langues — alors que ce qui les nomme, si. Les fondre dans la prose remettrait
+     * `ADRESSE_EDITEUR` et les deux autres constantes dans cinq chaînes au lieu d'un
+     * endroit, et ferait d'une correction de coquille une modification en cinq exemplaires.
+     *
+     * Le téléphone et le courriel ne sont pas un ornement : le droit luxembourgeois demande
+     * un moyen de contact direct, et une adresse postale n'en est pas un.
+     */
+    editeurAdresseEtiquette: string
+    editeurTelephoneEtiquette: string
+    editeurCourrielEtiquette: string
     hebergeurTitre: string
+    /** Qui héberge. `HEBERGEUR` s'y insère : l'identité et le pays sont ce qui compte. */
     hebergeurCorps: string
     donneesTitre: string
     donneesCorps: string
     responsabiliteTitre: string
     responsabiliteCorps: string
+    retour: string
+  }
+
+  /*
+   * La page de contact.
+   *
+   * Le site décrivait une application sans offrir le moindre moyen d'écrire à qui la fait.
+   * Ce que cette page doit tenir, et qui explique la forme de ces clés :
+   *
+   * - L'ADRESSE EST EN CLAIR, et avant tout le reste. C'est ce qui rend la page utile sans
+   *   JavaScript, et ce qui la garde utile si un formulaire vient s'y ajouter et tombe.
+   * - Elle dit ce qu'elle NE PEUT PAS FAIRE. C'est le premier principe du projet, et c'est
+   *   ici qu'il coûte le plus cher à tenir : un parent qui écrit pour signaler une absence
+   *   ou demander un changement d'arrêt s'adresse à la commune, pas à ce site, et il faut
+   *   qu'il le lise AVANT d'écrire — pas dans une réponse trois jours plus tard.
+   * - Elle ne promet aucun délai. Une boîte relevée par une personne entre deux journées
+   *   de travail n'est pas un service, et l'écrire vaut mieux que de le laisser deviner.
+   */
+  contact: {
+    titre: string
+    /** Ce que cette page est. Sert aussi de description aux moteurs. */
+    intro: string
+    adresseTitre: string
+    /** La phrase qui précède l'adresse. L'adresse elle-même vient de `ADRESSE_CONTACT`. */
+    adresseIntro: string
+    /** Ce qu'il advient d'un message reçu, et ce que la page ne fait pas en l'affichant. */
+    adresseNote: string
+    utileTitre: string
+    /** Un paragraphe par ligne : ce qui aide à traiter un signalement. */
+    utileCorps: string
+    limitesTitre: string
+    /** Ce que cette adresse ne peut pas faire, et à qui s'adresser à sa place. */
+    limitesCorps: string
     retour: string
   }
 }

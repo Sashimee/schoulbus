@@ -221,6 +221,30 @@ Contrainte qui gouverne `entree-serveur.ts` : **ce qui est rendu là doit être 
 que le navigateur rendra à l'hydratation.** D'où le niveau de mouvement qui démarre à
 `aucun` des deux côtés, et aucune lecture de `window` pendant le rendu.
 
+### Une seule langue descend
+
+Les cinq dictionnaires étaient dans le paquet : un lecteur francophone téléchargeait
+l'allemand, le luxembourgeois, le portugais et l'anglais, soit ≈ 14 ko comprimés pour rien.
+Chacun est maintenant un morceau séparé, tenu par `src/i18n/registre.ts`, et le pré-rendu
+annonce celui de SA langue en `modulepreload` — nom lu dans le manifeste de Vite, jamais
+écrit à la main.
+
+Trois choses à savoir avant d'y toucher :
+
+1. **`useContenu()` reste une lecture SYNCHRONE**, parce qu'elle est appelée au milieu d'un
+   rendu. C'est `src/entree.tsx` qui attend (`await chargerContenu`) **avant** `hydrateRoot`.
+   Rien ne clignote : le document est déjà pré-rendu, et React ne touche au DOM qu'au moment
+   où elle s'y accroche. Mesuré à 400 ko/s — 603 relevés du titre du héros, aucun vide.
+2. **Trois lecteurs alimentent le registre, et il n'en existe pas de quatrième** : le
+   navigateur par `chargerContenu`, le pré-rendu et les tests par `enregistrerContenu`
+   (depuis `src/contenu/tous.ts`, la forme réunie — **à ne jamais importer d'une
+   composante**, elle ramènerait les cinq langues).
+3. **Un test qui appelle `vi.resetModules()` repart d'un registre vide** et doit recharger
+   sa langue lui-même, comme le fait `entree.tsx`. Voir `src/tests/niveau-mouvement.test.ts`.
+
+Le budget de `npm run poids` est ce qui tient l'acquis : il lit ce que le document NOMME,
+donc le morceau de langue y entre et les quatre autres n'y entrent pas.
+
 ### Le mouvement est étagé, pas interrupté
 
 `src/mouvement/useNiveauMouvement.ts` rend `complet` / `reduit` / `aucun`. **Le premier
@@ -312,8 +336,36 @@ git clone --no-hardlinks --branch main ../bus-scolaire-beckerich /tmp/app-main
 cp -a ../bus-scolaire-beckerich/node_modules /tmp/app-main/node_modules
 docker run --rm -u $(id -u):$(id -g) -v "$PWD":/vitrine -v /tmp/app-main:/app \
   -w /vitrine -e DEPOT_APP=/app -e HOME=/tmp \
-  mcr.microsoft.com/playwright:v1.62.1-noble npm run captures
+  "$(node -p "require('./scripts/captures.source.json').imagePlaywright")" npm run captures
 ```
+
+**L'image est épinglée par EMPREINTE, et l'empreinte n'est écrite qu'à un endroit** —
+`imagePlaywright` dans `scripts/captures.source.json`, à côté de la révision de
+l'application. Les deux moitiés du déterminisme sont le code photographié et l'appareil qui
+photographie ; seule la première était enregistrée. `mcr.microsoft.com/playwright:v1.62.1-noble`
+est une étiquette, que Microsoft republie : le jour où elle bouge, dix fichiers deviennent
+différents sans qu'aucun ne soit faux, et rien dans le dépôt ne dit que la cause est l'image.
+
+`captures.mjs` réécrit ce fichier en entier à chaque exécution et **reconduit l'empreinte
+telle quelle** : un conteneur ne peut pas lire l'empreinte de sa propre image, donc
+l'épinglage est une déclaration, jamais un relevé. Sans empreinte, le script s'arrête.
+
+### Monter volontairement d'image
+
+C'est une décision datée, pas une mise à jour subie. Dans cet ordre, et le résultat se
+commite d'un seul lot :
+
+```bash
+docker pull mcr.microsoft.com/playwright:v1.63.0-noble
+docker image inspect mcr.microsoft.com/playwright:v1.63.0-noble \
+  --format '{{json .RepoDigests}}'          # l'empreinte à inscrire
+npm i -D playwright@1.63.0                  # le lockfile doit suivre : la CI le vérifie
+```
+
+Inscrire l'empreinte relevée dans `imagePlaywright`, régénérer
+(`npm run captures:conteneur`), **regarder ce qui a bougé** — l'écart attendu porte sur les
+dix `semaine-*`, qui portent une carte Leaflet — puis commiter l'empreinte, le lockfile et
+les captures ENSEMBLE. Séparés, la CI rougit sur la révision du milieu.
 
 Le piège proprement dit : **le script franchit trois portes avant de photographier** — le
 choix de la langue, l'avertissement d'indépendance, la reprise de la configuration reçue

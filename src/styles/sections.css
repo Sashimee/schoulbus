@@ -920,6 +920,67 @@
   .pied__liens a:hover {
     color: var(--encre);
   }
+  /*
+   * L'adresse de contact, écrite en clair.
+   *
+   * Elle est la raison d'être de sa page, donc elle se lit d'un coup d'œil : chasse fixe
+   * pour qu'aucun caractère ne s'ambiguïse à la recopie, et hauteur de cible pleine parce
+   * que c'est un lien qu'on touche au doigt. Pas de capitales — une adresse de courrier se
+   * recopie telle qu'elle est écrite.
+   */
+  .contact__adresse {
+    font-family: var(--police-chiffres);
+    font-size: var(--texte-xl);
+    word-break: break-word;
+  }
+  .contact__adresse a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--cible);
+    color: var(--accent);
+  }
+
+  /*
+   * Les coordonnées de l'éditeur, aux mentions légales.
+   *
+   * Une grille à deux colonnes plutôt qu'une liste de paragraphes : l'étiquette et la
+   * valeur se lisent sur la même ligne, ce qu'un `<dl>` dit déjà à un lecteur d'écran et
+   * que la mise en page doit dire à l'œil. Elle retombe sur une colonne quand la place
+   * manque — un numéro de téléphone coupé en deux ne se compose pas.
+   */
+  .coordonnees {
+    display: grid;
+    gap: var(--espace-2) var(--espace-4);
+  }
+  .coordonnees__ligne {
+    display: grid;
+    grid-template-columns: minmax(8ch, max-content) 1fr;
+    gap: var(--espace-2) var(--espace-4);
+    align-items: baseline;
+  }
+  .coordonnees__etiquette {
+    font-size: var(--texte-s);
+    color: var(--vitrine-encre-faible);
+  }
+  .coordonnees__valeur {
+    font-family: var(--police-chiffres);
+    word-break: break-word;
+  }
+  /* Cible tactile : seules les valeurs joignables portent un lien. */
+  .coordonnees__valeur a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--cible);
+    color: var(--accent);
+  }
+
+  @media (max-width: 30rem) {
+    .coordonnees__ligne {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+
   .pied__bas {
     display: flex;
     flex-wrap: wrap;

@@ -8,7 +8,8 @@
  * restent entières (voir l'en-tête de `lb.ts` et de `pt.ts`).
  */
 import { describe, expect, it } from 'vitest'
-import { CONTENUS, LANGUES, cheminLangue, langueDuChemin } from '../i18n/contexte.ts'
+import { LANGUES, cheminLangue, langueDuChemin } from '../i18n/contexte.ts'
+import { CONTENUS } from '../contenu/tous.ts'
 import { ECRANS } from '../contenu/captures.ts'
 import { CHIFFRES } from '../contenu/chiffres.ts'
 import { SIGNES_MAX_TITRE } from '../contenu/type.ts'

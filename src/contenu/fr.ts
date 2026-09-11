@@ -34,7 +34,7 @@
  */
 import type { Contenu } from './type.ts'
 import {
-  ADRESSE_EDITEUR,
+  HEBERGEUR,
   NOM_EDITEUR,
   URL_APP,
   URL_CREDITS,
@@ -108,7 +108,7 @@ export const fr: Contenu = {
     note: `De vraies captures de l’application, mardi 22 septembre 2026 à 07:25.`,
     cartes: [
       { titre: 'L’écran du matin', texte: 'Une heure par enfant, et rien d’autre.' },
-      { titre: 'La fiche de la semaine', texte: 'Cinq jours, et la carte du trajet à pied.' },
+      { titre: 'La semaine', texte: 'Cinq jours, et la carte du trajet à pied.' },
       {
         titre: 'Le plan officiel, recopié',
         texte: `${CHIFFRES.lignes} lignes, ${CHIFFRES.arrets} arrêts, tableau par tableau.`,
@@ -123,7 +123,7 @@ export const fr: Contenu = {
     tuiles: [
       {
         icone: 'semaine',
-        titre: 'La fiche de la semaine',
+        titre: 'La semaine',
         texte: 'Les cinq jours d’un enfant sur un écran.',
       },
       {
@@ -296,6 +296,7 @@ export const fr: Contenu = {
     mention: 'Fait par un parent, à Beckerich.',
     source: `Données : plan officiel de la commune, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Mentions légales',
+    lienContact: 'Écrire',
     viePrivee: 'Cette page ne pose aucun cookie, ne mesure rien, et n’appelle aucun serveur.',
   },
 
@@ -303,14 +304,32 @@ export const fr: Contenu = {
     titre: `Mentions légales`,
     intro: `Cette page identifie qui publie ce site. Elle ne change rien à ce qu’il dit par ailleurs : le site reste indépendant, et le document officiel de la commune fait foi.`,
     editeurTitre: `Éditeur`,
-    editeurCorps: `Ce site est publié par ${NOM_EDITEUR}, à titre privé et non commercial. Il n’est ni commandé, ni validé, ni relu par l’administration communale de Beckerich, par l’école fondamentale ou par la maison relais.
-Adresse : ${ADRESSE_EDITEUR}`,
+    editeurCorps: `Ce site est publié par ${NOM_EDITEUR}, à titre privé et non commercial. Il n’est ni commandé, ni validé, ni relu par l’administration communale de Beckerich, par l’école fondamentale ou par la maison relais.`,
+    editeurAdresseEtiquette: `Adresse`,
+    editeurTelephoneEtiquette: `Téléphone`,
+    editeurCourrielEtiquette: `Courriel`,
     hebergeurTitre: `Hébergement`,
-    hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur loué par l’éditeur. Aucune donnée de visite n’y est conservée.`,
+    hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur privé virtuel que l’éditeur loue auprès d’${HEBERGEUR}. Aucune donnée de visite n’y est conservée.`,
     donneesTitre: `Données personnelles`,
     donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l’audience et n’adresse aucune requête à un service tiers. Aucune donnée personnelle n’est collectée, et il n’y a donc rien à consulter, à corriger ni à effacer. L’application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
     responsabiliteTitre: `Responsabilité`,
     responsabiliteCorps: `Les horaires affichés sont repris du plan officiel de la commune et retranscrits avec soin, sans garantie d’exactitude. En cas de doute ou de divergence, c’est le document officiel de la commune qui fait foi.`,
+    retour: `Retour à la page d’accueil`,
+  },
+
+  contact: {
+    titre: `Écrire`,
+    intro: `Une adresse, pour signaler un horaire qui ne correspond pas, un affichage qui se tient mal, ou quelque chose qui manque. Derrière, il y a un parent, pas un service.`,
+    adresseTitre: `L’adresse`,
+    adresseIntro: `Les messages arrivent ici :`,
+    adresseNote: `Cette page n’envoie rien elle-même : l’adresse est écrite en clair, et c’est votre logiciel de courrier qui s’en charge. Un message reçu reste dans une boîte ordinaire le temps qu’il serve ; il n’est ni classé, ni recopié ailleurs. Une réponse peut tarder de quelques jours.`,
+    utileTitre: `Ce qui aide`,
+    utileCorps: `Pour un horaire qui ne correspond pas : la ligne, l’arrêt, le jour, et l’heure que vous attendiez.
+Pour un affichage qui se tient mal : l’appareil, le navigateur, et ce que montre l’écran.
+Écrivez dans la langue qui vous vient.`,
+    limitesTitre: `Ce que cette adresse ne peut pas faire`,
+    limitesCorps: `Elle ne mène ni à la commune, ni à l’école, ni à la maison relais. Une absence à signaler, une inscription, une demande de changement d’arrêt : cela s’adresse à eux directement, et un message envoyé ici n’y arrivera pas.
+Le plan officiel de la commune fait foi. Si ce site l’affiche autrement, c’est ce site qui a tort — et c’est exactement ce qui vaut la peine d’être signalé.`,
     retour: `Retour à la page d’accueil`,
   },
 }

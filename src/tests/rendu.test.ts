@@ -15,14 +15,21 @@
  */
 import { describe, expect, it } from 'vitest'
 import { blocNoscript, rendre } from '../entree-serveur.ts'
-import { CONTENUS, LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
+import { LANGUES, PAGES, cheminPage } from '../i18n/contexte.ts'
+import { CONTENUS } from '../contenu/tous.ts'
 import {
+  ADRESSE_CONTACT,
+  ADRESSE_EDITEUR,
   APP_PUBLIEE,
+  HEBERGEUR,
+  NOM_EDITEUR,
   ORIGINE,
+  TELEPHONE_EDITEUR,
   URL_APP,
   URL_SOURCE_OFFICIELLE,
   imagePartage,
   mentionsPretes,
+  telephoneAppelable,
 } from '../config.ts'
 import { ECRANS, THEMES, fichierCapture } from '../contenu/captures.ts'
 
@@ -227,6 +234,61 @@ describe('pré-rendu', () => {
   })
 
   /*
+   * Les coordonnées de l'éditeur, sur la page des mentions.
+   *
+   * Ce qui est testé ici n'est pas l'affichage mais l'OBLIGATION : une mention légale
+   * luxembourgeoise demande d'identifier l'éditeur ET de donner un moyen de le joindre
+   * directement. L'adresse postale identifie, elle ne joint pas ; le téléphone et le
+   * courriel joignent. Perdre l'un des trois laisserait la page s'afficher parfaitement.
+   *
+   * EN CLAIR veut dire hors du `href`, comme sur la page de contact : une valeur qui
+   * n'existe que dans un `tel:` ou un `mailto:` ne se recopie pas à la main et s'annonce
+   * mal. C'est aussi ce qui la garde lisible sans JavaScript et sans logiciel de courrier.
+   */
+  it.each(LANGUES)('%s : les mentions portent les coordonnées de l’éditeur', (langue) => {
+    if (!mentionsPretes()) return
+    const { html } = rendre(langue, 'mentions')
+
+    for (const valeur of [ADRESSE_EDITEUR, TELEPHONE_EDITEUR, ADRESSE_CONTACT]) {
+      expect(html).toContain(`>${valeur}<`)
+    }
+    // Joignables, et pas seulement lisibles.
+    expect(html).toContain(`tel:${telephoneAppelable()}`)
+    expect(html).toContain(`mailto:${ADRESSE_CONTACT}`)
+    // Les étiquettes sont traduites ; les valeurs, non.
+    expect(html).toContain(CONTENUS[langue].mentions.editeurAdresseEtiquette)
+    expect(html).toContain(CONTENUS[langue].mentions.editeurTelephoneEtiquette)
+    expect(html).toContain(CONTENUS[langue].mentions.editeurCourrielEtiquette)
+  })
+
+  /*
+   * L'hébergeur est NOMMÉ.
+   *
+   * La rubrique disait « un serveur loué par l'éditeur » dans les cinq langues, c'est-à-dire
+   * qu'elle omettait exactement ce qu'elle existe pour porter : par qui il est loué. Une
+   * rubrique d'hébergement qui ne nomme pas l'hébergeur est une rubrique vide qui a l'air
+   * pleine — le genre de défaut qu'aucune porte ne voit.
+   */
+  it.each(LANGUES)('%s : les mentions nomment l’hébergeur', (langue) => {
+    if (!mentionsPretes()) return
+    expect(rendre(langue, 'mentions').html).toContain(HEBERGEUR)
+  })
+
+  /*
+   * Le nom de l'éditeur est à l'état civil complet.
+   *
+   * Les crédits de l'application disent `Alex` : c'est le seul endroit du site où la forme
+   * longue compte, parce que c'est elle qui identifie une personne devant un tiers. Le test
+   * existe parce qu'un alignement « pour cohérence » avec le dépôt frère serait une
+   * régression qui ne se verrait nulle part ailleurs.
+   */
+  it('le nom de l’éditeur est complet, et non le prénom des crédits', () => {
+    expect(NOM_EDITEUR).toBe('Alexandre Baskewitsch')
+    if (!mentionsPretes()) return
+    expect(rendre('fr', 'mentions').html).toContain(NOM_EDITEUR)
+  })
+
+  /*
    * La page « Indépendance ».
    *
    * Elle n'est conditionnée par rien — contrairement aux mentions, qui attendent l'adresse
@@ -241,6 +303,46 @@ describe('pré-rendu', () => {
     expect(tete).toContain(`${cheminPage(langue, 'independance')}" />`)
     // Le balisage structuré décrit le site, pas une page annexe.
     expect(tete).not.toContain('application/ld+json')
+  })
+
+  /*
+   * La page de contact, et la seule chose qu'elle DOIT porter : l'adresse, en clair.
+   *
+   * En clair veut dire hors du `href` : une adresse qui n'existe que dans un `mailto:` ne
+   * se recopie pas à la main, ne s'annonce pas correctement, et disparaît de la page pour
+   * qui n'a pas de logiciel de courrier configuré. C'est ce qui rend la page utile avant
+   * qu'un formulaire existe, et ce qui la garde utile le jour où le formulaire tombera.
+   */
+  it.each(LANGUES)('%s : la page de contact porte l’adresse en clair', (langue) => {
+    expect(PAGES).toContain('contact')
+    const { html, tete } = rendre(langue, 'contact')
+
+    expect(html).toContain(CONTENUS[langue].contact.titre)
+    // Écrite comme texte, et pas seulement dans l'attribut du lien.
+    expect(html).toContain(`>${ADRESSE_CONTACT}<`)
+    expect(html).toContain(`mailto:${ADRESSE_CONTACT}`)
+    // Sans canonique propre, elle se disputerait le résultat de recherche de l'accueil.
+    expect(tete).toContain(`${cheminPage(langue, 'contact')}" />`)
+    // Le balisage structuré décrit le site, pas une page annexe.
+    expect(tete).not.toContain('application/ld+json')
+  })
+
+  /*
+   * Ce que la page de contact dit de ses propres limites.
+   *
+   * C'est le premier principe du projet à l'endroit où il coûte le plus cher : un parent
+   * qui écrit ici pour signaler une absence s'adresse à la mauvaise personne, et il doit le
+   * lire AVANT d'écrire. Une page de contact qui perdrait ce paragraphe continuerait de
+   * s'afficher parfaitement.
+   */
+  it.each(LANGUES)('%s : la page de contact dit ce qu’elle ne peut pas faire', (langue) => {
+    const { html } = rendre(langue, 'contact')
+    expect(html).toContain(CONTENUS[langue].contact.limitesTitre)
+  })
+
+  it('le pied de page mène au contact', () => {
+    const { html } = rendre('fr')
+    expect(html).toContain(cheminPage('fr', 'contact'))
   })
 
   /*
