@@ -498,6 +498,21 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
 
 ### Réserves levées
 
+- *« Le texte dormant de l'interrupteur affirme ce qui n'est plus vrai. »* — Levée le
+  14 septembre 2026, ticket #24, par une décision et non par une réécriture.
+  `final.bientot` et `general.bientot` disent, dans les cinq langues, que l'application est
+  « encore en développement ». Elles dorment derrière `APP_PUBLIEE === true`, donc rien de
+  faux n'est servi ; la crainte était qu'un jour l'interrupteur se referme pour cause
+  d'**indisponibilité**, et serve alors d'un seul geste une affirmation fausse en cinq
+  langues. **Décision de l'éditeur : ce cas n'arrivera pas, parce que l'interrupteur ne se
+  refermera que pour le motif qu'il annonce.** L'application est publiée mais elle est en
+  test, et c'est pour cela — et pour cela seulement — qu'on la retirerait du public ; une
+  panne d'hébergement, elle, se répare chez l'hébergeur et non en commitant une constante.
+  Le motif est écrit dans `src/config.ts`, à côté de `APP_PUBLIEE`, parce que c'est ce
+  fichier qu'on ouvre pour refermer l'interrupteur. **Ce qui rouvrirait la réserve** : que
+  l'application sorte du test et soit tenue pour finie. Ce jour-là, les deux clés doivent
+  être réécrites dans les cinq langues AVANT que l'interrupteur puisse servir à nouveau.
+
 - *« Le thème sombre est une dérivation, pas une maquette. »* — Levée le 10 septembre 2026.
   Ce qu'elle demandait était un avis humain sur le GOÛT du vert-noir : le calcul était fait
   (pire couple à 6,12:1, plus confortable qu'en clair), la page entière avait été capturée
