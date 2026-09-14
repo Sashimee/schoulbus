@@ -407,6 +407,41 @@ describe('pré-rendu', () => {
     expect(html).toContain(CONTENUS[langue].contact.limitesTitre)
   })
 
+  /*
+   * Le formulaire doit être atteignable AVANT le pied de page.
+   *
+   * Il ne l'était pas : le seul lien « Écrire » était en pied de page, à 88 % de la
+   * hauteur de l'accueil — c'est-à-dire nulle part pour la personne qui vient de lire,
+   * dans la section des limites, qu'en cas d'écart c'est le document officiel qui fait
+   * foi. Une page qui demande qu'on la corrige et qui cache l'adresse où le dire ne la
+   * demande pas vraiment.
+   *
+   * Ce test compte la POSITION, pas seulement la présence : un lien qui redescendrait en
+   * pied de page passerait un test d'existence sans rien régler.
+   */
+  it.each(LANGUES)('%s : on peut signaler une erreur sans atteindre le pied de page', (langue) => {
+    const { html } = rendre(langue)
+    const chemin = cheminPage(langue, 'contact')
+
+    expect(html).toContain(CONTENUS[langue].limites.lienSignaler)
+
+    const premier = html.indexOf(`href="${chemin}"`)
+    const pied = html.indexOf('<footer')
+    expect(premier).toBeGreaterThan(-1)
+    expect(pied).toBeGreaterThan(-1)
+    expect(premier).toBeLessThan(pied)
+  })
+
+  /*
+   * Et il y mène même quand l'application n'est pas joignable. Le lien voisin, celui du
+   * détail des limites, disparaît avec l'interrupteur parce qu'il mène à l'application ;
+   * celui-ci ne le doit pas — une erreur d'horaire se signale surtout ce jour-là.
+   */
+  it('le signalement ne dépend pas de l’interrupteur', () => {
+    const { html } = rendre('fr')
+    expect(html).toContain(CONTENUS.fr.limites.lienSignaler)
+  })
+
   it('le pied de page mène au contact', () => {
     const { html } = rendre('fr')
     expect(html).toContain(cheminPage('fr', 'contact'))

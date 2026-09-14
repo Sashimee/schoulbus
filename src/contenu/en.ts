@@ -212,6 +212,7 @@ export const en: Contenu = {
       },
     ],
     lien: 'Read the “Limits” page',
+    lienSignaler: 'Report a mistake',
   },
 
   independance: {

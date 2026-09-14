@@ -767,7 +767,17 @@
     color: var(--vitrine-encre-faible);
   }
 
+  /*
+   * Deux liens depuis que le signalement s'y est ajouté : celui du détail, vers
+   * l'application, et celui du formulaire. Une rangée qui se replie plutôt qu'une ligne de
+   * texte — sur un téléphone, les deux libellés et leurs flèches ne tiennent pas côte à
+   * côte, et sans le repli le second déborderait de la colonne.
+   */
   .limites__lien {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espace-2) var(--espace-5);
     margin-block-start: var(--espace-5);
     font-size: var(--texte-m);
     font-weight: 600;

@@ -206,6 +206,7 @@ export const lb: Contenu = {
       },
     ],
     lien: 'D’Säit „Grenzen“ liesen',
+    lienSignaler: 'E Feeler mellen',
   },
 
   independance: {
