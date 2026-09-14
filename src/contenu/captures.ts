@@ -133,6 +133,27 @@ export const HAUTEUR_IMAGE = HAUTEUR * DENSITE
  *
  * Quelques minutes avant le départ, pour que le décompte de l'accueil ait un sens : c'est
  * lui qui porte l'idée que l'heure affichée est celle où il faut SORTIR, marche déduite.
+ *
+ * SIXIÈME PROPRIÉTÉ, ajoutée le 14 septembre 2026 (ticket #24) : CET INSTANT DOIT ÊTRE
+ * PASSÉ le jour où les captures sont publiées.
+ *
+ * `heros.legende` annonce « Capture réelle · <cette date> » dans les cinq langues. Une
+ * date à venir accolée au mot « réelle » se lit mal : le lecteur voit l'écran à côté de la
+ * phrase, et c'est la phrase qu'il croit fausse. La date du 22 septembre a été choisie le
+ * 8 septembre, donc onze jours en avance, et personne ne s'en était aperçu — rien dans le
+ * dépôt ne mesure cela.
+ *
+ * CE QUI REND LA RÈGLE DÉLICATE, et qu'il faut savoir avant de choisir une date : reculer
+ * n'est pas toujours possible. Le 14 septembre 2026, AUCUNE date passée ne convenait.
+ * L'année 2026/2027 commence le 15 septembre, et l'année 2025/2026 est `partiel: true`
+ * dans `vacances-lu.json` — hors congé d'été, `calendrier.ts` y rend
+ * `{ ecole: false, raison: 'annee-inconnue' }`, donc l'accueil dirait qu'il ne sait pas
+ * s'il y a école. Une date passée ET valide n'existait qu'à partir du 16 septembre 2026,
+ * pour le mardi 15.
+ *
+ * En clair : au prochain regel, prendre le MARDI D'ÉCOLE LE PLUS RÉCENT DÉJÀ ÉCOULÉ, et
+ * reporter la même date dans `heros.legende` des cinq langues. Les deux bougent ensemble
+ * ou pas du tout.
  */
 export const INSTANT_DEMO = '2026-09-22T05:25:00.000Z'
 

@@ -496,6 +496,26 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   déplacer le dépôt frère — **et il ne faut pas le faire**, il peut être sur une branche de
   travail. Un clone jetable et `DEPOT_APP` suffisent (recette dans `CLAUDE.md`).
 
+- **L'instant simulé des captures est encore une date à venir.** `heros.legende` annonce
+  « Capture réelle · 22 septembre 2026, 07:25 » dans les cinq langues, et cette date sera
+  passée le 22 septembre. La décision du 14 septembre 2026 (ticket #24) est l'option (b) :
+  **l'instant doit être passé le jour où les captures sont publiées**, et il le deviendra
+  au prochain regel. La règle est écrite dans `src/contenu/captures.ts`, en sixième
+  propriété de `INSTANT_DEMO` — c'est le fichier qu'on ouvre pour la changer.
+
+  **Ce qui a empêché de l'appliquer le jour même**, et c'est le constat qui valait le
+  détour : aucune date passée ne convenait. L'année scolaire 2026/2027 commence le
+  15 septembre 2026, et l'année 2025/2026 est `partiel: true` dans le `vacances-lu.json` de
+  l'application — hors congé d'été, `calendrier.ts:117` y rend
+  `{ ecole: false, raison: 'annee-inconnue' }`, donc l'écran d'accueil dirait qu'il ne sait
+  pas s'il y a école. Reculer la date aurait produit quarante captures montrant une
+  application qui ne sait rien. **Une date à la fois passée et valide n'existait qu'à
+  partir du 16 septembre 2026**, pour le mardi 15.
+
+  Le regel coûte quarante fichiers dans le conteneur épinglé, plus `heros.legende` dans les
+  cinq langues : **les deux bougent ensemble ou pas du tout**, sans quoi la phrase et
+  l'écran se contredisent sous les yeux du lecteur.
+
 ### Réserves levées
 
 - *« Le thème sombre est une dérivation, pas une maquette. »* — Levée le 10 septembre 2026.
