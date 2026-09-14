@@ -42,7 +42,7 @@ export function AppelFinal() {
               <>
                 <p className="final__chapeau">{contenu.final.chapeau}</p>
                 <div className="final__actions">
-                  <Bouton href={URL_APP} variante="primaire" grand aimante externe>
+                  <Bouton href={URL_APP} variante="primaire" grand externe>
                     {contenu.final.action}
                   </Bouton>
                 </div>
@@ -83,7 +83,6 @@ export function AppelFinal() {
                     href={URL_SOURCE_OFFICIELLE}
                     variante="primaire"
                     grand
-                    aimante
                     externe
                   >
                     {contenu.independance.lien}

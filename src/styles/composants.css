@@ -78,13 +78,6 @@
     padding-inline: var(--espace-6);
   }
 
-  /* L'enveloppe qui porte la translation de `useAimant`, pour ne pas écraser les
-     transitions du lien lui-même. */
-  .aimant {
-    display: inline-block;
-    will-change: transform;
-  }
-
   /* ------------------------------------------------------------------ *
    * Les étiquettes.
    *

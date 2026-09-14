@@ -113,7 +113,7 @@ export function Hero() {
           <div className="heros__actions">
             {APP_PUBLIEE ? (
               <>
-                <Bouton href={URL_APP} variante="primaire" grand aimante externe>
+                <Bouton href={URL_APP} variante="primaire" grand externe>
                   {contenu.heros.actionPrincipale}
                 </Bouton>
                 <Bouton href={URL_LIMITES} variante="discret" grand externe>
@@ -128,7 +128,7 @@ export function Hero() {
                  * paragraphe de l'appel final annonce, et c'est le même libellé —
                  * `independance.lien` est partagé entre les deux, exprès.
                  */}
-                <Bouton href={URL_SOURCE_OFFICIELLE} variante="primaire" grand aimante externe>
+                <Bouton href={URL_SOURCE_OFFICIELLE} variante="primaire" grand externe>
                   {contenu.independance.lien}
                 </Bouton>
                 <span className="etiquette etiquette--bientot">{contenu.general.bientot}</span>
