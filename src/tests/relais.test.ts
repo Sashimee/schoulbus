@@ -150,3 +150,45 @@ describe('Le plafond de débit', () => {
     expect(debit.taille).toBe(0)
   })
 })
+
+/*
+ * L'image, et non les règles.
+ *
+ * Ce bloc existe parce qu'un déploiement a échoué sans que rien ne soit faux dans le code :
+ * `index.mjs` importait `./validation.mjs`, et le `Dockerfile` ne copiait que `index.mjs`.
+ * L'image se construit très bien — l'erreur n'apparaît qu'au DÉMARRAGE, en boucle de
+ * redémarrage, et le formulaire aurait rendu 502 indéfiniment.
+ *
+ * `npm run verifier` ne construit pas d'image, donc rien n'aurait pu le voir. Ce test lit
+ * les deux fichiers et compare : tout import relatif de `index.mjs` doit être copié.
+ */
+describe("L'image du relais", () => {
+  /*
+   * `import.meta.glob` et non `node:fs`, pour la raison écrite dans `rendu.test.ts` :
+   * `tsconfig.app.json` ne déclare que `vite/client` et `vitest/globals`.
+   */
+  const FICHIERS = import.meta.glob(['../../serveur/index.mjs', '../../serveur/Dockerfile'], {
+    query: '?raw',
+    eager: true,
+    import: 'default',
+  }) as Record<string, string>
+
+  it('copie tous les fichiers que le service importe', () => {
+    const source = FICHIERS['../../serveur/index.mjs']
+    const dockerfile = FICHIERS['../../serveur/Dockerfile']
+    expect(source, 'index.mjs introuvable').toBeTypeOf('string')
+    expect(dockerfile, 'Dockerfile introuvable').toBeTypeOf('string')
+
+    const importes = [...source.matchAll(/from\s+'\.\/([^']+)'/g)].map((m) => m[1])
+    expect(importes.length).toBeGreaterThan(0)
+
+    const copies = dockerfile
+      .split('\n')
+      .filter((ligne: string) => ligne.startsWith('COPY'))
+      .join(' ')
+
+    for (const fichier of importes) {
+      expect(copies, `${fichier} est importé mais jamais copié dans l'image`).toContain(fichier)
+    }
+  })
+})
