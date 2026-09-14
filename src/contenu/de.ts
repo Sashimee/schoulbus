@@ -258,7 +258,9 @@ export const de: Contenu = {
     source: `Daten: offizieller Plan der Gemeinde, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Impressum',
     lienContact: 'Schreiben',
-    viePrivee: 'Diese Seite setzt keine Cookies, misst nichts und ruft keinen Server auf.',
+    viePrivee:
+      `Diese Seite setzt keine Cookies, misst nichts und ruft keinen Dritten auf. Der ` +
+      `einzige Versand geht vom Kontaktformular aus, wenn Sie ihn auslösen.`,
   },
 
   mentions: {
@@ -272,7 +274,7 @@ export const de: Contenu = {
     hebergeurTitre: `Hosting`,
     hebergeurCorps: `Die Seite besteht aus statischen Dateien, die von einem virtuellen privaten Server ausgeliefert werden. Der Herausgeber mietet ihn bei ${HEBERGEUR}. Besuchsdaten werden dort nicht aufbewahrt.`,
     donneesTitre: `Personenbezogene Daten`,
-    donneesCorps: `Diese Seite setzt keine Cookies, misst keine Zugriffe und ruft keinen Dienst Dritter auf. Es werden keine personenbezogenen Daten erhoben; es gibt daher nichts einzusehen, zu berichtigen oder zu löschen. Die Anwendung selbst behält, was Sie dort eingeben, ausschließlich auf Ihrem Gerät — ihre Seite „Grenzen“ führt das aus.`,
+    donneesCorps: `Diese Seite setzt keine Cookies, misst keine Zugriffe und richtet keine Anfrage an einen Drittdienst. Eine einzige Sache geht von hier hinaus, und Sie lösen sie aus: das Formular der Kontaktseite. Es übermittelt den Betreff, die Nachricht und die Antwortadresse, die Sie angeben, an die Adresse des Herausgebers oben; diese Nachrichten werden zwölf Monate aufbewahrt und dann gelöscht. Vor Ablauf dieser Frist können Sie über dieselbe Adresse verlangen, Ihre Nachricht einzusehen, berichtigen oder löschen zu lassen. Die App selbst behält das, was Sie dort eingeben, allein auf Ihrem Gerät; ihre Seite „Grenzen“ beschreibt das.`,
     responsabiliteTitre: `Haftung`,
     responsabiliteCorps: `Die angezeigten Zeiten stammen aus dem offiziellen Plan der Gemeinde und sind sorgfältig übertragen, jedoch ohne Gewähr. Im Zweifel oder bei Abweichungen gilt das offizielle Dokument der Gemeinde.`,
     retour: `Zurück zur Startseite`,
@@ -283,7 +285,7 @@ export const de: Contenu = {
     intro: `Eine Adresse, um eine Zeit zu melden, die nicht stimmt, eine Anzeige, die verrutscht, oder etwas, das fehlt. Dahinter steht ein Elternteil, kein Dienst.`,
     adresseTitre: `Die Adresse`,
     adresseIntro: `Nachrichten kommen hier an:`,
-    adresseNote: `Diese Seite verschickt selbst nichts: die Adresse steht im Klartext, und Ihr E-Mail-Programm übernimmt den Rest. Eine eingegangene Nachricht bleibt in einem gewöhnlichen Postfach, solange sie gebraucht wird; sie wird weder erfasst noch anderswohin kopiert. Eine Antwort kann einige Tage dauern.`,
+    adresseNote: `Die Adresse steht im Klartext: Ihr E-Mail-Programm genügt, und sie bleibt nützlich an dem Tag, an dem das Formular darunter ausfällt. Eine eingegangene Nachricht landet in einem gewöhnlichen Postfach; sie wird weder erfasst noch anderswohin kopiert. Eine Antwort kann einige Tage dauern.`,
     utileTitre: `Was hilft`,
     utileCorps: `Bei einer Zeit, die nicht stimmt: die Linie, die Haltestelle, der Tag, und die Zeit, die Sie erwartet haben.
 Bei einer Anzeige, die verrutscht: das Gerät, der Browser, und was der Bildschirm zeigt.
@@ -291,6 +293,22 @@ Schreiben Sie in der Sprache, die Ihnen kommt.`,
     limitesTitre: `Was diese Adresse nicht kann`,
     limitesCorps: `Sie führt weder zur Gemeinde noch zur Schule noch zur Maison Relais. Eine Abwesenheit, eine Anmeldung, der Wunsch nach einer anderen Haltestelle: das gehört direkt an sie, und eine Nachricht an diese Adresse kommt dort nicht an.
 Es gilt der offizielle Plan der Gemeinde. Zeigt diese Seite etwas anderes, dann irrt diese Seite — und genau das ist eine Meldung wert.`,
+    formulaireTitre: `Oder von hier aus schreiben`,
+    formulaireNote: `Das Formular sendet, was Sie schreiben: den Betreff, die Nachricht und die Antwortadresse, falls Sie eine angeben. Mehr geht nicht hinaus — weder Ihr Name noch Ihr Standort noch irgendetwas, woran man Sie von einem Besuch zum nächsten wiedererkennt. Ihre IP-Adresse dient eine Stunde lang dazu, Massensendungen zu verhindern, in einer verwürfelten Form, die nicht zu Ihnen zurückführt, und nichts davon wird auf eine Platte geschrieben. Eingegangene Nachrichten werden zwölf Monate aufbewahrt und dann gelöscht.`,
+    sujetEtiquette: `Worum geht es?`,
+    messageEtiquette: `Ihre Nachricht`,
+    reponseEtiquette: `Ihre Adresse, für die Antwort`,
+    reponseAide: `Freiwillig. Ohne sie kommt die Nachricht trotzdem an — nur lässt sie sich nicht beantworten.`,
+    leurreEtiquette: `Dieses Feld leer lassen`,
+    envoyer: `Senden`,
+    envoiEnCours: `Wird gesendet…`,
+    envoiReussi: `Die Nachricht ist unterwegs. Danke — eine Antwort kann ein paar Tage dauern.`,
+    erreurVide: `Betreff oder Nachricht fehlt.`,
+    erreurTropLong: `Die Nachricht ist zu lang. Behalten Sie das Wesentliche: Linie, Haltestelle, Tag, Uhrzeit.`,
+    erreurTropDeLiens: `Zu viele Links. Beschreiben Sie lieber, was Sie sehen.`,
+    erreurTropVite: `Zu schnell gesendet, um von Hand geschrieben zu sein. Versuchen Sie es in ein paar Sekunden erneut.`,
+    erreurTropSouvent: `Zu viele Nachrichten aus dieser Verbindung. Versuchen Sie es in einer Stunde erneut, oder schreiben Sie an die Adresse oben.`,
+    erreurEnvoi: `Das Senden hat nicht geklappt. Schreiben Sie an die Adresse oben: die funktioniert weiterhin.`,
     retour: `Zurück zur Startseite`,
   },
 }

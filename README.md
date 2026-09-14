@@ -438,6 +438,13 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   | premier écran | 106,4 ko | **96,7 ko** | 110 → **102 ko** |
   | tout le site | 115,7 ko | **120,8 ko** | 120 → **128 ko** |
 
+  Le 14 septembre 2026, le formulaire de contact a ajouté dix-sept chaînes dans les cinq
+  langues : le premier écran passe à **98,4 ko** (4 % de marge, budget inchangé) et tout le
+  site à **125,4 ko**, dont la marge tombait à 2 %. **Le second budget passe donc à
+  136 ko**, et le premier ne bouge pas. C'est l'asymétrie annoncée au découpage : une page
+  écrite dans les cinq langues coûte cinq fois plus au plafond théorique qu'à la visite
+  réelle, puisque celle-ci ne télécharge qu'un dictionnaire.
+
   Le premier écran perd 9,7 ko parce qu'un lecteur francophone ne télécharge plus les
   quatre langues qu'il ne lira jamais. Le total en gagne 5, parce que gzip partageait la
   structure des cinq dictionnaires tant qu'ils tenaient dans un seul fichier : comprimés

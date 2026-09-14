@@ -256,7 +256,9 @@ export const lb: Contenu = {
     source: `Donnéeën: offizielle Plang vun der Gemeng, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Impressum',
     lienContact: 'Schreiwen',
-    viePrivee: 'Dës Säit setzt keng Cookien, mëscht keng Miessung, a kontaktéiert kee Server.',
+    viePrivee:
+      `Dës Säit setzt keng Cookien, mëscht keng Miessung, a kontaktéiert kee Drëtten. Den ` +
+      `eenzegen Envoi geet vum Kontaktformulaire aus, wann Dir en ausléist.`,
   },
 
   mentions: {
@@ -270,7 +272,7 @@ export const lb: Contenu = {
     hebergeurTitre: `Hosting`,
     hebergeurCorps: `D’Säit besteet aus statesche Fichieren, déi vun engem virtuelle private Server ausgeliwwert ginn, deen den Editeur bei ${HEBERGEUR} lount. Do gi keng Besuchsdonnéeë gespäichert.`,
     donneesTitre: `Perséinlech Donnéeën`,
-    donneesCorps: `Dës Säit setzt keng Cookien, mëscht keng Zougrëffsmiessung a kontaktéiert kee friemen Déngscht. Et gi keng perséinlech Donnéeë gesammelt; et gëtt also näischt ze kucken, ze verbesseren oder ze läschen. D’Applikatioun selwer behält dat, wat Dir do aginn, nëmmen op Ärem Apparat — hir Säit „Grenzen“ beschreift dat.`,
+    donneesCorps: `Dës Säit setzt keng Cookien, mëscht keng Zougrëffsmiessung a kontaktéiert kee friemen Déngscht. Eng eenzeg Saach geet vun hei eraus, an Dir sidd et, deen se ausléist: de Formulaire vun der Kontaktsäit. En iwwerdréit de Sujet, d’Noriicht an d’Adress fir d’Äntwert, déi Dir gitt, op d’Adress vum Editeur hei uewen; dës Noriichte gi zwielef Méint opgehalen a duerno geläscht. Virun deem Termin kënnt Dir iwwer déiselwecht Adress froen, déi Är ze kucken, ze verbesseren oder ze läschen. D’Applikatioun selwer behält dat, wat Dir do aginn, nëmmen op Ärem Apparat — hir Säit „Grenzen“ beschreift dat.`,
     responsabiliteTitre: `Haftung`,
     responsabiliteCorps: `D’ugewisen Zäite kommen aus dem offizielle Plang vun der Gemeng a si suergfälteg iwwerdroen, awer ouni Garantie. Am Zweiwel oder bei Ofwäichunge gëllt dat offiziellt Dokument vun der Gemeng.`,
     retour: `Zréck op d’Startsäit`,
@@ -281,7 +283,7 @@ export const lb: Contenu = {
     intro: `Eng Adress, fir eng Zäit ze mellen, déi net stëmmt, eppes, wat falsch ugewise gëtt, oder eppes, wat feelt. Dohannert steet en Elterendeel, kee Service.`,
     adresseTitre: `D’Adress`,
     adresseIntro: `Noriichte kommen hei un:`,
-    adresseNote: `Dës Säit schéckt selwer näischt: d’Adress steet am Kloertext, an Äre Mailprogramm mécht de Rescht. Eng Noriicht, déi ukomm ass, bleift an enger gewéinlecher Boîte, sou laang wéi se déngt; si gëtt weder erfaasst nach soss anzwuersch kopéiert. Eng Äntwert ka e puer Deeg daueren.`,
+    adresseNote: `D’Adress steet am Kloertext: Äre Mailprogramm duergeet, a si bleift nëtzlech den Dag, wou de Formulaire hei drënner ausfält. Eng Noriicht, déi ukomm ass, landet an enger gewéinlecher Boîte; si gëtt weder erfaasst nach soss anzwuersch kopéiert. Eng Äntwert ka e puer Deeg daueren.`,
     utileTitre: `Wat hëlleft`,
     utileCorps: `Bei enger Zäit, déi net stëmmt: d’Linn, d’Statioun, den Dag, an d’Zäit, déi Dir erwaart hutt.
 Bei eppes, wat falsch ugewise gëtt: den Apparat, de Browser, a wat de Bildschierm weist.
@@ -289,6 +291,22 @@ Schreift an der Sprooch, déi Iech kënnt.`,
     limitesTitre: `Wat dës Adress net ka maachen`,
     limitesCorps: `Si féiert weder op d’Gemeng, nach op d’Schoul, nach op d’Maison Relais. Eng Absence ze mellen, eng Umeldung, de Wonsch no enger anerer Statioun: dat gehéiert direkt bei hinnen, an eng Noriicht op dës Adress kënnt do net un.
 Et gëllt dat offiziellt Dokument vun der Gemeng. Weist dës Säit eppes anescht, dann ass dës Säit falsch — a genau dat ass eng Meldung wäert.`,
+    formulaireTitre: `Oder vun hei aus schreiwen`,
+    formulaireNote: `De Formulaire schéckt dat, wat Dir schreift: de Sujet, d’Noriicht, an d’Adress fir d’Äntwert, wann Dir eng gitt. Méi geet net eraus — weder Ären Numm, nach wou Dir sidd, nach soss eppes, woumat een Iech vun engem Besuch op deen anere widdererkennt. Är IP-Adress déngt eng Stonn laang dozou, Envoien a Serie ze verhënneren, an enger verwierkelter Form, déi net op Iech zeréckféiert, a näischt dovunner gëtt op eng Plack geschriwwen. Noriichten, déi ukommen, gi zwielef Méint opgehalen a duerno geläscht.`,
+    sujetEtiquette: `Ëm wat geet et?`,
+    messageEtiquette: `Är Noriicht`,
+    reponseEtiquette: `Är Adress, fir d’Äntwert`,
+    reponseAide: `Fräiwëlleg. Ouni si kënnt d’Noriicht trotzdeem un — mä et gëtt kee Wee, Iech ze äntweren.`,
+    leurreEtiquette: `Dëst Feld eidel loossen`,
+    envoyer: `Schécken`,
+    envoiEnCours: `Gëtt geschéckt…`,
+    envoiReussi: `D’Noriicht ass ënnerwee. Merci — eng Äntwert ka e puer Deeg daueren.`,
+    erreurVide: `De Sujet oder d’Noriicht feelt.`,
+    erreurTropLong: `D’Noriicht ass ze laang. Haalt dat Wesentlecht: d’Linn, d’Statioun, den Dag, d’Zäit.`,
+    erreurTropDeLiens: `Ze vill Linken. Beschreift léiwer, wat Dir gesitt.`,
+    erreurTropVite: `Ze séier geschéckt, fir vun Hand geschriwwen ze sinn. Probéiert an e puer Sekonnen nach eng Kéier.`,
+    erreurTropSouvent: `Ze vill Noriichte vun dëser Verbindung. Probéiert an enger Stonn nach eng Kéier, oder schreift un d’Adress hei uewen.`,
+    erreurEnvoi: `Den Envoi huet net geklappt. Schreift un d’Adress hei uewen: déi fonctionnéiert ëmmer nach.`,
     retour: `Zréck op d’Startsäit`,
   },
 }

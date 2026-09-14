@@ -22,7 +22,7 @@ captures d'écran (engendrées par script). Ne pas mélanger les deux.
 | Rôle | outil quotidien, personnalisé | page lue une fois |
 | Forme | SPA, `noindex` | HTML statique pré-rendu par langue, indexé |
 | Langues | 5 (fr, de, lb, pt, en) | 5 (fr, de, lb, pt, en) |
-| Données | garde ce que la famille saisit | **aucune donnée, aucun cookie, aucune mesure** |
+| Données | garde ce que la famille saisit | aucun cookie, aucune mesure, aucun tiers — **et un seul envoi, que le visiteur déclenche** (voir « Le relais ») |
 
 ## Le flux de branches — à lire avant de toucher à quoi que ce soit
 
@@ -245,6 +245,53 @@ Trois choses à savoir avant d'y toucher :
 Le budget de `npm run poids` est ce qui tient l'acquis : il lit ce que le document NOMME,
 donc le morceau de langue y entre et les quatre autres n'y entrent pas.
 
+### Le relais, et la seule chose qui sorte de l'appareil
+
+`serveur/` est un service de quatre-vingts lignes, une route `POST /api/contact`, déployé à
+côté de la vitrine (`compose.yml`) et proxyfié par nginx. **C'est le seul code du projet qui
+tourne côté serveur**, et le seul endroit d'où quelque chose sorte de l'appareil du
+visiteur.
+
+Cinq choses à savoir avant d'y toucher :
+
+1. **Le DNS décide du montage.** `schoulbus.lu` porte `-all` et rejette tout ce qui n'est
+   pas OVH ; `bas.lu`, d'où part l'expéditeur, porte `~all` — un envoi direct depuis le
+   conteneur n'y serait pas rejeté, donc « fonctionnerait », **sans passer SPF pour
+   autant**. Toléré n'est pas authentifié, et l'écart ne se voit qu'au bout de trois mois.
+   On remet donc au SMTP authentifié d'OVH. **Ne jamais élargir le SPF** pour contourner :
+   cela ouvrirait le domaine à l'usurpation pour la commodité d'un formulaire.
+2. **L'adresse du visiteur va en `Reply-To`, jamais en `From`.** La mettre en `From` est une
+   usurpation de son domaine, et c'est précisément ce que DMARC existe pour détecter.
+3. **La CSP N'A PAS ÉTÉ ROUVERTE**, contrairement à ce que le ticket annonçait.
+   `connect-src 'self'` couvre déjà une requête de même origine, et `form-action 'none'`
+   ne gêne pas un envoi par `fetch` — il interdit la soumission NATIVE, ce qui reste le bon
+   comportement le jour où JavaScript échoue : le formulaire ne part pas du tout, au lieu
+   de partir n'importe où.
+4. **nginx proxyfie par une VARIABLE et non un nom littéral.** Avec un nom littéral, nginx
+   résout au démarrage et refuse de démarrer si le relais est absent : le site entier
+   tomberait pour un formulaire de contact. Vérifié en le faisant tourner sans relais.
+5. **Le port du relais n'est pas publié**, et ce n'est pas un oubli. Le service croit
+   l'en-tête `X-Forwarded-For` que nginx lui pose, parce qu'il n'est joignable que depuis le
+   réseau interne. Le publier rendrait son plafond de débit contournable d'un en-tête, et
+   ouvrirait un relais SMTP authentifié sur l'Internet.
+
+**Les règles sont dans `serveur/validation.mjs`, qui n'ouvre aucun port** — c'est pour cela
+qu'il est séparé, et `src/tests/relais.test.ts` le tient. Anti-spam sans le moindre service
+tiers, parce qu'un captcha hébergé ailleurs ferait entrer un tiers dans une page qui n'en a
+aucun : leurre, délai minimal, plafonds par champ, compte de liens, cinq envois par heure.
+Le délai est mesuré par le navigateur, donc falsifiable, et c'est écrit plutôt que passé sous silence.
+
+**Ce que le formulaire a rendu faux, et qui a été réécrit avec lui** : `pied.viePrivee` et
+`mentions.donneesCorps`, dans les cinq langues, annonçaient que rien ne sort. Leur
+contrepartie est `contact.formulaireNote`, qui dit ce que le message emporte et combien de
+temps il est gardé — **douze mois**. C'est le même couple que le « 0 » de la bande de
+chiffres et sa note : ne pas rouvrir l'un sans rouvrir l'autre.
+
+Les identifiants viennent ENTIÈREMENT de l'environnement (`.env.exemple` dit quoi poser,
+Dokploy pose les valeurs). Rien n'est écrit dans le dépôt, et le service refuse de démarrer
+si une variable manque — une variable oubliée qui ne se verrait qu'au moment où un parent
+écrit est un défaut qui coûte un message réel.
+
 ### Le mouvement est étagé, pas interrupté
 
 `src/mouvement/useNiveauMouvement.ts` rend `complet` / `reduit` / `aucun`. **Le premier
@@ -292,12 +339,18 @@ dessiné à 76 px sur 1200 px : **24 caractères par ligne au plus.**
 | `src/styles/` | `jetons.css` (copie de l'application), puis vitrine / composants / sections. |
 | `scripts/` | Tout ce qui engendre : captures, chiffres, vignettes, QR, jetons, contrastes, pré-rendu. |
 | `src/tests/` | Invariants du contenu et du rendu. |
+| `serveur/` | Le relais de courriel. Paquet à part, sans TypeScript ni construction : il doit pouvoir démarrer avec `node index.mjs`. |
 
 ## Déploiement
 
 Docker à deux étages (Node construit, nginx sert), Dokploy sur `schoulbus.lu`. La CSP est
 posée en `<meta>` par `vite.config.ts`, parce que l'empreinte du script anti-clignotement
 s'y calcule ; l'en-tête HTTP ne porte que `frame-ancestors`.
+
+**DEUX CONTENEURS DEPUIS LE FORMULAIRE DE CONTACT**, décrits par `compose.yml` : `vitrine`
+(nginx, le seul exposé) et `relais` (voir « Le relais »). Le second n'a aucun port publié,
+et ce n'est pas un oubli. Les variables du relais se posent dans Dokploy — `.env.exemple`
+dit lesquelles, `.env` est ignoré par git et doit le rester.
 
 ## Documentation
 

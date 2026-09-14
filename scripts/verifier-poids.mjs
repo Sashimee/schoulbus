@@ -59,13 +59,23 @@ const DIST = resolve(ici, '../dist')
  * visite réelle. C'est lui qu'on resserre : sa marge était de 3 %, elle passe à 5 %, ce qui
  * suffit à rattraper une régression qui remettrait les dictionnaires dans le paquet.
  *
+ * TROISIÈME DÉPLACEMENT, le 14 septembre 2026, et il ne touche QUE le second budget :
+ * 128 → 136 ko. Le formulaire de contact a ajouté dix-sept chaînes dans les cinq langues,
+ * soit ≈ 4,6 ko répartis sur les cinq dictionnaires — et « tout le site » les compte tous
+ * les cinq, alors que « premier écran » n'en compte qu'un. La marge y était tombée à 2 %,
+ * c'est-à-dire qu'une phrase de plus aurait fait échouer la construction.
+ *
+ * C'est exactement l'asymétrie annoncée au découpage : une page ajoutée dans les cinq
+ * langues coûte cinq fois plus au plafond théorique qu'à la visite réelle. Le premier
+ * budget, lui, ne bouge pas — 98,4 ko sur 102, 4 % de marge — et c'est lui qui décide.
+ *
  * Les relever est permis. Les relever SANS RIEN DIRE ne l'est pas : la ligne du README qui
  * les cite dit d'où vient le chiffre, et c'est elle qui rend le relèvement visible.
  */
 const BUDGETS = {
   'JavaScript du premier écran': 102 * 1024,
   'feuille de style du premier écran': 8 * 1024,
-  'JavaScript de tout le site': 128 * 1024,
+  'JavaScript de tout le site': 136 * 1024,
 }
 
 if (!existsSync(resolve(DIST, 'index.html'))) {

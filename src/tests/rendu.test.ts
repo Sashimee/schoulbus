@@ -328,6 +328,73 @@ describe('pré-rendu', () => {
   })
 
   /*
+   * Le formulaire, et les trois promesses qu'il rend fausses.
+   *
+   * C'est le premier principe du projet à l'endroit où il coûte le plus cher. Tant que la
+   * page n'envoyait rien, `pied.viePrivee` et `mentions.donneesCorps` pouvaient annoncer
+   * que rien ne sort de l'appareil ; le formulaire rend les deux fausses le jour où il est
+   * livré. Le principe interdit de livrer l'un sans l'autre, et rien dans la construction
+   * ne le verrait : la page s'afficherait parfaitement en mentant.
+   */
+  it.each(LANGUES)('%s : la page de contact porte le formulaire', (langue) => {
+    const { html } = rendre(langue, 'contact')
+    const c = CONTENUS[langue].contact
+
+    expect(html).toContain(c.formulaireTitre)
+    expect(html).toContain(c.sujetEtiquette)
+    expect(html).toContain(c.messageEtiquette)
+    expect(html).toContain(c.reponseEtiquette)
+    // Le leurre est RENDU et NOMMÉ : caché à l'œil, jamais au lecteur d'écran.
+    expect(html).toContain(c.leurreEtiquette)
+    expect(html).toContain('name="site"')
+    // L'adresse en clair reste au-dessus : c'est elle qui sert quand le relais tombe.
+    expect(html).toContain(`>${ADRESSE_CONTACT}<`)
+  })
+
+  /*
+   * `formulaireNote` est à la page de contact ce que `chiffres.envoiNote` est à la bande
+   * de chiffres : la phrase qui CADRE et qui rend le reste vrai. Elle dit ce que le message
+   * emporte et combien de temps il est gardé. La supprimer pour alléger la page ferait de
+   * `pied.viePrivee` une affirmation que le site ne tient pas.
+   */
+  it.each(LANGUES)('%s : la page dit ce que le message emporte, et pour combien de temps', (langue) => {
+    const { html } = rendre(langue, 'contact')
+    expect(html).toContain(CONTENUS[langue].contact.formulaireNote)
+    // La durée est écrite en toutes lettres dans les cinq langues, pas en chiffres.
+    expect(CONTENUS[langue].contact.formulaireNote).toMatch(
+      /douze|zwölf|zwielef|doze|twelve/i,
+    )
+  })
+
+  /*
+   * La promesse du pied de page ne doit plus dire que la page n'appelle aucun serveur.
+   *
+   * Ce test n'est pas une coquetterie de vocabulaire : c'est la seule affirmation du site
+   * qui le distingue, et elle est lue sur CHAQUE page. Une réécriture qui la remettrait
+   * telle quelle passerait toutes les autres portes.
+   */
+  it.each(LANGUES)('%s : le pied de page ne promet plus que rien ne sort', (langue) => {
+    const promesse = CONTENUS[langue].pied.viePrivee
+    expect(promesse).not.toMatch(
+      /aucun serveur|keinen Server|kee Server|nenhum servidor|no server/i,
+    )
+    // Ce qui reste vrai doit rester écrit : c'est ce qui distingue la page.
+    expect(promesse).toMatch(/cookie|Cookie/i)
+  })
+
+  /*
+   * Les mentions légales doivent porter la durée de conservation et les droits qui vont
+   * avec. Un message de contact est une donnée personnelle ; la page disait qu'il n'y en
+   * avait aucune, donc rien à consulter, à corriger ni à effacer.
+   */
+  it.each(LANGUES)('%s : les mentions annoncent la conservation des messages', (langue) => {
+    if (!mentionsPretes()) return
+    const corps = CONTENUS[langue].mentions.donneesCorps
+    expect(corps).toMatch(/douze|zwölf|zwielef|doze|twelve/i)
+    expect(rendre(langue, 'mentions').html).toContain(corps)
+  })
+
+  /*
    * Ce que la page de contact dit de ses propres limites.
    *
    * C'est le premier principe du projet à l'endroit où il coûte le plus cher : un parent
