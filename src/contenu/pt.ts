@@ -273,7 +273,9 @@ export const pt: Contenu = {
     source: `Dados: plano oficial do município, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Aviso legal',
     lienContact: 'Escrever',
-    viePrivee: 'Esta página não instala cookies, não mede nada e não chama nenhum servidor.',
+    viePrivee:
+      `Esta página não instala cookies, não mede nada e não contacta nenhum terceiro. O ` +
+      `único envio parte do formulário de contacto, quando é o utilizador a pedi-lo.`,
   },
 
   mentions: {
@@ -287,7 +289,7 @@ export const pt: Contenu = {
     hebergeurTitre: `Alojamento`,
     hebergeurCorps: `O site é composto por ficheiros estáticos, servidos a partir de um servidor privado virtual que o editor aluga à ${HEBERGEUR}. Nenhum dado de visita é aí conservado.`,
     donneesTitre: `Dados pessoais`,
-    donneesCorps: `Esta página não instala cookies, não mede a audiência e não faz qualquer pedido a serviços terceiros. Não é recolhido nenhum dado pessoal, pelo que não há nada a consultar, a corrigir ou a apagar. A aplicação, essa, guarda o que aí introduzir apenas no seu aparelho; a página «Limites» dela explica-o em detalhe.`,
+    donneesCorps: `Esta página não instala cookies, não mede a audiência e não faz qualquer pedido a serviços terceiros. Uma única coisa sai daqui, e é o utilizador que a desencadeia: o formulário da página de contacto. Transmite o assunto, a mensagem e o endereço de resposta que indicar, para o endereço do editor acima; estas mensagens são conservadas doze meses e depois apagadas. Antes desse prazo, pode pedir pelo mesmo endereço para consultar, corrigir ou apagar a sua. A aplicação, essa, guarda o que aí introduzir apenas no seu aparelho; a página «Limites» dela explica-o em detalhe.`,
     responsabiliteTitre: `Responsabilidade`,
     responsabiliteCorps: `Os horários apresentados são retomados do plano oficial do município e transcritos com cuidado, sem garantia de exatidão. Em caso de dúvida ou de divergência, prevalece o documento oficial do município.`,
     retour: `Voltar à página inicial`,
@@ -298,7 +300,7 @@ export const pt: Contenu = {
     intro: `Um endereço, para assinalar um horário que não corresponde, uma apresentação que se desmancha, ou algo que falta. Por detrás está um pai, não um serviço.`,
     adresseTitre: `O endereço`,
     adresseIntro: `As mensagens chegam aqui:`,
-    adresseNote: `Esta página não envia nada por si mesma: o endereço está escrito por extenso, e é o seu programa de correio que trata do resto. Uma mensagem recebida fica numa caixa de correio comum enquanto servir; não é registada nem copiada para outro lado. Uma resposta pode demorar alguns dias.`,
+    adresseNote: `O endereço está escrito por extenso: o seu programa de correio basta, e continua útil no dia em que o formulário abaixo deixar de funcionar. Uma mensagem recebida chega a uma caixa de correio comum; não é registada nem copiada para outro lado. Uma resposta pode demorar alguns dias.`,
     utileTitre: `O que ajuda`,
     utileCorps: `Para um horário que não corresponde: a linha, a paragem, o dia, e a hora que esperava.
 Para uma apresentação que se desmancha: o aparelho, o navegador, e o que mostra o ecrã.
@@ -306,6 +308,22 @@ Escreva na língua que lhe vier.`,
     limitesTitre: `O que este endereço não pode fazer`,
     limitesCorps: `Não leva ao município, nem à escola, nem à maison relais. Uma ausência a comunicar, uma inscrição, um pedido de mudança de paragem: isso dirige-se diretamente a eles, e uma mensagem enviada para aqui não lá chegará.
 Prevalece o plano oficial do município. Se este site o mostrar de outra maneira, é este site que está errado — e é exatamente isso que vale a pena assinalar.`,
+    formulaireTitre: `Ou escrever a partir daqui`,
+    formulaireNote: `O formulário envia o que escrever: o assunto, a mensagem e o endereço de resposta, se indicar um. Mais nada sai — nem o seu nome, nem a sua posição, nem seja o que for que permita reconhecê-lo de uma visita para a outra. O seu endereço IP serve durante uma hora para impedir envios em série, numa forma baralhada que não permite chegar até si, e nada disso é escrito num disco. As mensagens recebidas são conservadas doze meses e depois apagadas.`,
+    sujetEtiquette: `De que se trata?`,
+    messageEtiquette: `A sua mensagem`,
+    reponseEtiquette: `O seu endereço, para a resposta`,
+    reponseAide: `Facultativo. Sem ele a mensagem chega à mesma — só que não há maneira de lhe responder.`,
+    leurreEtiquette: `Deixe este campo vazio`,
+    envoyer: `Enviar`,
+    envoiEnCours: `A enviar…`,
+    envoiReussi: `A mensagem seguiu. Obrigado — uma resposta pode demorar alguns dias.`,
+    erreurVide: `Falta o assunto ou a mensagem.`,
+    erreurTropLong: `A mensagem é demasiado longa. Guarde o essencial: a linha, a paragem, o dia, a hora.`,
+    erreurTropDeLiens: `Demasiadas ligações. Descreva antes o que está a ver.`,
+    erreurTropVite: `Enviado depressa de mais para ter sido escrito à mão. Tente outra vez daqui a alguns segundos.`,
+    erreurTropSouvent: `Demasiadas mensagens a partir desta ligação. Tente daqui a uma hora, ou escreva para o endereço acima.`,
+    erreurEnvoi: `O envio não chegou a bom porto. Escreva para o endereço acima: esse continua a funcionar.`,
     retour: `Voltar à página inicial`,
   },
 }

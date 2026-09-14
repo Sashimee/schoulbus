@@ -262,7 +262,9 @@ export const en: Contenu = {
     source: `Data: the municipality’s official plan, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Legal notice',
     lienContact: 'Write',
-    viePrivee: 'This page sets no cookies, measures nothing, and calls no server.',
+    viePrivee:
+      `This page sets no cookies, measures nothing, and calls no third party. The only ` +
+      `thing it sends comes from the contact form, when you ask it to.`,
   },
 
   mentions: {
@@ -276,7 +278,7 @@ export const en: Contenu = {
     hebergeurTitre: `Hosting`,
     hebergeurCorps: `The site consists of static files, served from a virtual private server that the publisher rents from ${HEBERGEUR}. No visit data is kept there.`,
     donneesTitre: `Personal data`,
-    donneesCorps: `This page sets no cookies, does not measure audience and makes no request to any third-party service. No personal data is collected, so there is nothing to consult, correct or erase. The app itself keeps what you enter on your device alone; its “Limits” page sets that out in detail.`,
+    donneesCorps: `This page sets no cookies, does not measure its audience and makes no request to any third-party service. One single thing leaves from here, and you are the one who sets it off: the form on the contact page. It passes on the subject, the message and the reply address you give, to the publisher’s address above; those messages are kept for twelve months, then deleted. Before that term you may ask, at the same address, to see, correct or erase yours. The app itself keeps what you enter there on your device alone; its “Limits” page explains it in detail.`,
     responsabiliteTitre: `Liability`,
     responsabiliteCorps: `The times shown are taken from the municipality’s official plan and transcribed with care, without any guarantee of accuracy. In case of doubt or disagreement, the municipality’s official document prevails.`,
     retour: `Back to the home page`,
@@ -287,7 +289,7 @@ export const en: Contenu = {
     intro: `An address, to report a time that does not match, a layout that breaks, or something that is missing. Behind it is a parent, not a service.`,
     adresseTitre: `The address`,
     adresseIntro: `Messages arrive here:`,
-    adresseNote: `This page sends nothing itself: the address is written in plain text, and your mail program does the rest. A message that arrives stays in an ordinary mailbox for as long as it is useful; it is neither filed nor copied anywhere else. A reply may take a few days.`,
+    adresseNote: `The address is written in plain text: your mail program is enough, and it stays useful on the day the form below breaks. A message that arrives lands in an ordinary mailbox; it is neither filed nor copied anywhere else. A reply may take a few days.`,
     utileTitre: `What helps`,
     utileCorps: `For a time that does not match: the line, the stop, the day, and the time you expected.
 For a layout that breaks: the device, the browser, and what the screen shows.
@@ -295,6 +297,22 @@ Write in whichever language comes to you.`,
     limitesTitre: `What this address cannot do`,
     limitesCorps: `It leads neither to the municipality, nor to the school, nor to the maison relais. An absence to report, an enrolment, a request to change stop: that goes to them directly, and a message sent here will not reach them.
 The municipality’s official plan prevails. If this site shows something else, it is this site that is wrong — and that is exactly what is worth reporting.`,
+    formulaireTitre: `Or write from here`,
+    formulaireNote: `The form sends what you write: the subject, the message, and the reply address if you give one. Nothing else leaves — not your name, not your location, nothing that would recognise you from one visit to the next. Your IP address is used for one hour to stop bursts of messages, in a scrambled form that leads nowhere back to you, and none of it is written to a disk. Messages that arrive are kept for twelve months, then deleted.`,
+    sujetEtiquette: `What is it about?`,
+    messageEtiquette: `Your message`,
+    reponseEtiquette: `Your address, for a reply`,
+    reponseAide: `Optional. Without it the message still arrives — there is simply no way to answer you.`,
+    leurreEtiquette: `Leave this field empty`,
+    envoyer: `Send`,
+    envoiEnCours: `Sending…`,
+    envoiReussi: `The message is on its way. Thank you — a reply can take a few days.`,
+    erreurVide: `The subject or the message is missing.`,
+    erreurTropLong: `The message is too long. Keep what matters: the line, the stop, the day, the time.`,
+    erreurTropDeLiens: `Too many links. Describe what you see instead.`,
+    erreurTropVite: `Sent too fast to have been typed. Try again in a few seconds.`,
+    erreurTropSouvent: `Too many messages from this connection. Try again in an hour, or write to the address above.`,
+    erreurEnvoi: `The message did not get through. Write to the address above: that one still works.`,
     retour: `Back to the home page`,
   },
 }
