@@ -14,7 +14,10 @@ WORKDIR /relais
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
-COPY index.mjs ./
+# `validation.mjs` est importé par `index.mjs` : l'oublier ici ne casse RIEN à la
+# construction — l'image se bâtit, et le conteneur meurt au démarrage sur un
+# ERR_MODULE_NOT_FOUND, en boucle. C'est arrivé.
+COPY index.mjs validation.mjs ./
 
 # Ne pas tourner en root. L'image `node` porte déjà cet utilisateur.
 USER node
