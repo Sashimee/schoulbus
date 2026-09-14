@@ -223,6 +223,7 @@ export const pt: Contenu = {
       },
     ],
     lien: 'Ler a página «Limites»',
+    lienSignaler: 'Assinalar um erro',
   },
 
   independance: {

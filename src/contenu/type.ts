@@ -214,6 +214,21 @@ export type Contenu = {
     note: string
     items: Limite[]
     lien: string
+    /*
+     * Le renvoi vers le formulaire, et c'est le SEUL chemin qui mène au signalement avant
+     * le pied de page.
+     *
+     * Il n'existait pas : le lien « Écrire » était en pied de page, à 88 % de la hauteur de
+     * l'accueil. Or la personne qui a quelque chose à signaler vient de lire, deux lignes
+     * plus haut, « en cas d'écart, c'est le document officiel qui fait foi » — c'est là
+     * qu'elle est, et pas en bas de page. Une page qui demande qu'on la corrige et qui
+     * cache l'adresse où le dire ne la demande pas vraiment.
+     *
+     * À la différence de `lien`, il ne dépend PAS de `APP_PUBLIEE` : on peut signaler une
+     * erreur d'horaire même quand l'application n'est pas joignable, et c'est même le
+     * moment où cela compte le plus.
+     */
+    lienSignaler: string
   }
   /**
    * La page « Indépendance » (`/independance/`), et non plus une section de l'accueil.

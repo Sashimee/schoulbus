@@ -238,6 +238,7 @@ export const fr: Contenu = {
       },
     ],
     lien: 'Lire la page « Limites »',
+    lienSignaler: 'Signaler une erreur',
   },
 
   independance: {

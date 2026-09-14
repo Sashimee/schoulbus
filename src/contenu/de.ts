@@ -208,6 +208,7 @@ export const de: Contenu = {
       },
     ],
     lien: 'Die Seite „Grenzen“ lesen',
+    lienSignaler: 'Einen Fehler melden',
   },
 
   independance: {
