@@ -35,6 +35,24 @@ export const URL_APP = 'https://app.schoulbus.lu'
  * depuis qu'il a fallu le servir dans les cinq langues (`blocNoscript`), donc
  * `APP_PUBLIEE` y décide comme partout ailleurs — et le test vérifie les cinq.
  *
+ * CE QUE LE TEXTE DORMANT AFFIRME — tranché le 14 septembre 2026, ticket #24.
+ *
+ * Refermer l'interrupteur ressert `final.bientot` et `general.bientot` dans les cinq
+ * langues, et ces deux clés disent « encore en développement », non « momentanément
+ * indisponible ». La question était de savoir si ce motif serait encore le bon le jour où
+ * l'interrupteur se referme. Il l'est, et c'est une décision et non un constat :
+ * l'application est publiée mais elle est EN TEST, et c'est pour cela — et pour cela
+ * seulement — qu'on la retirerait du public.
+ *
+ * Une indisponibilité d'hébergement ne se répare pas en commitant une constante ; elle se
+ * répare chez l'hébergeur, et la vitrine continue pendant ce temps de décrire une
+ * application qui existe. L'interrupteur ne sert donc pas à signaler une panne.
+ *
+ * CE QUI RENDRAIT CES DEUX CLÉS FAUSSES : que l'application sorte du test et soit tenue
+ * pour finie. Ce jour-là, les deux clés doivent être réécrites dans les cinq langues
+ * AVANT que l'interrupteur puisse se refermer — sans quoi il servirait d'un seul geste
+ * une affirmation fausse en cinq langues, ce que le premier principe du projet interdit.
+ *
  * Ouverte : l'application est publiée sur `app.schoulbus.lu`. Elle avait déjà été ouverte
  * un jour puis refermée le lendemain, l'application n'étant pas prête — c'est exactement
  * l'usage prévu, et la raison pour laquelle c'est un interrupteur, pas une suppression.
