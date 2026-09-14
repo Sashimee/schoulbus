@@ -155,7 +155,7 @@ couple et l'endroit où il se rencontre.
 
 | Niveau | Quand | Ce qui tourne |
 | --- | --- | --- |
-| `complet` | souris, écran large, ≥ 4 cœurs | défilement doux, aimants des boutons, révélations au défilement |
+| `complet` | souris, écran large, ≥ 4 cœurs | défilement doux, révélations au défilement |
 | `reduit` | tactile, ou machine modeste | révélations au défilement conservées, défilement natif |
 | `aucun` | « réduire les animations » demandé | rien ne bouge, tout est lisible |
 

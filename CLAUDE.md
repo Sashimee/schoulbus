@@ -335,7 +335,7 @@ dessiné à 76 px sur 1200 px : **24 caractères par ligne au plus.**
 | `src/sections/` | Une composante par section de l'accueil, dans l'ordre de `App.tsx`. Disposition seulement. |
 | `src/pages/` | Les pages hors accueil : `independance` (toujours engendrée), `mentions` (seulement si `ADRESSE_EDITEUR` est renseignée). Le nom de la page EST son segment d'adresse — même règle dans `cheminPage()` et dans le `dossier()` du pré-rendu. |
 | `src/composants/` | Briques réutilisées : `Cadre` (l'encadrement d'une capture), `Ecrans` (les captures), `Icones`, `Bouton`, `LogoBus`, `Selecteurs`. |
-| `src/mouvement/` | Niveau de mouvement, révélation au défilement, défilement doux, aimant des boutons. |
+| `src/mouvement/` | Niveau de mouvement, révélation au défilement, défilement doux. |
 | `src/styles/` | `jetons.css` (copie de l'application), puis vitrine / composants / sections. |
 | `scripts/` | Tout ce qui engendre : captures, chiffres, vignettes, QR, jetons, contrastes, pré-rendu. |
 | `src/tests/` | Invariants du contenu et du rendu. |
