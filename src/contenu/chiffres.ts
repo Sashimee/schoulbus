@@ -15,7 +15,7 @@ export const CHIFFRES = {
   "cycles": 5,
   "lignes": 7,
   "rues": 59,
-  "adresses": 1162,
+  "adresses": 1159,
   "langues": 5,
   "anneesCouvertes": [
     "2025/2026",
