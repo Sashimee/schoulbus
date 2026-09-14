@@ -1,0 +1,48 @@
+# Les deux conteneurs du site, côte à côte.
+#
+# Le site lui-même est statique et n'a jamais eu besoin de ceci : un `Dockerfile` suffisait.
+# Ce qui l'a rendu nécessaire est le formulaire de contact, qui ENVOIE — et un envoi demande
+# un point d'entrée. C'est le seul morceau du projet qui tourne côté serveur.
+#
+# `vitrine` sert les fichiers et proxyfie `/api/contact` vers `relais` (voir `nginx.conf`).
+# La même origine est ce qui permet de garder `connect-src 'self'` et `form-action 'none'`
+# dans la politique de sécurité du contenu, sans y inscrire le moindre tiers.
+services:
+  vitrine:
+    build:
+      context: .
+      args:
+        # L'origine publique entre dans les métadonnées de partage, qui exigent des URL
+        # absolues : elle doit être connue à la CONSTRUCTION et non au démarrage.
+        URL_PUBLIQUE: ${URL_PUBLIQUE:-https://www.schoulbus.lu}
+    restart: unless-stopped
+    # C'est le seul service exposé. Traefik s'y branche comme avant.
+    ports:
+      - '80'
+    depends_on:
+      - relais
+
+  relais:
+    build:
+      context: ./serveur
+    restart: unless-stopped
+    # AUCUN PORT PUBLIÉ, et c'est une décision de sécurité et non un oubli. Le service
+    # croit l'en-tête `X-Forwarded-For` que nginx lui pose, parce qu'il n'est joignable que
+    # depuis ce réseau. Publier son port rendrait son plafond de débit contournable d'un
+    # en-tête falsifié, et ouvrirait un relais SMTP authentifié sur l'Internet.
+    expose:
+      - '3000'
+    environment:
+      # Rien de tout cela n'est écrit dans le dépôt. Dokploy les pose, et le service refuse
+      # de démarrer si l'une manque — une variable oubliée qui ne se verrait qu'au moment
+      # où un parent écrit est un défaut qui coûte un message réel.
+      SMTP_HOTE: ${SMTP_HOTE:?il faut l hote SMTP d OVH}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_TLS: ${SMTP_TLS:-true}
+      SMTP_UTILISATEUR: ${SMTP_UTILISATEUR:?il faut la boite qui s authentifie}
+      SMTP_MOTDEPASSE: ${SMTP_MOTDEPASSE:?il faut le mot de passe de cette boite}
+      # L'expéditeur est un ALIAS `@bas.lu` de la boîte ci-dessus. Expéditeur et
+      # destinataire doivent différer : identiques, un message perdu ne se distingue pas
+      # d'un message jamais parti, et le filtrage devient impossible.
+      SMTP_EXPEDITEUR: ${SMTP_EXPEDITEUR:?il faut l alias @bas.lu qui expedie}
+      COURRIEL_DESTINATAIRE: ${COURRIEL_DESTINATAIRE:-admin@schoulbus.lu}
