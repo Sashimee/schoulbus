@@ -348,9 +348,18 @@ posée en `<meta>` par `vite.config.ts`, parce que l'empreinte du script anti-cl
 s'y calcule ; l'en-tête HTTP ne porte que `frame-ancestors`.
 
 **DEUX CONTENEURS DEPUIS LE FORMULAIRE DE CONTACT**, décrits par `compose.yml` : `vitrine`
-(nginx, le seul exposé) et `relais` (voir « Le relais »). Le second n'a aucun port publié,
-et ce n'est pas un oubli. Les variables du relais se posent dans Dokploy — `.env.exemple`
-dit lesquelles, `.env` est ignoré par git et doit le rester.
+(nginx, sur `dokploy-network` et sur `interne`) et `relais` (sur `interne` SEULEMENT — voir
+« Le relais »). Le second n'a ni port publié ni accès à Traefik, et ce n'est pas un oubli.
+Les variables du relais se posent dans Dokploy — `.env.exemple` dit lesquelles, `.env` est
+ignoré par git et doit le rester.
+
+**LE ROUTAGE N'EST PAS DANS `compose.yml`.** Les deux domaines sont des entrées de domaine
+Dokploy posées sur le service `vitrine`, port 80 — et `schoulbus.lu` y porte le middleware
+`redirect-to-www-schoulbus`, qui est ce qui rend le 308 vers `www`. Le dépôt frère, lui,
+écrit ses propres étiquettes Traefik dans son compose ; ici on ne le fait pas, parce que
+recopier ce montage à la main serait réécrire sans filet la seule partie du déploiement qui
+marche déjà. **Si le 308 de l'apex disparaît un jour, c'est ce middleware qu'il faut
+regarder**, pas nginx : `nginx.conf` ne redirige rien.
 
 ## Documentation
 
