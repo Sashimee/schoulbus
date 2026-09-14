@@ -92,7 +92,7 @@ export const pt: Contenu = {
     arrets: 'paragens servidas',
     villages: 'aldeias do município',
     langues: 'línguas, incluindo o luxemburguês',
-    envoi: 'dados da família que saem sem os ter pedido',
+    envoi: 'dados da família que saem sem que os peça',
     envoiValeur: '0',
     envoiNote:
       `Três coisas saem mesmo assim: a aplicação conta as suas visualizações de página, ativar as ` +
@@ -166,7 +166,7 @@ export const pt: Contenu = {
       {
         icone: 'horloge',
         titre: 'A casa de acolhimento',
-        texte: 'Deixado à segunda, buscado à quinta.',
+        texte: 'Entregue à segunda, recolhido à quinta.',
       },
     ],
   },
@@ -223,7 +223,7 @@ export const pt: Contenu = {
       },
     ],
     lien: 'Ler a página «Limites»',
-    lienSignaler: 'Assinalar um erro',
+    lienSignaler: 'Comunicar um erro',
   },
 
   independance: {
@@ -276,7 +276,7 @@ export const pt: Contenu = {
     lienContact: 'Escrever',
     viePrivee:
       `Esta página não instala cookies, não mede nada e não contacta nenhum terceiro. O ` +
-      `único envio parte do formulário de contacto, quando é o utilizador a pedi-lo.`,
+      `único envio parte do formulário de contacto, quando o pede.`,
   },
 
   mentions: {
@@ -301,20 +301,20 @@ export const pt: Contenu = {
     intro: `Um endereço, para assinalar um horário que não corresponde, uma apresentação que se desmancha, ou algo que falta. Por detrás está um pai, não um serviço.`,
     adresseTitre: `O endereço`,
     adresseIntro: `As mensagens chegam aqui:`,
-    adresseNote: `O endereço está escrito por extenso: o seu programa de correio basta, e continua útil no dia em que o formulário abaixo deixar de funcionar. Uma mensagem recebida chega a uma caixa de correio comum; não é registada nem copiada para outro lado. Uma resposta pode demorar alguns dias.`,
+    adresseNote: `O endereço está escrito em texto simples: o seu programa de correio basta, e continua útil no dia em que o formulário abaixo deixar de funcionar. Uma mensagem recebida chega a uma caixa de correio comum; não é registada nem copiada para outro lado. Uma resposta pode demorar alguns dias.`,
     utileTitre: `O que ajuda`,
     utileCorps: `Para um horário que não corresponde: a linha, a paragem, o dia, e a hora que esperava.
 Para uma apresentação que se desmancha: o aparelho, o navegador, e o que mostra o ecrã.
 Escreva na língua que lhe vier.`,
     limitesTitre: `O que este endereço não pode fazer`,
-    limitesCorps: `Não leva ao município, nem à escola, nem à maison relais. Uma ausência a comunicar, uma inscrição, um pedido de mudança de paragem: isso dirige-se diretamente a eles, e uma mensagem enviada para aqui não lá chegará.
+    limitesCorps: `Não leva ao município, nem à escola, nem à maison relais. Uma ausência a comunicar, uma inscrição, um pedido de mudança de paragem: isso dirige-se diretamente a eles, e uma mensagem enviada para aqui não chegará lá.
 Prevalece o plano oficial do município. Se este site o mostrar de outra maneira, é este site que está errado — e é exatamente isso que vale a pena assinalar.`,
     formulaireTitre: `Ou escrever a partir daqui`,
     formulaireNote: `O formulário envia o que escrever: o assunto, a mensagem e o endereço de resposta, se indicar um. Mais nada sai — nem o seu nome, nem a sua posição, nem seja o que for que permita reconhecê-lo de uma visita para a outra. O seu endereço IP serve durante uma hora para impedir envios em série, numa forma baralhada que não permite chegar até si, e nada disso é escrito num disco. As mensagens recebidas são conservadas doze meses e depois apagadas.`,
     sujetEtiquette: `De que se trata?`,
     messageEtiquette: `A sua mensagem`,
     reponseEtiquette: `O seu endereço, para a resposta`,
-    reponseAide: `Facultativo. Sem ele a mensagem chega à mesma — só que não há maneira de lhe responder.`,
+    reponseAide: `Opcional. Sem ele a mensagem chega à mesma — só que não há maneira de lhe responder.`,
     leurreEtiquette: `Deixe este campo vazio`,
     envoyer: `Enviar`,
     envoiEnCours: `A enviar…`,
