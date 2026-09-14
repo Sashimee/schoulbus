@@ -212,7 +212,7 @@ export const en: Contenu = {
       },
     ],
     lien: 'Read the “Limits” page',
-    lienSignaler: 'Report a mistake',
+    lienSignaler: 'Report an error',
   },
 
   independance: {
@@ -279,7 +279,7 @@ export const en: Contenu = {
     hebergeurTitre: `Hosting`,
     hebergeurCorps: `The site consists of static files, served from a virtual private server that the publisher rents from ${HEBERGEUR}. No visit data is kept there.`,
     donneesTitre: `Personal data`,
-    donneesCorps: `This page sets no cookies, does not measure its audience and makes no request to any third-party service. One single thing leaves from here, and you are the one who sets it off: the form on the contact page. It passes on the subject, the message and the reply address you give, to the publisher’s address above; those messages are kept for twelve months, then deleted. Before that term you may ask, at the same address, to see, correct or erase yours. The app itself keeps what you enter there on your device alone; its “Limits” page explains it in detail.`,
+    donneesCorps: `This page sets no cookies, does not measure its audience and makes no request to any third-party service. One single thing leaves from here, and you are the one who sets it off: the form on the contact page. It passes on the subject, the message and the reply address you give, to the publisher’s address above; those messages are kept for twelve months, then deleted. Before that period ends you may ask, at the same address, to see, correct or erase yours. The app itself keeps what you enter there on your device alone; its “Limits” page explains it in detail.`,
     responsabiliteTitre: `Liability`,
     responsabiliteCorps: `The times shown are taken from the municipality’s official plan and transcribed with care, without any guarantee of accuracy. In case of doubt or disagreement, the municipality’s official document prevails.`,
     retour: `Back to the home page`,
@@ -299,7 +299,7 @@ Write in whichever language comes to you.`,
     limitesCorps: `It leads neither to the municipality, nor to the school, nor to the maison relais. An absence to report, an enrolment, a request to change stop: that goes to them directly, and a message sent here will not reach them.
 The municipality’s official plan prevails. If this site shows something else, it is this site that is wrong — and that is exactly what is worth reporting.`,
     formulaireTitre: `Or write from here`,
-    formulaireNote: `The form sends what you write: the subject, the message, and the reply address if you give one. Nothing else leaves — not your name, not your location, nothing that would recognise you from one visit to the next. Your IP address is used for one hour to stop bursts of messages, in a scrambled form that leads nowhere back to you, and none of it is written to a disk. Messages that arrive are kept for twelve months, then deleted.`,
+    formulaireNote: `The form sends what you write: the subject, the message, and the reply address if you give one. Nothing else leaves — not your name, not your location, nothing that would identify you from one visit to the next. Your IP address is used for one hour to stop bursts of messages, in a scrambled form that cannot be traced back to you, and none of it is written to a disk. Messages that arrive are kept for twelve months, then deleted.`,
     sujetEtiquette: `What is it about?`,
     messageEtiquette: `Your message`,
     reponseEtiquette: `Your address, for a reply`,
