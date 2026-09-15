@@ -286,8 +286,19 @@ Cinq choses à savoir avant d'y toucher :
 **Les règles sont dans `serveur/validation.mjs`, qui n'ouvre aucun port** — c'est pour cela
 qu'il est séparé, et `src/tests/relais.test.ts` le tient. Anti-spam sans le moindre service
 tiers, parce qu'un captcha hébergé ailleurs ferait entrer un tiers dans une page qui n'en a
-aucun : leurre, délai minimal, plafonds par champ, compte de liens, cinq envois par heure.
+aucun : leurre, délai minimal, plafonds par champ, compte de liens, cinq envois par heure,
+et l'origine déclarée quand le navigateur en déclare une.
 Le délai est mesuré par le navigateur, donc falsifiable, et c'est écrit plutôt que passé sous silence.
+
+**Ces six protections arrêtent le spam automatique, pas quelqu'un qui vise ce site-ci**, et
+c'est à dire ainsi plutôt qu'à laisser croire l'inverse. Le contrôle d'origine, en
+particulier, N'EST PAS UNE PORTE : un client qui n'est pas un navigateur ne pose pas
+d'en-tête `Origin`, et une absence est **acceptée** — la refuser casserait `curl` et les
+tests de fumée sans arrêter personne, puisqu'il suffirait de ne rien envoyer. Ce qu'il ferme
+est le formulaire recopié sur une autre page, qui posterait ici depuis le navigateur d'un
+visiteur. L'origine attendue est `URL_PUBLIQUE`, **la même variable que l'adresse publique
+de la vitrine** : une seule valeur, donc pas de montage où les deux services désignent deux
+sites différents.
 
 **Ce que le formulaire a rendu faux, et qui a été réécrit avec lui** : `pied.viePrivee` et
 `mentions.donneesCorps`, dans les cinq langues, annonçaient que rien ne sort. Leur
