@@ -18,6 +18,7 @@ import {
   creerCompteurDeDebit,
   desalignementExpediteur,
   motifDeRefus,
+  origineRefusee,
 } from '../../serveur/validation.mjs'
 
 /** Un message qui doit passer. Chaque test n'en change qu'une chose. */
@@ -252,5 +253,49 @@ describe('Le garde-fou du démarrage', () => {
     const source = SOURCE['../../serveur/index.mjs']
     expect(source).toContain('desalignementExpediteur(CONFIG.utilisateur, CONFIG.expediteur)')
     expect(source).toContain('process.exit(1)')
+  })
+})
+
+/*
+ * L'origine déclarée par le navigateur.
+ *
+ * Ce contrôle est une COUCHE, pas une porte : il ferme le formulaire recopié sur une autre
+ * page, et rien d'autre. Les tests disent les deux moitiés — ce qu'il refuse, et ce qu'il
+ * laisse passer volontairement — pour qu'un lecteur pressé ne le prenne pas pour une
+ * protection contre un client en ligne de commande.
+ */
+describe("L'origine de la requête", () => {
+  const SITE = 'https://www.schoulbus.lu'
+
+  it('laisse passer la page elle-même', () => {
+    expect(origineRefusee(SITE, SITE)).toBeNull()
+  })
+
+  it('refuse une autre origine, fût-elle un sous-domaine', () => {
+    expect(origineRefusee('https://exemple.lu', SITE)).toBe('origine')
+    expect(origineRefusee('https://app.schoulbus.lu', SITE)).toBe('origine')
+  })
+
+  it('refuse le même hôte en clair : une page en http n’est pas la page servie', () => {
+    expect(origineRefusee('http://www.schoulbus.lu', SITE)).toBe('origine')
+  })
+
+  it('refuse l’apex, qui ne sert aucune page — il redirige', () => {
+    expect(origineRefusee('https://schoulbus.lu', SITE)).toBe('origine')
+  })
+
+  /*
+   * Une absence est ACCEPTÉE, et c'est délibéré. Un client qui n'est pas un navigateur
+   * n'en pose pas ; le refuser casserait `curl` et les tests de fumée sans arrêter
+   * personne, puisqu'il suffirait de ne rien envoyer. Le plafond de débit reste dessous.
+   */
+  it('accepte une origine absente ou vide, plutôt que de mentir sur ce qu’elle prouve', () => {
+    expect(origineRefusee(undefined, SITE)).toBeNull()
+    expect(origineRefusee('', SITE)).toBeNull()
+    expect(origineRefusee('   ', SITE)).toBeNull()
+  })
+
+  it('refuse tout dès que l’attendue est absente, plutôt que de tout laisser passer', () => {
+    expect(origineRefusee(SITE, undefined)).toBe('origine')
   })
 })

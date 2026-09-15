@@ -34,6 +34,7 @@ import {
   creerCompteurDeDebit,
   desalignementExpediteur,
   motifDeRefus,
+  origineRefusee,
 } from './validation.mjs'
 import { createTransport } from 'nodemailer'
 
@@ -56,6 +57,8 @@ const CONFIG = {
   motDePasse: process.env.SMTP_MOTDEPASSE,
   expediteur: process.env.SMTP_EXPEDITEUR,
   destinataire: process.env.COURRIEL_DESTINATAIRE,
+  /* L'origine que le navigateur doit déclarer. C'est l'adresse publique du site. */
+  origineAttendue: process.env.URL_PUBLIQUE,
 }
 
 /*
@@ -72,7 +75,7 @@ if (manquantes.length > 0) {
   console.error(
     `Configuration incomplète : ${manquantes.join(', ')}. ` +
       'Poser SMTP_HOTE, SMTP_PORT, SMTP_TLS, SMTP_UTILISATEUR, SMTP_MOTDEPASSE, ' +
-      'SMTP_EXPEDITEUR et COURRIEL_DESTINATAIRE dans les variables du service.',
+      'SMTP_EXPEDITEUR, COURRIEL_DESTINATAIRE et URL_PUBLIQUE dans les variables du service.',
   )
   process.exit(1)
 }
@@ -102,7 +105,15 @@ const facteur = createTransport({
 })
 
 /* Ce qui est compté, et rien d'autre. Aucune adresse, aucun contenu, aucun message. */
-const refus = { leurre: 0, tropVite: 0, tropLong: 0, tropDeLiens: 0, tropSouvent: 0, vide: 0 }
+const refus = {
+  leurre: 0,
+  tropVite: 0,
+  tropLong: 0,
+  tropDeLiens: 0,
+  tropSouvent: 0,
+  vide: 0,
+  origine: 0,
+}
 
 const debit = creerCompteurDeDebit()
 setInterval(() => debit.oublierLesVieux(), PLAFONDS.fenetre).unref()
@@ -158,6 +169,18 @@ const serveur = createServer(async (requete, reponse) => {
 
   if (requete.method !== 'POST' || !requete.url?.startsWith('/api/contact')) {
     return repondre(reponse, 404, { erreur: 'route inconnue' })
+  }
+
+  /*
+   * Avant de lire quoi que ce soit : d'où la page qui poste dit-elle venir ?
+   *
+   * Refusé AVANT `lireCorps`, parce qu'il n'y a aucune raison d'avaler seize kilo-octets
+   * d'une requête qu'on sait déjà mauvaise.
+   */
+  const refusOrigine = origineRefusee(requete.headers.origin, CONFIG.origineAttendue)
+  if (refusOrigine) {
+    refus.origine += 1
+    return repondre(reponse, 403, { erreur: refusOrigine })
   }
 
   let corps

@@ -37,6 +37,27 @@ export const PLAFONDS = {
 const texte = (valeur) => (typeof valeur === 'string' ? valeur.trim() : '')
 
 /**
+ * L'ORIGINE, QUAND LE NAVIGATEUR EN DÉCLARE UNE.
+ *
+ * Un navigateur envoie `Origin` sur toute requête qui n'est ni `GET` ni `HEAD`, y compris
+ * de même origine. Comparer cet en-tête ferme le cas du formulaire recopié sur une autre
+ * page, qui posterait ici depuis le navigateur d'un visiteur.
+ *
+ * CE QUE CELA N'ARRÊTE PAS, ET C'EST ÉCRIT PLUTÔT QUE SOUS-ENTENDU : un client qui n'est
+ * pas un navigateur ne pose pas d'en-tête `Origin`, ou en pose un faux. Une absence est
+ * donc ACCEPTÉE — la refuser casserait `curl`, les tests de fumée et les clients en ligne
+ * de commande sans arrêter personne, puisqu'il suffit de ne rien envoyer. Ce contrôle
+ * s'ajoute au leurre, au délai et au plafond de débit ; il ne les remplace pas.
+ *
+ * Rend le motif du refus, ou `null`.
+ */
+export function origineRefusee(origine, attendue) {
+  const declaree = texte(origine)
+  if (declaree === '') return null
+  return declaree === texte(attendue) ? null : 'origine'
+}
+
+/**
  * LE DOMAINE DE L'EXPÉDITEUR DOIT S'ALIGNER SUR CELUI DU COMPTE QUI S'AUTHENTIFIE.
  *
  * OVH refuse en 550 5.7.1 un message dont l'en-tête `From` porte un autre domaine que le

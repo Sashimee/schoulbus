@@ -23,6 +23,12 @@ export declare function motifDeRefus(
 ): 'leurre' | 'vide' | 'tropLong' | 'tropVite' | 'tropDeLiens' | null
 
 /**
+ * Le motif du refus de l'ORIGINE, ou `null`. Une origine absente est acceptée : un client
+ * qui n'est pas un navigateur n'en déclare pas.
+ */
+export declare function origineRefusee(origine: unknown, attendue: unknown): 'origine' | null
+
+/**
  * Le motif du refus de la CONFIGURATION, ou `null` si elle peut expédier : OVH exige que le
  * domaine du `From` s'aligne sur celui du compte authentifié.
  */
