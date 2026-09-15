@@ -355,6 +355,15 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   `Fahrt` à un troisième. **L'application, elle, n'a pas été touchée** — c'est un ticket,
   pas un geste unilatéral dans un dépôt qu'on ne relit pas ici.
 
+  **Le 15 septembre a raccourci la page de contact dans les cinq langues**, et c'est à
+  compter au même endroit. Le raccourcissement a été fait **par retrait de propositions et
+  jamais par réécriture**, précisément pour ne pas composer de phrases neuves en
+  luxembourgeois, en portugais et en anglais — mais retirer n'est pas neutre : une phrase
+  amputée peut devenir sèche, ou perdre le mot qui la rendait naturelle. Les clés touchées
+  sont `contact.intro`, `adresseNote`, `utileCorps`, `limitesCorps` et `formulaireTitre`,
+  plus les deux messages d'échec dont la direction a changé. `formulaireNote` n'a pas été
+  touchée, par décision.
+
   **Le 8 septembre a ajouté des chaînes à relire**, et il faut le dire plutôt que de le
   laisser se diluer : `meta.sansScript` (le bloc sans JavaScript) est une phrase nouvelle
   dans chaque langue, et `chiffres.envoi`, `chiffres.envoiNote` ainsi que la limite « trois
@@ -416,6 +425,28 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   rétrécit, elle ne se referme pas** — et pour le portugais, aucun corpus institutionnel
   publié au Luxembourg n'est assez large pour arbitrer : ni guichet.public.lu ni
   mobiliteit.lu ne publient dans cette langue.
+
+- **L'anti-spam du formulaire arrête le spam automatique, pas quelqu'un qui vise ce
+  site-ci.** Six protections, sans le moindre service tiers : leurre, délai minimal de trois
+  secondes, plafonds par champ, compte de liens, cinq envois par heure et par empreinte
+  d'adresse, et l'origine déclarée quand le navigateur en déclare une. Elles tiennent le
+  bruit, qui est l'essentiel. Ce qu'elles ne tiennent pas est écrit ici plutôt que supposé :
+
+  - **le délai est mesuré par le navigateur**, donc falsifiable — deux messages ont été
+    envoyés en `curl` avec `duree: 45000` pendant la mise en service ;
+  - **le leurre se contourne dès qu'on lit le HTML** ;
+  - **le contrôle d'origine n'est pas une porte** : une origine absente est acceptée, parce
+    que la refuser casserait `curl` et les tests de fumée sans arrêter personne. Il ferme le
+    formulaire recopié sur une autre page, et rien d'autre ;
+  - **le plafond de débit est en mémoire d'un seul exemplaire** : un redémarrage le remet à
+    zéro, et plusieurs adresses le contournent.
+
+  Ce que le montage garantit en revanche, et qui est la vraie limite du dégât : **le
+  destinataire est dans l'environnement, jamais dans la requête.** Le pire qu'on obtienne
+  est de remplir une boîte, pas d'expédier vers l'extérieur. La réserve est de NATURE — un
+  captcha hébergé ailleurs ferait entrer un tiers dans la seule page qui n'en a aucun, et
+  c'est un prix que le projet refuse. Elle reste écrite pour que personne ne prenne ces six
+  protections pour davantage qu'elles ne sont.
 
 - **Quatre-vingt-seize kilo-octets de JavaScript. Le poids est approuvé, la question
   d'architecture reste.** Premier écran, cache vide : **96,7 ko de JS comprimé** pour une
@@ -517,6 +548,55 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   l'écran se contredisent sous les yeux du lecteur.
 
 ### Réserves levées
+
+- *« Le formulaire de contact n'a jamais servi en vrai. »* — Levée le 15 septembre 2026,
+  **et elle a coûté un message avant de se lever**. La chaîne est aujourd'hui prouvée de
+  bout en bout — navigateur, nginx, relais, SMTP authentifié d'OVH, `admin@schoulbus.lu` —
+  en-têtes lus par l'éditeur.
+
+  Ce qu'elle a appris, et qui vaut plus que la réserve : **`{"etat":"envoye"}` ne prouvait
+  pas la remise.** Le relais répond après que `sendMail` a résolu, c'est-à-dire après
+  l'ACCEPTATION par le serveur de soumission. OVH a ensuite rejeté le premier message en
+  550 5.7.1 — le `From` était `formulaire@bas.lu` pour un compte authentifié
+  `admin@schoulbus.lu`, et **le domaine doit s'aligner** ; un alias ne suffit pas. Le rejet
+  est asynchrone : il part en rapport de non-remise, le relais ne le voit jamais, et le
+  visiteur a lu « message envoyé ». Corrigé par le ticket #41 — l'expéditeur est passé sur
+  le domaine authentifié, et `desalignementExpediteur()` empêche désormais le service de
+  démarrer sur ce défaut plutôt que de le découvrir dans trois mois.
+
+  Le raisonnement SPF du dépôt n'était pas faux, il concluait au mauvais endroit : ce n'est
+  pas le SPF qui décide de l'expéditeur, c'est la politique de soumission d'OVH, en amont.
+  **Le SPF de `schoulbus.lu` était déjà correct et n'a pas été touché.**
+
+- *« Les domaines sont sur un service qui ne construit pas le compose. »* — Levée le
+  15 septembre 2026. `schoulbus.lu` et `www.schoulbus.lu` sont passés sur le compose
+  `vitrine-relais`, coupure mesurée à **41 secondes** sur `www`. Trois choses apprises, et
+  écrites dans `CLAUDE.md` parce qu'elles se retrouveraient difficilement :
+
+  1. **`domain.update` ne déplace pas un domaine d'une application vers un compose** — il
+     rend 200 et ignore silencieusement `composeId`. Il faut supprimer puis recréer.
+  2. **Le middleware doit porter son fournisseur** : `redirect-to-www-schoulbus@file`. Les
+     étiquettes d'un domaine de compose viennent du fournisseur *docker*, où un nom nu est
+     cherché sous `…@docker`, introuvable — **et Traefik jette le routeur entier**. L'apex
+     a rendu 404 sans que rien n'explique pourquoi.
+  3. **`compose.deploy` rend 200 « queued » bien avant que l'enregistrement de déploiement
+     n'existe** : sonder juste après lit l'ANCIEN déploiement, `done`, et fait croire que
+     c'est fini.
+
+  L'ancienne application reste en filet, sans domaine attaché, jusqu'au 20 septembre 2026.
+
+- *« La vitrine est plus précise que l'application qu'elle décrit. »* — Levée le
+  15 septembre 2026, ticket #15, et **par le dépôt frère** : sa page « Limites » nomme
+  désormais le prénom qui part chez Google Agenda, et l'application renvoie vers le
+  formulaire unique de la vitrine plutôt que d'en construire un second.
+
+  **Ce que cela crée, et qu'il faut savoir avant de toucher aux adresses** : cinq adresses
+  de la vitrine sont maintenant une dépendance de l'application — `/contact/` pour le
+  français, `/{langue}/contact/` pour les quatre autres, construites en un seul endroit
+  là-bas (`src/lib/contact.ts`). Renommer le segment `contact`, ou changer la règle « le
+  français à la racine, les autres sous leur segment », casse cinq liens **dans un dépôt qui
+  ne le verra pas passer**. Les cinq répondaient 200 le 15 septembre 2026.
+
 
 - *« Le texte dormant de l'interrupteur affirme ce qui n'est plus vrai. »* — Levée le
   14 septembre 2026, ticket #24, par une décision et non par une réécriture.
