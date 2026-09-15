@@ -155,7 +155,7 @@ couple et l'endroit où il se rencontre.
 
 | Niveau | Quand | Ce qui tourne |
 | --- | --- | --- |
-| `complet` | souris, écran large, ≥ 4 cœurs | défilement doux, aimants des boutons, révélations au défilement |
+| `complet` | souris, écran large, ≥ 4 cœurs | défilement doux, révélations au défilement |
 | `reduit` | tactile, ou machine modeste | révélations au défilement conservées, défilement natif |
 | `aucun` | « réduire les animations » demandé | rien ne bouge, tout est lisible |
 
@@ -438,6 +438,13 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   | premier écran | 106,4 ko | **96,7 ko** | 110 → **102 ko** |
   | tout le site | 115,7 ko | **120,8 ko** | 120 → **128 ko** |
 
+  Le 14 septembre 2026, le formulaire de contact a ajouté dix-sept chaînes dans les cinq
+  langues : le premier écran passe à **98,4 ko** (4 % de marge, budget inchangé) et tout le
+  site à **125,4 ko**, dont la marge tombait à 2 %. **Le second budget passe donc à
+  136 ko**, et le premier ne bouge pas. C'est l'asymétrie annoncée au découpage : une page
+  écrite dans les cinq langues coûte cinq fois plus au plafond théorique qu'à la visite
+  réelle, puisque celle-ci ne télécharge qu'un dictionnaire.
+
   Le premier écran perd 9,7 ko parce qu'un lecteur francophone ne télécharge plus les
   quatre langues qu'il ne lira jamais. Le total en gagne 5, parce que gzip partageait la
   structure des cinq dictionnaires tant qu'ils tenaient dans un seul fichier : comprimés
@@ -489,7 +496,42 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   déplacer le dépôt frère — **et il ne faut pas le faire**, il peut être sur une branche de
   travail. Un clone jetable et `DEPOT_APP` suffisent (recette dans `CLAUDE.md`).
 
+- **L'instant simulé des captures est encore une date à venir.** `heros.legende` annonce
+  « Capture réelle · 22 septembre 2026, 07:25 » dans les cinq langues, et cette date sera
+  passée le 22 septembre. La décision du 14 septembre 2026 (ticket #24) est l'option (b) :
+  **l'instant doit être passé le jour où les captures sont publiées**, et il le deviendra
+  au prochain regel. La règle est écrite dans `src/contenu/captures.ts`, en sixième
+  propriété de `INSTANT_DEMO` — c'est le fichier qu'on ouvre pour la changer.
+
+  **Ce qui a empêché de l'appliquer le jour même**, et c'est le constat qui valait le
+  détour : aucune date passée ne convenait. L'année scolaire 2026/2027 commence le
+  15 septembre 2026, et l'année 2025/2026 est `partiel: true` dans le `vacances-lu.json` de
+  l'application — hors congé d'été, `calendrier.ts:117` y rend
+  `{ ecole: false, raison: 'annee-inconnue' }`, donc l'écran d'accueil dirait qu'il ne sait
+  pas s'il y a école. Reculer la date aurait produit quarante captures montrant une
+  application qui ne sait rien. **Une date à la fois passée et valide n'existait qu'à
+  partir du 16 septembre 2026**, pour le mardi 15.
+
+  Le regel coûte quarante fichiers dans le conteneur épinglé, plus `heros.legende` dans les
+  cinq langues : **les deux bougent ensemble ou pas du tout**, sans quoi la phrase et
+  l'écran se contredisent sous les yeux du lecteur.
+
 ### Réserves levées
+
+- *« Le texte dormant de l'interrupteur affirme ce qui n'est plus vrai. »* — Levée le
+  14 septembre 2026, ticket #24, par une décision et non par une réécriture.
+  `final.bientot` et `general.bientot` disent, dans les cinq langues, que l'application est
+  « encore en développement ». Elles dorment derrière `APP_PUBLIEE === true`, donc rien de
+  faux n'est servi ; la crainte était qu'un jour l'interrupteur se referme pour cause
+  d'**indisponibilité**, et serve alors d'un seul geste une affirmation fausse en cinq
+  langues. **Décision de l'éditeur : ce cas n'arrivera pas, parce que l'interrupteur ne se
+  refermera que pour le motif qu'il annonce.** L'application est publiée mais elle est en
+  test, et c'est pour cela — et pour cela seulement — qu'on la retirerait du public ; une
+  panne d'hébergement, elle, se répare chez l'hébergeur et non en commitant une constante.
+  Le motif est écrit dans `src/config.ts`, à côté de `APP_PUBLIEE`, parce que c'est ce
+  fichier qu'on ouvre pour refermer l'interrupteur. **Ce qui rouvrirait la réserve** : que
+  l'application sorte du test et soit tenue pour finie. Ce jour-là, les deux clés doivent
+  être réécrites dans les cinq langues AVANT que l'interrupteur puisse servir à nouveau.
 
 - *« Le thème sombre est une dérivation, pas une maquette. »* — Levée le 10 septembre 2026.
   Ce qu'elle demandait était un avis humain sur le GOÛT du vert-noir : le calcul était fait
@@ -803,7 +845,7 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   version, un chiffre est une affirmation sur le plan d'aujourd'hui. Le prix est assumé —
   un changement de données là-bas fera rougir la CI d'ici.
 
-- *« L'origine par défaut désignait un hôte qui redirige. »* — `schoulbus.lu` répond 308
+- *« L'origine par défaut désignait un hôte qui redirige. »* — `schoulbus.lu` répond 301
   vers `www.schoulbus.lu`. Le `Dockerfile` portait seul la bonne valeur ; `vite.config.ts`,
   `scripts/prerendu.mjs`, `src/config.ts`, le test de fumée de la CI et l'exemple de ce
   README retombaient tous sur l'apex. Une construction lancée hors de Dokploy écrivait donc
@@ -898,7 +940,7 @@ docker run --rm -p 8080:80 vitrine
 
 `URL_PUBLIQUE` entre dans les métadonnées de partage, qui exigent des adresses absolues :
 elle est donc connue à la construction, pas au démarrage. **Elle porte le `www`** : c'est
-l'hôte qui répond, `schoulbus.lu` redirigeant vers lui en 308. Une canonique vers un hôte
+l'hôte qui répond, `schoulbus.lu` redirigeant vers lui en 301. Une canonique vers un hôte
 qui redirige n'est pas une erreur visible — c'est une page qui désigne comme officielle une
 adresse qu'elle n'est pas. `DATE_CONTENU` sert au `lastmod`
 du plan du site ; le dépôt Git n'étant pas copié dans l'image, sans elle la balise est

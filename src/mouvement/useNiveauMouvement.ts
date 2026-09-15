@@ -10,7 +10,7 @@
  * D'où l'étagement plutôt que l'interrupteur :
  *
  *   'complet'  Pointeur fin, WebGL2 disponible, au moins 4 cœurs. Tout : nuage animé,
- *              défilement doux, curseur, brouillage, aimants, projecteurs.
+ *              défilement doux, curseur, brouillage, projecteurs.
  *   'reduit'   Tactile, ou machine modeste. Le fond redevient le dégradé CSS de
  *              l'application, pas de curseur ni de défilement doux. Les révélations au
  *              défilement restent : elles ne coûtent qu'une transformation.

@@ -10,3 +10,12 @@ public/.captures-en-cours
 # État de travail d’une session, jamais versionné (voir la section « Resume state »
 # des règles globales) : il décrit une machine et un instant, pas le projet.
 RESUME.md
+
+# Les identifiants SMTP du relais de courriel. `.env.exemple` dit quoi poser ; les valeurs
+# se posent dans Dokploy, et ce fichier-ci ne doit jamais entrer dans le dépôt.
+.env
+.env.*
+!.env.exemple
+
+# Les dépendances du relais, qui a son propre paquet.
+serveur/node_modules/

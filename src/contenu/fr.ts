@@ -238,6 +238,7 @@ export const fr: Contenu = {
       },
     ],
     lien: 'Lire la page « Limites »',
+    lienSignaler: 'Signaler une erreur',
   },
 
   independance: {
@@ -306,7 +307,9 @@ export const fr: Contenu = {
     source: `Données : plan officiel de la commune, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Mentions légales',
     lienContact: 'Écrire',
-    viePrivee: 'Cette page ne pose aucun cookie, ne mesure rien, et n’appelle aucun serveur.',
+    viePrivee:
+      `Cette page ne pose aucun cookie, ne mesure rien, et n’appelle aucun tiers. Le seul ` +
+      `envoi part du formulaire de contact, quand vous le demandez.`,
   },
 
   mentions: {
@@ -320,7 +323,7 @@ export const fr: Contenu = {
     hebergeurTitre: `Hébergement`,
     hebergeurCorps: `Le site est constitué de fichiers statiques, servis depuis un serveur privé virtuel que l’éditeur loue auprès d’${HEBERGEUR}. Aucune donnée de visite n’y est conservée.`,
     donneesTitre: `Données personnelles`,
-    donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l’audience et n’adresse aucune requête à un service tiers. Aucune donnée personnelle n’est collectée, et il n’y a donc rien à consulter, à corriger ni à effacer. L’application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
+    donneesCorps: `Cette page ne dépose aucun cookie, ne mesure pas l’audience et n’adresse aucune requête à un service tiers. Une seule chose sort d’ici, et c’est vous qui la déclenchez : le formulaire de la page de contact. Il transmet le sujet, le message et l’adresse de réponse que vous donnez, à l’adresse de l’éditeur ci-dessus ; ces messages sont conservés douze mois, puis effacés. Vous pouvez demander à consulter, à corriger ou à effacer le vôtre avant ce terme, par cette même adresse. L’application, elle, garde ce que vous y saisissez sur votre seul appareil ; sa page « Limites » le détaille.`,
     responsabiliteTitre: `Responsabilité`,
     responsabiliteCorps: `Les horaires affichés sont repris du plan officiel de la commune et retranscrits avec soin, sans garantie d’exactitude. En cas de doute ou de divergence, c’est le document officiel de la commune qui fait foi.`,
     retour: `Retour à la page d’accueil`,
@@ -331,7 +334,7 @@ export const fr: Contenu = {
     intro: `Une adresse, pour signaler un horaire qui ne correspond pas, un affichage qui se tient mal, ou quelque chose qui manque. Derrière, il y a un parent, pas un service.`,
     adresseTitre: `L’adresse`,
     adresseIntro: `Les messages arrivent ici :`,
-    adresseNote: `Cette page n’envoie rien elle-même : l’adresse est écrite en clair, et c’est votre logiciel de courrier qui s’en charge. Un message reçu reste dans une boîte ordinaire le temps qu’il serve ; il n’est ni classé, ni recopié ailleurs. Une réponse peut tarder de quelques jours.`,
+    adresseNote: `L’adresse est écrite en clair : votre logiciel de courrier suffit, et elle reste utile le jour où le formulaire ci-dessous tombe en panne. Un message reçu arrive dans une boîte ordinaire ; il n’est ni classé, ni recopié ailleurs. Une réponse peut tarder de quelques jours.`,
     utileTitre: `Ce qui aide`,
     utileCorps: `Pour un horaire qui ne correspond pas : la ligne, l’arrêt, le jour, et l’heure que vous attendiez.
 Pour un affichage qui se tient mal : l’appareil, le navigateur, et ce que montre l’écran.
@@ -339,6 +342,22 @@ Pour un affichage qui se tient mal : l’appareil, le navigateur, et ce que mon
     limitesTitre: `Ce que cette adresse ne peut pas faire`,
     limitesCorps: `Elle ne mène ni à la commune, ni à l’école, ni à la maison relais. Une absence à signaler, une inscription, une demande de changement d’arrêt : cela s’adresse à eux directement, et un message envoyé ici n’y arrivera pas.
 Le plan officiel de la commune fait foi. Si ce site l’affiche autrement, c’est ce site qui a tort — et c’est exactement ce qui vaut la peine d’être signalé.`,
+    formulaireTitre: `Ou écrire d’ici`,
+    formulaireNote: `Le formulaire envoie ce que vous écrivez : le sujet, le message, et l’adresse de réponse si vous en donnez une. Rien d’autre ne part — ni votre nom, ni votre position, ni de quoi vous reconnaître d’une visite à l’autre. Votre adresse IP sert une heure à empêcher les envois en rafale, sous une forme brouillée dont on ne remonte pas à vous, et rien n’en est écrit sur un disque. Les messages reçus sont gardés douze mois, puis effacés.`,
+    sujetEtiquette: `De quoi s’agit-il ?`,
+    messageEtiquette: `Votre message`,
+    reponseEtiquette: `Votre adresse, pour la réponse`,
+    reponseAide: `Facultative. Sans elle, le message arrive quand même — mais il n’y a pas moyen de vous répondre.`,
+    leurreEtiquette: `Laissez ce champ vide`,
+    envoyer: `Envoyer`,
+    envoiEnCours: `Envoi en cours…`,
+    envoiReussi: `Le message est parti. Merci — une réponse peut tarder de quelques jours.`,
+    erreurVide: `Il manque le sujet ou le message.`,
+    erreurTropLong: `Le message est trop long. Gardez l’essentiel : la ligne, l’arrêt, le jour, l’heure.`,
+    erreurTropDeLiens: `Trop de liens. Décrivez plutôt ce que vous voyez.`,
+    erreurTropVite: `Envoi trop rapide pour être lu comme humain. Réessayez dans quelques secondes.`,
+    erreurTropSouvent: `Trop de messages depuis cette connexion. Réessayez dans une heure, ou écrivez à l’adresse ci-dessus.`,
+    erreurEnvoi: `L’envoi n’a pas abouti. Écrivez à l’adresse ci-dessus : elle fonctionne toujours.`,
     retour: `Retour à la page d’accueil`,
   },
 }

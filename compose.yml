@@ -1,0 +1,64 @@
+# Les deux conteneurs du site, côte à côte.
+#
+# Le site lui-même est statique et n'a jamais eu besoin de ceci : un `Dockerfile` suffisait.
+# Ce qui l'a rendu nécessaire est le formulaire de contact, qui ENVOIE — et un envoi demande
+# un point d'entrée. C'est le seul morceau du projet qui tourne côté serveur.
+#
+# `vitrine` sert les fichiers et proxyfie `/api/contact` vers `relais` (voir `nginx.conf`).
+# La même origine est ce qui permet de garder `connect-src 'self'` et `form-action 'none'`
+# dans la politique de sécurité du contenu, sans y inscrire le moindre tiers.
+#
+# LE ROUTAGE N'EST PAS ÉCRIT ICI, à la différence de `compose.deploiement.yaml` du dépôt
+# frère, qui pose ses propres étiquettes Traefik. Les deux domaines de ce site existent déjà
+# comme entrées de domaine dans Dokploy — et `schoulbus.lu` y porte le middleware
+# `redirect-to-www-schoulbus`, qui est ce qui rend le 308 vers `www`. Les recopier en
+# étiquettes serait réécrire à la main, sans filet, la seule chose de ce déploiement qui
+# marche déjà. Dokploy les repose sur le service `vitrine`, port 80.
+services:
+  vitrine:
+    build:
+      context: .
+      args:
+        # L'origine publique entre dans les métadonnées de partage, qui exigent des URL
+        # absolues : elle doit être connue à la CONSTRUCTION et non au démarrage.
+        URL_PUBLIQUE: ${URL_PUBLIQUE:-https://www.schoulbus.lu}
+    restart: unless-stopped
+    networks:
+      # Celui de Traefik : c'est par là que les visiteurs arrivent.
+      - dokploy-network
+      # Et celui du relais, que lui seul doit pouvoir joindre.
+      - interne
+    depends_on:
+      - relais
+
+  relais:
+    build:
+      context: ./serveur
+    restart: unless-stopped
+    # SUR LE RÉSEAU INTERNE SEULEMENT, et ce n'est pas un oubli. Le service croit l'en-tête
+    # `X-Forwarded-For` que nginx lui pose, parce qu'il n'est joignable que d'ici. Le mettre
+    # sur `dokploy-network` rendrait son plafond de débit contournable d'un en-tête falsifié,
+    # et exposerait un relais SMTP authentifié. Aucun `ports:` non plus, pour la même raison.
+    networks:
+      - interne
+    environment:
+      # Rien de tout cela n'est écrit dans le dépôt. Dokploy les pose, et le service refuse
+      # de démarrer si l'une manque — une variable oubliée qui ne se verrait qu'au moment
+      # où un parent écrit est un défaut qui coûte un message réel.
+      SMTP_HOTE: ${SMTP_HOTE:?il faut l hote SMTP d OVH}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_TLS: ${SMTP_TLS:-true}
+      SMTP_UTILISATEUR: ${SMTP_UTILISATEUR:?il faut la boite qui s authentifie}
+      SMTP_MOTDEPASSE: ${SMTP_MOTDEPASSE:?il faut le mot de passe de cette boite}
+      # L'expéditeur est un ALIAS `@bas.lu` de la boîte ci-dessus. Expéditeur et
+      # destinataire doivent différer : identiques, un message perdu ne se distingue pas
+      # d'un message jamais parti, et le filtrage devient impossible.
+      SMTP_EXPEDITEUR: ${SMTP_EXPEDITEUR:?il faut l alias @bas.lu qui expedie}
+      COURRIEL_DESTINATAIRE: ${COURRIEL_DESTINATAIRE:-admin@schoulbus.lu}
+
+networks:
+  # Fourni par Dokploy, c'est là que vit Traefik. Déclaré externe : ce fichier ne le crée
+  # pas, il s'y raccorde.
+  dokploy-network:
+    external: true
+  interne:

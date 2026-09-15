@@ -767,7 +767,17 @@
     color: var(--vitrine-encre-faible);
   }
 
+  /*
+   * Deux liens depuis que le signalement s'y est ajouté : celui du détail, vers
+   * l'application, et celui du formulaire. Une rangée qui se replie plutôt qu'une ligne de
+   * texte — sur un téléphone, les deux libellés et leurs flèches ne tiennent pas côte à
+   * côte, et sans le repli le second déborderait de la colonne.
+   */
   .limites__lien {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espace-2) var(--espace-5);
     margin-block-start: var(--espace-5);
     font-size: var(--texte-m);
     font-weight: 600;
@@ -938,6 +948,85 @@
     align-items: center;
     min-block-size: var(--cible);
     color: var(--accent);
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Le formulaire de contact
+   * ------------------------------------------------------------------ */
+  .formulaire {
+    display: grid;
+    gap: var(--espace-4);
+  }
+  .champ {
+    display: grid;
+    gap: var(--espace-2);
+  }
+  .champ__etiquette {
+    font-size: var(--texte-s);
+    font-weight: 600;
+  }
+  .champ__saisie {
+    inline-size: 100%;
+    min-block-size: var(--cible);
+    padding: var(--espace-2) var(--espace-3);
+    color: var(--encre);
+    background: var(--surface);
+    border: var(--trait) solid var(--bord);
+    border-radius: var(--rayon-m);
+    font: inherit;
+  }
+  .champ__saisie--long {
+    /* La hauteur vient de `rows` ; ce qu'il faut ici, c'est empêcher le redimensionnement
+       latéral, qui déborderait de la colonne de texte. */
+    resize: vertical;
+    min-block-size: calc(var(--cible) * 3);
+  }
+  .champ__saisie:focus-visible {
+    outline: var(--trait-fort) solid var(--accent);
+    outline-offset: 2px;
+  }
+  .champ__aide {
+    font-size: var(--texte-s);
+    color: var(--vitrine-encre-faible);
+  }
+
+  /*
+   * Le leurre.
+   *
+   * `display: none` serait plus simple et serait une faute : la plupart des robots ne
+   * calculent pas la mise en page, mais ceux qui la calculent sautent précisément ce qui
+   * est en `display: none`. Il est donc RENDU, hors de l'écran, et il garde son étiquette
+   * — qui dit de le laisser vide, pour la personne qui l'entendra.
+   *
+   * Pas d'`aria-hidden` non plus, et pour la même raison : un champ que le lecteur d'écran
+   * ne nomme pas est un champ qu'une personne aveugle remplit sans savoir qu'il la fera
+   * refuser.
+   */
+  .formulaire__leurre {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .formulaire__etat {
+    padding: var(--espace-3);
+    border-radius: var(--rayon-m);
+    border-inline-start: var(--trait-fort) solid;
+  }
+  /* Sarcelle pour ce qui est vrai : le message est parti. */
+  .formulaire__etat--reussi {
+    border-color: var(--succes-bord);
+    background: var(--succes-fond);
+    color: var(--succes);
+  }
+  /* Corail pour ce qui presse ou ce qui nuance : un refus est l'un et l'autre. */
+  .formulaire__etat--erreur {
+    border-color: var(--danger-bord);
+    background: var(--danger-fond);
+    color: var(--danger);
   }
 
   /*

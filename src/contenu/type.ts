@@ -214,6 +214,21 @@ export type Contenu = {
     note: string
     items: Limite[]
     lien: string
+    /*
+     * Le renvoi vers le formulaire, et c'est le SEUL chemin qui mène au signalement avant
+     * le pied de page.
+     *
+     * Il n'existait pas : le lien « Écrire » était en pied de page, à 88 % de la hauteur de
+     * l'accueil. Or la personne qui a quelque chose à signaler vient de lire, deux lignes
+     * plus haut, « en cas d'écart, c'est le document officiel qui fait foi » — c'est là
+     * qu'elle est, et pas en bas de page. Une page qui demande qu'on la corrige et qui
+     * cache l'adresse où le dire ne la demande pas vraiment.
+     *
+     * À la différence de `lien`, il ne dépend PAS de `APP_PUBLIEE` : on peut signaler une
+     * erreur d'horaire même quand l'application n'est pas joignable, et c'est même le
+     * moment où cela compte le plus.
+     */
+    lienSignaler: string
   }
   /**
    * La page « Indépendance » (`/independance/`), et non plus une section de l'accueil.
@@ -339,6 +354,41 @@ export type Contenu = {
     limitesTitre: string
     /** Ce que cette adresse ne peut pas faire, et à qui s'adresser à sa place. */
     limitesCorps: string
+
+    /*
+     * LE FORMULAIRE.
+     *
+     * Il n'existe que parce qu'un service existe derrière (`serveur/`), et c'est la seule
+     * chose de tout le site qui sorte de l'appareil du visiteur. D'où la forme de ces clés :
+     *
+     * - `formulaireNote` dit CE QUE LE MESSAGE EMPORTE et COMBIEN DE TEMPS il est gardé.
+     *   Elle est ce qui rend honnêtes `pied.viePrivee` et `mentions.donneesCorps`, qui
+     *   annonçaient jusqu'ici que rien ne sort. Ne pas l'alléger sans rouvrir les deux
+     *   autres : c'est le même raisonnement que la note du « 0 » de la bande de chiffres.
+     * - `reponseAide` dit que l'adresse est FACULTATIVE. Un formulaire qui exige une
+     *   adresse pour signaler une faute d'horaire perd le signalement.
+     * - `leurreEtiquette` nomme le champ que la mise en page cache. Il est invisible à
+     *   l'œil, jamais au lecteur d'écran : un champ sans nom est un champ qu'une personne
+     *   aveugle remplit sans savoir qu'il la fera refuser.
+     * - Les six `erreur*` disent QUOI FAIRE, jamais seulement « erreur ». Un refus muet
+     *   laisse le visiteur croire qu'il a écrit.
+     */
+    formulaireTitre: string
+    formulaireNote: string
+    sujetEtiquette: string
+    messageEtiquette: string
+    reponseEtiquette: string
+    reponseAide: string
+    leurreEtiquette: string
+    envoyer: string
+    envoiEnCours: string
+    envoiReussi: string
+    erreurVide: string
+    erreurTropLong: string
+    erreurTropDeLiens: string
+    erreurTropVite: string
+    erreurTropSouvent: string
+    erreurEnvoi: string
     retour: string
   }
 }

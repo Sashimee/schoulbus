@@ -7,10 +7,16 @@
  *
  * L'ADRESSE EST ÉCRITE EN CLAIR, et c'est la seule décision de forme qui compte ici.
  * Elle est lisible sans JavaScript, recopiable à la main, annonçable par un lecteur
- * d'écran, et elle reste vraie le jour où un formulaire viendra s'ajouter au-dessous et
- * tombera en panne. Le lien `mailto:` n'est qu'une commodité posée par-dessus : il n'appelle
- * aucun serveur, et c'est ce qui laisse intacte la promesse de `pied.viePrivee`.
+ * d'écran, et elle reste vraie le jour où le formulaire au-dessous tombe en panne. Le lien
+ * `mailto:` n'est qu'une commodité posée par-dessus : il n'appelle aucun serveur.
+ *
+ * LE FORMULAIRE, LUI, EN APPELLE UN — et c'est le seul endroit du site où quelque chose
+ * sorte de l'appareil du visiteur. `pied.viePrivee` et `mentions.donneesCorps` ont été
+ * réécrites le jour où il est arrivé : elles annonçaient que rien ne sort. Les rouvrir
+ * demande de rouvrir aussi `contact.formulaireNote`, qui dit ce que le message emporte et
+ * combien de temps il est gardé — c'est le couple qui rend la page honnête.
  */
+import { FormulaireContact } from '../composants/FormulaireContact.tsx'
 import { LogoBus } from '../composants/LogoBus.tsx'
 import { ChoixLangue, ChoixTheme } from '../composants/Selecteurs.tsx'
 import { ADRESSE_CONTACT } from '../config.ts'
@@ -60,6 +66,17 @@ export function Contact() {
               <a href={`mailto:${ADRESSE_CONTACT}`}>{ADRESSE_CONTACT}</a>
             </p>
             <p className="texte-doux">{contenu.contact.adresseNote}</p>
+          </section>
+
+          {/*
+            * Le formulaire vient APRÈS l'adresse en clair, et jamais avant. C'est l'adresse
+            * qui fait que la page sert sans JavaScript, sans logiciel de courrier
+            * configuré, et le jour où le relais tombe ; le formulaire est une commodité
+            * posée par-dessus. Les inverser ferait dépendre la page de son service.
+            */}
+          <section className="pile pile--2">
+            <h2>{contenu.contact.formulaireTitre}</h2>
+            <FormulaireContact />
           </section>
 
           <section className="pile pile--2">

@@ -19,9 +19,11 @@
 import { useContenu } from '../i18n/contexte.ts'
 import { Revele } from '../mouvement/Revele.tsx'
 import { APP_PUBLIEE, URL_LIMITES } from '../config.ts'
+import { cheminPage, useLangue } from '../i18n/contexte.ts'
 
 export function Limites() {
   const contenu = useContenu()
+  const { langue } = useLangue()
 
   return (
     <section className="section bande-teintee" id="limites">
@@ -49,13 +51,26 @@ export function Limites() {
          * n'appelle pas un geste. La flèche est posée en CSS — elle est décorative, et un
          * lecteur d'écran n'a pas à entendre « flèche vers la droite » à la fin du libellé.
          */}
-        {APP_PUBLIEE && (
-          <Revele as="p" className="limites__lien">
+        <Revele as="p" className="limites__lien">
+          {APP_PUBLIEE && (
             <a href={URL_LIMITES} target="_blank" rel="noopener noreferrer">
               {contenu.limites.lien}
             </a>
-          </Revele>
-        )}
+          )}
+          {/*
+            * Le signalement, ICI et pas seulement en pied de page.
+            *
+            * Le lien « Écrire » existait, à 88 % de la hauteur de l'accueil — c'est-à-dire
+            * nulle part pour qui vient de lire, deux lignes plus haut, qu'en cas d'écart
+            * c'est le document officiel qui fait foi. Une page qui demande qu'on la
+            * corrige doit dire où, à l'endroit où elle le demande.
+            *
+            * Il ne dépend PAS de `APP_PUBLIEE`, à la différence du lien voisin : une
+            * erreur d'horaire se signale même quand l'application n'est pas joignable, et
+            * c'est justement le moment où cela compte le plus.
+            */}
+          <a href={cheminPage(langue, 'contact')}>{contenu.limites.lienSignaler}</a>
+        </Revele>
       </div>
     </section>
   )
