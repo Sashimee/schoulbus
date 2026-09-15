@@ -7,7 +7,7 @@
  *
  * L'ADRESSE EST ÉCRITE EN CLAIR, et c'est la seule décision de forme qui compte ici.
  * Elle est lisible sans JavaScript, recopiable à la main, annonçable par un lecteur
- * d'écran, et elle reste vraie le jour où le formulaire au-dessous tombe en panne. Le lien
+ * d'écran, et elle reste vraie le jour où le formulaire au-dessus tombe en panne. Le lien
  * `mailto:` n'est qu'une commodité posée par-dessus : il n'appelle aucun serveur.
  *
  * LE FORMULAIRE, LUI, EN APPELLE UN — et c'est le seul endroit du site où quelque chose
@@ -59,6 +59,21 @@ export function Contact() {
             <p className="chapeau">{contenu.contact.intro}</p>
           </div>
 
+          {/*
+            * LE FORMULAIRE VIENT EN PREMIER, décision de l'éditeur du 15 septembre 2026.
+            * L'ordre inverse tenait pour que la page serve sans JavaScript et le jour où le
+            * relais tombe — ce qui reste vrai et reste tenu, mais autrement : l'adresse en
+            * clair est la section SUIVANTE, sur le même écran, et les messages d'échec du
+            * formulaire y renvoient explicitement (« écrivez à l'adresse ci-dessous »).
+            * Ce qu'il ne faut donc pas faire : repousser l'adresse plus bas que ce bloc-ci,
+            * ou lui retirer sa mention dans `erreurEnvoi` et `erreurTropSouvent`. Le repli
+            * doit rester visible depuis l'endroit où l'on constate la panne.
+            */}
+          <section className="pile pile--2">
+            <h2>{contenu.contact.formulaireTitre}</h2>
+            <FormulaireContact />
+          </section>
+
           <section className="pile pile--2">
             <h2>{contenu.contact.adresseTitre}</h2>
             <p className="texte-doux">{contenu.contact.adresseIntro}</p>
@@ -66,17 +81,6 @@ export function Contact() {
               <a href={`mailto:${ADRESSE_CONTACT}`}>{ADRESSE_CONTACT}</a>
             </p>
             <p className="texte-doux">{contenu.contact.adresseNote}</p>
-          </section>
-
-          {/*
-            * Le formulaire vient APRÈS l'adresse en clair, et jamais avant. C'est l'adresse
-            * qui fait que la page sert sans JavaScript, sans logiciel de courrier
-            * configuré, et le jour où le relais tombe ; le formulaire est une commodité
-            * posée par-dessus. Les inverser ferait dépendre la page de son service.
-            */}
-          <section className="pile pile--2">
-            <h2>{contenu.contact.formulaireTitre}</h2>
-            <FormulaireContact />
           </section>
 
           <section className="pile pile--2">

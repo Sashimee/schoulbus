@@ -298,18 +298,18 @@ export const pt: Contenu = {
 
   contact: {
     titre: `Escrever`,
-    intro: `Um endereço, para assinalar um horário que não corresponde, uma apresentação que se desmancha, ou algo que falta. Por detrás está um pai, não um serviço.`,
+    intro: `Um formulário e um endereço, para assinalar um horário que não corresponde ou uma apresentação que se desmancha. Por detrás está um pai, não um serviço.`,
     adresseTitre: `O endereço`,
     adresseIntro: `As mensagens chegam aqui:`,
-    adresseNote: `O endereço está escrito em texto simples: o seu programa de correio basta, e continua útil no dia em que o formulário abaixo deixar de funcionar. Uma mensagem recebida chega a uma caixa de correio comum; não é registada nem copiada para outro lado. Uma resposta pode demorar alguns dias.`,
+    adresseNote: `O endereço está escrito em texto simples: o seu programa de correio basta, e continua útil no dia em que o formulário acima deixar de funcionar. Uma resposta pode demorar alguns dias.`,
     utileTitre: `O que ajuda`,
-    utileCorps: `Para um horário que não corresponde: a linha, a paragem, o dia, e a hora que esperava.
-Para uma apresentação que se desmancha: o aparelho, o navegador, e o que mostra o ecrã.
+    utileCorps: `Um horário que não corresponde: a linha, a paragem, o dia, a hora que esperava.
+Uma apresentação que se desmancha: o aparelho, o navegador, o que mostra o ecrã.
 Escreva na língua que lhe vier.`,
     limitesTitre: `O que este endereço não pode fazer`,
-    limitesCorps: `Não leva ao município, nem à escola, nem à maison relais. Uma ausência a comunicar, uma inscrição, um pedido de mudança de paragem: isso dirige-se diretamente a eles, e uma mensagem enviada para aqui não chegará lá.
-Prevalece o plano oficial do município. Se este site o mostrar de outra maneira, é este site que está errado — e é exatamente isso que vale a pena assinalar.`,
-    formulaireTitre: `Ou escrever a partir daqui`,
+    limitesCorps: `Não leva ao município, nem à escola, nem à maison relais. Uma ausência, uma inscrição, uma mudança de paragem: isso dirige-se diretamente a eles.
+Prevalece o plano oficial do município. Se este site o mostrar de outra maneira, é este site que está errado — e é isso que vale a pena assinalar.`,
+    formulaireTitre: `Escrever a partir daqui`,
     formulaireNote: `O formulário envia o que escrever: o assunto, a mensagem e o endereço de resposta, se indicar um. Mais nada sai — nem o seu nome, nem a sua posição, nem seja o que for que permita reconhecê-lo de uma visita para a outra. O seu endereço IP serve durante uma hora para impedir envios em série, numa forma baralhada que não permite chegar até si, e nada disso é escrito num disco. As mensagens recebidas são conservadas doze meses e depois apagadas.`,
     sujetEtiquette: `De que se trata?`,
     messageEtiquette: `A sua mensagem`,
@@ -323,8 +323,8 @@ Prevalece o plano oficial do município. Se este site o mostrar de outra maneira
     erreurTropLong: `A mensagem é demasiado longa. Guarde o essencial: a linha, a paragem, o dia, a hora.`,
     erreurTropDeLiens: `Demasiadas ligações. Descreva antes o que está a ver.`,
     erreurTropVite: `Enviado depressa de mais para ter sido escrito à mão. Tente outra vez daqui a alguns segundos.`,
-    erreurTropSouvent: `Demasiadas mensagens a partir desta ligação. Tente daqui a uma hora, ou escreva para o endereço acima.`,
-    erreurEnvoi: `O envio não chegou a bom porto. Escreva para o endereço acima: esse continua a funcionar.`,
+    erreurTropSouvent: `Demasiadas mensagens a partir desta ligação. Tente daqui a uma hora, ou escreva para o endereço abaixo.`,
+    erreurEnvoi: `O envio não chegou a bom porto. Escreva para o endereço abaixo: esse continua a funcionar.`,
     retour: `Voltar à página inicial`,
   },
 }
