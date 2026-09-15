@@ -281,18 +281,18 @@ export const lb: Contenu = {
 
   contact: {
     titre: `Schreiwen`,
-    intro: `Eng Adress, fir eng Zäit ze mellen, déi net stëmmt, eppes, wat falsch ugewise gëtt, oder eppes, wat feelt. Dohannert steet en Elterendeel, kee Service.`,
+    intro: `E Formulaire an eng Adress, fir eng Zäit ze mellen, déi net stëmmt, oder eppes, wat falsch ugewise gëtt. Dohannert steet en Elterendeel, kee Service.`,
     adresseTitre: `D’Adress`,
     adresseIntro: `Noriichte kommen hei un:`,
-    adresseNote: `D’Adress steet am Kloertext: Ären E-Mail-Programm geet duer, a si bleift nëtzlech den Dag, wou de Formulaire hei drënner ausfält. Eng Noriicht, déi ukomm ass, lant an enger gewéinlecher Boîte; si gëtt weder erfaasst nach soss anzwousch kopéiert. Eng Äntwert ka e puer Deeg daueren.`,
+    adresseNote: `D’Adress steet am Kloertext: Ären E-Mail-Programm geet duer, a si bleift nëtzlech den Dag, wou de Formulaire hei uewen ausfält. Eng Äntwert ka e puer Deeg daueren.`,
     utileTitre: `Wat hëlleft`,
-    utileCorps: `Bei enger Zäit, déi net stëmmt: d’Linn, d’Statioun, den Dag, an d’Zäit, déi Dir erwaart hutt.
-Bei eppes, wat falsch ugewise gëtt: den Apparat, de Browser, a wat de Bildschierm weist.
+    utileCorps: `Eng Zäit, déi net stëmmt: d’Linn, d’Statioun, den Dag, d’Zäit, déi Dir erwaart hutt.
+Eppes, wat falsch ugewise gëtt: den Apparat, de Browser, wat de Bildschierm weist.
 Schreift an der Sprooch, déi Iech kënnt.`,
     limitesTitre: `Wat dës Adress net ka maachen`,
-    limitesCorps: `Si féiert weder op d’Gemeng, nach op d’Schoul, nach op d’Maison Relais. Eng Absence ze mellen, eng Umeldung, de Wonsch no enger anerer Statioun: dat gehéiert direkt bei hinnen, an eng Noriicht op dës Adress kënnt do net un.
+    limitesCorps: `Si féiert weder op d’Gemeng, nach op d’Schoul, nach op d’Maison Relais. Eng Absence, eng Umeldung, eng aner Statioun: dat gehéiert direkt bei hinnen.
 Et gëllt dat offiziellt Dokument vun der Gemeng. Weist dës Säit eppes anescht, dann ass dës Säit falsch — a genau dat ass eng Meldung wäert.`,
-    formulaireTitre: `Oder vun hei aus schreiwen`,
+    formulaireTitre: `Vun hei aus schreiwen`,
     formulaireNote: `De Formulaire schéckt dat, wat Dir schreift: de Sujet, d’Noriicht, an d’Adress fir d’Äntwert, wann Dir eng gitt. Méi geet net eraus — weder Ären Numm, nach wou Dir sidd, nach soss eppes, woumat een Iech vun engem Besuch op deen anere erëmerkennt. Är IP-Adress déngt eng Stonn laang dozou, Envoien a Serie ze verhënneren, an enger onliesbarer Form, déi net op Iech zeréckféiert, a näischt dovunner gëtt op eng Festplack geschriwwen. Noriichten, déi ukommen, gi zwielef Méint gespäichert a duerno geläscht.`,
     sujetEtiquette: `Ëm wat geet et?`,
     messageEtiquette: `Är Noriicht`,
@@ -306,8 +306,8 @@ Et gëllt dat offiziellt Dokument vun der Gemeng. Weist dës Säit eppes anescht
     erreurTropLong: `D’Noriicht ass ze laang. Haalt dat Wesentlecht: d’Linn, d’Statioun, den Dag, d’Zäit.`,
     erreurTropDeLiens: `Ze vill Linken. Beschreift léiwer, wat Dir gesitt.`,
     erreurTropVite: `Ze séier geschéckt, fir vun Hand geschriwwen ze sinn. Probéiert an e puer Sekonnen nach eng Kéier.`,
-    erreurTropSouvent: `Ze vill Noriichte vun dëser Verbindung. Probéiert an enger Stonn nach eng Kéier, oder schreift un d’Adress hei uewen.`,
-    erreurEnvoi: `Den Envoi huet net geklappt. Schreift un d’Adress hei uewen: déi funktionéiert ëmmer nach.`,
+    erreurTropSouvent: `Ze vill Noriichte vun dëser Verbindung. Probéiert an enger Stonn nach eng Kéier, oder schreift un d’Adress hei ënnen.`,
+    erreurEnvoi: `Den Envoi huet net geklappt. Schreift un d’Adress hei ënnen: déi funktionéiert ëmmer nach.`,
     retour: `Zréck op d’Startsäit`,
   },
 }

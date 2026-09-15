@@ -347,8 +347,43 @@ describe('pré-rendu', () => {
     // Le leurre est RENDU et NOMMÉ : caché à l'œil, jamais au lecteur d'écran.
     expect(html).toContain(c.leurreEtiquette)
     expect(html).toContain('name="site"')
-    // L'adresse en clair reste au-dessus : c'est elle qui sert quand le relais tombe.
+    // L'adresse en clair reste sur la page : c'est elle qui sert quand le relais tombe.
     expect(html).toContain(`>${ADRESSE_CONTACT}<`)
+  })
+
+  /*
+   * L'ORDRE DE LA PAGE, et le repli qui le rend acceptable.
+   *
+   * Le formulaire est en tête depuis le 15 septembre 2026 : c'est ce qu'on vient y faire.
+   * Ce que l'ordre inverse protégeait reste dû — une page qui sert quand le relais tombe —
+   * et il est tenu par deux choses que ce test verrouille ensemble : l'adresse en clair
+   * vient JUSTE APRÈS le formulaire, avant tout le texte explicatif, et les deux messages
+   * d'échec y renvoient. Un remaniement qui repousserait l'adresse sous les limites, ou qui
+   * réécrirait « ci-dessous » en « ci-dessus » sans rien déplacer, laisserait la page
+   * s'afficher parfaitement en envoyant le visiteur chercher un repli qui n'est pas là.
+   */
+  it.each(LANGUES)('%s : le formulaire est en tête, et l’adresse juste après', (langue) => {
+    const { html } = rendre(langue, 'contact')
+    const c = CONTENUS[langue].contact
+
+    const formulaire = html.indexOf(c.formulaireTitre)
+    const adresse = html.indexOf(`>${ADRESSE_CONTACT}<`)
+    const utile = html.indexOf(c.utileTitre)
+    const limites = html.indexOf(c.limitesTitre)
+
+    expect(formulaire).toBeGreaterThan(-1)
+    expect(adresse).toBeGreaterThan(formulaire)
+    expect(utile).toBeGreaterThan(adresse)
+    expect(limites).toBeGreaterThan(utile)
+
+    /*
+     * Le repli est nommé depuis l'endroit où l'on constate la panne. Ces deux messages ne
+     * sont rendus qu'au moment de l'échec : c'est donc la CHAÎNE qu'on vérifie, et le mot
+     * qui dit vers OÙ regarder. Il pointait vers le haut tant que l'adresse y était.
+     */
+    const versLeBas = /ci-dessous|unten|ënnen|abaixo|below/i
+    expect(c.erreurEnvoi).toMatch(versLeBas)
+    expect(c.erreurTropSouvent).toMatch(versLeBas)
   })
 
   /*

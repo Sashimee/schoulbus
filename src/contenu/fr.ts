@@ -331,18 +331,18 @@ export const fr: Contenu = {
 
   contact: {
     titre: `Écrire`,
-    intro: `Une adresse, pour signaler un horaire qui ne correspond pas, un affichage qui se tient mal, ou quelque chose qui manque. Derrière, il y a un parent, pas un service.`,
+    intro: `Un formulaire et une adresse, pour signaler un horaire qui ne correspond pas ou un affichage qui se tient mal. Derrière, il y a un parent, pas un service.`,
     adresseTitre: `L’adresse`,
     adresseIntro: `Les messages arrivent ici :`,
-    adresseNote: `L’adresse est écrite en clair : votre logiciel de courrier suffit, et elle reste utile le jour où le formulaire ci-dessous tombe en panne. Un message reçu arrive dans une boîte ordinaire ; il n’est ni classé, ni recopié ailleurs. Une réponse peut tarder de quelques jours.`,
+    adresseNote: `L’adresse est écrite en clair : votre logiciel de courrier suffit, et elle reste utile le jour où le formulaire ci-dessus tombe en panne. Une réponse peut tarder de quelques jours.`,
     utileTitre: `Ce qui aide`,
-    utileCorps: `Pour un horaire qui ne correspond pas : la ligne, l’arrêt, le jour, et l’heure que vous attendiez.
-Pour un affichage qui se tient mal : l’appareil, le navigateur, et ce que montre l’écran.
+    utileCorps: `Un horaire qui ne correspond pas : la ligne, l’arrêt, le jour, l’heure attendue.
+Un affichage qui se tient mal : l’appareil, le navigateur, ce que montre l’écran.
 Écrivez dans la langue qui vous vient.`,
     limitesTitre: `Ce que cette adresse ne peut pas faire`,
-    limitesCorps: `Elle ne mène ni à la commune, ni à l’école, ni à la maison relais. Une absence à signaler, une inscription, une demande de changement d’arrêt : cela s’adresse à eux directement, et un message envoyé ici n’y arrivera pas.
-Le plan officiel de la commune fait foi. Si ce site l’affiche autrement, c’est ce site qui a tort — et c’est exactement ce qui vaut la peine d’être signalé.`,
-    formulaireTitre: `Ou écrire d’ici`,
+    limitesCorps: `Elle ne mène ni à la commune, ni à l’école, ni à la maison relais. Une absence, une inscription, un changement d’arrêt : cela s’adresse à eux directement.
+Le plan officiel de la commune fait foi. Si ce site l’affiche autrement, c’est ce site qui a tort — et c’est cela qui vaut la peine d’être signalé.`,
+    formulaireTitre: `Écrire d’ici`,
     formulaireNote: `Le formulaire envoie ce que vous écrivez : le sujet, le message, et l’adresse de réponse si vous en donnez une. Rien d’autre ne part — ni votre nom, ni votre position, ni de quoi vous reconnaître d’une visite à l’autre. Votre adresse IP sert une heure à empêcher les envois en rafale, sous une forme brouillée dont on ne remonte pas à vous, et rien n’en est écrit sur un disque. Les messages reçus sont gardés douze mois, puis effacés.`,
     sujetEtiquette: `De quoi s’agit-il ?`,
     messageEtiquette: `Votre message`,
@@ -356,8 +356,8 @@ Le plan officiel de la commune fait foi. Si ce site l’affiche autrement, c’e
     erreurTropLong: `Le message est trop long. Gardez l’essentiel : la ligne, l’arrêt, le jour, l’heure.`,
     erreurTropDeLiens: `Trop de liens. Décrivez plutôt ce que vous voyez.`,
     erreurTropVite: `Envoi trop rapide pour être lu comme humain. Réessayez dans quelques secondes.`,
-    erreurTropSouvent: `Trop de messages depuis cette connexion. Réessayez dans une heure, ou écrivez à l’adresse ci-dessus.`,
-    erreurEnvoi: `L’envoi n’a pas abouti. Écrivez à l’adresse ci-dessus : elle fonctionne toujours.`,
+    erreurTropSouvent: `Trop de messages depuis cette connexion. Réessayez dans une heure, ou écrivez à l’adresse ci-dessous.`,
+    erreurEnvoi: `L’envoi n’a pas abouti. Écrivez à l’adresse ci-dessous : elle fonctionne toujours.`,
     retour: `Retour à la page d’accueil`,
   },
 }
