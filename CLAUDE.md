@@ -355,11 +355,23 @@ ignoré par git et doit le rester.
 
 **LE ROUTAGE N'EST PAS DANS `compose.yml`.** Les deux domaines sont des entrées de domaine
 Dokploy posées sur le service `vitrine`, port 80 — et `schoulbus.lu` y porte le middleware
-`redirect-to-www-schoulbus`, qui est ce qui rend le 308 vers `www`. Le dépôt frère, lui,
-écrit ses propres étiquettes Traefik dans son compose ; ici on ne le fait pas, parce que
+`redirect-to-www-schoulbus@file`, qui est ce qui rend le **301** vers `www`. Le dépôt frère,
+lui, écrit ses propres étiquettes Traefik dans son compose ; ici on ne le fait pas, parce que
 recopier ce montage à la main serait réécrire sans filet la seule partie du déploiement qui
-marche déjà. **Si le 308 de l'apex disparaît un jour, c'est ce middleware qu'il faut
+marche déjà. **Si la redirection de l'apex disparaît un jour, c'est ce middleware qu'il faut
 regarder**, pas nginx : `nginx.conf` ne redirige rien.
+
+**Le suffixe `@file` du middleware n'est pas décoratif**, et c'est le piège qui a coûté le
+plus de temps à la bascule du 14 septembre 2026. Dokploy matérialise un domaine de compose
+en **étiquettes Traefik**, donc en provenance *docker* : un middleware nommé sans son
+fournisseur y est cherché sous `…@docker`, introuvable, et **Traefik jette le routeur
+entier** — l'apex rend alors 404, sans que rien ne dise pourquoi. L'ancienne application ne
+connaissait pas ce défaut parce qu'elle passait par le fournisseur *file*, où le nom nu
+résolvait. Deux corollaires : **un domaine de compose n'existe qu'après un
+`compose.deploy`** (les étiquettes sont écrites au déploiement, pas à l'enregistrement du
+domaine), et **`domain.update` de l'API Dokploy ne déplace pas un domaine d'une application
+vers un compose** — il rend 200, écrit `domainType` et `serviceName`, et ignore
+silencieusement `composeId`. Il faut supprimer puis recréer.
 
 ## Documentation
 
