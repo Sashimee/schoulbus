@@ -22,6 +22,15 @@ export declare function motifDeRefus(
   corps: unknown,
 ): 'leurre' | 'vide' | 'tropLong' | 'tropVite' | 'tropDeLiens' | null
 
+/**
+ * Le motif du refus de la CONFIGURATION, ou `null` si elle peut expédier : OVH exige que le
+ * domaine du `From` s'aligne sur celui du compte authentifié.
+ */
+export declare function desalignementExpediteur(
+  utilisateur: unknown,
+  expediteur: unknown,
+): 'compteSansDomaine' | 'expediteurSansDomaine' | 'domainesDifferents' | null
+
 export declare function creerCompteurDeDebit(maintenant?: () => number): {
   tropSouvent(empreinte: string): boolean
   oublierLesVieux(): void

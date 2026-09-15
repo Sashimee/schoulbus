@@ -10,11 +10,15 @@
  * tourne côté serveur.
  *
  * POURQUOI IL PASSE PAR OVH EN AUTHENTIFIÉ, et jamais en direct. Le DNS de `schoulbus.lu`
- * porte `v=spf1 include:mx.ovh.com -all` : un envoi émis par ce conteneur est rejeté.
- * `bas.lu`, d'où part l'expéditeur, porte `~all` — il ne serait donc pas rejeté, mais il
- * ne passerait pas SPF pour autant, il serait toléré. Ce n'est pas la même chose, et c'est
- * exactement le genre de différence qui ne se voit qu'au bout de trois mois, quand les
- * messages commencent à tomber en indésirable. On remet donc au relais d'OVH, qui signe.
+ * porte `v=spf1 include:mx.ovh.com -all` : un envoi émis par ce conteneur est rejeté. Un
+ * domaine en `~all` ne serait pas rejeté, mais il ne passerait pas SPF pour autant — il
+ * serait toléré. Ce n'est pas la même chose, et c'est exactement le genre de différence qui
+ * ne se voit qu'au bout de trois mois, quand les messages commencent à tomber en
+ * indésirable. On remet donc au relais d'OVH, qui signe.
+ *
+ * ET L'EXPÉDITEUR RESTE SUR LE DOMAINE AUTHENTIFIÉ. OVH exige que le `From` s'aligne sur le
+ * compte de soumission, et refuse le reste en 550 5.7.1 — après acceptation, par un rapport
+ * de non-remise. Voir `desalignementExpediteur` dans `validation.mjs`.
  *
  * NE PAS ÉLARGIR LE SPF pour se passer de cette authentification : cela ouvrirait le
  * domaine à l'usurpation pour la commodité d'un formulaire.
@@ -25,7 +29,12 @@
  */
 import { createServer } from 'node:http'
 import { createHash, randomUUID } from 'node:crypto'
-import { PLAFONDS, creerCompteurDeDebit, motifDeRefus } from './validation.mjs'
+import {
+  PLAFONDS,
+  creerCompteurDeDebit,
+  desalignementExpediteur,
+  motifDeRefus,
+} from './validation.mjs'
 import { createTransport } from 'nodemailer'
 
 const PORT = Number(process.env.PORT ?? 3000)
@@ -34,10 +43,10 @@ const PORT = Number(process.env.PORT ?? 3000)
  * La configuration vient ENTIÈREMENT de l'environnement. Aucune adresse, aucun hôte et
  * surtout aucun mot de passe n'est écrit dans ce dépôt — c'est Dokploy qui les pose.
  *
- * `EXPEDITEUR` est un alias `@bas.lu` de la boîte `@schoulbus.lu` qui s'authentifie :
- * l'expéditeur et le destinataire diffèrent donc, ce qui rend le filtrage et le débogage
- * possibles. Les deux étant identiques, un message perdu ne se distingue pas d'un message
- * jamais parti.
+ * `EXPEDITEUR` porte le MÊME DOMAINE que la boîte qui s'authentifie — OVH n'en accepte pas
+ * d'autre — mais une autre adresse qu'elle : l'expéditeur et le destinataire diffèrent donc,
+ * ce qui rend le filtrage et le débogage possibles. Les deux étant identiques, un message
+ * perdu ne se distingue pas d'un message jamais parti.
  */
 const CONFIG = {
   hote: process.env.SMTP_HOTE,
@@ -64,6 +73,22 @@ if (manquantes.length > 0) {
     `Configuration incomplète : ${manquantes.join(', ')}. ` +
       'Poser SMTP_HOTE, SMTP_PORT, SMTP_TLS, SMTP_UTILISATEUR, SMTP_MOTDEPASSE, ' +
       'SMTP_EXPEDITEUR et COURRIEL_DESTINATAIRE dans les variables du service.',
+  )
+  process.exit(1)
+}
+
+/*
+ * Le même refus, pour la même raison, un cran plus loin : une configuration COMPLÈTE peut
+ * encore être inexpédiable. Un expéditeur hors du domaine authentifié passe la soumission
+ * et se fait rejeter ensuite — le visiteur a lu « message envoyé », et le rapport de
+ * non-remise part vers une boîte que personne ne surveille. Mieux vaut ne pas démarrer.
+ */
+const desalignement = desalignementExpediteur(CONFIG.utilisateur, CONFIG.expediteur)
+if (desalignement) {
+  console.error(
+    `SMTP_EXPEDITEUR inexpédiable (${desalignement}) : « ${CONFIG.expediteur} » ne peut pas ` +
+      `partir du compte « ${CONFIG.utilisateur} ». OVH exige que le domaine du From ` +
+      "s'aligne sur celui du compte authentifié — un alias ne suffit pas.",
   )
   process.exit(1)
 }

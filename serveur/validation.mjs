@@ -34,9 +34,37 @@ export const PLAFONDS = {
   octetsMaximum: 16_384,
 }
 
-const LIEN = /https?:\/\/|www\./gi
-
 const texte = (valeur) => (typeof valeur === 'string' ? valeur.trim() : '')
+
+/**
+ * LE DOMAINE DE L'EXPÉDITEUR DOIT S'ALIGNER SUR CELUI DU COMPTE QUI S'AUTHENTIFIE.
+ *
+ * OVH refuse en 550 5.7.1 un message dont l'en-tête `From` porte un autre domaine que le
+ * compte de soumission, et il le refuse APRÈS avoir accepté le message : `sendMail` résout,
+ * le relais répond « envoyé », le visiteur le croit, et le rejet arrive plus tard par un
+ * rapport de non-remise que personne ne lit. Un alias ne suffit pas — c'est le domaine qui
+ * compte, pas l'autorisation de la boîte. Éprouvé le 14 septembre 2026, sur un vrai message.
+ *
+ * D'où cette règle ici, avec les autres, plutôt qu'un commentaire dans `index.mjs` : elle
+ * décide si un message part, et c'est exactement ce que ce fichier contient.
+ *
+ * Rend le motif du refus, ou `null` si la configuration peut expédier.
+ */
+export function desalignementExpediteur(utilisateur, expediteur) {
+  const domaine = (adresse) => {
+    const arobase = texte(adresse).lastIndexOf('@')
+    return arobase === -1 ? '' : texte(adresse).slice(arobase + 1).toLowerCase()
+  }
+
+  const duCompte = domaine(utilisateur)
+  const deLExpediteur = domaine(expediteur)
+
+  if (duCompte === '') return 'compteSansDomaine'
+  if (deLExpediteur === '') return 'expediteurSansDomaine'
+  return duCompte === deLExpediteur ? null : 'domainesDifferents'
+}
+
+const LIEN = /https?:\/\/|www\./gi
 
 /**
  * Rend le motif du refus, ou `null` si le message peut partir.
