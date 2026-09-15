@@ -50,10 +50,11 @@ services:
       SMTP_TLS: ${SMTP_TLS:-true}
       SMTP_UTILISATEUR: ${SMTP_UTILISATEUR:?il faut la boite qui s authentifie}
       SMTP_MOTDEPASSE: ${SMTP_MOTDEPASSE:?il faut le mot de passe de cette boite}
-      # L'expéditeur est un ALIAS `@bas.lu` de la boîte ci-dessus. Expéditeur et
-      # destinataire doivent différer : identiques, un message perdu ne se distingue pas
-      # d'un message jamais parti, et le filtrage devient impossible.
-      SMTP_EXPEDITEUR: ${SMTP_EXPEDITEUR:?il faut l alias @bas.lu qui expedie}
+      # L'expéditeur porte le MÊME DOMAINE que la boîte ci-dessus — OVH rejette le reste —
+      # mais une autre adresse qu'elle. Expéditeur et destinataire doivent différer :
+      # identiques, un message perdu ne se distingue pas d'un message jamais parti, et le
+      # filtrage devient impossible.
+      SMTP_EXPEDITEUR: ${SMTP_EXPEDITEUR:?il faut l adresse qui expedie, sur le domaine authentifie}
       COURRIEL_DESTINATAIRE: ${COURRIEL_DESTINATAIRE:-admin@schoulbus.lu}
 
 networks:
