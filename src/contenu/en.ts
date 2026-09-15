@@ -287,18 +287,18 @@ export const en: Contenu = {
 
   contact: {
     titre: `Write`,
-    intro: `An address, to report a time that does not match, a layout that breaks, or something that is missing. Behind it is a parent, not a service.`,
+    intro: `A form and an address, to report a time that does not match or a layout that breaks. Behind it is a parent, not a service.`,
     adresseTitre: `The address`,
     adresseIntro: `Messages arrive here:`,
-    adresseNote: `The address is written in plain text: your mail program is enough, and it stays useful on the day the form below breaks. A message that arrives lands in an ordinary mailbox; it is neither filed nor copied anywhere else. A reply may take a few days.`,
+    adresseNote: `The address is written in plain text: your mail program is enough, and it stays useful on the day the form above breaks. A reply may take a few days.`,
     utileTitre: `What helps`,
-    utileCorps: `For a time that does not match: the line, the stop, the day, and the time you expected.
-For a layout that breaks: the device, the browser, and what the screen shows.
+    utileCorps: `A time that does not match: the line, the stop, the day, the time you expected.
+A layout that breaks: the device, the browser, what the screen shows.
 Write in whichever language comes to you.`,
     limitesTitre: `What this address cannot do`,
-    limitesCorps: `It leads neither to the municipality, nor to the school, nor to the maison relais. An absence to report, an enrolment, a request to change stop: that goes to them directly, and a message sent here will not reach them.
-The municipality’s official plan prevails. If this site shows something else, it is this site that is wrong — and that is exactly what is worth reporting.`,
-    formulaireTitre: `Or write from here`,
+    limitesCorps: `It leads neither to the municipality, nor to the school, nor to the maison relais. An absence, an enrolment, a change of stop: that goes to them directly.
+The municipality’s official plan prevails. If this site shows something else, it is this site that is wrong — and that is what is worth reporting.`,
+    formulaireTitre: `Write from here`,
     formulaireNote: `The form sends what you write: the subject, the message, and the reply address if you give one. Nothing else leaves — not your name, not your location, nothing that would identify you from one visit to the next. Your IP address is used for one hour to stop bursts of messages, in a scrambled form that cannot be traced back to you, and none of it is written to a disk. Messages that arrive are kept for twelve months, then deleted.`,
     sujetEtiquette: `What is it about?`,
     messageEtiquette: `Your message`,
@@ -312,8 +312,8 @@ The municipality’s official plan prevails. If this site shows something else, 
     erreurTropLong: `The message is too long. Keep what matters: the line, the stop, the day, the time.`,
     erreurTropDeLiens: `Too many links. Describe what you see instead.`,
     erreurTropVite: `Sent too fast to have been typed. Try again in a few seconds.`,
-    erreurTropSouvent: `Too many messages from this connection. Try again in an hour, or write to the address above.`,
-    erreurEnvoi: `The message did not get through. Write to the address above: that one still works.`,
+    erreurTropSouvent: `Too many messages from this connection. Try again in an hour, or write to the address below.`,
+    erreurEnvoi: `The message did not get through. Write to the address below: that one still works.`,
     retour: `Back to the home page`,
   },
 }

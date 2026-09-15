@@ -283,18 +283,18 @@ export const de: Contenu = {
 
   contact: {
     titre: `Schreiben`,
-    intro: `Eine Adresse, um eine Zeit zu melden, die nicht stimmt, eine Anzeige, die verrutscht, oder etwas, das fehlt. Dahinter steht ein Elternteil, kein Dienst.`,
+    intro: `Ein Formular und eine Adresse, um eine Zeit zu melden, die nicht stimmt, oder eine Anzeige, die verrutscht. Dahinter steht ein Elternteil, kein Dienst.`,
     adresseTitre: `Die Adresse`,
     adresseIntro: `Nachrichten kommen hier an:`,
-    adresseNote: `Die Adresse steht im Klartext: Ihr E-Mail-Programm genügt, und sie bleibt nützlich an dem Tag, an dem das Formular darunter ausfällt. Eine eingegangene Nachricht landet in einem gewöhnlichen Postfach; sie wird weder erfasst noch anderswohin kopiert. Eine Antwort kann einige Tage dauern.`,
+    adresseNote: `Die Adresse steht im Klartext: Ihr E-Mail-Programm genügt, und sie bleibt nützlich an dem Tag, an dem das Formular darüber ausfällt. Eine Antwort kann einige Tage dauern.`,
     utileTitre: `Was hilft`,
-    utileCorps: `Bei einer Zeit, die nicht stimmt: die Linie, die Haltestelle, der Tag, und die Zeit, die Sie erwartet haben.
-Bei einer Anzeige, die verrutscht: das Gerät, der Browser, und was der Bildschirm zeigt.
+    utileCorps: `Eine Zeit, die nicht stimmt: die Linie, die Haltestelle, der Tag, die erwartete Zeit.
+Eine Anzeige, die verrutscht: das Gerät, der Browser, was der Bildschirm zeigt.
 Schreiben Sie in der Sprache, die Ihnen kommt.`,
     limitesTitre: `Was diese Adresse nicht kann`,
-    limitesCorps: `Sie führt weder zur Gemeinde noch zur Schule noch zur Maison Relais. Eine Abwesenheit, eine Anmeldung, der Wunsch nach einer anderen Haltestelle: das gehört direkt an sie, und eine Nachricht an diese Adresse kommt dort nicht an.
+    limitesCorps: `Sie führt weder zur Gemeinde noch zur Schule noch zur Maison Relais. Eine Abwesenheit, eine Anmeldung, eine andere Haltestelle: das gehört direkt an sie.
 Es gilt der offizielle Plan der Gemeinde. Zeigt diese Seite etwas anderes, dann irrt diese Seite — und genau das ist eine Meldung wert.`,
-    formulaireTitre: `Oder von hier aus schreiben`,
+    formulaireTitre: `Von hier aus schreiben`,
     formulaireNote: `Das Formular sendet, was Sie schreiben: den Betreff, die Nachricht und die Antwortadresse, falls Sie eine angeben. Mehr geht nicht hinaus — weder Ihr Name noch Ihr Standort noch irgendetwas, woran man Sie von einem Besuch zum nächsten wiedererkennt. Ihre IP-Adresse dient eine Stunde lang dazu, Massensendungen zu verhindern, in einer verwürfelten Form, die nicht zu Ihnen zurückführt, und nichts davon wird auf eine Festplatte geschrieben. Eingegangene Nachrichten werden zwölf Monate aufbewahrt und dann gelöscht.`,
     sujetEtiquette: `Worum geht es?`,
     messageEtiquette: `Ihre Nachricht`,
@@ -308,8 +308,8 @@ Es gilt der offizielle Plan der Gemeinde. Zeigt diese Seite etwas anderes, dann 
     erreurTropLong: `Die Nachricht ist zu lang. Behalten Sie das Wesentliche: Linie, Haltestelle, Tag, Uhrzeit.`,
     erreurTropDeLiens: `Zu viele Links. Beschreiben Sie lieber, was Sie sehen.`,
     erreurTropVite: `Zu schnell gesendet, um von Hand geschrieben zu sein. Versuchen Sie es in ein paar Sekunden erneut.`,
-    erreurTropSouvent: `Zu viele Nachrichten von dieser Verbindung. Versuchen Sie es in einer Stunde erneut, oder schreiben Sie an die Adresse oben.`,
-    erreurEnvoi: `Das Senden hat nicht geklappt. Schreiben Sie an die Adresse oben: die funktioniert weiterhin.`,
+    erreurTropSouvent: `Zu viele Nachrichten von dieser Verbindung. Versuchen Sie es in einer Stunde erneut, oder schreiben Sie an die Adresse unten.`,
+    erreurEnvoi: `Das Senden hat nicht geklappt. Schreiben Sie an die Adresse unten: die funktioniert weiterhin.`,
     retour: `Zurück zur Startseite`,
   },
 }
