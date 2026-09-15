@@ -56,6 +56,10 @@ services:
       # filtrage devient impossible.
       SMTP_EXPEDITEUR: ${SMTP_EXPEDITEUR:?il faut l adresse qui expedie, sur le domaine authentifie}
       COURRIEL_DESTINATAIRE: ${COURRIEL_DESTINATAIRE:-admin@schoulbus.lu}
+      # L'origine que le navigateur doit déclarer sur `POST /api/contact`. C'est la même
+      # variable qui sert d'adresse publique à la construction de la vitrine : une seule
+      # valeur, donc pas de montage où les deux services désignent des sites différents.
+      URL_PUBLIQUE: ${URL_PUBLIQUE:-https://www.schoulbus.lu}
 
 networks:
   # Fourni par Dokploy, c'est là que vit Traefik. Déclaré externe : ce fichier ne le crée
