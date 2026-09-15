@@ -845,7 +845,7 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   version, un chiffre est une affirmation sur le plan d'aujourd'hui. Le prix est assumé —
   un changement de données là-bas fera rougir la CI d'ici.
 
-- *« L'origine par défaut désignait un hôte qui redirige. »* — `schoulbus.lu` répond 308
+- *« L'origine par défaut désignait un hôte qui redirige. »* — `schoulbus.lu` répond 301
   vers `www.schoulbus.lu`. Le `Dockerfile` portait seul la bonne valeur ; `vite.config.ts`,
   `scripts/prerendu.mjs`, `src/config.ts`, le test de fumée de la CI et l'exemple de ce
   README retombaient tous sur l'apex. Une construction lancée hors de Dokploy écrivait donc
@@ -940,7 +940,7 @@ docker run --rm -p 8080:80 vitrine
 
 `URL_PUBLIQUE` entre dans les métadonnées de partage, qui exigent des adresses absolues :
 elle est donc connue à la construction, pas au démarrage. **Elle porte le `www`** : c'est
-l'hôte qui répond, `schoulbus.lu` redirigeant vers lui en 308. Une canonique vers un hôte
+l'hôte qui répond, `schoulbus.lu` redirigeant vers lui en 301. Une canonique vers un hôte
 qui redirige n'est pas une erreur visible — c'est une page qui désigne comme officielle une
 adresse qu'elle n'est pas. `DATE_CONTENU` sert au `lastmod`
 du plan du site ; le dépôt Git n'étant pas copié dans l'image, sans elle la balise est
