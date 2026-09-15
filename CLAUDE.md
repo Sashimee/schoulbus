@@ -255,11 +255,19 @@ visiteur.
 Cinq choses à savoir avant d'y toucher :
 
 1. **Le DNS décide du montage.** `schoulbus.lu` porte `-all` et rejette tout ce qui n'est
-   pas OVH ; `bas.lu`, d'où part l'expéditeur, porte `~all` — un envoi direct depuis le
-   conteneur n'y serait pas rejeté, donc « fonctionnerait », **sans passer SPF pour
-   autant**. Toléré n'est pas authentifié, et l'écart ne se voit qu'au bout de trois mois.
-   On remet donc au SMTP authentifié d'OVH. **Ne jamais élargir le SPF** pour contourner :
-   cela ouvrirait le domaine à l'usurpation pour la commodité d'un formulaire.
+   pas OVH. Un domaine en `~all` ne rejetterait pas un envoi direct depuis le conteneur,
+   donc il « fonctionnerait », **sans passer SPF pour autant** — toléré n'est pas
+   authentifié, et l'écart ne se voit qu'au bout de trois mois. On remet donc au SMTP
+   authentifié d'OVH. **Ne jamais élargir le SPF** pour contourner : cela ouvrirait le
+   domaine à l'usurpation pour la commodité d'un formulaire.
+
+   **ET L'EXPÉDITEUR RESTE SUR LE DOMAINE AUTHENTIFIÉ** — `formulaire@schoulbus.lu`, pas
+   d'alias ailleurs. C'est OVH qui l'exige, en amont du SPF : un `From` dont le domaine ne
+   s'aligne pas sur le compte de soumission est rejeté en **550 5.7.1**, et il l'est
+   **après** acceptation, par un rapport de non-remise. Le relais a répondu « envoyé », le
+   visiteur l'a cru, et le message n'est jamais arrivé. Éprouvé le 14 septembre 2026 sur le
+   premier message réel du formulaire — ticket #41. `desalignementExpediteur`
+   (`serveur/validation.mjs`) empêche désormais le service de démarrer sur ce défaut.
 2. **L'adresse du visiteur va en `Reply-To`, jamais en `From`.** La mettre en `From` est une
    usurpation de son domaine, et c'est précisément ce que DMARC existe pour détecter.
 3. **La CSP N'A PAS ÉTÉ ROUVERTE**, contrairement à ce que le ticket annonçait.

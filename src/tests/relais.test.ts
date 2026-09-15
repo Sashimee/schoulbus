@@ -13,7 +13,12 @@
  * remise à OVH ne se simule pas utilement.
  */
 import { describe, expect, it } from 'vitest'
-import { PLAFONDS, creerCompteurDeDebit, motifDeRefus } from '../../serveur/validation.mjs'
+import {
+  PLAFONDS,
+  creerCompteurDeDebit,
+  desalignementExpediteur,
+  motifDeRefus,
+} from '../../serveur/validation.mjs'
 
 /** Un message qui doit passer. Chaque test n'en change qu'une chose. */
 const valide = {
@@ -190,5 +195,62 @@ describe("L'image du relais", () => {
     for (const fichier of importes) {
       expect(copies, `${fichier} est importé mais jamais copié dans l'image`).toContain(fichier)
     }
+  })
+})
+
+/*
+ * Le défaut que ces tests empêchent de revenir a coûté un message réel : l'expéditeur était
+ * `formulaire@bas.lu` pour un compte `admin@schoulbus.lu`, OVH a accepté puis rejeté en
+ * 550 5.7.1, et le visiteur avait lu « message envoyé ». Ticket #41.
+ */
+describe("L'expéditeur et le compte qui s'authentifie", () => {
+  it('passent quand ils partagent le domaine, sans être la même adresse', () => {
+    expect(desalignementExpediteur('admin@schoulbus.lu', 'formulaire@schoulbus.lu')).toBeNull()
+  })
+
+  it('passent quand ils sont la même adresse', () => {
+    expect(desalignementExpediteur('admin@schoulbus.lu', 'admin@schoulbus.lu')).toBeNull()
+  })
+
+  it('refusent un domaine différent, fût-il un alias autorisé', () => {
+    expect(desalignementExpediteur('admin@schoulbus.lu', 'formulaire@bas.lu')).toBe(
+      'domainesDifferents',
+    )
+  })
+
+  it('refusent un sous-domaine, que l’alignement ne couvre pas davantage', () => {
+    expect(desalignementExpediteur('admin@schoulbus.lu', 'formulaire@mail.schoulbus.lu')).toBe(
+      'domainesDifferents',
+    )
+  })
+
+  it('ignorent la casse et les espaces, qu’un copier-coller laisse traîner', () => {
+    expect(desalignementExpediteur('  Admin@Schoulbus.LU ', 'formulaire@schoulbus.lu')).toBeNull()
+  })
+
+  it('refusent une adresse sans domaine, des deux côtés', () => {
+    expect(desalignementExpediteur('admin', 'formulaire@schoulbus.lu')).toBe('compteSansDomaine')
+    expect(desalignementExpediteur('admin@schoulbus.lu', 'formulaire')).toBe(
+      'expediteurSansDomaine',
+    )
+  })
+
+  it('refusent une valeur absente plutôt que de la tenir pour alignée', () => {
+    expect(desalignementExpediteur(undefined, 'formulaire@schoulbus.lu')).toBe('compteSansDomaine')
+    expect(desalignementExpediteur('admin@schoulbus.lu', undefined)).toBe('expediteurSansDomaine')
+  })
+})
+
+describe('Le garde-fou du démarrage', () => {
+  const SOURCE = import.meta.glob('../../serveur/index.mjs', {
+    query: '?raw',
+    eager: true,
+    import: 'default',
+  }) as Record<string, string>
+
+  it("sort en erreur plutôt que de démarrer sur un expéditeur inexpédiable", () => {
+    const source = SOURCE['../../serveur/index.mjs']
+    expect(source).toContain('desalignementExpediteur(CONFIG.utilisateur, CONFIG.expediteur)')
+    expect(source).toContain('process.exit(1)')
   })
 })
