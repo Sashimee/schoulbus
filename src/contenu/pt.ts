@@ -85,7 +85,7 @@ export const pt: Contenu = {
     ],
     actionPrincipale: 'Abrir a aplicação',
     actionSecondaire: 'O que o site não sabe fazer',
-    legende: 'Captura real · 22 de setembro de 2026, 07:25',
+    legende: 'Captura real · 15 de setembro de 2026, 07:25',
   },
 
   chiffres: {
@@ -103,7 +103,7 @@ export const pt: Contenu = {
 
   ecrans: {
     titre: 'Quatro ecrãs, e é este o produto todo.',
-    note: `Capturas reais da aplicação, terça-feira, 22 de setembro de 2026, às 07:25.`,
+    note: `Capturas reais da aplicação, terça-feira, 15 de setembro de 2026, às 07:25.`,
     cartes: [
       { titre: 'O ecrã da manhã', texte: 'Uma hora por criança, e mais nada.' },
       { titre: 'A semana', texte: 'Cinco dias, e o mapa do percurso a pé.' },

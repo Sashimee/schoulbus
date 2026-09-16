@@ -68,7 +68,7 @@ export const lb: Contenu = {
     ],
     actionPrincipale: 'App opmaachen',
     actionSecondaire: 'Wat d’Säit net kann',
-    legende: 'Richteg Opnam · 22. September 2026, 07:25 Auer',
+    legende: 'Richteg Opnam · 15. September 2026, 07:25 Auer',
   },
 
   chiffres: {
@@ -87,7 +87,7 @@ export const lb: Contenu = {
 
   ecrans: {
     titre: 'Véier Bildschiermer, an dat ass de ganze Produit.',
-    note: `Richteg Opname vun der Applikatioun, Dënschdeg den 22. September 2026 um 07:25.`,
+    note: `Richteg Opname vun der Applikatioun, Dënschdeg de 15. September 2026 um 07:25.`,
     cartes: [
       { titre: 'De Bildschierm vum Moien', texte: 'Eng Zäit pro Kand, a soss näischt.' },
       { titre: 'D’Woch', texte: 'Fënnef Deeg, an d’Kaart vum Wee zu Fouss.' },

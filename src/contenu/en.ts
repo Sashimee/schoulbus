@@ -75,7 +75,7 @@ export const en: Contenu = {
     ],
     actionPrincipale: 'Open the app',
     actionSecondaire: 'What this site cannot do',
-    legende: 'Real screenshot · 22 September 2026, 07:25',
+    legende: 'Real screenshot · 15 September 2026, 07:25',
   },
 
   chiffres: {
@@ -93,7 +93,7 @@ export const en: Contenu = {
 
   ecrans: {
     titre: 'Four screens, and that is the whole product.',
-    note: `Real screenshots of the app, Tuesday 22 September 2026 at 07:25.`,
+    note: `Real screenshots of the app, Tuesday 15 September 2026 at 07:25.`,
     cartes: [
       { titre: 'The morning screen', texte: 'One time per child, and nothing else.' },
       { titre: 'The week', texte: 'Five days, and the map of the walk.' },
