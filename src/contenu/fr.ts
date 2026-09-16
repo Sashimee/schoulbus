@@ -24,7 +24,7 @@
  *
  *  1. Les nombres du héros et de l'appel final sont CEUX DES CAPTURES. Le lecteur voit
  *     l'écran à côté de la phrase ; s'ils divergent, c'est la phrase qu'il croira fausse.
- *     Ils viennent de `src/contenu/captures.ts` (mardi 22 septembre 2026, 07:25) et se
+ *     Ils viennent de `src/contenu/captures.ts` (mardi 15 septembre 2026, 07:25) et se
  *     lisent sur `public/captures/aujourdhui-fr-*.webp` : Léa part à 07:45, dans 16 min,
  *     depuis Hovelange · Kneppchen, à 4 min de marche ; Noah part à 07:44.
  *  2. `heros.titre` est dessiné dans les vignettes de partage à 76 px sur 1200 px de large
@@ -87,7 +87,7 @@ export const fr: Contenu = {
     ],
     actionPrincipale: 'Ouvrir l’application',
     actionSecondaire: 'Ce que le site ne sait pas',
-    legende: 'Capture réelle · 22 septembre 2026, 07:25',
+    legende: 'Capture réelle · 15 septembre 2026, 07:25',
   },
 
   chiffres: {
@@ -105,7 +105,7 @@ export const fr: Contenu = {
 
   ecrans: {
     titre: 'Quatre écrans, et c’est tout le produit.',
-    note: `De vraies captures de l’application, mardi 22 septembre 2026 à 07:25.`,
+    note: `De vraies captures de l’application, mardi 15 septembre 2026 à 07:25.`,
     cartes: [
       { titre: 'L’écran du matin', texte: 'Une heure par enfant, et rien d’autre.' },
       { titre: 'La semaine', texte: 'Cinq jours, et la carte du trajet à pied.' },
