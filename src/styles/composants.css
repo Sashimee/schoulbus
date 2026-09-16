@@ -424,4 +424,39 @@
     block-size: 1em;
     flex: none;
   }
+
+  /* ------------------------------------------------------------------ *
+   * La révélation au défilement — voir `mouvement/Revele.tsx`.
+   *
+   * Les classes ne sont posées QUE lorsque le mouvement est autorisé et que l'élément
+   * n'est pas déjà peint : une page dont le JavaScript s'arrête n'a donc jamais de bloc
+   * à `opacity: 0`, et c'est la composante qui en répond, pas cette feuille.
+   *
+   * `transform` et `opacity` seulement, comme toute animation de la vitrine.
+   * ------------------------------------------------------------------ */
+  .revele {
+    opacity: 0;
+    transition:
+      opacity var(--vitrine-revele) var(--sortie),
+      transform var(--vitrine-revele) var(--sortie);
+  }
+  .revele--monte {
+    transform: translateY(14px);
+  }
+  .revele--glisse {
+    transform: translateX(18px);
+  }
+  .revele--rang-1 {
+    transition-delay: var(--vitrine-revele-cran);
+  }
+  .revele--rang-2 {
+    transition-delay: calc(2 * var(--vitrine-revele-cran));
+  }
+  .revele--rang-3 {
+    transition-delay: calc(3 * var(--vitrine-revele-cran));
+  }
+  .revele--vu {
+    opacity: 1;
+    transform: none;
+  }
 }

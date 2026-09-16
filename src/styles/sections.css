@@ -62,6 +62,24 @@
       stroke-dashoffset: 0;
     }
   }
+  /*
+   * La sortie et l'entrée du nom, en CSS depuis le retrait de `motion`. Les durées sont
+   * celles de `Rideau.tsx` : 380 ms pour l'effacement, une entrée retardée de 450 ms qui
+   * laisse le tracé se dessiner d'abord.
+   */
+  .rideau--sort {
+    opacity: 0;
+    transition: opacity 0.38s var(--sortie);
+  }
+  .rideau__marque {
+    animation: rideau-marque 0.34s var(--sortie) 0.45s both;
+  }
+  @keyframes rideau-marque {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
 
   /* ------------------------------------------------------------------ *
    * L'en-tête, collant du premier pixel au dernier

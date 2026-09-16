@@ -21,7 +21,7 @@
  * Attendre ne fait pourtant rien clignoter : le document est déjà pré-rendu, complet et
  * dans la bonne langue, et React ne touche au DOM qu'au moment où elle s'y accroche. Ce
  * qui arrive quelques millisecondes plus tard n'est pas la page, c'est son interactivité —
- * exactement le marché déjà passé pour `lenis` et pour `motion`.
+ * exactement le marché déjà passé pour `lenis`.
  */
 import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'

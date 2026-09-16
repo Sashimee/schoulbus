@@ -69,13 +69,23 @@ const DIST = resolve(ici, '../dist')
  * langues coûte cinq fois plus au plafond théorique qu'à la visite réelle. Le premier
  * budget, lui, ne bouge pas — 98,4 ko sur 102, 4 % de marge — et c'est lui qui décide.
  *
+ * QUATRIÈME DÉPLACEMENT, le 16 septembre 2026, et c'est le premier qui ABAISSE les deux :
+ * 102 → 76 ko et 136 → 100 ko. `motion` est parti — ses trois emplois (la révélation au
+ * défilement, le décompte de la bande, le rideau) tiennent en CSS et en un
+ * `IntersectionObserver` —, et le premier écran tombe de 98,0 à 70,8 ko, tout le site de
+ * 124,7 à 93,3. Un budget qui resterait à 102 laisserait rentrer une bibliothèque entière
+ * sans rien dire : ce n'est plus un budget, c'est un souvenir.
+ *
+ * Les deux nouvelles marges sont de 7 %, assez pour une section de plus, pas pour une
+ * dépendance de plus. C'est le réglage voulu.
+ *
  * Les relever est permis. Les relever SANS RIEN DIRE ne l'est pas : la ligne du README qui
  * les cite dit d'où vient le chiffre, et c'est elle qui rend le relèvement visible.
  */
 const BUDGETS = {
-  'JavaScript du premier écran': 102 * 1024,
+  'JavaScript du premier écran': 76 * 1024,
   'feuille de style du premier écran': 8 * 1024,
-  'JavaScript de tout le site': 136 * 1024,
+  'JavaScript de tout le site': 100 * 1024,
 }
 
 if (!existsSync(resolve(DIST, 'index.html'))) {

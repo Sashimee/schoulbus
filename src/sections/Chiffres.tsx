@@ -20,12 +20,23 @@
  * Le décompte s'arrête à la première valeur atteinte et ne rejoue pas. Un compteur qui
  * repart à chaque passage devant lui transforme un fait en animation.
  */
-import { animate, useInView } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CHIFFRES } from '../contenu/chiffres.ts'
 import { useContenu } from '../i18n/contexte.ts'
+import { useEnVue } from '../mouvement/useEnVue.ts'
 import { useNiveauMouvement } from '../mouvement/useNiveauMouvement.ts'
 import { Revele } from '../mouvement/Revele.tsx'
+
+const DUREE_DECOMPTE = 1100
+
+/*
+ * La courbe de sortie de la charte est une bézier cubique, que CSS sait lire et que le
+ * JavaScript ne sait pas résoudre sans bibliothèque. Sur 1,1 s et quatre nombres à deux
+ * chiffres, un ralentissement cubique s'en distingue par moins d'une unité affichée : on
+ * garde la sensation et on se passe des vingt-cinq kilo-octets qui donnaient la courbe
+ * exacte. Un compteur n'est pas un geste, c'est une lecture.
+ */
+const ralenti = (part: number) => 1 - (1 - part) ** 3
 
 function Compteur({ valeur, actif }: { valeur: number; actif: boolean }) {
   const [affiche, setAffiche] = useState(actif ? 0 : valeur)
@@ -35,12 +46,15 @@ function Compteur({ valeur, actif }: { valeur: number; actif: boolean }) {
       setAffiche(valeur)
       return
     }
-    const controles = animate(0, valeur, {
-      duration: 1.1,
-      ease: [0.22, 0.61, 0.36, 1],
-      onUpdate: (v) => setAffiche(Math.round(v)),
-    })
-    return () => controles.stop()
+    let image = 0
+    const debut = performance.now()
+    const avancer = (instant: number) => {
+      const part = Math.min((instant - debut) / DUREE_DECOMPTE, 1)
+      setAffiche(Math.round(valeur * ralenti(part)))
+      if (part < 1) image = requestAnimationFrame(avancer)
+    }
+    image = requestAnimationFrame(avancer)
+    return () => cancelAnimationFrame(image)
   }, [valeur, actif])
 
   return <>{affiche}</>
@@ -49,8 +63,7 @@ function Compteur({ valeur, actif }: { valeur: number; actif: boolean }) {
 export function Chiffres() {
   const contenu = useContenu()
   const niveau = useNiveauMouvement()
-  const ref = useRef<HTMLDivElement>(null)
-  const vu = useInView(ref, { once: true, amount: 0.5 })
+  const { observer, vu } = useEnVue(0.5)
   const compte = niveau !== 'aucun' && vu
 
   const entrees = [
@@ -69,7 +82,7 @@ export function Chiffres() {
          * doublerait chaque trait intérieur ; ici il n'y en a jamais qu'un, et il survit
          * au repli en deux puis une colonne sans qu'aucune règle ne le rattrape.
          */}
-        <div className="chiffres" ref={ref}>
+        <div className="chiffres" ref={observer}>
           {entrees.map((e, i) => (
             <Revele
               key={e.libelle}
