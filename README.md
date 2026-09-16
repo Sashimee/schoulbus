@@ -276,8 +276,15 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   la refonte a réécrit presque chaque chaîne du fichier, les tuiles et les limites passant
   d'un paragraphe à une ligne — et une phrase courte pardonne moins qu'une longue, faute de
   contexte autour pour rattraper un mot mal choisi. C'est la langue du foyer dans une bonne
-  part de la commune, et la vitrine est publiée. **C'est la seule réserve qui demande une
-  personne plutôt qu'une commande.**
+  part de la commune, et la vitrine est publiée.
+
+  **L'ÉDITEUR A TRANCHÉ LE 16 SEPTEMBRE 2026 : la relecture des agents vaut relecture.**
+  La réserve n'attend donc plus une personne — c'était jusqu'ici la seule du projet dans
+  ce cas. Ce qu'elle devient, et c'est ce qui reste à savoir en la lisant : les constats
+  des agents sont SOURCÉS (LOD/ZLS, guichet.public.lu, mobiliteit.lu, Ciberdúvidas) et
+  vérifiables un par un, mais une source dit ce qui est fautif, pas ce qu'un parent de
+  Biekerech écrirait. La réserve change donc de nature plutôt que de se refermer : elle
+  cesse d'être une tâche et devient une limite du procédé, comme les contrastes calculés.
 
   Une relecture systématique a eu lieu depuis, fichier contre fichier et contre les
   dictionnaires de l'application. Ce qu'elle a corrigé : le luxembourgeois disait
