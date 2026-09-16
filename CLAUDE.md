@@ -372,6 +372,14 @@ s'y calcule ; l'en-tête HTTP ne porte que `frame-ancestors`.
 Les variables du relais se posent dans Dokploy — `.env.exemple` dit lesquelles, `.env` est
 ignoré par git et doit le rester.
 
+**FUSIONNER DANS `main` NE SUFFISAIT PAS À PUBLIER**, et cela a coûté dix minutes à guetter
+une page qui ne changeait pas : le service avait `autoDeploy: false`, donc les conteneurs
+continuaient de servir la construction précédente pendant que `main` et la CI étaient
+verts. Le drapeau est passé à `true` le 16 septembre 2026, après un `compose.deploy` posé à
+la main. Deux choses à en retenir : **`.claude/scripts/dokploy-sonde.sh` affiche
+`autoDeploy` et la date du dernier déploiement** — c'est là qu'on regarde quand le site ne
+bouge pas —, et une publication n'est constatée que sur le SITE, jamais sur la branche.
+
 **LE ROUTAGE N'EST PAS DANS `compose.yml`.** Les deux domaines sont des entrées de domaine
 Dokploy posées sur le service `vitrine`, port 80 — et `schoulbus.lu` y porte le middleware
 `redirect-to-www-schoulbus@file`, qui est ce qui rend le **301** vers `www`. Le dépôt frère,
