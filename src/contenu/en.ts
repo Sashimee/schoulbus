@@ -155,7 +155,7 @@ export const en: Contenu = {
       },
       {
         icone: 'horloge',
-        titre: 'After-school centre',
+        titre: 'The maison relais',
         texte: 'Dropped off Monday, picked up Thursday.',
       },
     ],
