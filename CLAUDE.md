@@ -403,13 +403,13 @@ silencieusement `composeId`. Il faut supprimer puis recréer.
 
 ## Réserve la plus urgente
 
-**Le luxembourgeois n'a pas été relu par une personne dont c'est la langue maternelle**, et
-la refonte a réécrit presque chaque chaîne du fichier — une phrase d'une ligne pardonne
-moins qu'un paragraphe, faute de contexte autour pour rattraper un mot mal choisi. Le
-portugais et l'anglais sont dans le même cas, en première rédaction. C'est la langue du
-foyer dans une bonne part de la commune, et la vitrine est publiée : refermer
-l'interrupteur ne change rien à cela. C'est la seule réserve du projet qui demande une
-personne plutôt qu'une commande. Voir l'en-tête de `src/contenu/lb.ts` et les réserves du
+**Le luxembourgeois, le portugais et l'anglais ont été relus par les agents, pas par des
+locuteurs natifs** — et c'est l'éditeur qui a décidé, le 16 septembre 2026, que cela
+suffisait (ticket #11). La réserve n'attend donc plus personne, mais elle ne se referme
+pas pour autant : un constat sourcé dit ce qui est fautif, il ne dit pas ce qu'un parent de
+Biekerech écrirait. Ce qui en découle pour toute retouche de ces trois fichiers : **on
+corrige ce qu'une source tranche, on ne compose pas de phrase neuve pour le confort du
+style.** Voir l'en-tête de `src/contenu/lb.ts`, celui de `pt.ts`, et les réserves du
 README.
 
 ## Un piège connu : régénérer les captures
