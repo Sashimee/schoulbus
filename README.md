@@ -448,14 +448,14 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   c'est un prix que le projet refuse. Elle reste écrite pour que personne ne prenne ces six
   protections pour davantage qu'elles ne sont.
 
-- **Quatre-vingt-seize kilo-octets de JavaScript. Le poids est approuvé, la question
-  d'architecture reste.** Premier écran, cache vide : **96,7 ko de JS comprimé** pour une
+- **Soixante et onze kilo-octets de JavaScript depuis le retrait de `motion`. Reste
+  React.** Premier écran, cache vide : **96,7 ko de JS comprimé** pour une
   page entièrement pré-rendue dont l'interactivité se réduit à une liste déroulante, deux
   boutons de thème et des révélations au défilement. Deux requêtes seulement bloquent le
   premier rendu (6,4 ko de document, 6,0 ko de style), donc rien ne presse à l'affichage.
   Ce qui manquait — une limite — a été posé le 8 septembre : `npm run poids`, appelé à la
   fin de `npm run build`, mesure ce que `dist/index.html` NOMME (les imports dynamiques de
-  `lenis` et de `motion` ne comptent pas, ils ne partent pas avec la page).
+  `lenis` ne compte pas, il ne part pas avec la page).
   **L'éditeur avait approuvé 103,6 ko le 10 septembre 2026**, et le chiffre a baissé
   depuis : le budget ne fait plus qu'enregistrer un poids que personne n'avait jugé.
 
@@ -492,12 +492,31 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   aucun vide.** Le document est déjà pré-rendu : attendre le dictionnaire avant
   `hydrateRoot` ne vide rien, puisque React ne touche au DOM qu'au moment où elle s'y
   accroche. Ce qui arrive quelques millisecondes plus tard n'est pas la page, c'est son
-  interactivité — le marché déjà passé pour `lenis` et pour `motion`.
+  interactivité — le marché déjà passé pour `lenis`.
 
-  Ce qui reste ouvert est la question qu'aucun des deux budgets ne pose : ce que React et
-  `motion` font dans une page qu'on lit une fois. C'est le seul poste où il reste une marge
-  d'un ordre de grandeur, et la refermer demande une décision d'architecture, pas un
-  réglage.
+  **`motion` est parti le 16 septembre 2026, et les deux budgets BAISSENT pour la première
+  fois.** Il ne lui restait que trois emplois — la révélation au défilement, le décompte de
+  la bande de chiffres et le rideau d'ouverture — et tous trois tiennent en CSS, avec un
+  `IntersectionObserver` (`src/mouvement/useEnVue.ts`) pour savoir quand partir. Son noyau,
+  lui, partait avec la page : `LazyMotion` ne différait que ses fonctionnalités.
+
+  | | avant | après | budget |
+  | --- | --- | --- | --- |
+  | premier écran | 98,0 ko | **70,8 ko** | 102 → **76 ko** |
+  | tout le site | 124,7 ko | **93,3 ko** | 136 → **100 ko** |
+
+  Les deux marges sont ramenées à 7 % : assez pour une section de plus, pas pour une
+  dépendance de plus. Un budget laissé à 102 ko aurait laissé rentrer une bibliothèque
+  entière sans rien dire.
+
+  Ce qui a été VÉRIFIÉ dans un navigateur, et non raisonné : la page parcourue de haut en
+  bas dans l'image épinglée de Playwright, **zéro élément resté sous l'opacité 1**, et les
+  quatre nombres de la bande arrivés à leur valeur. C'est le seul risque du changement — un
+  bloc qui ne se révélerait jamais est un bloc invisible.
+
+  Ce qui reste ouvert est la question qu'aucun des deux budgets ne pose : ce que React fait
+  dans une page qu'on lit une fois. C'est le dernier poste où il reste une marge d'un ordre
+  de grandeur, et la refermer demande une décision d'architecture, pas un réglage.
 
 - **Les contrastes sont calculés, pas mesurés à la pipette — réserve ACCEPTÉE.**
   `npm run contraste` calcule ce que le navigateur devrait afficher ; il ne lit pas

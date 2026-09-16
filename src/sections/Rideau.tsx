@@ -16,7 +16,6 @@
  * doux et le curseur, qui s'abstiennent déjà à ce niveau-là — une décoration d'ouverture
  * appartient à la machine qui peut se l'offrir.
  */
-import { AnimatePresence, m } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { LogoBus } from '../composants/LogoBus.tsx'
 import { useContenu } from '../i18n/contexte.ts'
@@ -24,10 +23,19 @@ import { useNiveauMouvement } from '../mouvement/useNiveauMouvement.ts'
 
 const CLE_SESSION = 'vitrine-schoulbus.rideau-vu'
 
+/*
+ * 1,1 s de rideau, puis 380 ms pour s'effacer. Les deux durées étaient écrites dans les
+ * accessoires de `motion` ; elles sont maintenant ici et dans `sections.css`, et elles
+ * doivent rester d'accord — `rideau-sortie` dure ce que dit `SORTIE`.
+ */
+const AFFICHAGE = 1100
+const SORTIE = 380
+
 export function Rideau() {
   const contenu = useContenu()
   const niveau = useNiveauMouvement()
   const [ouvert, setOuvert] = useState(false)
+  const [sort, setSort] = useState(false)
 
   useEffect(() => {
     if (niveau !== 'complet') return
@@ -38,29 +46,20 @@ export function Rideau() {
       // Stockage refusé : le rideau se montrera à chaque visite. Ennuyeux, pas cassé.
     }
     setOuvert(true)
-    const minuterie = setTimeout(() => setOuvert(false), 1100)
-    return () => clearTimeout(minuterie)
+    const depart = setTimeout(() => setSort(true), AFFICHAGE)
+    const fin = setTimeout(() => setOuvert(false), AFFICHAGE + SORTIE)
+    return () => {
+      clearTimeout(depart)
+      clearTimeout(fin)
+    }
   }, [niveau])
 
+  if (!ouvert) return null
+
   return (
-    <AnimatePresence>
-      {ouvert && (
-        <m.div
-          className="rideau"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.38, ease: [0.22, 0.61, 0.36, 1] } }}
-        >
-          <LogoBus className="rideau__logo" variante="trace" />
-          <m.span
-            className="marque"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45, duration: 0.34, ease: [0.22, 0.61, 0.36, 1] }}
-          >
-            {contenu.general.marque}
-          </m.span>
-        </m.div>
-      )}
-    </AnimatePresence>
+    <div className={`rideau${sort ? ' rideau--sort' : ''}`}>
+      <LogoBus className="rideau__logo" variante="trace" />
+      <span className="marque rideau__marque">{contenu.general.marque}</span>
+    </div>
   )
 }

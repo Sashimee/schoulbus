@@ -280,6 +280,14 @@
     --vitrine-tres-lent: 1.4s;
 
     /*
+     * La révélation au défilement, reprise de l'application : 550 ms de geste et 60 ms
+     * de décalage entre voisins. Elles étaient écrites dans `Revele.tsx` tant que
+     * `motion` animait ; en CSS, elles redeviennent des jetons.
+     */
+    --vitrine-revele: 0.55s;
+    --vitrine-revele-cran: 60ms;
+
+    /*
      * Rythme vertical. Il s'est resserré lui aussi, et pour une raison mesurable : la
      * page compte désormais neuf sections au lieu de treize, mais chacune est plus dense.
      * À 12vh de respiration, le lecteur traversait deux écrans de vide entre deux idées

@@ -7,25 +7,30 @@
  * apparaît dans l'application doivent être le même mouvement, sinon les deux sites ne
  * se ressemblent que sur l'image fixe.
  *
- * Trois garde-fous :
+ * ELLE N'ANIME PLUS EN JAVASCRIPT. Le geste est une transition CSS (`.revele` dans
+ * `composants.css`) et l'entrée dans l'écran un `IntersectionObserver` ; il ne restait
+ * de `motion` que ces deux services, pour vingt-cinq kilo-octets comprimés sur une page
+ * qu'on lit une fois.
  *
- *  - `once: true`. Un élément qui rejoue son entrée à chaque passage transforme un
- *    retour en arrière dans la page en clignotement.
+ * Trois garde-fous, inchangés :
+ *
+ *  - L'entrée ne rejoue pas. Un élément qui rejoue son entrée à chaque passage
+ *    transforme un retour en arrière dans la page en clignotement.
  *  - L'état de départ n'est posé que si le mouvement est autorisé. Sans cela, une page
  *    dont le JavaScript échoue à mi-parcours resterait à `opacity: 0` — invisible et
  *    irrécupérable. Le défaut, ici, est d'être visible.
  *  - ON NE RÉVÈLE PAS CE QUI EST DÉJÀ PEINT. Le premier rendu vaut toujours `aucun`,
- *    pré-rendu comme hydratation, et rendait donc une balise nue ; à la mesure, la
- *    balise devenait une balise `motion` qui reposait son `initial`, c'est-à-dire
+ *    pré-rendu comme hydratation, et rend donc une balise nue ; à la mesure, la balise
+ *    devenait une balise animée qui reposait son état de départ, c'est-à-dire
  *    `opacity: 0`. Relevé à 1 280 × 900 : zéro élément caché jusqu'à 122 ms, puis six
  *    blocs déjà à l'écran repassaient sous l'opacité 1 à 171 ms pour n'en ressortir
  *    qu'après. Sur une page dont tout l'argument est d'être pré-rendue, c'est le
  *    pré-rendu qui se faisait défaire. Un bloc déjà à l'écran quand le mouvement est
  *    autorisé garde donc sa balise nue : il n'a rien à révéler, il est lu.
  */
-import { m } from 'motion/react'
 import type { ReactNode } from 'react'
 import { useCallback, useRef } from 'react'
+import { useEnVue } from './useEnVue.ts'
 import { useNiveauMouvement } from './useNiveauMouvement.ts'
 
 type Props = {
@@ -44,14 +49,14 @@ type Props = {
  * d'une liste de neuf attendrait plus d'une demi-seconde après le premier, et la grille
  * se lirait comme un chargement plutôt que comme une apparition.
  */
-const PAS = 0.06
 const CRANS_MAX = 3
 
 export function Revele({ children, rang = 0, geste = 'monte', className, as = 'div' }: Props) {
   const niveau = useNiveauMouvement()
-  const Balise = m[as]
-  const Simple = as
+  const Balise = as
   const dejaPeint = useRef(false)
+  // 0,2 : la même part visible que demandait `motion`, et le même seuil que l'application.
+  const { observer, vu } = useEnVue(0.2)
 
   /*
    * La mesure est prise au commit du rendu nu : une référence est rattachée avant que
@@ -64,30 +69,28 @@ export function Revele({ children, rang = 0, geste = 'monte', className, as = 'd
 
   if (niveau === 'aucun') {
     return (
-      <Simple ref={mesurer} className={className}>
+      <Balise ref={mesurer} className={className}>
         {children}
-      </Simple>
+      </Balise>
     )
   }
 
   if (dejaPeint.current) {
-    return <Simple className={className}>{children}</Simple>
+    return <Balise className={className}>{children}</Balise>
   }
 
-  const depart = geste === 'monte' ? { opacity: 0, y: 14 } : { opacity: 0, x: 18 }
+  const classes = [
+    className,
+    'revele',
+    `revele--${geste}`,
+    `revele--rang-${Math.min(rang, CRANS_MAX)}`,
+    vu ? 'revele--vu' : null,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   return (
-    <Balise
-      className={className}
-      initial={depart}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, amount: 0.2, margin: '0px 0px -10% 0px' }}
-      transition={{
-        duration: 0.55,
-        delay: Math.min(rang, CRANS_MAX) * PAS,
-        ease: [0.22, 0.61, 0.36, 1],
-      }}
-    >
+    <Balise ref={observer} className={classes}>
       {children}
     </Balise>
   )

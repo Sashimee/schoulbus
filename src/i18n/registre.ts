@@ -17,7 +17,7 @@
  * avant d'appeler `hydrateRoot`, et le HTML servi reste à l'écran pendant ce temps. Rien
  * ne clignote : React ne touche au DOM qu'au moment où elle s'y accroche. Le seul coût
  * est que l'interactivité arrive quelques millisecondes plus tard — le marché déjà passé
- * pour `lenis` et pour `motion`.
+ * pour `lenis`.
  *
  * Trois endroits alimentent ce registre, et il n'en existe pas de quatrième : le
  * navigateur par `chargerContenu`, le pré-rendu et les tests par `enregistrerContenu`.

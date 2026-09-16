@@ -34,15 +34,13 @@
  * un curseur personnalisé, qui ne s'adressait qu'à la souris sur une page dont la moitié
  * des lecteurs sont sur un téléphone.
  *
- * `LazyMotion` + `domAnimation` : la fabrique complète de `motion` pèse près du double,
- * et rien ici n'a besoin de la physique de projection ni du glisser-déposer.
- *
- * Les fonctionnalités sont en outre chargées APRÈS le premier rendu, et non avec lui.
- * Elles ne servent à personne tant que le niveau de mouvement vaut 'aucun' — ce qu'il
- * vaut toujours au premier rendu, des deux côtés de l'hydratation — et la page est
- * entièrement pré-rendue : rien n'attend une animation pour être lisible.
+ * `motion` A DISPARU LUI AUSSI, le 16 septembre 2026. Il ne lui restait que trois
+ * emplois — la révélation au défilement, le décompte de la bande de chiffres et le
+ * rideau — et tous trois tiennent en CSS, avec un `IntersectionObserver` pour savoir
+ * quand partir. `LazyMotion` chargeait ses fonctionnalités après le premier rendu, mais
+ * son noyau, lui, partait avec la page : vingt-cinq kilo-octets comprimés du premier
+ * écran, pour une page qu'on lit une fois.
  */
-import { LazyMotion } from 'motion/react'
 import { useContenu } from './i18n/contexte.ts'
 import { DefilementDoux } from './mouvement/DefilementDoux.tsx'
 import { Rideau } from './sections/Rideau.tsx'
@@ -56,13 +54,11 @@ import { Limites } from './sections/Limites.tsx'
 import { AppelFinal } from './sections/AppelFinal.tsx'
 import { PiedDePage } from './sections/PiedDePage.tsx'
 
-const chargerFonctions = () => import('./mouvement/fonctions-motion.ts').then((m) => m.default)
-
 export function App() {
   const contenu = useContenu()
 
   return (
-    <LazyMotion features={chargerFonctions} strict>
+    <>
       <a className="saut-contenu" href="#contenu">
         {contenu.general.sautContenu}
       </a>
@@ -82,6 +78,6 @@ export function App() {
       </main>
 
       <PiedDePage />
-    </LazyMotion>
+    </>
   )
 }
