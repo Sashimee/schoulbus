@@ -69,7 +69,7 @@ export const de: Contenu = {
     ],
     actionPrincipale: 'App öffnen',
     actionSecondaire: 'Was die Seite nicht kann',
-    legende: 'Echte Aufnahme · 22. September 2026, 07:25 Uhr',
+    legende: 'Echte Aufnahme · 15. September 2026, 07:25 Uhr',
   },
 
   chiffres: {
@@ -88,7 +88,7 @@ export const de: Contenu = {
 
   ecrans: {
     titre: 'Vier Bildschirme, und das ist das ganze Produkt.',
-    note: `Echte Aufnahmen der Anwendung, Dienstag, 22. September 2026 um 07:25 Uhr.`,
+    note: `Echte Aufnahmen der Anwendung, Dienstag, 15. September 2026 um 07:25 Uhr.`,
     cartes: [
       { titre: 'Der Morgenbildschirm', texte: 'Eine Uhrzeit je Kind, und sonst nichts.' },
       { titre: 'Die Woche', texte: 'Fünf Tage, und die Karte des Fußwegs.' },

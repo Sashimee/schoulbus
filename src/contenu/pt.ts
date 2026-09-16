@@ -22,6 +22,15 @@
  * equivalentes. Guarda «vale» para «vale o ciclo indicado na caderneta», que diz outra
  * coisa — qual das duas informações usar, e não qual dos dois documentos manda.
  *
+ * «MAISON RELAIS» EM TODO O LADO, decidido em 16 de setembro de 2026. O mosaico dizia
+ * «casa de acolhimento» enquanto o aviso legal e o contacto diziam «maison relais»: dois
+ * nomes para a mesma instituição a duas páginas de distância. É o nome francês que fica,
+ * porque é o nome pelo qual a instituição se designa no Luxemburgo. Mesma decisão em
+ * `en.ts`.
+ *
+ * «UM DOS PAIS» E NÃO «UM PAI», mesma data: «um pai» diz o progenitor masculino, e a frase
+ * de origem diz apenas que por detrás do sítio está um dos pais de um aluno.
+ *
  * DUAS EXIGÊNCIAS FIRMES, a reler antes de qualquer retoque:
  *
  *  1. Os números do cabeçalho e do fecho são OS DA CAPTURA. O leitor vê o ecrã ao lado da
@@ -85,7 +94,7 @@ export const pt: Contenu = {
     ],
     actionPrincipale: 'Abrir a aplicação',
     actionSecondaire: 'O que o site não sabe fazer',
-    legende: 'Captura real · 22 de setembro de 2026, 07:25',
+    legende: 'Captura real · 15 de setembro de 2026, 07:25',
   },
 
   chiffres: {
@@ -103,7 +112,7 @@ export const pt: Contenu = {
 
   ecrans: {
     titre: 'Quatro ecrãs, e é este o produto todo.',
-    note: `Capturas reais da aplicação, terça-feira, 22 de setembro de 2026, às 07:25.`,
+    note: `Capturas reais da aplicação, terça-feira, 15 de setembro de 2026, às 07:25.`,
     cartes: [
       { titre: 'O ecrã da manhã', texte: 'Uma hora por criança, e mais nada.' },
       { titre: 'A semana', texte: 'Cinco dias, e o mapa do percurso a pé.' },
@@ -165,7 +174,7 @@ export const pt: Contenu = {
       },
       {
         icone: 'horloge',
-        titre: 'A casa de acolhimento',
+        titre: 'A maison relais',
         texte: 'Entregue à segunda, recolhido à quinta.',
       },
     ],
@@ -229,7 +238,7 @@ export const pt: Contenu = {
   independance: {
     titre: 'Este site é independente.',
     texte:
-      `Foi feito por um pai, a título privado, e não tem qualquer ligação à administração ` +
+      `Foi feito por um dos pais, a título privado, e não tem qualquer ligação à administração ` +
       `comunal de Beckerich nem à escola. Responde apenas por si. Em caso de dúvida ou de ` +
       `divergência, prevalece o documento oficial do município.`,
     lien: 'Ver o plano oficial em kanner.beckerich.lu',
@@ -270,7 +279,7 @@ export const pt: Contenu = {
       ],
       projet: [{ texte: 'Créditos e agradecimentos', url: URL_CREDITS }],
     },
-    mention: 'Feito por um pai, em Beckerich.',
+    mention: 'Feito por um dos pais, em Beckerich.',
     source: `Dados: plano oficial do município, ${CHIFFRES.anneesCouvertes.join(' · ')}.`,
     lienMentions: 'Aviso legal',
     lienContact: 'Escrever',
@@ -298,7 +307,7 @@ export const pt: Contenu = {
 
   contact: {
     titre: `Escrever`,
-    intro: `Um formulário e um endereço, para assinalar um horário que não corresponde ou uma apresentação que se desmancha. Por detrás está um pai, não um serviço.`,
+    intro: `Um formulário e um endereço, para assinalar um horário que não corresponde ou uma apresentação que se desmancha. Por detrás está um dos pais, não um serviço.`,
     adresseTitre: `O endereço`,
     adresseIntro: `As mensagens chegam aqui:`,
     adresseNote: `O endereço está escrito em texto simples: o seu programa de correio basta, e continua útil no dia em que o formulário acima deixar de funcionar. Uma resposta pode demorar alguns dias.`,

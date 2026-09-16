@@ -118,7 +118,7 @@ export const LARGEUR_IMAGE = LARGEUR * DENSITE
 export const HAUTEUR_IMAGE = HAUTEUR * DENSITE
 
 /**
- * L'instant simulé pendant la prise : mardi 22 septembre 2026, 07:25, heure du Luxembourg.
+ * L'instant simulé pendant la prise : mardi 15 septembre 2026, 07:25, heure du Luxembourg.
  *
  * Il n'est pas choisi au hasard, et chacune de ses propriétés a été vérifiée dans les
  * données de l'application :
@@ -141,7 +141,8 @@ export const HAUTEUR_IMAGE = HAUTEUR * DENSITE
  * date à venir accolée au mot « réelle » se lit mal : le lecteur voit l'écran à côté de la
  * phrase, et c'est la phrase qu'il croit fausse. La date du 22 septembre a été choisie le
  * 8 septembre, donc onze jours en avance, et personne ne s'en était aperçu — rien dans le
- * dépôt ne mesure cela.
+ * dépôt ne mesure cela. La règle a été appliquée le 16 septembre 2026, au premier jour où
+ * une date passée ET valide existait : le mardi 15.
  *
  * CE QUI REND LA RÈGLE DÉLICATE, et qu'il faut savoir avant de choisir une date : reculer
  * n'est pas toujours possible. Le 14 septembre 2026, AUCUNE date passée ne convenait.
@@ -155,7 +156,7 @@ export const HAUTEUR_IMAGE = HAUTEUR * DENSITE
  * reporter la même date dans `heros.legende` des cinq langues. Les deux bougent ensemble
  * ou pas du tout.
  */
-export const INSTANT_DEMO = '2026-09-22T05:25:00.000Z'
+export const INSTANT_DEMO = '2026-09-15T05:25:00.000Z'
 
 /**
  * Le foyer de démonstration.
