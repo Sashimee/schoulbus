@@ -69,7 +69,7 @@ dans une rue qui n'existe pas. Aucun test ne pouvait le voir, faute d'avoir quoi
 
 Le script photographie le **serveur de développement de l'application**, jamais le site
 publié, et neutralise tout ce qui n'est pas reproductible : horloge figée au mardi
-22 septembre 2026 à 07:25, tuiles de carte servies depuis `scripts/fixtures/tuiles/`,
+15 septembre 2026 à 07:25, tuiles de carte servies depuis `scripts/fixtures/tuiles/`,
 perturbations et traductions servies vides, révision affichée fixée à celle qui est
 photographiée. Le foyer de démonstration est posé par le **lien de partage de
 l'application** — une interface publique et versionnée — et non par une clé de stockage
@@ -418,12 +418,20 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
     indépendamment de l'allemand `stecken in`. Ce n'était pas un calque. Registre concret
     plutôt qu'abstrait : un choix, et non une faute.
 
-  **Ce qui reste ouvert, et ne se referme pas ici.** En portugais, `por um pai` traduit
-  `un parent` par « un père » — le LOD traduit lui-même `Elterendeel` par « um dos pais »,
-  mais l'application dit la même chose trois fois, donc corriger la vitrine seule les ferait
-  diverger : c'est une proposition pour les deux dépôts ou pour aucun. Même situation pour
-  `casa de acolhimento`, qui est en droit portugais un terme de placement d'enfant en
-  danger (Portaria n.º 450/2023) là où le registre d'ici garde `maison relais`.
+  **Ce qui restait ouvert est parti chez l'application le 17 septembre 2026** — ticket
+  `bus-scolaire-beckerich#20` —, et le ticket #11 de ce dépôt est clos avec lui : il n'y
+  avait plus rien d'actionnable ici. Les deux points sont en portugais, et **les deux
+  dépôts divergent en attendant la réponse**, ce qui est le prix assumé de la décision de
+  l'éditeur du 16 septembre. `por um pai` traduit `un parent` par « un père » — le LOD
+  traduit lui-même `Elterendeel` par « um dos pais » —, et la vitrine dit `um dos pais`
+  quand l'application dit encore `um pai`, trois fois. `casa de acolhimento` est en droit
+  portugais un terme de placement d'enfant en danger (Portaria n.º 450/2023) là où le
+  registre d'ici garde `maison relais`, dans les cinq langues, et l'application l'emploie
+  encore. Si l'application refuse, c'est la vitrine qui se réaligne : ce qui ne peut pas
+  durer, c'est deux mots pour une même institution selon la page qu'on lit.
+
+  `Ziichten` → `Zäiten` est `bus-scolaire-beckerich#19`, ouvert le 16 septembre, et ne
+  concerne que l'application : zéro occurrence ici.
 
   Et surtout : **ce que le dictionnaire tranche est ce qui a une règle.** Le LOD dit que
   `stiechen` a le sens locatif ; il ne dit pas qu'un parent de Biekerech écrirait
@@ -525,6 +533,33 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   dans une page qu'on lit une fois. C'est le dernier poste où il reste une marge d'un ordre
   de grandeur, et la refermer demande une décision d'architecture, pas un réglage.
 
+  **Elle a cessé d'être une question le 17 septembre 2026 : elle est MESURÉE** — ticket #58.
+  Un alias `resolve.alias` vers `preact/compat`, dix lignes dans `vite.config.ts` et rien
+  de touché dans les composantes, construit les cinq langues et passe `npm run poids` :
+
+  | | React | preact/compat | budget actuel |
+  | --- | --- | --- | --- |
+  | premier écran | 70,8 ko | **20,7 ko** | 76 ko |
+  | tout le site | 93,3 ko | **43,2 ko** | 100 ko |
+
+  **Cinquante kilo-octets, 71 % du premier écran** — plus que le retrait de `motion` et le
+  découpage des dictionnaires réunis. Ce n'est donc plus l'ampleur du gain qui est en
+  suspens, c'est son prix, et il tient en une ligne : **`preact/compat` n'a pas de
+  `getServerSnapshot`.** Le pré-rendu appelle directement la mesure, lit `window.matchMedia`
+  et casse net — c'est l'invariant central du dépôt, « le premier rendu est toujours
+  `aucun`, des deux côtés ». Un garde le fait construire, mais ne dit rien de l'hydratation,
+  que preact ferait mesurer aussitôt là où React réemploie `getServerSnapshot`. S'y ajoutent
+  vingt-deux tests qui suivent React et non l'alias, et une vérification d'hydratation qui
+  se fait dans un navigateur, pas dans un test — même risque que le retrait de `motion` : un
+  bloc resté sous l'opacité 0 ne se voit dans aucune assertion.
+
+  La sortie préférable est écrite dans le ticket : rendre `useNiveauMouvement` indépendant
+  de `useSyncExternalStore`, un `useState` + `useEffect` démarrant à `aucun` tenant
+  exactement le même contrat. **Ce qui est écarté d'avance, c'est React au pré-rendu et
+  preact au navigateur** : deux moteurs sur le même arbre, c'est-à-dire deux sources de
+  vérité sur le même produit — le défaut que les captures reconstruites ont déjà coûté au
+  projet.
+
 - **Les contrastes sont calculés, pas mesurés à la pipette — réserve ACCEPTÉE.**
   `npm run contraste` calcule ce que le navigateur devrait afficher ; il ne lit pas
   l'écran. La refonte a rendu ce calcul plus fiable — les surfaces sont opaques, il n'y a
@@ -565,27 +600,27 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   déplacer le dépôt frère — **et il ne faut pas le faire**, il peut être sur une branche de
   travail. Un clone jetable et `DEPOT_APP` suffisent (recette dans `CLAUDE.md`).
 
-- **L'instant simulé des captures est encore une date à venir.** `heros.legende` annonce
-  « Capture réelle · 22 septembre 2026, 07:25 » dans les cinq langues, et cette date sera
-  passée le 22 septembre. La décision du 14 septembre 2026 (ticket #24) est l'option (b) :
-  **l'instant doit être passé le jour où les captures sont publiées**, et il le deviendra
-  au prochain regel. La règle est écrite dans `src/contenu/captures.ts`, en sixième
-  propriété de `INSTANT_DEMO` — c'est le fichier qu'on ouvre pour la changer.
-
-  **Ce qui a empêché de l'appliquer le jour même**, et c'est le constat qui valait le
-  détour : aucune date passée ne convenait. L'année scolaire 2026/2027 commence le
-  15 septembre 2026, et l'année 2025/2026 est `partiel: true` dans le `vacances-lu.json` de
-  l'application — hors congé d'été, `calendrier.ts:117` y rend
-  `{ ecole: false, raison: 'annee-inconnue' }`, donc l'écran d'accueil dirait qu'il ne sait
-  pas s'il y a école. Reculer la date aurait produit quarante captures montrant une
-  application qui ne sait rien. **Une date à la fois passée et valide n'existait qu'à
-  partir du 16 septembre 2026**, pour le mardi 15.
-
-  Le regel coûte quarante fichiers dans le conteneur épinglé, plus `heros.legende` dans les
-  cinq langues : **les deux bougent ensemble ou pas du tout**, sans quoi la phrase et
-  l'écran se contredisent sous les yeux du lecteur.
-
 ### Réserves levées
+
+- *« L'instant simulé des captures est encore une date à venir. »* — Levée le
+  16 septembre 2026, constatée dans le dépôt le 17. `INSTANT_DEMO` vaut
+  `2026-09-15T05:25:00.000Z`, `heros.legende` dit « 15 septembre 2026, 07:25 » dans les
+  cinq langues et `scripts/captures.source.json` porte le même instant : la date accolée au
+  mot « réelle » est passée, comme le veut la décision du 14 septembre (ticket #24).
+
+  **Ce qui reste vrai et ne se périme pas**, parce que c'est ce qu'il faudra relire au
+  prochain regel : prendre le MARDI D'ÉCOLE LE PLUS RÉCENT DÉJÀ ÉCOULÉ, et reporter la même
+  date dans `heros.legende` des cinq langues — **les deux bougent ensemble ou pas du
+  tout**, sans quoi la phrase et l'écran se contredisent sous les yeux du lecteur. Le regel
+  coûte en outre quarante fichiers dans le conteneur épinglé. La règle entière est en
+  sixième propriété de `INSTANT_DEMO`, dans `src/contenu/captures.ts` — c'est le fichier
+  qu'on ouvre pour la changer, et il porte aussi pourquoi reculer n'est pas toujours
+  possible : le 14 septembre, aucune date passée ne convenait, l'année 2025/2026 étant
+  `partiel: true` dans le `vacances-lu.json` de l'application.
+
+  Ce que cet épisode a appris, et qui vaut plus que la réserve : **rien dans le dépôt ne
+  mesure qu'une date écrite en dur est encore à venir.** Celle du 22 septembre avait été
+  choisie onze jours en avance, `npm run verifier` était vert, et personne ne l'a vu.
 
 - *« Le formulaire de contact n'a jamais servi en vrai. »* — Levée le 15 septembre 2026,
   **et elle a coûté un message avant de se lever**. La chaîne est aujourd'hui prouvée de
@@ -621,7 +656,11 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
      n'existe** : sonder juste après lit l'ANCIEN déploiement, `done`, et fait croire que
      c'est fini.
 
-  L'ancienne application reste en filet, sans domaine attaché, jusqu'au 20 septembre 2026.
+  L'ancienne application a servi de filet, sans domaine attaché, jusqu'au
+  **17 septembre 2026** : supprimée ce jour-là, trois jours avant l'échéance prévue, les
+  trois conditions tenant (aucun domaine attaché, `www` en 200, `POST /api/contact` en
+  400). Il n'y a plus de filet, et il n'y en a plus besoin — la production a été constatée
+  saine après coup : apex **301**, `www` **200**, `/pt/` **200**, relais **400**.
 
 - *« La vitrine est plus précise que l'application qu'elle décrit. »* — Levée le
   15 septembre 2026, ticket #15, et **par le dépôt frère** : sa page « Limites » nomme

@@ -194,7 +194,7 @@ pas réintroduire de maquette dessinée « pour le thème clair » ou « pour le
 ces trois erreurs.
 
 Le script photographie le **serveur de développement de l'application**, jamais le site
-publié, et fige tout ce qui bouge : horloge au mardi 22 septembre 2026 07:25, tuiles de
+publié, et fige tout ce qui bouge : horloge au mardi 15 septembre 2026 07:25, tuiles de
 carte depuis `scripts/fixtures/tuiles/`, perturbations et traductions servies vides,
 révision affichée fixée. Le foyer de démonstration est posé par le **lien de partage de
 l'application** — interface publique et versionnée — et son adresse est au niveau de la
