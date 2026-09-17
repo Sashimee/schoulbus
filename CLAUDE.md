@@ -97,6 +97,13 @@ poussée seule, sans PR, n'est vue par personne ni par rien.
   faut s'en servir plutôt que de croire une dérive sur parole : le dépôt frère peut être
   sorti sur une branche de travail, et ce sont alors des jetons non publiés que la
   vérification compare. `DEPOT_APP=/tmp/app-main npm run jetons:verifier` tranche.
+
+  **LE CLONE DE CONTRÔLE SE PREND SUR `origin/main`, APRÈS UN `git fetch`.** Un clone du
+  `main` LOCAL du dépôt frère peut avoir des semaines de retard, et il répond alors
+  « jetons conformes » avec assurance. C'est ainsi qu'une dérive réelle a été classée
+  fausse alerte le 16 septembre 2026 : l'application avait repris la charte de la vitrine,
+  la vitrine servait des captures bleu nuit, et la seule commande qui le disait a été
+  écartée. Le signal avait raison.
 - **MAIS LES COULEURS NE VIENNENT PLUS DE LÀ.** La vitrine a sa propre palette — crème,
   sarcelle, corail — déclarée dans la couche `vitrine` de `src/styles/vitrine.css`, qui
   redéfinit les rôles (`--encre`, `--surface`, `--accent`…) APRÈS la couche `tokens`. Tout
@@ -372,6 +379,14 @@ s'y calcule ; l'en-tête HTTP ne porte que `frame-ancestors`.
 Les variables du relais se posent dans Dokploy — `.env.exemple` dit lesquelles, `.env` est
 ignoré par git et doit le rester.
 
+**FUSIONNER DANS `main` NE SUFFISAIT PAS À PUBLIER**, et cela a coûté dix minutes à guetter
+une page qui ne changeait pas : le service avait `autoDeploy: false`, donc les conteneurs
+continuaient de servir la construction précédente pendant que `main` et la CI étaient
+verts. Le drapeau est passé à `true` le 16 septembre 2026, après un `compose.deploy` posé à
+la main. Deux choses à en retenir : **`.claude/scripts/dokploy-sonde.sh` affiche
+`autoDeploy` et la date du dernier déploiement** — c'est là qu'on regarde quand le site ne
+bouge pas —, et une publication n'est constatée que sur le SITE, jamais sur la branche.
+
 **LE ROUTAGE N'EST PAS DANS `compose.yml`.** Les deux domaines sont des entrées de domaine
 Dokploy posées sur le service `vitrine`, port 80 — et `schoulbus.lu` y porte le middleware
 `redirect-to-www-schoulbus@file`, qui est ce qui rend le **301** vers `www`. Le dépôt frère,
@@ -460,9 +475,13 @@ Inscrire l'empreinte relevée dans `imagePlaywright`, régénérer
 dix `semaine-*`, qui portent une carte Leaflet — puis commiter l'empreinte, le lockfile et
 les captures ENSEMBLE. Séparés, la CI rougit sur la révision du milieu.
 
-Le piège proprement dit : **le script franchit trois portes avant de photographier** — le
+Le piège proprement dit : **le script franchit QUATRE portes avant de photographier** — le
 choix de la langue, l'avertissement d'indépendance, la reprise de la configuration reçue
-par lien. Quand l'application en ajoute une, le script attend trente secondes un bouton qui
+par lien, et depuis le 17 septembre 2026 la carte du trajet, que l'application ne charge
+plus que sur demande (`carte.afficher`). La quatrième est déclarée dans le manifeste
+(`demandeCarte`), et son clic est donné DANS LA PAGE, depuis le haut du document : un clic
+de Playwright défile jusqu'à sa cible, Leaflet fixe son origine en pixels à cet instant, et
+la carte sortait alors décalée de quelques pixels une fois sur deux. Quand l'application en ajoute une, le script attend trente secondes un bouton qui
 n'est pas encore à l'écran et échoue sur un clic introuvable, sans dire lequel des trois
 écrans manque. C'est arrivé avec `ChoixLangueInitial`. Le remède est toujours le même :
 regarder ce que l'application affiche vraiment (un `page.screenshot()` suffit) et
