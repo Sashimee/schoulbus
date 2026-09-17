@@ -198,13 +198,22 @@ function libelles(langue) {
   const dico = JSON.parse(readFileSync(chemin, 'utf8'))
   const accepterAvertissement = dico.avertissement?.accepter
   const accepterPartage = dico.partage?.accepter
-  if (!accepterAvertissement || !accepterPartage) {
+  /*
+   * La carte du trajet ne se dessine plus d'elle-même : l'application la charge SUR
+   * DEMANDE depuis septembre 2026, pour que les tuiles d'OpenStreetMap — qui voient les
+   * environs du domicile — ne partent pas sans que le parent l'ait voulu. C'est une porte
+   * de plus, et elle se franchit comme les autres : par le vrai libellé de la vraie
+   * langue.
+   */
+  const afficherCarte = dico.carte?.afficher
+  if (!accepterAvertissement || !accepterPartage || !afficherCarte) {
     throw new Error(
-      `Libellés introuvables dans ${chemin} (avertissement.accepter, partage.accepter). ` +
+      `Libellés introuvables dans ${chemin} (avertissement.accepter, partage.accepter, ` +
+        `carte.afficher). ` +
         `L'application a dû renommer ses clés : corrigez ce script plutôt que de le contourner.`,
     )
   }
-  return { accepterAvertissement, accepterPartage }
+  return { accepterAvertissement, accepterPartage, afficherCarte }
 }
 
 /* ------------------------------------------------------------------ *
@@ -444,7 +453,7 @@ async function prendre(navigateur, langue, theme, base, revision) {
   // enrayerait l'ordonnanceur de React et laisserait la carte à moitié dessinée.
   await page.clock.setFixedTime(new Date(INSTANT_DEMO))
 
-  const { accepterAvertissement, accepterPartage } = libelles(langue)
+  const { accepterAvertissement, accepterPartage, afficherCarte } = libelles(langue)
 
   await page.goto(`${base}/#partage=${CODE_PARTAGE}`, { waitUntil: 'domcontentloaded' })
   await page.locator(`button[lang="${langue}"]`).click()
@@ -487,6 +496,18 @@ async function prendre(navigateur, langue, theme, base, revision) {
   const pris = []
   for (const ecran of ECRANS) {
     await page.goto(`${base}${ecran.chemin}`, { waitUntil: 'domcontentloaded' })
+
+    /*
+     * La carte est DEMANDÉE avant d'être attendue, et c'est l'ordre qui compte : le
+     * sélecteur `pret` de l'écran de la semaine EST `.leaflet-container`, qui n'existe pas
+     * tant que personne n'a cliqué. Le bouton n'est présent que sur l'écran qui porte une
+     * carte ; ailleurs, `count()` vaut zéro et rien ne se passe.
+     */
+    const demanderCarte = page.getByRole('button', { name: afficherCarte })
+    if (await demanderCarte.count()) {
+      await demanderCarte.first().click()
+    }
+
     if (ecran.parEnfant) {
       // Autant d'occurrences que d'enfants : voir `parEnfant` dans le manifeste.
       await page.waitForFunction(
