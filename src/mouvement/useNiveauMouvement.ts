@@ -20,13 +20,13 @@
  *
  * Le niveau est mesuré UNE FOIS pour la page, dans un magasin partagé, et l'arbre servi
  * par le pré-rendu vaut toujours 'aucun' : au pré-rendu, il n'existe ni `matchMedia` ni
- * WebGL, et deviner produirait une hydratation divergente. C'est ce que rend
- * `getServerSnapshot`, que React emploie aussi pendant l'hydratation ; la mesure ne
- * reprend la main qu'ensuite. 'aucun' est l'état où tout est visible et immobile : une
- * page qui s'affiche puis s'anime est correcte ; une page qui reste blanche parce que le
- * JavaScript n'est jamais arrivé ne l'est pas.
+ * WebGL, et deviner produirait une hydratation divergente. Le premier rendu vaut donc
+ * 'aucun' des deux côtés, et la mesure ne reprend la main qu'à l'effet, une fois la page
+ * vivante. 'aucun' est l'état où tout est visible et immobile : une page qui s'affiche
+ * puis s'anime est correcte ; une page qui reste blanche parce que le JavaScript n'est
+ * jamais arrivé ne l'est pas.
  */
-import { useSyncExternalStore } from 'react'
+import { useEffect, useState } from 'react'
 
 export type NiveauMouvement = 'complet' | 'reduit' | 'aucun'
 
@@ -110,25 +110,38 @@ function sabonner(prevenir: () => void): () => void {
   }
 }
 
-/** Le niveau mesuré. React l'appelle à chaque rendu : il doit rendre la même valeur. */
+/** Le niveau mesuré, une fois pour la page. */
 function lire(): NiveauMouvement {
   cache ??= mesurer()
   return cache
 }
 
 /*
- * Au pré-rendu, il n'existe ni `matchMedia` ni WebGL, et deviner produirait une
- * hydratation divergente. React rend donc l'arbre servi avec cette valeur-ci, puis
- * repasse à la mesure une fois la page vivante. `aucun` est aussi l'état où tout est
- * visible et immobile : une page qui s'affiche puis s'anime est correcte ; une page
- * restée blanche parce que le JavaScript n'est jamais arrivé ne l'est pas.
+ * `useState` + `useEffect` PLUTÔT QUE `useSyncExternalStore`, et ce n'est pas un détail de
+ * style : c'est ce crochet-ci qui décidait de la bibliothèque du projet.
+ *
+ * `useSyncExternalStore` disait la même chose en un appel, par son troisième argument
+ * `getServerSnapshot`. Mais ce troisième argument n'existe que chez React : `preact/compat`
+ * n'en a pas, et le pré-rendu appelait alors la mesure, lisait `window.matchMedia` et
+ * cassait net. L'invariant — « le premier rendu vaut 'aucun' des deux côtés » — était donc
+ * porté par une particularité de React, pour un besoin que deux crochets universels
+ * couvrent exactement : démarrer à 'aucun', mesurer après le montage.
+ *
+ * Ce que cela change à l'exécution : rien de visible. React n'employait de toute façon
+ * `getServerSnapshot` que jusqu'à la fin de l'hydratation, et la mesure arrivait au rendu
+ * suivant — ici elle arrive à l'effet, c'est-à-dire au même moment pour l'œil.
  */
-function auPreRendu(): NiveauMouvement {
-  return 'aucun'
-}
-
 export function useNiveauMouvement(): NiveauMouvement {
-  return useSyncExternalStore(sabonner, lire, auPreRendu)
+  const [niveau, setNiveau] = useState<NiveauMouvement>('aucun')
+
+  useEffect(() => {
+    setNiveau(lire())
+    // Le magasin garde la mesure et les trois écouteurs : trente-neuf appels du crochet
+    // font trente-neuf abonnés, pas trente-neuf mesures.
+    return sabonner(() => setNiveau(lire()))
+  }, [])
+
+  return niveau
 }
 
 /** Raccourci lisible : y a-t-il le droit de bouger, tout court ? */

@@ -12,7 +12,7 @@
  *      applique le thème efface alors l'attribut que le script vient de poser, et ramène
  *      le clignotement qu'il évitait.
  */
-import { renderHook, waitFor } from '@testing-library/react'
+import { renderHook, waitFor } from '@testing-library/preact'
 import { afterEach, describe, expect, it } from 'vitest'
 import { useTheme, type Theme } from '../theme.ts'
 

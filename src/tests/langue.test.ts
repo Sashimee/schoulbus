@@ -10,7 +10,7 @@
  * Le bouton Précédent tombait dans le même trou : `pushState` sans `popstate` en face
  * change l'adresse sans changer la page.
  */
-import { act, render, waitFor } from '@testing-library/react'
+import { act, render, waitFor } from '@testing-library/preact'
 import { createElement } from 'react'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { FournisseurI18n } from '../i18n/Fournisseur.tsx'
@@ -41,7 +41,7 @@ function Sonde() {
 
 function monter() {
   return render(
-    createElement(FournisseurI18n, { langueInitiale: 'fr' }, createElement(Sonde)),
+    createElement(FournisseurI18n, { langueInitiale: 'fr' }, createElement(Sonde, null)),
   )
 }
 

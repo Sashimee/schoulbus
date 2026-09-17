@@ -166,7 +166,7 @@ papier crème ne ressemble à rien. Le niveau `complet` a donc beaucoup moins à
 qu'avant, et le premier rendu ne compile plus de shader.
 
 Le premier rendu est **toujours** `aucun` — c'est aussi ce que produit le pré-rendu, et
-les deux doivent concorder pour que React hydrate au lieu de tout refaire.
+les deux doivent concorder pour que l'hydratation reprenne la page au lieu de tout refaire.
 
 Deux règles s'appliquent à toute animation ajoutée ici :
 
@@ -463,8 +463,9 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   c'est un prix que le projet refuse. Elle reste écrite pour que personne ne prenne ces six
   protections pour davantage qu'elles ne sont.
 
-- **Soixante et onze kilo-octets de JavaScript depuis le retrait de `motion`. Reste
-  React.** Premier écran, cache vide : **96,7 ko de JS comprimé** pour une
+- **Vingt kilo-octets de JavaScript depuis le départ de React.** Le poste a été divisé par
+  cinq en dix jours, et l'historique ci-dessous dit dans quel ordre. Au départ, premier
+  écran, cache vide : **96,7 ko de JS comprimé** pour une
   page entièrement pré-rendue dont l'interactivité se réduit à une liste déroulante, deux
   boutons de thème et des révélations au défilement. Deux requêtes seulement bloquent le
   premier rendu (6,4 ko de document, 6,0 ko de style), donc rien ne presse à l'affichage.
@@ -529,36 +530,50 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   quatre nombres de la bande arrivés à leur valeur. C'est le seul risque du changement — un
   bloc qui ne se révélerait jamais est un bloc invisible.
 
-  Ce qui reste ouvert est la question qu'aucun des deux budgets ne pose : ce que React fait
-  dans une page qu'on lit une fois. C'est le dernier poste où il reste une marge d'un ordre
-  de grandeur, et la refermer demande une décision d'architecture, pas un réglage.
+  **CINQUIÈME DÉPLACEMENT, le 17 septembre 2026, et il ferme la réserve : React est parti.**
+  C'était la dernière question qu'aucun budget ne posait — ce que React fait dans une page
+  qu'on lit une fois —, et le dernier poste où il restait une marge d'un ordre de grandeur.
+  Ticket #58.
 
-  **Elle a cessé d'être une question le 17 septembre 2026 : elle est MESURÉE** — ticket #58.
-  Un alias `resolve.alias` vers `preact/compat`, dix lignes dans `vite.config.ts` et rien
-  de touché dans les composantes, construit les cinq langues et passe `npm run poids` :
-
-  | | React | preact/compat | budget actuel |
+  | | avant | après | budget |
   | --- | --- | --- | --- |
-  | premier écran | 70,8 ko | **20,7 ko** | 76 ko |
-  | tout le site | 93,3 ko | **43,2 ko** | 100 ko |
+  | premier écran | 70,8 ko | **20,6 ko** | 76 → **22 ko** |
+  | tout le site | 93,3 ko | **43,1 ko** | 100 → **46 ko** |
 
   **Cinquante kilo-octets, 71 % du premier écran** — plus que le retrait de `motion` et le
-  découpage des dictionnaires réunis. Ce n'est donc plus l'ampleur du gain qui est en
-  suspens, c'est son prix, et il tient en une ligne : **`preact/compat` n'a pas de
-  `getServerSnapshot`.** Le pré-rendu appelle directement la mesure, lit `window.matchMedia`
-  et casse net — c'est l'invariant central du dépôt, « le premier rendu est toujours
-  `aucun`, des deux côtés ». Un garde le fait construire, mais ne dit rien de l'hydratation,
-  que preact ferait mesurer aussitôt là où React réemploie `getServerSnapshot`. S'y ajoutent
-  vingt-deux tests qui suivent React et non l'alias, et une vérification d'hydratation qui
-  se fait dans un navigateur, pas dans un test — même risque que le retrait de `motion` : un
-  bloc resté sous l'opacité 0 ne se voit dans aucune assertion.
+  découpage des dictionnaires réunis. Les composantes n'ont pas bougé : elles importent
+  toujours `react`, et un `resolve.alias` de `vite.config.ts` leur donne `preact/compat`,
+  avec les chemins correspondants dans `tsconfig.app.json` pour que `tsc` voie la même
+  chose.
 
-  La sortie préférable est écrite dans le ticket : rendre `useNiveauMouvement` indépendant
-  de `useSyncExternalStore`, un `useState` + `useEffect` démarrant à `aucun` tenant
-  exactement le même contrat. **Ce qui est écarté d'avance, c'est React au pré-rendu et
-  preact au navigateur** : deux moteurs sur le même arbre, c'est-à-dire deux sources de
-  vérité sur le même produit — le défaut que les captures reconstruites ont déjà coûté au
-  projet.
+  **Ce qui a vraiment coûté, et qui n'est pas le poids : `preact/compat` n'a pas de
+  `getServerSnapshot`.** `useNiveauMouvement` portait l'invariant central du dépôt — « le
+  premier rendu vaut `aucun` des deux côtés » — par le troisième argument de
+  `useSyncExternalStore`, qui n'existe que chez React ; le pré-rendu appelait la mesure,
+  lisait `window.matchMedia` et cassait net. Le crochet est donc passé à `useState` +
+  `useEffect`, deux crochets universels qui tiennent exactement le même contrat : démarrer à
+  `aucun`, mesurer après le montage. **L'invariant n'était pas en cause — c'est la façon de
+  l'écrire qui dépendait d'une bibliothèque.**
+
+  Ce qui est écarté, et le restera : **React au pré-rendu et preact au navigateur.** Deux
+  moteurs sur le même arbre, c'est deux sources de vérité sur le même produit — le défaut
+  que les captures reconstruites ont déjà coûté au projet.
+
+  **VÉRIFIÉ DANS UN NAVIGATEUR, parce qu'aucun test ne pouvait le voir.** jsdom ne calcule
+  pas de style : un bloc resté sous l'opacité 0 y est parfaitement rendu, et c'était le seul
+  défaut que ce changement pouvait introduire. D'où `npm run hydratation`
+  (`scripts/verifier-hydratation.mjs`), qui sert `dist/` et relève dans l'image Playwright
+  épinglée, **pour les cinq langues** : aucune plainte du navigateur, **zéro élément resté
+  sous l'opacité 1** une fois la page parcourue de haut en bas, les quatre nombres de la
+  bande arrivés à leur valeur, le bouton de thème qui répond et la liste des langues qui
+  navigue. La CI le rejoue dans un travail dédié.
+
+  Deux choses ont bougé ailleurs, et elles disent quelque chose du reste : un test du
+  pré-rendu cherchait `value="fr" selected` là où preact écrit `selected value="fr"` —
+  **l'ordre des attributs appartient au moteur de rendu, pas au produit**, et l'assertion a
+  été réécrite pour chercher l'option choisie plutôt qu'une sous-chaîne ; et
+  `Selecteurs.tsx` lit maintenant `evenement.currentTarget.value`, qui est typé, au lieu de
+  `evenement.target.value`, qui ne l'était que chez React.
 
 - **Les contrastes sont calculés, pas mesurés à la pipette — réserve ACCEPTÉE.**
   `npm run contraste` calcule ce que le navigateur devrait afficher ; il ne lit pas
@@ -980,7 +995,7 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
 
 - *« Le segment de thème choisi ne se disait pas choisi. »* — `useTheme` lisait
   `data-theme` **pendant le rendu** : `auto` au pré-rendu, où l'attribut n'existe pas, et
-  `clair` dans le navigateur, où le script en ligne l'a déjà posé. React ne rattrape pas un
+  `clair` dans le navigateur, où le script en ligne l'a déjà posé. L'hydratation ne rattrape pas un
   attribut divergent, et son avertissement est retiré du paquet de production : la page
   s'affichait dans le bon thème avec `aria-pressed="false"` sur les deux segments, sans
   aucune erreur en console. **Le défaut ne frappait que les visiteurs ayant choisi** —

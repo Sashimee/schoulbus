@@ -167,6 +167,7 @@ export function rendre(
             : page === 'contact'
               ? Contact
               : App,
+        null,
       ),
     ),
   )
