@@ -547,6 +547,18 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   décision datée, avec sa procédure dans `CLAUDE.md`. Ce que cela NE fait pas : rendre les
   captures reproductibles partout — la carte Leaflet reste sensible au rendu. La réserve se
   reformule donc, elle ne se referme pas.
+  **Ce qui a été appris le 17 septembre 2026, et qui change la nature de la réserve :**
+  l'irreproductibilité des `semaine-*` n'était pas celle du rendu de la carte. Quand
+  l'application est passée à une carte chargée SUR DEMANDE, cinq fichiers sur dix se sont
+  mis à changer d'une exécution à l'autre **dans la même image épinglée** — donc sans que
+  l'appareil varie. La cause : un clic de Playwright défile jusqu'à sa cible, et Leaflet
+  fixe son origine en pixels à l'instant où il s'initialise. Le clic est désormais donné
+  dans la page, depuis le haut du document ; trois exécutions locales et l'intégration
+  continue rendent les quarante mêmes fichiers. Une capture doit maintenant en outre être
+  **stable en image** — deux prises identiques — et non plus seulement posée sur un DOM qui
+  s'est tu : Leaflet replace ses tuiles par `transform`, ce qu'aucun `MutationObserver` ne
+  voit.
+
   *Note pratique, reprise le 9 septembre :* le script photographie l'application telle
   qu'elle est dans `DEPOT_APP` et INSCRIT la révision trouvée ; c'est l'intégration continue
   qui, ensuite, extrait cette révision pour comparer. Régénérer ne demande donc pas de
