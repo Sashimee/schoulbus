@@ -82,6 +82,20 @@ export type Ecran = {
    * à l'identique par quelqu'un d'autre.
    */
   cadrer?: string
+
+  /**
+   * L'écran porte-t-il une carte à DEMANDER avant de pouvoir être photographié ?
+   *
+   * L'application ne dessine plus le trajet à pied d'elle-même : les tuiles
+   * d'OpenStreetMap voient les environs du domicile, et elle ne les appelle donc que si
+   * le parent le demande. Le script clique le vrai bouton, dans la vraie langue.
+   *
+   * Déclaré ici plutôt que deviné à l'exécution : la première version cherchait le bouton
+   * et passait son chemin s'il n'y était pas encore. Sur un runner lent, il n'y était
+   * parfois pas — et l'écran de la semaine échouait alors sur une carte qu'on n'avait
+   * jamais demandée, en annonçant l'absence de la carte plutôt que celle du bouton.
+   */
+  demandeCarte?: boolean
 }
 
 /*
@@ -92,7 +106,7 @@ export type Ecran = {
 export const ECRANS: Ecran[] = [
   // Le lien « Voir la semaine » d'une carte d'enfant : pas de carte, pas de lien.
   { nom: 'aujourdhui', chemin: '/', pret: 'a[href*="/enfant/"]', parEnfant: true },
-  { nom: 'semaine', chemin: '/enfant/partage-0', pret: '.leaflet-container' },
+  { nom: 'semaine', chemin: '/enfant/partage-0', pret: '.leaflet-container', demandeCarte: true },
   // Le haut de `/plan` porte les avertissements ; ce qu'on veut montrer, ce sont les
   // horaires recopiés. On cadre donc sur le premier tableau.
   { nom: 'plan', chemin: '/plan', pret: 'table', cadrer: 'table' },

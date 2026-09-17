@@ -528,12 +528,42 @@ async function prendre(navigateur, langue, theme, base, revision) {
     /*
      * La carte est DEMANDÉE avant d'être attendue, et c'est l'ordre qui compte : le
      * sélecteur `pret` de l'écran de la semaine EST `.leaflet-container`, qui n'existe pas
-     * tant que personne n'a cliqué. Le bouton n'est présent que sur l'écran qui porte une
-     * carte ; ailleurs, `count()` vaut zéro et rien ne se passe.
+     * tant que personne n'a cliqué.
+     *
+     * On ATTEND le bouton au lieu de constater sa présence. Le constat passait son chemin
+     * quand le bouton n'était pas encore monté — ce qui n'arrivait jamais ici et arrivait
+     * sur le runner : l'écran échouait alors sur l'absence de la carte, en taisant que la
+     * cause était l'absence du bouton.
      */
-    const demanderCarte = page.getByRole('button', { name: afficherCarte })
-    if (await demanderCarte.count()) {
-      await demanderCarte.first().click()
+    if (ecran.demandeCarte) {
+      const demanderCarte = page.getByRole('button', { name: afficherCarte }).first()
+      await demanderCarte.waitFor({ state: 'visible', timeout: 15000 })
+      /*
+       * ON OUVRE LA CARTE SUR UNE PAGE QUI NE BOUGE PLUS, et c'est cela qui la rend
+       * reproductible. Leaflet cadre le trajet d'après la TAILLE de son conteneur au
+       * moment où il s'initialise ; l'encart « position approximative » se pose au-dessus
+       * de lui un instant plus tard. Selon l'ordre des deux, la carte sortait décalée de
+       * quelques pixels — deux états stables, tirés au sort à chaque exécution, et cinq
+       * `semaine-*` sur dix qui changeaient sans que rien n'ait changé.
+       */
+      await attendreDomStable(page)
+      /*
+       * LE CLIC EST DONNÉ SANS DÉFILER, et c'est ce qui rend la carte reproductible.
+       *
+       * Un clic de Playwright amène d'abord sa cible à l'écran. Leaflet, lui, calcule son
+       * origine en pixels à l'instant où il s'initialise — donc à la position où ce
+       * défilement l'a laissé, laquelle variait de quelques pixels d'une exécution à
+       * l'autre. Résultat : deux états stables, tirés au sort, et jusqu'à cinq
+       * `semaine-*` sur dix qui changeaient sans que rien n'ait changé. La géométrie de la
+       * page, elle, était identique — mesurée : même hauteur de document, même position de
+       * la carte au pixel près.
+       *
+       * On appelle donc `click()` dans la page, depuis le haut du document. C'est le vrai
+       * bouton de la vraie langue, et il reçoit un vrai clic ; seul le voyage jusqu'à lui
+       * disparaît.
+       */
+      await page.evaluate(() => window.scrollTo(0, 0))
+      await demanderCarte.evaluate((bouton) => bouton.click())
     }
 
     if (ecran.parEnfant) {
