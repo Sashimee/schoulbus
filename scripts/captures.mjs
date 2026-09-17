@@ -198,13 +198,22 @@ function libelles(langue) {
   const dico = JSON.parse(readFileSync(chemin, 'utf8'))
   const accepterAvertissement = dico.avertissement?.accepter
   const accepterPartage = dico.partage?.accepter
-  if (!accepterAvertissement || !accepterPartage) {
+  /*
+   * La carte du trajet ne se dessine plus d'elle-même : l'application la charge SUR
+   * DEMANDE depuis septembre 2026, pour que les tuiles d'OpenStreetMap — qui voient les
+   * environs du domicile — ne partent pas sans que le parent l'ait voulu. C'est une porte
+   * de plus, et elle se franchit comme les autres : par le vrai libellé de la vraie
+   * langue.
+   */
+  const afficherCarte = dico.carte?.afficher
+  if (!accepterAvertissement || !accepterPartage || !afficherCarte) {
     throw new Error(
-      `Libellés introuvables dans ${chemin} (avertissement.accepter, partage.accepter). ` +
+      `Libellés introuvables dans ${chemin} (avertissement.accepter, partage.accepter, ` +
+        `carte.afficher). ` +
         `L'application a dû renommer ses clés : corrigez ce script plutôt que de le contourner.`,
     )
   }
-  return { accepterAvertissement, accepterPartage }
+  return { accepterAvertissement, accepterPartage, afficherCarte }
 }
 
 /* ------------------------------------------------------------------ *
@@ -370,6 +379,34 @@ async function brancherFichiersVivants(contexte, revision) {
  * plus, et celle qui mute encore n'est pas prête à être photographiée, quel qu'en soit le
  * motif. Le silence exigé vaut pour tous les écrans, présents et à venir.
  */
+/*
+ * Photographier tant que deux prises de suite ne sont pas IDENTIQUES.
+ *
+ * Le document peut s'être tu — plus une mutation — pendant que la carte, elle, finit de
+ * se poser : Leaflet replace ses tuiles et ses épingles par `transform`, ce qu'aucun
+ * `MutationObserver` ne voit. Depuis que la carte se charge SUR DEMANDE, quatre des dix
+ * `semaine-*` sortaient différentes d'une exécution à l'autre DANS LA MÊME IMAGE
+ * épinglée : ce n'était donc pas l'appareil qui variait, c'était l'instant.
+ *
+ * Le remède se prend là où est le besoin : ce qu'on veut stable n'est pas le DOM, c'est
+ * l'image. Deux prises identiques valent preuve ; la troisième itération est une limite,
+ * pas une attente.
+ */
+async function imageStable(page, essais = 6, reposMs = 250) {
+  let precedente = await page.screenshot({ type: 'png' })
+  for (let essai = 1; essai < essais; essai += 1) {
+    await page.waitForTimeout(reposMs)
+    const courante = await page.screenshot({ type: 'png' })
+    if (courante.equals(precedente)) return courante
+    precedente = courante
+  }
+  throw new Error(
+    `L'image n'est pas stabilisée après ${essais} prises : quelque chose bouge encore ` +
+      `sans muter le DOM (une carte, une animation). Regardez l'écran plutôt que de ` +
+      `relever la limite.`,
+  )
+}
+
 async function attendreDomStable(page, silenceMs = 400, limiteMs = 15000) {
   await page.evaluate(
     ([silence, limite]) =>
@@ -444,7 +481,7 @@ async function prendre(navigateur, langue, theme, base, revision) {
   // enrayerait l'ordonnanceur de React et laisserait la carte à moitié dessinée.
   await page.clock.setFixedTime(new Date(INSTANT_DEMO))
 
-  const { accepterAvertissement, accepterPartage } = libelles(langue)
+  const { accepterAvertissement, accepterPartage, afficherCarte } = libelles(langue)
 
   await page.goto(`${base}/#partage=${CODE_PARTAGE}`, { waitUntil: 'domcontentloaded' })
   await page.locator(`button[lang="${langue}"]`).click()
@@ -487,6 +524,48 @@ async function prendre(navigateur, langue, theme, base, revision) {
   const pris = []
   for (const ecran of ECRANS) {
     await page.goto(`${base}${ecran.chemin}`, { waitUntil: 'domcontentloaded' })
+
+    /*
+     * La carte est DEMANDÉE avant d'être attendue, et c'est l'ordre qui compte : le
+     * sélecteur `pret` de l'écran de la semaine EST `.leaflet-container`, qui n'existe pas
+     * tant que personne n'a cliqué.
+     *
+     * On ATTEND le bouton au lieu de constater sa présence. Le constat passait son chemin
+     * quand le bouton n'était pas encore monté — ce qui n'arrivait jamais ici et arrivait
+     * sur le runner : l'écran échouait alors sur l'absence de la carte, en taisant que la
+     * cause était l'absence du bouton.
+     */
+    if (ecran.demandeCarte) {
+      const demanderCarte = page.getByRole('button', { name: afficherCarte }).first()
+      await demanderCarte.waitFor({ state: 'visible', timeout: 15000 })
+      /*
+       * ON OUVRE LA CARTE SUR UNE PAGE QUI NE BOUGE PLUS, et c'est cela qui la rend
+       * reproductible. Leaflet cadre le trajet d'après la TAILLE de son conteneur au
+       * moment où il s'initialise ; l'encart « position approximative » se pose au-dessus
+       * de lui un instant plus tard. Selon l'ordre des deux, la carte sortait décalée de
+       * quelques pixels — deux états stables, tirés au sort à chaque exécution, et cinq
+       * `semaine-*` sur dix qui changeaient sans que rien n'ait changé.
+       */
+      await attendreDomStable(page)
+      /*
+       * LE CLIC EST DONNÉ SANS DÉFILER, et c'est ce qui rend la carte reproductible.
+       *
+       * Un clic de Playwright amène d'abord sa cible à l'écran. Leaflet, lui, calcule son
+       * origine en pixels à l'instant où il s'initialise — donc à la position où ce
+       * défilement l'a laissé, laquelle variait de quelques pixels d'une exécution à
+       * l'autre. Résultat : deux états stables, tirés au sort, et jusqu'à cinq
+       * `semaine-*` sur dix qui changeaient sans que rien n'ait changé. La géométrie de la
+       * page, elle, était identique — mesurée : même hauteur de document, même position de
+       * la carte au pixel près.
+       *
+       * On appelle donc `click()` dans la page, depuis le haut du document. C'est le vrai
+       * bouton de la vraie langue, et il reçoit un vrai clic ; seul le voyage jusqu'à lui
+       * disparaît.
+       */
+      await page.evaluate(() => window.scrollTo(0, 0))
+      await demanderCarte.evaluate((bouton) => bouton.click())
+    }
+
     if (ecran.parEnfant) {
       // Autant d'occurrences que d'enfants : voir `parEnfant` dans le manifeste.
       await page.waitForFunction(
@@ -635,7 +714,7 @@ async function prendre(navigateur, langue, theme, base, revision) {
       }
     }
 
-    const png = await page.screenshot({ type: 'png' })
+    const png = await imageStable(page)
     const webp = await versWebp(page, png)
     const nom = fichierCapture(ecran.nom, langue, theme).replace(/^captures\//, '')
     writeFileSync(resolve(TRAVAIL, nom), webp)
