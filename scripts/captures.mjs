@@ -379,6 +379,34 @@ async function brancherFichiersVivants(contexte, revision) {
  * plus, et celle qui mute encore n'est pas prête à être photographiée, quel qu'en soit le
  * motif. Le silence exigé vaut pour tous les écrans, présents et à venir.
  */
+/*
+ * Photographier tant que deux prises de suite ne sont pas IDENTIQUES.
+ *
+ * Le document peut s'être tu — plus une mutation — pendant que la carte, elle, finit de
+ * se poser : Leaflet replace ses tuiles et ses épingles par `transform`, ce qu'aucun
+ * `MutationObserver` ne voit. Depuis que la carte se charge SUR DEMANDE, quatre des dix
+ * `semaine-*` sortaient différentes d'une exécution à l'autre DANS LA MÊME IMAGE
+ * épinglée : ce n'était donc pas l'appareil qui variait, c'était l'instant.
+ *
+ * Le remède se prend là où est le besoin : ce qu'on veut stable n'est pas le DOM, c'est
+ * l'image. Deux prises identiques valent preuve ; la troisième itération est une limite,
+ * pas une attente.
+ */
+async function imageStable(page, essais = 6, reposMs = 250) {
+  let precedente = await page.screenshot({ type: 'png' })
+  for (let essai = 1; essai < essais; essai += 1) {
+    await page.waitForTimeout(reposMs)
+    const courante = await page.screenshot({ type: 'png' })
+    if (courante.equals(precedente)) return courante
+    precedente = courante
+  }
+  throw new Error(
+    `L'image n'est pas stabilisée après ${essais} prises : quelque chose bouge encore ` +
+      `sans muter le DOM (une carte, une animation). Regardez l'écran plutôt que de ` +
+      `relever la limite.`,
+  )
+}
+
 async function attendreDomStable(page, silenceMs = 400, limiteMs = 15000) {
   await page.evaluate(
     ([silence, limite]) =>
@@ -656,7 +684,7 @@ async function prendre(navigateur, langue, theme, base, revision) {
       }
     }
 
-    const png = await page.screenshot({ type: 'png' })
+    const png = await imageStable(page)
     const webp = await versWebp(page, png)
     const nom = fichierCapture(ecran.nom, langue, theme).replace(/^captures\//, '')
     writeFileSync(resolve(TRAVAIL, nom), webp)
