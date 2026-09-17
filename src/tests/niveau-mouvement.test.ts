@@ -4,7 +4,7 @@
  * ou un nuage WebGL et un curseur qui traîne. Une régression y est invisible à la
  * relecture et grave à l'usage — d'où ces tests.
  */
-import { render, renderHook, waitFor } from '@testing-library/react'
+import { render, renderHook, waitFor } from '@testing-library/preact'
 import { createElement } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -126,7 +126,7 @@ describe('useNiveauMouvement', () => {
       return createElement('span', null, useNiveauMouvement())
     }
 
-    expect(renderToStaticMarkup(createElement(Sonde))).toBe('<span>aucun</span>')
+    expect(renderToStaticMarkup(createElement(Sonde, null))).toBe('<span>aucun</span>')
   })
 
   it('ne mesure qu’une fois pour toute la page', async () => {
@@ -173,7 +173,7 @@ describe('Le rideau', () => {
     const { chargerContenu } = await import('../i18n/registre.ts')
     await chargerContenu('fr')
     return render(
-      createElement(FournisseurI18n, { langueInitiale: 'fr' }, createElement(Rideau)),
+      createElement(FournisseurI18n, { langueInitiale: 'fr' }, createElement(Rideau, null)),
     )
   }
 

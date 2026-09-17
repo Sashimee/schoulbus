@@ -1,7 +1,7 @@
 // `vitest/config` plutôt que `vite` : c'est lui qui connaît la clé `test` ci-dessous.
 import { createHash } from 'node:crypto'
 import { defineConfig } from 'vitest/config'
-import react from '@vitejs/plugin-react'
+import preact from '@preact/preset-vite'
 
 // La vitrine est destinée à la racine d'un domaine propre (schoulbus.lu). Le préfixe
 // reste néanmoins une variable : tant que le domaine n'est pas posé, la page peut être
@@ -61,7 +61,7 @@ function politiqueSecurite(empreintes: string[] = []): string {
  * Insère la politique dans `index.html`.
  *
  * **Construction uniquement**, pour la même raison que dans l'application : en
- * développement, `@vitejs/plugin-react` injecte un préambule en ligne que
+ * développement, `@preact/preset-vite` injecte un préambule en ligne que
  * `script-src 'self'` bloque, et la page ne démarre plus.
  */
 function pluginCsp() {
@@ -123,7 +123,28 @@ export default defineConfig({
   define: {
     __ORIGINE__: JSON.stringify(origine),
   },
-  plugins: [react(), pluginCsp()],
+  /*
+   * `preact/compat` SOUS LE NOM DE REACT, et les composantes ne le savent pas.
+   *
+   * Le projet a écrit React pendant toute sa vie ; ce qu'il en emploie tient en six
+   * crochets et un rendu de chaîne. L'alias remplace le moteur sans toucher une seule
+   * importation, et fait tomber le premier écran de 70,8 à 20,7 ko — la dernière réserve
+   * de poids du dépôt (ticket #58).
+   *
+   * Les deux entrées les plus spécifiques passent AVANT `react` et `react-dom`, que Vite
+   * ferait autrement correspondre en premier : `react-dom/server` doit aller chez
+   * `preact-render-to-string`, que `preact/compat` ne fournit pas.
+   */
+  resolve: {
+    alias: {
+      'react-dom/server': 'preact-render-to-string',
+      'react-dom/client': 'preact/compat/client',
+      'react/jsx-runtime': 'preact/jsx-runtime',
+      react: 'preact/compat',
+      'react-dom': 'preact/compat',
+    },
+  },
+  plugins: [preact(), pluginCsp()],
   build: {
     /*
      * Le manifeste, pour le pré-rendu et pour lui seul.

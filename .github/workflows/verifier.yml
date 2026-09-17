@@ -160,6 +160,28 @@ jobs:
           fi
 
   # ------------------------------------------------------------------ #
+  # L'hydratation tient-elle dans un vrai navigateur ?
+  # ------------------------------------------------------------------ #
+  #
+  # `npm run verifier` ne peut pas répondre à cette question : jsdom ne calcule pas de
+  # style, donc un bloc resté sous l'opacité 0 y est parfaitement rendu. C'est pourtant le
+  # seul défaut que le passage à `preact/compat` pouvait introduire (ticket #58) — du
+  # contenu invisible sur une page que tous les tests déclarent bonne.
+  #
+  # Le conteneur épinglé sert ici pour sa seule moitié utile, Chromium : le rendu au pixel
+  # près n'entre pas en jeu, on ne compare aucune image. Mais reprendre l'image des
+  # captures évite une seconde version de navigateur dans le dépôt.
+  hydratation:
+    runs-on: ubuntu-latest
+    needs: empreinte
+    container: ${{ needs.empreinte.outputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run build
+      - run: npm run hydratation
+
+  # ------------------------------------------------------------------ #
   # Les chiffres correspondent-ils encore aux données de l'application ?
   # ------------------------------------------------------------------ #
   #

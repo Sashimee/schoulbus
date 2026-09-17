@@ -137,6 +137,7 @@ npm run test:watch                         # en continu
 
 npm run contraste           # chaque couple encre/fond sur la composition réelle
 npm run poids               # ce que le premier écran pèse, contre son budget (demande dist/)
+npm run hydratation         # les cinq langues dans un vrai navigateur (demande dist/)
 npm run jetons:verifier     # les jetons ont-ils divergé de l'application ?
 npm run chiffres            # régénérer src/contenu/chiffres.ts depuis les données de l'app
 npm run assets:partage      # vignettes de partage + icônes matricielles
@@ -194,7 +195,7 @@ pas réintroduire de maquette dessinée « pour le thème clair » ou « pour le
 ces trois erreurs.
 
 Le script photographie le **serveur de développement de l'application**, jamais le site
-publié, et fige tout ce qui bouge : horloge au mardi 22 septembre 2026 07:25, tuiles de
+publié, et fige tout ce qui bouge : horloge au mardi 15 septembre 2026 07:25, tuiles de
 carte depuis `scripts/fixtures/tuiles/`, perturbations et traductions servies vides,
 révision affichée fixée. Le foyer de démonstration est posé par le **lien de partage de
 l'application** — interface publique et versionnée — et son adresse est au niveau de la
@@ -227,6 +228,36 @@ dist/lb/index.html   luxembourgeois
 Contrainte qui gouverne `entree-serveur.ts` : **ce qui est rendu là doit être exactement ce
 que le navigateur rendra à l'hydratation.** D'où le niveau de mouvement qui démarre à
 `aucun` des deux côtés, et aucune lecture de `window` pendant le rendu.
+
+Et cette contrainte se vérifie DANS UN NAVIGATEUR, pas dans un test : `npm run hydratation`
+sert `dist/` et relève, pour les cinq langues, qu'aucun élément ne reste sous l'opacité 1,
+que les quatre nombres de la bande arrivent à leur valeur et que les deux interactions
+répondent. **jsdom ne calcule pas de style** — un bloc invisible y est parfaitement rendu,
+et c'est exactement le défaut qu'aucune assertion ne verrait. La CI le rejoue dans l'image
+Playwright épinglée.
+
+### Ce n'est pas React, c'est `preact/compat`
+
+Les composantes importent `react` et obtiennent **`preact/compat`**, par un `resolve.alias`
+de `vite.config.ts` doublé des `paths` de `tsconfig.app.json` — sans quoi `tsc` chercherait
+des types qui ne sont plus installés. Le 17 septembre 2026, ticket #58 : premier écran de
+70,8 à **20,6 ko**.
+
+Deux choses à savoir avant d'écrire un crochet ici :
+
+1. **N'employer que ce que les deux moteurs ont.** `useSyncExternalStore` existe chez
+   preact, mais **sans son troisième argument `getServerSnapshot`** — c'est ce qui a fait
+   tomber le pré-rendu, et c'est pour cela que `useNiveauMouvement` s'écrit désormais en
+   `useState` + `useEffect`. Un crochet qui démarre à une valeur neutre puis mesure à
+   l'effet tient le même contrat et ne dépend d'aucune bibliothèque.
+2. **L'ordre des attributs rendus appartient au moteur**, pas au produit : preact écrit
+   `selected value="fr"` là où React écrivait `value="fr" selected`. Une assertion de test
+   qui cherche une sous-chaîne d'attributs teste le moteur ; chercher l'élément, puis son
+   attribut.
+
+Ce qui est écarté, et le restera : **deux moteurs sur le même arbre**, React au pré-rendu et
+preact au navigateur. C'est deux sources de vérité sur le même produit, le défaut même que
+les captures reconstruites ont coûté au projet.
 
 ### Une seule langue descend
 

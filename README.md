@@ -69,7 +69,7 @@ dans une rue qui n'existe pas. Aucun test ne pouvait le voir, faute d'avoir quoi
 
 Le script photographie le **serveur de développement de l'application**, jamais le site
 publié, et neutralise tout ce qui n'est pas reproductible : horloge figée au mardi
-22 septembre 2026 à 07:25, tuiles de carte servies depuis `scripts/fixtures/tuiles/`,
+15 septembre 2026 à 07:25, tuiles de carte servies depuis `scripts/fixtures/tuiles/`,
 perturbations et traductions servies vides, révision affichée fixée à celle qui est
 photographiée. Le foyer de démonstration est posé par le **lien de partage de
 l'application** — une interface publique et versionnée — et non par une clé de stockage
@@ -166,7 +166,7 @@ papier crème ne ressemble à rien. Le niveau `complet` a donc beaucoup moins à
 qu'avant, et le premier rendu ne compile plus de shader.
 
 Le premier rendu est **toujours** `aucun` — c'est aussi ce que produit le pré-rendu, et
-les deux doivent concorder pour que React hydrate au lieu de tout refaire.
+les deux doivent concorder pour que l'hydratation reprenne la page au lieu de tout refaire.
 
 Deux règles s'appliquent à toute animation ajoutée ici :
 
@@ -418,12 +418,20 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
     indépendamment de l'allemand `stecken in`. Ce n'était pas un calque. Registre concret
     plutôt qu'abstrait : un choix, et non une faute.
 
-  **Ce qui reste ouvert, et ne se referme pas ici.** En portugais, `por um pai` traduit
-  `un parent` par « un père » — le LOD traduit lui-même `Elterendeel` par « um dos pais »,
-  mais l'application dit la même chose trois fois, donc corriger la vitrine seule les ferait
-  diverger : c'est une proposition pour les deux dépôts ou pour aucun. Même situation pour
-  `casa de acolhimento`, qui est en droit portugais un terme de placement d'enfant en
-  danger (Portaria n.º 450/2023) là où le registre d'ici garde `maison relais`.
+  **Ce qui restait ouvert est parti chez l'application le 17 septembre 2026** — ticket
+  `bus-scolaire-beckerich#20` —, et le ticket #11 de ce dépôt est clos avec lui : il n'y
+  avait plus rien d'actionnable ici. Les deux points sont en portugais, et **les deux
+  dépôts divergent en attendant la réponse**, ce qui est le prix assumé de la décision de
+  l'éditeur du 16 septembre. `por um pai` traduit `un parent` par « un père » — le LOD
+  traduit lui-même `Elterendeel` par « um dos pais » —, et la vitrine dit `um dos pais`
+  quand l'application dit encore `um pai`, trois fois. `casa de acolhimento` est en droit
+  portugais un terme de placement d'enfant en danger (Portaria n.º 450/2023) là où le
+  registre d'ici garde `maison relais`, dans les cinq langues, et l'application l'emploie
+  encore. Si l'application refuse, c'est la vitrine qui se réaligne : ce qui ne peut pas
+  durer, c'est deux mots pour une même institution selon la page qu'on lit.
+
+  `Ziichten` → `Zäiten` est `bus-scolaire-beckerich#19`, ouvert le 16 septembre, et ne
+  concerne que l'application : zéro occurrence ici.
 
   Et surtout : **ce que le dictionnaire tranche est ce qui a une règle.** Le LOD dit que
   `stiechen` a le sens locatif ; il ne dit pas qu'un parent de Biekerech écrirait
@@ -455,8 +463,9 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   c'est un prix que le projet refuse. Elle reste écrite pour que personne ne prenne ces six
   protections pour davantage qu'elles ne sont.
 
-- **Soixante et onze kilo-octets de JavaScript depuis le retrait de `motion`. Reste
-  React.** Premier écran, cache vide : **96,7 ko de JS comprimé** pour une
+- **Vingt kilo-octets de JavaScript depuis le départ de React.** Le poste a été divisé par
+  cinq en dix jours, et l'historique ci-dessous dit dans quel ordre. Au départ, premier
+  écran, cache vide : **96,7 ko de JS comprimé** pour une
   page entièrement pré-rendue dont l'interactivité se réduit à une liste déroulante, deux
   boutons de thème et des révélations au défilement. Deux requêtes seulement bloquent le
   premier rendu (6,4 ko de document, 6,0 ko de style), donc rien ne presse à l'affichage.
@@ -521,9 +530,50 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   quatre nombres de la bande arrivés à leur valeur. C'est le seul risque du changement — un
   bloc qui ne se révélerait jamais est un bloc invisible.
 
-  Ce qui reste ouvert est la question qu'aucun des deux budgets ne pose : ce que React fait
-  dans une page qu'on lit une fois. C'est le dernier poste où il reste une marge d'un ordre
-  de grandeur, et la refermer demande une décision d'architecture, pas un réglage.
+  **CINQUIÈME DÉPLACEMENT, le 17 septembre 2026, et il ferme la réserve : React est parti.**
+  C'était la dernière question qu'aucun budget ne posait — ce que React fait dans une page
+  qu'on lit une fois —, et le dernier poste où il restait une marge d'un ordre de grandeur.
+  Ticket #58.
+
+  | | avant | après | budget |
+  | --- | --- | --- | --- |
+  | premier écran | 70,8 ko | **20,6 ko** | 76 → **22 ko** |
+  | tout le site | 93,3 ko | **43,1 ko** | 100 → **46 ko** |
+
+  **Cinquante kilo-octets, 71 % du premier écran** — plus que le retrait de `motion` et le
+  découpage des dictionnaires réunis. Les composantes n'ont pas bougé : elles importent
+  toujours `react`, et un `resolve.alias` de `vite.config.ts` leur donne `preact/compat`,
+  avec les chemins correspondants dans `tsconfig.app.json` pour que `tsc` voie la même
+  chose.
+
+  **Ce qui a vraiment coûté, et qui n'est pas le poids : `preact/compat` n'a pas de
+  `getServerSnapshot`.** `useNiveauMouvement` portait l'invariant central du dépôt — « le
+  premier rendu vaut `aucun` des deux côtés » — par le troisième argument de
+  `useSyncExternalStore`, qui n'existe que chez React ; le pré-rendu appelait la mesure,
+  lisait `window.matchMedia` et cassait net. Le crochet est donc passé à `useState` +
+  `useEffect`, deux crochets universels qui tiennent exactement le même contrat : démarrer à
+  `aucun`, mesurer après le montage. **L'invariant n'était pas en cause — c'est la façon de
+  l'écrire qui dépendait d'une bibliothèque.**
+
+  Ce qui est écarté, et le restera : **React au pré-rendu et preact au navigateur.** Deux
+  moteurs sur le même arbre, c'est deux sources de vérité sur le même produit — le défaut
+  que les captures reconstruites ont déjà coûté au projet.
+
+  **VÉRIFIÉ DANS UN NAVIGATEUR, parce qu'aucun test ne pouvait le voir.** jsdom ne calcule
+  pas de style : un bloc resté sous l'opacité 0 y est parfaitement rendu, et c'était le seul
+  défaut que ce changement pouvait introduire. D'où `npm run hydratation`
+  (`scripts/verifier-hydratation.mjs`), qui sert `dist/` et relève dans l'image Playwright
+  épinglée, **pour les cinq langues** : aucune plainte du navigateur, **zéro élément resté
+  sous l'opacité 1** une fois la page parcourue de haut en bas, les quatre nombres de la
+  bande arrivés à leur valeur, le bouton de thème qui répond et la liste des langues qui
+  navigue. La CI le rejoue dans un travail dédié.
+
+  Deux choses ont bougé ailleurs, et elles disent quelque chose du reste : un test du
+  pré-rendu cherchait `value="fr" selected` là où preact écrit `selected value="fr"` —
+  **l'ordre des attributs appartient au moteur de rendu, pas au produit**, et l'assertion a
+  été réécrite pour chercher l'option choisie plutôt qu'une sous-chaîne ; et
+  `Selecteurs.tsx` lit maintenant `evenement.currentTarget.value`, qui est typé, au lieu de
+  `evenement.target.value`, qui ne l'était que chez React.
 
 - **Les contrastes sont calculés, pas mesurés à la pipette — réserve ACCEPTÉE.**
   `npm run contraste` calcule ce que le navigateur devrait afficher ; il ne lit pas
@@ -565,27 +615,27 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
   déplacer le dépôt frère — **et il ne faut pas le faire**, il peut être sur une branche de
   travail. Un clone jetable et `DEPOT_APP` suffisent (recette dans `CLAUDE.md`).
 
-- **L'instant simulé des captures est encore une date à venir.** `heros.legende` annonce
-  « Capture réelle · 22 septembre 2026, 07:25 » dans les cinq langues, et cette date sera
-  passée le 22 septembre. La décision du 14 septembre 2026 (ticket #24) est l'option (b) :
-  **l'instant doit être passé le jour où les captures sont publiées**, et il le deviendra
-  au prochain regel. La règle est écrite dans `src/contenu/captures.ts`, en sixième
-  propriété de `INSTANT_DEMO` — c'est le fichier qu'on ouvre pour la changer.
-
-  **Ce qui a empêché de l'appliquer le jour même**, et c'est le constat qui valait le
-  détour : aucune date passée ne convenait. L'année scolaire 2026/2027 commence le
-  15 septembre 2026, et l'année 2025/2026 est `partiel: true` dans le `vacances-lu.json` de
-  l'application — hors congé d'été, `calendrier.ts:117` y rend
-  `{ ecole: false, raison: 'annee-inconnue' }`, donc l'écran d'accueil dirait qu'il ne sait
-  pas s'il y a école. Reculer la date aurait produit quarante captures montrant une
-  application qui ne sait rien. **Une date à la fois passée et valide n'existait qu'à
-  partir du 16 septembre 2026**, pour le mardi 15.
-
-  Le regel coûte quarante fichiers dans le conteneur épinglé, plus `heros.legende` dans les
-  cinq langues : **les deux bougent ensemble ou pas du tout**, sans quoi la phrase et
-  l'écran se contredisent sous les yeux du lecteur.
-
 ### Réserves levées
+
+- *« L'instant simulé des captures est encore une date à venir. »* — Levée le
+  16 septembre 2026, constatée dans le dépôt le 17. `INSTANT_DEMO` vaut
+  `2026-09-15T05:25:00.000Z`, `heros.legende` dit « 15 septembre 2026, 07:25 » dans les
+  cinq langues et `scripts/captures.source.json` porte le même instant : la date accolée au
+  mot « réelle » est passée, comme le veut la décision du 14 septembre (ticket #24).
+
+  **Ce qui reste vrai et ne se périme pas**, parce que c'est ce qu'il faudra relire au
+  prochain regel : prendre le MARDI D'ÉCOLE LE PLUS RÉCENT DÉJÀ ÉCOULÉ, et reporter la même
+  date dans `heros.legende` des cinq langues — **les deux bougent ensemble ou pas du
+  tout**, sans quoi la phrase et l'écran se contredisent sous les yeux du lecteur. Le regel
+  coûte en outre quarante fichiers dans le conteneur épinglé. La règle entière est en
+  sixième propriété de `INSTANT_DEMO`, dans `src/contenu/captures.ts` — c'est le fichier
+  qu'on ouvre pour la changer, et il porte aussi pourquoi reculer n'est pas toujours
+  possible : le 14 septembre, aucune date passée ne convenait, l'année 2025/2026 étant
+  `partiel: true` dans le `vacances-lu.json` de l'application.
+
+  Ce que cet épisode a appris, et qui vaut plus que la réserve : **rien dans le dépôt ne
+  mesure qu'une date écrite en dur est encore à venir.** Celle du 22 septembre avait été
+  choisie onze jours en avance, `npm run verifier` était vert, et personne ne l'a vu.
 
 - *« Le formulaire de contact n'a jamais servi en vrai. »* — Levée le 15 septembre 2026,
   **et elle a coûté un message avant de se lever**. La chaîne est aujourd'hui prouvée de
@@ -621,7 +671,11 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
      n'existe** : sonder juste après lit l'ANCIEN déploiement, `done`, et fait croire que
      c'est fini.
 
-  L'ancienne application reste en filet, sans domaine attaché, jusqu'au 20 septembre 2026.
+  L'ancienne application a servi de filet, sans domaine attaché, jusqu'au
+  **17 septembre 2026** : supprimée ce jour-là, trois jours avant l'échéance prévue, les
+  trois conditions tenant (aucun domaine attaché, `www` en 200, `POST /api/contact` en
+  400). Il n'y a plus de filet, et il n'y en a plus besoin — la production a été constatée
+  saine après coup : apex **301**, `www` **200**, `/pt/` **200**, relais **400**.
 
 - *« La vitrine est plus précise que l'application qu'elle décrit. »* — Levée le
   15 septembre 2026, ticket #15, et **par le dépôt frère** : sa page « Limites » nomme
@@ -941,7 +995,7 @@ n'était visible par la porte, parce qu'aucun ne portait sur ce que la porte sai
 
 - *« Le segment de thème choisi ne se disait pas choisi. »* — `useTheme` lisait
   `data-theme` **pendant le rendu** : `auto` au pré-rendu, où l'attribut n'existe pas, et
-  `clair` dans le navigateur, où le script en ligne l'a déjà posé. React ne rattrape pas un
+  `clair` dans le navigateur, où le script en ligne l'a déjà posé. L'hydratation ne rattrape pas un
   attribut divergent, et son avertissement est retiré du paquet de production : la page
   s'affichait dans le bon thème avec `aria-pressed="false"` sur les deux segments, sans
   aucune erreur en console. **Le défaut ne frappait que les visiteurs ayant choisi** —

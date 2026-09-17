@@ -537,7 +537,15 @@ describe('pré-rendu', () => {
       expect(html, `${langue} : ${l} manque à la liste`).toContain(`value="${l}"`)
       expect(html).toContain(`>${l.toUpperCase()}</option>`)
     }
-    expect(html).toContain(`value="${langue}" selected`)
+    /*
+     * L'option est cherchée par une expression régulière et non par une sous-chaîne :
+     * l'ordre des attributs appartient au moteur de rendu, pas au produit. React écrivait
+     * `value="fr" selected`, preact écrit `selected value="fr"`, et la page est la même.
+     */
+    const choisies = html.match(/<option[^>]*>/g)?.filter((o) => o.includes('selected')) ?? []
+    // Une par liste, et la page en porte deux : l'en-tête et le pied.
+    expect(choisies, `${langue} : chaque liste doit choisir une option`).toHaveLength(2)
+    for (const option of choisies) expect(option).toContain(`value="${langue}"`)
   })
 
   it('le pied de page ne propose les mentions que si elles existent', () => {

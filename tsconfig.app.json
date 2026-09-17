@@ -17,6 +17,19 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /*
+     * Le pendant, pour le compilateur, de l'alias de `vite.config.ts` : les composantes
+     * écrivent `react`, et c'est `preact/compat` qu'elles obtiennent. Sans ces chemins,
+     * `tsc` chercherait des types React qui ne sont plus installés.
+     */
+    "paths": {
+      "react": ["./node_modules/preact/compat/"],
+      "react-dom": ["./node_modules/preact/compat/"],
+      "react-dom/client": ["./node_modules/preact/compat/client"],
+      "react-dom/server": ["./node_modules/preact-render-to-string/"],
+      "react/jsx-runtime": ["./node_modules/preact/jsx-runtime"]
+    },
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

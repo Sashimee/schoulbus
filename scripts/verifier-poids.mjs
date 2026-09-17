@@ -79,13 +79,24 @@ const DIST = resolve(ici, '../dist')
  * Les deux nouvelles marges sont de 7 %, assez pour une section de plus, pas pour une
  * dépendance de plus. C'est le réglage voulu.
  *
+ * CINQUIÈME DÉPLACEMENT, le 17 septembre 2026, et il abaisse davantage que les quatre
+ * précédents réunis : 76 → 22 ko et 100 → 46 ko. React a laissé la place à
+ * `preact/compat`, par un alias de `vite.config.ts` — le premier écran tombe de 70,8 à
+ * 20,6 ko, tout le site de 93,3 à 43,1 (ticket #58). C'était le dernier poste où il restait
+ * une marge d'un ordre de grandeur, et il est refermé.
+ *
+ * Les marges restent à 7 %, mais elles ne valent plus la même chose en absolu : 1,4 ko de
+ * jeu sur le premier écran là où il y en avait 5,2. C'est voulu, et c'est le sens d'un
+ * budget — une page qui tient en 20 ko n'a pas à s'autoriser les cinq kilo-octets d'une
+ * page qui en pesait 70. Une section de plus passe ; une dépendance, non.
+ *
  * Les relever est permis. Les relever SANS RIEN DIRE ne l'est pas : la ligne du README qui
  * les cite dit d'où vient le chiffre, et c'est elle qui rend le relèvement visible.
  */
 const BUDGETS = {
-  'JavaScript du premier écran': 76 * 1024,
+  'JavaScript du premier écran': 22 * 1024,
   'feuille de style du premier écran': 8 * 1024,
-  'JavaScript de tout le site': 100 * 1024,
+  'JavaScript de tout le site': 46 * 1024,
 }
 
 if (!existsSync(resolve(DIST, 'index.html'))) {
